@@ -80,9 +80,10 @@
             transition: 0.2s;
         }
 
-        .upload-box:hover {
-            border-color: #555;
-            background: #f7f7f7;
+        .upload-box.dragover {
+            border-color: #111;
+            background: #f0f0f0;
+            transform: scale(1.01);
         }
 
         .upload-icon {
@@ -99,6 +100,12 @@
         .upload-text {
             color: #777;
             margin-bottom: 20px;
+        }
+
+        .drop-text {
+            color: #555;
+            font-size: 14px;
+            margin-top: 10px;
         }
 
         input[type="file"] {
@@ -285,7 +292,7 @@
         </p>
 
 
-        <div class="upload-box">
+        <div class="upload-box" id="uploadBox">
 
             <div class="upload-icon">
                 📊
@@ -304,6 +311,12 @@
                 id="fileInput"
                 accept=".csv,.xlsx,.xls"
             >
+
+            <div class="drop-text">
+                Or drag and drop your file here
+            </div>
+
+            <br>
 
             <button onclick="cleanSpreadsheet()">
                 🧹 Clean My Spreadsheet
@@ -796,7 +809,7 @@ function cleanSpreadsheet() {
     if (!fileInput.files.length) {
 
         status.textContent =
-            "Please choose a CSV or Excel file first.";
+            "Please choose or drop a CSV or Excel file first.";
 
         return;
 
@@ -992,6 +1005,71 @@ function cleanSpreadsheet() {
     }
 
 }
+
+
+/* Drag and Drop */
+
+const uploadBox =
+    document.getElementById("uploadBox");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+
+uploadBox.addEventListener(
+    "dragover",
+    function(event) {
+
+        event.preventDefault();
+
+        uploadBox.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "dragleave",
+    function() {
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "drop",
+    function(event) {
+
+        event.preventDefault();
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+
+        if (
+            event.dataTransfer.files.length
+        ) {
+
+            fileInput.files =
+                event.dataTransfer.files;
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                "📁 File selected: " +
+                event.dataTransfer.files[0].name;
+
+        }
+
+    }
+);
 
 </script>
 
