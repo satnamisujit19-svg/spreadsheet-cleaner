@@ -456,6 +456,7 @@
 
 <body>
   <div class="container">
+
     <div class="hero">
       <div class="brand">
         <div class="logo-wrap">
@@ -463,7 +464,9 @@
           <p>Clean, validate and standardize messy spreadsheet data in seconds.</p>
         </div>
 
-        <div class="step-badge">Step 30 • Column Tools</div>
+        <div class="step-badge">
+          Step 30 • Column Tools
+        </div>
       </div>
 
       <div class="chips">
@@ -479,6 +482,7 @@
     </div>
 
     <div class="main-card">
+
       <div class="upload-section">
         <div class="upload-box">
           <div class="upload-icon">📊</div>
@@ -499,299 +503,507 @@
             accept=".xlsx,.xls,.csv"
           />
 
-          <div id="fileInfo" class="file-info"></div>
+          <div
+            id="fileInfo"
+            class="file-info"
+          ></div>
         </div>
       </div>
 
       <div class="action-bar">
-        <button id="cleanBtn" class="btn-primary" disabled>
+
+        <button
+          id="cleanBtn"
+          class="btn-primary"
+          disabled
+        >
           Clean Spreadsheet
         </button>
 
-        <button id="downloadXlsxBtn" class="btn-success" disabled>
+        <button
+          id="downloadXlsxBtn"
+          class="btn-success"
+          disabled
+        >
           Download Cleaned XLSX
         </button>
 
-        <button id="downloadCsvBtn" class="btn-success" disabled>
+        <button
+          id="downloadCsvBtn"
+          class="btn-success"
+          disabled
+        >
           Download Cleaned CSV
         </button>
 
-        <button id="resetBtn" class="btn-secondary">
+        <button
+          id="resetBtn"
+          class="btn-secondary"
+        >
           Reset
         </button>
+
       </div>
 
-      <div id="notice" class="notice"></div>
+      <div
+        id="notice"
+        class="notice"
+      ></div>
 
+      <!-- Spreadsheet Stats -->
       <div class="section">
+
         <div class="section-title">
           <h3>Spreadsheet Stats</h3>
-          <p>Original spreadsheet analysis before cleaning.</p>
+          <p>
+            Original spreadsheet analysis before cleaning.
+          </p>
         </div>
 
         <div class="stats-grid">
+
           <div class="stat-card">
             <div class="stat-label">Total Rows</div>
-            <div id="totalRows" class="stat-value">0</div>
+            <div
+              id="totalRows"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Total Columns</div>
-            <div id="totalColumns" class="stat-value">0</div>
+            <div
+              id="totalColumns"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Valid Emails</div>
-            <div id="validEmails" class="stat-value">0</div>
+            <div
+              id="validEmails"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Invalid Emails</div>
-            <div id="invalidEmails" class="stat-value">0</div>
+            <div
+              id="invalidEmails"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Valid Phones</div>
-            <div id="validPhones" class="stat-value">0</div>
+            <div
+              id="validPhones"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Invalid Phones</div>
-            <div id="invalidPhones" class="stat-value">0</div>
+            <div
+              id="invalidPhones"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Valid Dates</div>
-            <div id="validDates" class="stat-value">0</div>
+            <div
+              id="validDates"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Invalid Dates</div>
-            <div id="invalidDates" class="stat-value">0</div>
+            <div
+              id="invalidDates"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Ambiguous Dates</div>
-            <div id="ambiguousDates" class="stat-value">0</div>
+            <div
+              id="ambiguousDates"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Duplicate Headers</div>
-            <div id="duplicateHeaders" class="stat-value">0</div>
+            <div
+              id="duplicateHeaders"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Blank Headers</div>
-            <div id="blankHeaders" class="stat-value">0</div>
+            <div
+              id="blankHeaders"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Empty Email Cells</div>
-            <div id="emptyEmails" class="stat-value">0</div>
+            <div
+              id="emptyEmails"
+              class="stat-value"
+            >0</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">Empty Phone Cells</div>
-            <div id="emptyPhones" class="stat-value">0</div>
+            <div
+              id="emptyPhones"
+              class="stat-value"
+            >0</div>
           </div>
+
         </div>
       </div>
 
+      <!-- Data Quality -->
       <div class="section">
+
         <div class="section-title">
           <h3>Data Quality Checks</h3>
-          <p>Potential data problems detected in the original spreadsheet.</p>
+          <p>
+            Potential data problems detected in the original spreadsheet.
+          </p>
         </div>
 
         <div class="quality-grid">
+
           <div class="quality-item">
             <div class="label">Invalid Emails</div>
-            <div id="qualityInvalidEmails" class="value">0</div>
+            <div
+              id="qualityInvalidEmails"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Valid Phones</div>
-            <div id="qualityValidPhones" class="value">0</div>
+            <div
+              id="qualityValidPhones"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Invalid Phones</div>
-            <div id="qualityInvalidPhones" class="value">0</div>
+            <div
+              id="qualityInvalidPhones"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Valid Dates</div>
-            <div id="qualityValidDates" class="value">0</div>
+            <div
+              id="qualityValidDates"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Invalid Dates</div>
-            <div id="qualityInvalidDates" class="value">0</div>
+            <div
+              id="qualityInvalidDates"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Ambiguous Dates</div>
-            <div id="qualityAmbiguousDates" class="value">0</div>
+            <div
+              id="qualityAmbiguousDates"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Duplicate Headers</div>
-            <div id="qualityDuplicateHeaders" class="value">0</div>
+            <div
+              id="qualityDuplicateHeaders"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Blank Headers</div>
-            <div id="qualityBlankHeaders" class="value">0</div>
+            <div
+              id="qualityBlankHeaders"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Duplicate Rows</div>
-            <div id="qualityDuplicateRows" class="value">0</div>
+            <div
+              id="qualityDuplicateRows"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Empty Rows</div>
-            <div id="qualityEmptyRows" class="value">0</div>
+            <div
+              id="qualityEmptyRows"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Empty Columns</div>
-            <div id="qualityEmptyColumns" class="value">0</div>
+            <div
+              id="qualityEmptyColumns"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Whitespace Values</div>
-            <div id="qualityWhitespace" class="value">0</div>
+            <div
+              id="qualityWhitespace"
+              class="value"
+            >0</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Email Column</div>
-            <div id="qualityEmailColumn" class="value">Not detected</div>
+            <div
+              id="qualityEmailColumn"
+              class="value"
+            >Not detected</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Phone Column</div>
-            <div id="qualityPhoneColumn" class="value">Not detected</div>
+            <div
+              id="qualityPhoneColumn"
+              class="value"
+            >Not detected</div>
           </div>
 
           <div class="quality-item">
             <div class="label">Date Column</div>
-            <div id="qualityDateColumn" class="value">Not detected</div>
+            <div
+              id="qualityDateColumn"
+              class="value"
+            >Not detected</div>
           </div>
+
         </div>
       </div>
 
+      <!-- Validation Details -->
       <div class="section">
+
         <div class="section-title">
           <h3>Validation Details</h3>
-          <p>Columns identified automatically from your spreadsheet headers.</p>
+          <p>
+            Columns identified automatically from your spreadsheet headers.
+          </p>
         </div>
 
         <div class="details-box">
+
           <div class="detail-row">
-            <div class="detail-label">Detected Email Column</div>
-            <div id="detailEmailColumn" class="detail-value">Not detected</div>
+            <div class="detail-label">
+              Detected Email Column
+            </div>
+
+            <div
+              id="detailEmailColumn"
+              class="detail-value"
+            >
+              Not detected
+            </div>
           </div>
 
           <div class="detail-row">
-            <div class="detail-label">Detected Phone Column</div>
-            <div id="detailPhoneColumn" class="detail-value">Not detected</div>
+            <div class="detail-label">
+              Detected Phone Column
+            </div>
+
+            <div
+              id="detailPhoneColumn"
+              class="detail-value"
+            >
+              Not detected
+            </div>
           </div>
 
           <div class="detail-row">
-            <div class="detail-label">Detected Date Column</div>
-            <div id="detailDateColumn" class="detail-value">Not detected</div>
+            <div class="detail-label">
+              Detected Date Column
+            </div>
+
+            <div
+              id="detailDateColumn"
+              class="detail-value"
+            >
+              Not detected
+            </div>
           </div>
 
           <div class="detail-row">
-            <div class="detail-label">Date Output Format</div>
-            <div class="detail-value">DD-MM-YYYY</div>
+            <div class="detail-label">
+              Date Output Format
+            </div>
+
+            <div class="detail-value">
+              DD-MM-YYYY
+            </div>
           </div>
 
           <div class="detail-row">
-            <div class="detail-label">Header Cleanup</div>
-            <div id="detailHeaderCleanup" class="detail-value">
+            <div class="detail-label">
+              Header Cleanup
+            </div>
+
+            <div
+              id="detailHeaderCleanup"
+              class="detail-value"
+            >
               Ready
             </div>
           </div>
 
           <div class="detail-row">
-            <div class="detail-label">Ambiguous Dates</div>
-            <div id="detailAmbiguousDates" class="detail-value">
+            <div class="detail-label">
+              Ambiguous Dates
+            </div>
+
+            <div
+              id="detailAmbiguousDates"
+              class="detail-value"
+            >
               Left unchanged
             </div>
           </div>
+
         </div>
       </div>
 
+      <!-- Cleaning Summary -->
       <div class="section">
+
         <div class="section-title">
           <h3>Cleaning Summary</h3>
-          <p>Changes applied when you clean the spreadsheet.</p>
+          <p>
+            Changes applied when you clean the spreadsheet.
+          </p>
         </div>
 
         <div class="summary-grid">
+
           <div class="summary-item">
             <div class="label">Blank Rows Removed</div>
-            <div id="summaryBlankRows" class="value">0</div>
+            <div
+              id="summaryBlankRows"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Empty Columns Removed</div>
-            <div id="summaryEmptyColumns" class="value">0</div>
+            <div
+              id="summaryEmptyColumns"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Duplicate Rows Removed</div>
-            <div id="summaryDuplicates" class="value">0</div>
+            <div
+              id="summaryDuplicates"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Phone Values Standardized</div>
-            <div id="summaryPhones" class="value">0</div>
+            <div
+              id="summaryPhones"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Date Values Standardized</div>
-            <div id="summaryDates" class="value">0</div>
+            <div
+              id="summaryDates"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Emails Normalized</div>
-            <div id="summaryEmails" class="value">0</div>
+            <div
+              id="summaryEmails"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Headers Cleaned</div>
-            <div id="summaryHeaders" class="value">0</div>
+            <div
+              id="summaryHeaders"
+              class="value"
+            >0</div>
           </div>
 
           <div class="summary-item">
             <div class="label">Rows After Cleaning</div>
-            <div id="summaryRowsAfter" class="value">0</div>
+            <div
+              id="summaryRowsAfter"
+              class="value"
+            >0</div>
           </div>
+
         </div>
       </div>
 
+      <!-- Preview -->
       <div class="section">
+
         <div class="section-title">
           <h3>Spreadsheet Preview</h3>
+
           <p id="previewDescription">
             Upload a spreadsheet to preview your data.
           </p>
         </div>
 
         <div class="preview-wrap">
-          <div id="previewEmpty" class="empty-state">
+
+          <div
+            id="previewEmpty"
+            class="empty-state"
+          >
             Your spreadsheet preview will appear here.
           </div>
 
-          <table id="previewTable" class="hidden">
+          <table
+            id="previewTable"
+            class="hidden"
+          >
             <thead id="previewHead"></thead>
             <tbody id="previewBody"></tbody>
           </table>
+
         </div>
       </div>
+
     </div>
 
     <div class="footer">
@@ -800,19 +1012,43 @@
   </div>
 
   <script>
-    const fileInput = document.getElementById("fileInput");
-    const fileInfo = document.getElementById("fileInfo");
-    const cleanBtn = document.getElementById("cleanBtn");
-    const downloadXlsxBtn = document.getElementById("downloadXlsxBtn");
-    const downloadCsvBtn = document.getElementById("downloadCsvBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const notice = document.getElementById("notice");
+    const fileInput =
+      document.getElementById("fileInput");
 
-    const previewTable = document.getElementById("previewTable");
-    const previewHead = document.getElementById("previewHead");
-    const previewBody = document.getElementById("previewBody");
-    const previewEmpty = document.getElementById("previewEmpty");
-    const previewDescription = document.getElementById("previewDescription");
+    const fileInfo =
+      document.getElementById("fileInfo");
+
+    const cleanBtn =
+      document.getElementById("cleanBtn");
+
+    const downloadXlsxBtn =
+      document.getElementById("downloadXlsxBtn");
+
+    const downloadCsvBtn =
+      document.getElementById("downloadCsvBtn");
+
+    const resetBtn =
+      document.getElementById("resetBtn");
+
+    const notice =
+      document.getElementById("notice");
+
+    const previewTable =
+      document.getElementById("previewTable");
+
+    const previewHead =
+      document.getElementById("previewHead");
+
+    const previewBody =
+      document.getElementById("previewBody");
+
+    const previewEmpty =
+      document.getElementById("previewEmpty");
+
+    const previewDescription =
+      document.getElementById(
+        "previewDescription"
+      );
 
     let originalRows = [];
     let cleanedRows = [];
@@ -834,29 +1070,40 @@
     }
 
     function normalizeCellForDuplicate(value) {
-      if (value === null || value === undefined) {
+      if (
+        value === null ||
+        value === undefined
+      ) {
         return "";
       }
 
       if (typeof value === "string") {
-        return value.trim();
+        return value
+          .trim()
+          .replace(/\s+/g, " ")
+          .toLowerCase();
       }
 
-      return String(value);
+      return String(value)
+        .trim()
+        .toLowerCase();
     }
 
-    /*
-      Important duplicate-row fix:
-      Every row is normalized to exactly the same number of columns.
-      Text is trimmed so harmless whitespace differences don't prevent
-      duplicate detection.
-    */
-    function getComparableRow(row, columnCount) {
+    function getComparableRow(
+      row,
+      columnCount
+    ) {
       const normalized = [];
 
-      for (let i = 0; i < columnCount; i++) {
+      for (
+        let i = 0;
+        i < columnCount;
+        i++
+      ) {
         normalized.push(
-          normalizeCellForDuplicate(row[i])
+          normalizeCellForDuplicate(
+            row[i]
+          )
         );
       }
 
@@ -864,17 +1111,34 @@
     }
 
     function countDuplicateRows(rows) {
-      if (!rows || rows.length <= 1) {
+      if (
+        !rows ||
+        rows.length <= 1
+      ) {
         return 0;
       }
 
-      const headers = rows[0] || [];
-      const columnCount = headers.length;
-      const seen = new Set();
+      const headers =
+        rows[0] || [];
+
+      const columnCount =
+        headers.length;
+
+      const seen =
+        new Set();
+
       let duplicates = 0;
 
-      for (let i = 1; i < rows.length; i++) {
-        if (isEntireRowBlank(rows[i])) {
+      for (
+        let i = 1;
+        i < rows.length;
+        i++
+      ) {
+        if (
+          isEntireRowBlank(
+            rows[i]
+          )
+        ) {
           continue;
         }
 
@@ -884,11 +1148,14 @@
             columnCount
           );
 
-        const key = JSON.stringify(
-          comparableRow
-        );
+        const key =
+          JSON.stringify(
+            comparableRow
+          );
 
-        if (seen.has(key)) {
+        if (
+          seen.has(key)
+        ) {
           duplicates++;
         } else {
           seen.add(key);
@@ -898,14 +1165,22 @@
       return duplicates;
     }
 
-    function analyzeHeaders(headers) {
-      const seen = new Map();
+    function analyzeHeaders(
+      headers
+    ) {
+      const seen =
+        new Map();
+
       let duplicateHeaders = 0;
       let blankHeaders = 0;
 
-      for (const header of headers) {
+      for (
+        const header of headers
+      ) {
         const cleaned =
-          cleanHeaderText(header);
+          cleanHeaderText(
+            header
+          );
 
         if (!cleaned) {
           blankHeaders++;
@@ -915,10 +1190,15 @@
         const key =
           cleaned.toLowerCase();
 
-        if (seen.has(key)) {
+        if (
+          seen.has(key)
+        ) {
           duplicateHeaders++;
         } else {
-          seen.set(key, 1);
+          seen.set(
+            key,
+            1
+          );
         }
       }
 
@@ -928,74 +1208,103 @@
       };
     }
 
-    function buildCleanHeaders(headers) {
-      const usedNames = new Map();
+    function buildCleanHeaders(
+      headers
+    ) {
+      const usedNames =
+        new Map();
+
       const result = [];
+
       let cleanedCount = 0;
 
-      headers.forEach((header, index) => {
-        const original =
-          String(header ?? "");
+      headers.forEach(
+        (
+          header,
+          index
+        ) => {
+          const original =
+            String(
+              header ?? ""
+            );
 
-        let cleaned =
-          cleanHeaderText(original);
+          let cleaned =
+            cleanHeaderText(
+              original
+            );
 
-        if (!cleaned) {
-          cleaned =
-            `Column ${index + 1}`;
-        }
-
-        const baseKey =
-          cleaned.toLowerCase();
-
-        if (usedNames.has(baseKey)) {
-          const nextNumber =
-            usedNames.get(baseKey) + 1;
-
-          usedNames.set(
-            baseKey,
-            nextNumber
-          );
-
-          const baseName = cleaned;
-
-          cleaned =
-            `${baseName} (${nextNumber})`;
-
-          let uniqueKey =
-            cleaned.toLowerCase();
-
-          let suffix = nextNumber;
-
-          while (
-            usedNames.has(uniqueKey)
-          ) {
-            suffix++;
-
+          if (!cleaned) {
             cleaned =
-              `${baseName} (${suffix})`;
-
-            uniqueKey =
-              cleaned.toLowerCase();
+              `Column ${index + 1}`;
           }
 
-          usedNames.set(
-            uniqueKey,
-            1
-          );
-        } else {
-          usedNames.set(
-            baseKey,
-            1
+          const baseKey =
+            cleaned.toLowerCase();
+
+          if (
+            usedNames.has(
+              baseKey
+            )
+          ) {
+            const nextNumber =
+              usedNames.get(
+                baseKey
+              ) + 1;
+
+            usedNames.set(
+              baseKey,
+              nextNumber
+            );
+
+            const baseName =
+              cleaned;
+
+            cleaned =
+              `${baseName} (${nextNumber})`;
+
+            let uniqueKey =
+              cleaned.toLowerCase();
+
+            let suffix =
+              nextNumber;
+
+            while (
+              usedNames.has(
+                uniqueKey
+              )
+            ) {
+              suffix++;
+
+              cleaned =
+                `${baseName} (${suffix})`;
+
+              uniqueKey =
+                cleaned.toLowerCase();
+            }
+
+            usedNames.set(
+              uniqueKey,
+              1
+            );
+          } else {
+            usedNames.set(
+              baseKey,
+              1
+            );
+          }
+
+          if (
+            cleaned !==
+            original
+          ) {
+            cleanedCount++;
+          }
+
+          result.push(
+            cleaned
           );
         }
-
-        if (cleaned !== original) {
-          cleanedCount++;
-        }
-
-        result.push(cleaned);
-      });
+      );
 
       return {
         headers: result,
@@ -1003,9 +1312,14 @@
       };
     }
 
-    function findColumn(headers, type) {
+    function findColumn(
+      headers,
+      type
+    ) {
       const normalized =
-        headers.map(normalizeHeader);
+        headers.map(
+          normalizeHeader
+        );
 
       const exactSets = {
         email: [
@@ -1050,18 +1364,24 @@
             )
         );
 
-      if (exactIndex !== -1) {
+      if (
+        exactIndex !== -1
+      ) {
         return exactIndex;
       }
 
       const fallbackWords = {
-        email: ["email"],
+        email: [
+          "email"
+        ],
+
         phone: [
           "phone",
           "mobile",
           "contact",
           "telephone"
         ],
+
         date: [
           "date",
           "dob",
@@ -1074,48 +1394,75 @@
 
       return normalized.findIndex(
         (header) =>
-          fallbackWords[type].some(
+          fallbackWords[
+            type
+          ].some(
             (word) =>
-              header.includes(word)
+              header.includes(
+                word
+              )
           )
       );
     }
 
-    function isBlank(value) {
+    function isBlank(
+      value
+    ) {
       return String(
         value ?? ""
       ).trim() === "";
     }
 
-    function isEntireRowBlank(row) {
+    function isEntireRowBlank(
+      row
+    ) {
       return row.every(
-        (cell) => isBlank(cell)
+        (cell) =>
+          isBlank(cell)
       );
     }
 
-    function isValidEmail(value) {
+    function isValidEmail(
+      value
+    ) {
       const text =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
-      if (!text) return false;
+      if (!text) {
+        return false;
+      }
 
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
         text
       );
     }
 
-    function extractPhoneDigits(value) {
-      return String(value ?? "")
-        .replace(/\D/g, "");
+    function extractPhoneDigits(
+      value
+    ) {
+      return String(
+        value ?? ""
+      ).replace(
+        /\D/g,
+        ""
+      );
     }
 
-    function isPhoneErrorValue(value) {
+    function isPhoneErrorValue(
+      value
+    ) {
       const text =
-        String(value ?? "")
+        String(
+          value ?? ""
+        )
           .trim()
           .toUpperCase();
 
-      if (!text) return false;
+      if (!text) {
+        return false;
+      }
 
       return (
         text.startsWith("#") ||
@@ -1126,19 +1473,27 @@
       );
     }
 
-    function isValidPhone(value) {
+    function isValidPhone(
+      value
+    ) {
       const text =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
       if (
         !text ||
-        isPhoneErrorValue(text)
+        isPhoneErrorValue(
+          text
+        )
       ) {
         return false;
       }
 
       const digits =
-        extractPhoneDigits(text);
+        extractPhoneDigits(
+          text
+        );
 
       if (
         digits.length < 7 ||
@@ -1152,25 +1507,42 @@
       );
     }
 
-    function standardizePhone(value) {
+    function standardizePhone(
+      value
+    ) {
       const text =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
-      if (!isValidPhone(text)) {
+      if (
+        !isValidPhone(
+          text
+        )
+      ) {
         return text;
       }
 
       const digits =
-        extractPhoneDigits(text);
+        extractPhoneDigits(
+          text
+        );
 
-      if (text.startsWith("+")) {
+      if (
+        text.startsWith(
+          "+"
+        )
+      ) {
         return "+" + digits;
       }
 
       return digits;
     }
 
-    function daysInMonth(year, month) {
+    function daysInMonth(
+      year,
+      month
+    ) {
       return new Date(
         year,
         month,
@@ -1242,9 +1614,13 @@
       return `${dd}-${mm}-${yyyy}`;
     }
 
-    function parseDateValue(value) {
+    function parseDateValue(
+      value
+    ) {
       const text =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
       if (!text) {
         return {
@@ -1260,13 +1636,19 @@
 
       if (match) {
         const year =
-          Number(match[1]);
+          Number(
+            match[1]
+          );
 
         const month =
-          Number(match[2]);
+          Number(
+            match[2]
+          );
 
         const day =
-          Number(match[3]);
+          Number(
+            match[3]
+          );
 
         if (
           isValidDateParts(
@@ -1277,11 +1659,12 @@
         ) {
           return {
             status: "valid",
-            value: formatDate(
-              day,
-              month,
-              year
-            )
+            value:
+              formatDate(
+                day,
+                month,
+                year
+              )
           };
         }
 
@@ -1304,13 +1687,19 @@
       }
 
       const first =
-        Number(match[1]);
+        Number(
+          match[1]
+        );
 
       const second =
-        Number(match[2]);
+        Number(
+          match[2]
+        );
 
       const year =
-        Number(match[3]);
+        Number(
+          match[3]
+        );
 
       const ddmmValid =
         isValidDateParts(
@@ -1335,11 +1724,12 @@
         ) {
           return {
             status: "valid",
-            value: formatDate(
-              first,
-              second,
-              year
-            )
+            value:
+              formatDate(
+                first,
+                second,
+                year
+              )
           };
         }
 
@@ -1355,11 +1745,12 @@
       ) {
         return {
           status: "valid",
-          value: formatDate(
-            first,
-            second,
-            year
-          )
+          value:
+            formatDate(
+              first,
+              second,
+              year
+            )
         };
       }
 
@@ -1379,7 +1770,9 @@
       };
     }
 
-    function countWhitespaceValues(rows) {
+    function countWhitespaceValues(
+      rows
+    ) {
       let count = 0;
 
       for (
@@ -1389,9 +1782,11 @@
           const cell of row
         ) {
           if (
-            typeof cell === "string" &&
+            typeof cell ===
+              "string" &&
             cell.length > 0 &&
-            cell.trim() !== cell
+            cell.trim() !==
+              cell
           ) {
             count++;
           }
@@ -1405,14 +1800,16 @@
       rows,
       columnCount
     ) {
-      const emptyIndexes = [];
+      const emptyIndexes =
+        [];
 
       for (
         let col = 0;
         col < columnCount;
         col++
       ) {
-        let hasValue = false;
+        let hasValue =
+          false;
 
         for (
           let row = 1;
@@ -1424,20 +1821,25 @@
               rows[row][col]
             )
           ) {
-            hasValue = true;
+            hasValue =
+              true;
             break;
           }
         }
 
         if (!hasValue) {
-          emptyIndexes.push(col);
+          emptyIndexes.push(
+            col
+          );
         }
       }
 
       return emptyIndexes;
     }
 
-    function analyzeSpreadsheet(rows) {
+    function analyzeSpreadsheet(
+      rows
+    ) {
       const headers =
         rows[0] || [];
 
@@ -1491,7 +1893,9 @@
           ) {
             emptyEmails++;
           } else if (
-            isValidEmail(value)
+            isValidEmail(
+              value
+            )
           ) {
             validEmails++;
           } else {
@@ -1512,7 +1916,9 @@
           ) {
             emptyPhones++;
           } else if (
-            isValidPhone(value)
+            isValidPhone(
+              value
+            )
           ) {
             validPhones++;
           } else {
@@ -1529,7 +1935,9 @@
             ];
 
           const result =
-            parseDateValue(value);
+            parseDateValue(
+              value
+            );
 
           if (
             result.status ===
@@ -1624,7 +2032,9 @@
         emptyColumnIndexes,
 
         duplicateRows:
-          countDuplicateRows(rows),
+          countDuplicateRows(
+            rows
+          ),
 
         whitespaceValues:
           countWhitespaceValues(
@@ -1805,7 +2215,7 @@
         analysis.duplicateHeaders > 0 ||
         analysis.blankHeaders > 0
           ? "Duplicate/blank headers detected"
-          : "Headers look clean"
+          : "No header changes required"
       );
 
       setText(
@@ -1923,8 +2333,11 @@
         return;
       }
 
-      previewHead.innerHTML = "";
-      previewBody.innerHTML = "";
+      previewHead.innerHTML =
+        "";
+
+      previewBody.innerHTML =
+        "";
 
       const headerRow =
         rows[0];
@@ -2030,7 +2443,7 @@
       const originalHeaders =
         rows[0] || [];
 
-      // 1. Remove completely blank rows.
+      // Remove completely blank rows.
       const rowsBeforeBlankRemoval =
         rows.length;
 
@@ -2050,7 +2463,7 @@
         rowsBeforeBlankRemoval -
         rows.length;
 
-      // 2. Remove completely empty columns.
+      // Remove completely empty columns.
       const columnsToRemove =
         new Set(
           originalAnalysis.emptyColumnIndexes
@@ -2067,7 +2480,7 @@
             )
         );
 
-      // 3. Clean headers.
+      // Clean headers.
       const headerResult =
         buildCleanHeaders(
           rows[0] || []
@@ -2079,23 +2492,29 @@
       const headersCleaned =
         headerResult.cleanedCount;
 
-      // 4. Trim all text values.
+      // Trim all text values.
       rows =
         rows.map(
           (row) =>
             row.map(
               (cell) =>
-                typeof cell === "string"
+                typeof cell ===
+                  "string"
                   ? cell.trim()
                   : cell
             )
         );
 
-      let emailStandardized = 0;
-      let phoneStandardized = 0;
-      let dateStandardized = 0;
+      let emailStandardized =
+        0;
 
-      // 5. Detect columns again after changes.
+      let phoneStandardized =
+        0;
+
+      let dateStandardized =
+        0;
+
+      // Detect columns after cleaning headers.
       const cleanedHeaders =
         rows[0] || [];
 
@@ -2117,7 +2536,7 @@
           "date"
         );
 
-      // 6. Normalize email, phone and date values.
+      // Normalize values.
       for (
         let rowIndex = 1;
         rowIndex < rows.length;
@@ -2126,6 +2545,7 @@
         const row =
           rows[rowIndex];
 
+        // Email
         if (
           emailColumnIndex !== -1
         ) {
@@ -2154,10 +2574,12 @@
 
             row[
               emailColumnIndex
-            ] = normalizedEmail;
+            ] =
+              normalizedEmail;
           }
         }
 
+        // Phone
         if (
           phoneColumnIndex !== -1
         ) {
@@ -2186,11 +2608,13 @@
 
               row[
                 phoneColumnIndex
-              ] = standardized;
+              ] =
+                standardized;
             }
           }
         }
 
+        // Date
         if (
           dateColumnIndex !== -1
         ) {
@@ -2219,19 +2643,19 @@
 
             row[
               dateColumnIndex
-            ] = result.value;
+            ] =
+              result.value;
           } else {
+            // Invalid and ambiguous dates remain unchanged.
             row[
               dateColumnIndex
-            ] = originalValue;
+            ] =
+              originalValue;
           }
         }
       }
 
-      /*
-        7. Remove duplicate rows using the same
-        normalized comparison used during analysis.
-      */
+      // Remove duplicates using normalized comparison.
       const seen =
         new Set();
 
@@ -2268,6 +2692,7 @@
           duplicateRowsRemoved++;
         } else {
           seen.add(key);
+
           uniqueDataRows.push(
             rows[i]
           );
@@ -2317,18 +2742,6 @@
       setText(
         "summaryRowsAfter",
         cleanedRows.length - 1
-      );
-
-      setText(
-        "qualityDuplicateRows",
-        duplicateRowsRemoved
-      );
-
-      setText(
-        "detailHeaderCleanup",
-        headersCleaned > 0
-          ? `${headersCleaned} header(s) cleaned`
-          : "No header changes required"
       );
 
       downloadXlsxBtn.disabled =
@@ -2439,7 +2852,8 @@
           workbook,
           `${baseName}_cleaned.csv`,
           {
-            bookType: "csv"
+            bookType:
+              "csv"
           }
         );
       }
@@ -2451,7 +2865,8 @@
       originalAnalysis = null;
       currentFileName = "";
 
-      fileInput.value = "";
+      fileInput.value =
+        "";
 
       fileInfo.style.display =
         "none";
@@ -2592,15 +3007,20 @@
             XLSX.read(
               arrayBuffer,
               {
-                type: "array",
-                cellDates: false
+                type:
+                  "array",
+                cellDates:
+                  false
               }
             );
 
           const firstSheetName =
-            workbook.SheetNames[0];
+            workbook
+              .SheetNames[0];
 
-          if (!firstSheetName) {
+          if (
+            !firstSheetName
+          ) {
             throw new Error(
               "No worksheet found."
             );
@@ -2672,8 +3092,12 @@
             originalAnalysis
           );
 
-        } catch (error) {
-          console.error(error);
+        } catch (
+          error
+        ) {
+          console.error(
+            error
+          );
 
           showNotice(
             "Could not read this spreadsheet. Please check that the file is a valid XLSX, XLS or CSV file.",
@@ -2733,19 +3157,25 @@
       ) {
         return `${(
           bytes / 1024
-        ).toFixed(1)} KB`;
+        ).toFixed(
+          1
+        )} KB`;
       }
 
       return `${(
         bytes /
         (1024 * 1024)
-      ).toFixed(1)} MB`;
+      ).toFixed(
+        1
+      )} MB`;
     }
 
     function escapeHtml(
       value
     ) {
-      return String(value)
+      return String(
+        value
+      )
         .replace(
           /&/g,
           "&amp;"
