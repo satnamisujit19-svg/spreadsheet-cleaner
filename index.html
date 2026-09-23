@@ -107,7 +107,7 @@
         <h2>Turn a messy spreadsheet into a clean one</h2>
 
         <p>
-            Remove duplicate rows and empty rows from your CSV file.
+            Remove duplicate rows, empty rows and unnecessary spaces.
         </p>
 
         <div class="upload-box">
@@ -145,6 +145,11 @@
                 <p>
                     ♻️ Duplicate rows removed:
                     <strong id="duplicates"></strong>
+                </p>
+
+                <p>
+                    ✨ Spaces cleaned:
+                    <strong id="spaces"></strong>
                 </p>
 
                 <p>
@@ -192,7 +197,10 @@
                 let rows = text.split(/\r?\n/);
 
                 // Remove the final empty line if present
-                if (rows.length > 0 && rows[rows.length - 1].trim() === "") {
+                if (
+                    rows.length > 0 &&
+                    rows[rows.length - 1].trim() === ""
+                ) {
                     rows.pop();
                 }
 
@@ -206,11 +214,28 @@
                 const emptyRowsRemoved =
                     rows.length - nonEmptyRows.length;
 
+                // Clean unnecessary spaces
+                let spacesCleaned = 0;
+
+                const cleanedRows = nonEmptyRows.map(row => {
+
+                    const cleanedRow = row
+                        .split(",")
+                        .map(cell => cell.trim())
+                        .join(",");
+
+                    if (cleanedRow !== row) {
+                        spacesCleaned++;
+                    }
+
+                    return cleanedRow;
+                });
+
                 // Remove duplicate rows
-                const uniqueRows = [...new Set(nonEmptyRows)];
+                const uniqueRows = [...new Set(cleanedRows)];
 
                 const duplicatesRemoved =
-                    nonEmptyRows.length - uniqueRows.length;
+                    cleanedRows.length - uniqueRows.length;
 
                 const rowsAfter = uniqueRows.length;
 
@@ -230,7 +255,8 @@
                 const url = URL.createObjectURL(blob);
 
                 // Show status
-                status.textContent = "✅ Spreadsheet cleaned successfully!";
+                status.textContent =
+                    "✅ Spreadsheet cleaned successfully!";
 
                 // Show report
                 document.getElementById("before").textContent =
@@ -241,6 +267,9 @@
 
                 document.getElementById("duplicates").textContent =
                     duplicatesRemoved;
+
+                document.getElementById("spaces").textContent =
+                    spacesCleaned;
 
                 document.getElementById("after").textContent =
                     rowsAfter;
