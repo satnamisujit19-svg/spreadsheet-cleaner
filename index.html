@@ -308,7 +308,7 @@ small{
   <div class="hero">
 
     <div class="badge">
-      Step 33 • Data Types
+      Step 34 • Email Normalization
     </div>
 
     <h1>
@@ -322,6 +322,7 @@ small{
     <div class="features">
 
       <span class="feature">✓ Email Validation</span>
+      <span class="feature">✓ Email Normalization</span>
       <span class="feature">✓ Phone Standardization</span>
       <span class="feature">✓ Date Detection</span>
       <span class="feature">✓ Date Standardization</span>
@@ -730,7 +731,9 @@ function analyzeHeaders(headers){
 
 
     if(!cleaned){
+
       blankHeaders++;
+
     }
 
 
@@ -826,7 +829,9 @@ function findColumn(headers,patterns){
 
 
     if(idx !== -1){
+
       return idx;
+
     }
 
   }
@@ -841,7 +846,9 @@ function findColumn(headers,patterns){
 
 
     if(idx !== -1){
+
       return idx;
+
     }
 
   }
@@ -965,6 +972,25 @@ function isValidEmail(value){
   return (
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
   );
+
+}
+
+
+
+function normalizeEmail(value){
+
+  const s =
+    String(value ?? "").trim();
+
+
+  if(!isValidEmail(s)){
+
+    return value ?? "";
+
+  }
+
+
+  return s.toLowerCase();
 
 }
 
@@ -1182,10 +1208,6 @@ function parseDateValue(value){
   }
 
 
-  /*
-     Excel serial date
-  */
-
   if(
     /^\d+(\.\d+)?$/.test(raw)
   ){
@@ -1215,11 +1237,6 @@ function parseDateValue(value){
 
   }
 
-
-  /*
-     YYYY-MM-DD
-     YYYY/MM/DD
-  */
 
   let m =
     raw.match(
@@ -1273,11 +1290,6 @@ function parseDateValue(value){
 
   }
 
-
-  /*
-     DD/MM/YYYY
-     MM/DD/YYYY
-  */
 
   m =
     raw.match(
@@ -1399,7 +1411,9 @@ function standardizeCategory(value,type){
 
 
   if(!s){
+
     return value ?? "";
+
   }
 
 
@@ -1672,14 +1686,6 @@ function detectEmptyColumns(rows,width){
 
 
 
-/*
-   FIXED MISSING DATA DETECTION
-
-   Completely empty columns are excluded
-   because they already have their own
-   Empty Columns check.
-*/
-
 function analyzeMissingData(
   rows,
   width,
@@ -1715,10 +1721,6 @@ function analyzeMissingData(
       c<width;
       c++
     ){
-
-      /*
-         Skip fully empty columns.
-      */
 
       if(
         emptyColumnSet.has(c)
@@ -1788,11 +1790,6 @@ function analyzeMissingData(
 
 
 
-/*
-   STEP 33
-   DATA TYPE DETECTION
-*/
-
 function detectCellType(value){
 
   if(isBlank(value)){
@@ -1806,27 +1803,12 @@ function detectCellType(value){
     String(value).trim();
 
 
-  /*
-     EMAIL FIRST
-  */
-
   if(isValidEmail(s)){
 
     return "Email";
 
   }
 
-
-  /*
-     DATE BEFORE PHONE
-
-     This fixes values such as:
-     23-03-1997
-     15/05/1999
-     2000-06-18
-
-     They are dates, not phones.
-  */
 
   const dateInfo =
     parseDateValue(s);
@@ -1842,15 +1824,6 @@ function detectCellType(value){
   }
 
 
-  /*
-     BOOLEAN
-
-     Includes:
-     true / false
-     yes / no
-     y / n
-  */
-
   if(
     /^(true|false|yes|no|y|n)$/i.test(s)
   ){
@@ -1860,20 +1833,12 @@ function detectCellType(value){
   }
 
 
-  /*
-     PHONE
-  */
-
   if(isValidPhone(s)){
 
     return "Phone";
 
   }
 
-
-  /*
-     NUMBER
-  */
 
   const num =
     s
@@ -1892,10 +1857,6 @@ function detectCellType(value){
 
   }
 
-
-  /*
-     EVERYTHING ELSE
-  */
 
   return "Text";
 
@@ -1989,11 +1950,6 @@ function detectColumnType(
   const confidence =
     top / meaningful;
 
-
-  /*
-     Mixed when there is meaningful
-     uncertainty in the column.
-  */
 
   return {
 
@@ -2274,11 +2230,6 @@ function analyzeSpreadsheet(rows){
 
   }
 
-
-  /*
-     Detect empty columns BEFORE
-     missing-data analysis.
-  */
 
   const emptyColumns =
     detectEmptyColumns(
@@ -2969,22 +2920,27 @@ function cleanSpreadsheet(){
 
 
     /*
-       Email normalization
+       STEP 34
+       EMAIL NORMALIZATION
+
+       Only valid emails are normalized.
+       Invalid email values remain unchanged.
     */
 
     if(
       eIdx >= 0 &&
-      !isBlank(out[eIdx])
+      !isBlank(out[eIdx]) &&
+      isValidEmail(out[eIdx])
     ){
 
       const normalized =
-        String(
+        normalizeEmail(
           out[eIdx]
-        ).trim();
+        );
 
 
       if(
-        normalized !==
+        String(normalized) !==
         String(out[eIdx])
       ){
 
@@ -3000,7 +2956,7 @@ function cleanSpreadsheet(){
 
 
     /*
-       Phone standardization
+       PHONE STANDARDIZATION
     */
 
     if(
@@ -3033,7 +2989,7 @@ function cleanSpreadsheet(){
 
 
     /*
-       Date standardization
+       DATE STANDARDIZATION
     */
 
     if(
@@ -3079,7 +3035,7 @@ function cleanSpreadsheet(){
 
 
     /*
-       Gender
+       GENDER
     */
 
     if(
@@ -3104,13 +3060,14 @@ function cleanSpreadsheet(){
       }
 
 
-      out[gIdx] = v;
+      out[gIdx] =
+        v;
 
     }
 
 
     /*
-       Consent
+       CONSENT
     */
 
     if(
@@ -3135,13 +3092,14 @@ function cleanSpreadsheet(){
       }
 
 
-      out[cIdx] = v;
+      out[cIdx] =
+        v;
 
     }
 
 
     /*
-       Status
+       STATUS
     */
 
     if(
@@ -3166,7 +3124,8 @@ function cleanSpreadsheet(){
       }
 
 
-      out[sIdx] = v;
+      out[sIdx] =
+        v;
 
     }
 
@@ -3177,7 +3136,7 @@ function cleanSpreadsheet(){
 
 
   /*
-     Remove completely empty columns
+     REMOVE COMPLETELY EMPTY COLUMNS
   */
 
   const keepIndexes = [];
@@ -3270,6 +3229,9 @@ function cleanSpreadsheet(){
     ${duplicatesRemoved}
     duplicate row(s) removed,
 
+    ${emailsNormalized}
+    email value(s) normalized,
+
     ${phoneStandardized}
     phone value(s) standardized,
 
@@ -3278,9 +3240,6 @@ function cleanSpreadsheet(){
 
     ${ambiguousLeft}
     ambiguous date value(s) left unchanged,
-
-    ${emailsNormalized}
-    email value(s) trimmed,
 
     and
 
@@ -3856,9 +3815,7 @@ async function handleFile(file){
 
     "Your original spreadsheet has been analyzed. " +
 
-    "Data Type Detection is analysis-only at this step; " +
-
-    "it does not change uncertain values automatically.";
+    "Email Normalization will convert valid email addresses to lowercase while preserving invalid email values.";
 
 
   showMessage(
