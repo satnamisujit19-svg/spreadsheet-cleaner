@@ -491,6 +491,7 @@ small{
         <button
           id="cleanBtn"
           class="btn primary"
+          disabled
         >
           Clean Spreadsheet
         </button>
@@ -533,7 +534,6 @@ small{
 
 "use strict";
 
-
 let originalRows = [];
 let cleanedRows = [];
 
@@ -543,7 +543,8 @@ let cleanedAnalysis = null;
 let currentFileName = "spreadsheet";
 
 
-const $ = (id) => document.getElementById(id);
+const $ = (id) =>
+  document.getElementById(id);
 
 
 
@@ -553,7 +554,9 @@ function showMessage(text,kind){
 
   el.textContent = text;
 
-  el.className = "message " + (kind || "info");
+  el.className =
+    "message " +
+    (kind || "info");
 
 }
 
@@ -649,25 +652,39 @@ function getComparableRow(row,width){
 
 function countDuplicateRows(rows){
 
-  if(!rows || rows.length <= 1){
+  if(
+    !rows ||
+    rows.length <= 1
+  ){
+
     return 0;
+
   }
+
 
   const width =
     rows.reduce(
       (m,r) =>
         Math.max(
           m,
-          Array.isArray(r) ? r.length : 0
+          Array.isArray(r)
+            ? r.length
+            : 0
         ),
       0
     );
+
 
   const seen = new Set();
 
   let duplicates = 0;
 
-  for(let i=1;i<rows.length;i++){
+
+  for(
+    let i=1;
+    i<rows.length;
+    i++
+  ){
 
     const key =
       JSON.stringify(
@@ -676,6 +693,7 @@ function countDuplicateRows(rows){
           width
         )
       );
+
 
     if(seen.has(key)){
 
@@ -689,6 +707,7 @@ function countDuplicateRows(rows){
 
   }
 
+
   return duplicates;
 
 }
@@ -700,24 +719,31 @@ function analyzeHeaders(headers){
   const seen = new Map();
 
   let duplicateHeaders = 0;
+
   let blankHeaders = 0;
+
 
   headers.forEach((h)=>{
 
     const cleaned =
       cleanHeaderText(h);
 
+
     if(!cleaned){
       blankHeaders++;
     }
 
+
     const key =
       normalizeHeader(cleaned);
+
 
     if(key){
 
       if(seen.has(key)){
+
         duplicateHeaders++;
+
       }
 
       seen.set(
@@ -728,6 +754,7 @@ function analyzeHeaders(headers){
     }
 
   });
+
 
   return {
     duplicateHeaders,
@@ -742,31 +769,40 @@ function buildCleanHeaders(headers){
 
   const used = new Map();
 
+
   return headers.map((h,i)=>{
 
     let base =
       cleanHeaderText(h);
 
+
     if(!base){
 
       base =
-        "Column " + (i+1);
+        "Column " +
+        (i+1);
 
     }
+
 
     const key =
       normalizeHeader(base);
 
+
     const count =
       (used.get(key) || 0) + 1;
+
 
     used.set(
       key,
       count
     );
 
+
     return count === 1
+
       ? base
+
       : base + " (" + count + ")";
 
   });
@@ -780,12 +816,14 @@ function findColumn(headers,patterns){
   const normalized =
     headers.map(normalizeHeader);
 
+
   for(const p of patterns){
 
     const idx =
       normalized.findIndex(
         h => h === p
       );
+
 
     if(idx !== -1){
       return idx;
@@ -800,6 +838,7 @@ function findColumn(headers,patterns){
       normalized.findIndex(
         h => h.includes(p)
       );
+
 
     if(idx !== -1){
       return idx;
@@ -922,7 +961,10 @@ function isValidEmail(value){
   const s =
     String(value ?? "").trim();
 
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+
+  return (
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+  );
 
 }
 
@@ -935,7 +977,11 @@ function isPhoneErrorValue(value){
       .trim()
       .toUpperCase();
 
-  return /^#(?:ERROR|VALUE|DIV\/0|REF|N\/A|NAME|NUM|NULL)[!?]?$/.test(s);
+
+  return (
+    /^#(?:ERROR|VALUE|DIV\/0|REF|N\/A|NAME|NUM|NULL)[!?]?$/
+      .test(s)
+  );
 
 }
 
@@ -955,16 +1001,29 @@ function isValidPhone(value){
   const s =
     String(value ?? "").trim();
 
-  if(!s || isPhoneErrorValue(s)){
+
+  if(
+    !s ||
+    isPhoneErrorValue(s)
+  ){
+
     return false;
+
   }
 
-  if(!/^[+()\d\s.\-]+$/.test(s)){
+
+  if(
+    !/^[+()\d\s.\-]+$/.test(s)
+  ){
+
     return false;
+
   }
+
 
   const digits =
     extractPhoneDigits(s);
+
 
   return (
     digits.length >= 7 &&
@@ -980,12 +1039,17 @@ function standardizePhone(value){
   const s =
     String(value ?? "").trim();
 
+
   if(!isValidPhone(s)){
+
     return value ?? "";
+
   }
+
 
   const digits =
     extractPhoneDigits(s);
+
 
   return s.startsWith("+")
     ? "+" + digits
@@ -1000,13 +1064,17 @@ function excelSerialToDate(serial){
   const n =
     Number(serial);
 
+
   if(
     !Number.isFinite(n) ||
     n <= 0 ||
     n > 2958465
   ){
+
     return null;
+
   }
+
 
   const utc =
     new Date(
@@ -1018,13 +1086,17 @@ function excelSerialToDate(serial){
       n * 86400000
     );
 
+
   if(
     Number.isNaN(
       utc.getTime()
     )
   ){
+
     return null;
+
   }
+
 
   return utc;
 
@@ -1042,6 +1114,7 @@ function validYMD(y,m,d){
         d
       )
     );
+
 
   return (
     dt.getUTCFullYear() === y &&
@@ -1071,17 +1144,22 @@ function parseDateValue(value){
 
   if(
     value instanceof Date &&
-    !Number.isNaN(value.getTime())
+    !Number.isNaN(
+      value.getTime()
+    )
   ){
 
     return {
+
       status:"valid",
+
       value:
         formatDate(
           value.getUTCFullYear(),
           value.getUTCMonth()+1,
           value.getUTCDate()
         )
+
     };
 
   }
@@ -1094,34 +1172,43 @@ function parseDateValue(value){
   if(!raw){
 
     return {
+
       status:"empty",
+
       value:value ?? ""
+
     };
 
   }
 
 
   /*
-     Excel numeric serial date support
+     Excel serial date
   */
 
-  if(/^\d+(\.\d+)?$/.test(raw)){
+  if(
+    /^\d+(\.\d+)?$/.test(raw)
+  ){
 
     const serialDate =
       excelSerialToDate(
         Number(raw)
       );
 
+
     if(serialDate){
 
       return {
+
         status:"valid",
+
         value:
           formatDate(
             serialDate.getUTCFullYear(),
             serialDate.getUTCMonth()+1,
             serialDate.getUTCDate()
           )
+
       };
 
     }
@@ -1161,21 +1248,27 @@ function parseDateValue(value){
     ){
 
       return {
+
         status:"valid",
+
         value:
           formatDate(
             y,
             mo,
             d
           )
+
       };
 
     }
 
 
     return {
+
       status:"invalid",
+
       value
+
     };
 
   }
@@ -1211,6 +1304,7 @@ function parseDateValue(value){
         a
       );
 
+
     const monthFirst =
       validYMD(
         y,
@@ -1226,8 +1320,11 @@ function parseDateValue(value){
     ){
 
       return {
+
         status:"ambiguous",
+
         value
+
       };
 
     }
@@ -1239,13 +1336,16 @@ function parseDateValue(value){
     ){
 
       return {
+
         status:"valid",
+
         value:
           formatDate(
             y,
             b,
             a
           )
+
       };
 
     }
@@ -1257,24 +1357,33 @@ function parseDateValue(value){
     ){
 
       return {
+
         status:"ambiguous",
+
         value
+
       };
 
     }
 
 
     return {
+
       status:"invalid",
+
       value
+
     };
 
   }
 
 
   return {
+
     status:"invalid",
+
     value
+
   };
 
 }
@@ -1288,6 +1397,7 @@ function standardizeCategory(value,type){
       .trim()
       .toLowerCase();
 
+
   if(!s){
     return value ?? "";
   }
@@ -1298,19 +1408,27 @@ function standardizeCategory(value,type){
     if(
       ["m","male"].includes(s)
     ){
+
       return "Male";
+
     }
+
 
     if(
       ["f","female"].includes(s)
     ){
+
       return "Female";
+
     }
+
 
     if(
       ["o","other"].includes(s)
     ){
+
       return "Other";
+
     }
 
   }
@@ -1321,13 +1439,18 @@ function standardizeCategory(value,type){
     if(
       ["y","yes"].includes(s)
     ){
+
       return "Yes";
+
     }
+
 
     if(
       ["n","no"].includes(s)
     ){
+
       return "No";
+
     }
 
   }
@@ -1336,11 +1459,16 @@ function standardizeCategory(value,type){
   if(type === "status"){
 
     if(s === "active"){
+
       return "Active";
+
     }
 
+
     if(s === "inactive"){
+
       return "Inactive";
+
     }
 
   }
@@ -1363,6 +1491,7 @@ function countCategoryChanges(rows,headers){
   const s =
     statusColumn(headers);
 
+
   let changes = 0;
 
 
@@ -1383,11 +1512,14 @@ function countCategoryChanges(rows,headers){
           "gender"
         );
 
+
       if(
         changed !==
         rows[i][g]
       ){
+
         changes++;
+
       }
 
     }
@@ -1404,11 +1536,14 @@ function countCategoryChanges(rows,headers){
           "consent"
         );
 
+
       if(
         changed !==
         rows[i][c]
       ){
+
         changes++;
+
       }
 
     }
@@ -1425,11 +1560,14 @@ function countCategoryChanges(rows,headers){
           "status"
         );
 
+
       if(
         changed !==
         rows[i][s]
       ){
+
         changes++;
+
       }
 
     }
@@ -1462,6 +1600,7 @@ function countWhitespaceValues(rows){
 
       const v =
         rows[r][c];
+
 
       if(
         typeof v === "string" &&
@@ -1510,6 +1649,7 @@ function detectEmptyColumns(rows,width){
       ){
 
         hasValue = true;
+
         break;
 
       }
@@ -1518,7 +1658,9 @@ function detectEmptyColumns(rows,width){
 
 
     if(!hasValue){
+
       empty.push(c);
+
     }
 
   }
@@ -1530,11 +1672,30 @@ function detectEmptyColumns(rows,width){
 
 
 
-function analyzeMissingData(rows,width){
+/*
+   FIXED MISSING DATA DETECTION
+
+   Completely empty columns are excluded
+   because they already have their own
+   Empty Columns check.
+*/
+
+function analyzeMissingData(
+  rows,
+  width,
+  emptyColumnIndexes
+){
+
+  const emptyColumnSet =
+    new Set(
+      emptyColumnIndexes || []
+    );
+
 
   let emptyCells = 0;
 
   let rowsWithMissing = 0;
+
 
   const missingByColumn =
     Array(width).fill(0);
@@ -1555,6 +1716,19 @@ function analyzeMissingData(rows,width){
       c++
     ){
 
+      /*
+         Skip fully empty columns.
+      */
+
+      if(
+        emptyColumnSet.has(c)
+      ){
+
+        continue;
+
+      }
+
+
       if(
         isBlank(
           rows[r]?.[c]
@@ -1573,7 +1747,9 @@ function analyzeMissingData(rows,width){
 
 
     if(rowMissing){
+
       rowsWithMissing++;
+
     }
 
   }
@@ -1583,8 +1759,10 @@ function analyzeMissingData(rows,width){
     missingByColumn.reduce(
       (arr,n,i)=>{
 
-        if(n>0){
+        if(n > 0){
+
           arr.push(i);
+
         }
 
         return arr;
@@ -1595,10 +1773,15 @@ function analyzeMissingData(rows,width){
 
 
   return {
+
     emptyCells,
+
     rowsWithMissing,
+
     missingByColumn,
+
     columnsWithMissing
+
   };
 
 }
@@ -1613,7 +1796,9 @@ function analyzeMissingData(rows,width){
 function detectCellType(value){
 
   if(isBlank(value)){
+
     return "Empty";
+
   }
 
 
@@ -1622,26 +1807,25 @@ function detectCellType(value){
 
 
   /*
-     Email before phone/date
+     EMAIL FIRST
   */
 
   if(isValidEmail(s)){
+
     return "Email";
+
   }
 
 
   /*
-     Phone before number
-     so 9876543210 becomes Phone
-  */
+     DATE BEFORE PHONE
 
-  if(isValidPhone(s)){
-    return "Phone";
-  }
+     This fixes values such as:
+     23-03-1997
+     15/05/1999
+     2000-06-18
 
-
-  /*
-     Date detection
+     They are dates, not phones.
   */
 
   const dateInfo =
@@ -1659,11 +1843,16 @@ function detectCellType(value){
 
 
   /*
-     Boolean
+     BOOLEAN
+
+     Includes:
+     true / false
+     yes / no
+     y / n
   */
 
   if(
-    /^(true|false|yes|no)$/i.test(s)
+    /^(true|false|yes|no|y|n)$/i.test(s)
   ){
 
     return "Boolean";
@@ -1672,14 +1861,27 @@ function detectCellType(value){
 
 
   /*
-     Number
+     PHONE
+  */
+
+  if(isValidPhone(s)){
+
+    return "Phone";
+
+  }
+
+
+  /*
+     NUMBER
   */
 
   const num =
-    s.replace(
-      /[₹$€£,]/g,
-      ""
-    ).trim();
+    s
+      .replace(
+        /[₹$€£,]/g,
+        ""
+      )
+      .trim();
 
 
   if(
@@ -1691,15 +1893,23 @@ function detectCellType(value){
   }
 
 
+  /*
+     EVERYTHING ELSE
+  */
+
   return "Text";
 
 }
 
 
 
-function detectColumnType(rows,columnIndex){
+function detectColumnType(
+  rows,
+  columnIndex
+){
 
   const counts = {
+
     Email:0,
     Phone:0,
     Date:0,
@@ -1707,6 +1917,7 @@ function detectColumnType(rows,columnIndex){
     Number:0,
     Text:0,
     Empty:0
+
   };
 
 
@@ -1730,7 +1941,9 @@ function detectColumnType(rows,columnIndex){
 
 
     if(type !== "Empty"){
+
       meaningful++;
+
     }
 
   }
@@ -1739,10 +1952,15 @@ function detectColumnType(rows,columnIndex){
   if(meaningful === 0){
 
     return {
+
       type:"Empty",
+
       counts,
+
       meaningful,
+
       confidence:1
+
     };
 
   }
@@ -1761,27 +1979,21 @@ function detectColumnType(rows,columnIndex){
       );
 
 
-  if(entries.length === 0){
-
-    return {
-      type:"Empty",
-      counts,
-      meaningful,
-      confidence:1
-    };
-
-  }
-
-
   const dominant =
     entries[0][0];
 
   const top =
     entries[0][1];
 
+
   const confidence =
     top / meaningful;
 
+
+  /*
+     Mixed when there is meaningful
+     uncertainty in the column.
+  */
 
   return {
 
@@ -1790,8 +2002,8 @@ function detectColumnType(rows,columnIndex){
         entries.length > 1 &&
         confidence < 0.95
       )
-      ? "Mixed"
-      : dominant,
+        ? "Mixed"
+        : dominant,
 
     counts,
 
@@ -1805,7 +2017,10 @@ function detectColumnType(rows,columnIndex){
 
 
 
-function analyzeColumnTypes(rows,headers){
+function analyzeColumnTypes(
+  rows,
+  headers
+){
 
   const columns = [];
 
@@ -1844,38 +2059,46 @@ function analyzeColumnTypes(rows,headers){
     });
 
 
-    if(d.type === "Mixed"){
+    if(
+      d.type === "Mixed"
+    ){
+
       mixedTypeColumns++;
+
     }
 
 
-    if(d.type === "Number"){
+    if(
+      d.type === "Number"
+    ){
+
       numericColumns++;
+
     }
 
   }
 
 
   return {
+
     columns,
+
     mixedTypeColumns,
+
     numericColumns
+
   };
 
 }
 
 
 
-/*
-   MAIN ANALYSIS
-*/
-
 function analyzeSpreadsheet(rows){
 
   const safeRows =
     Array.isArray(rows)
-    ? rows
-    : [];
+      ? rows
+      : [];
 
 
   if(!safeRows.length){
@@ -1889,12 +2112,12 @@ function analyzeSpreadsheet(rows){
 
   const width =
     safeRows.reduce(
-      (m,r)=>
+      (m,r) =>
         Math.max(
           m,
           Array.isArray(r)
-          ? r.length
-          : 0
+            ? r.length
+            : 0
         ),
       0
     );
@@ -1943,11 +2166,9 @@ function analyzeSpreadsheet(rows){
   let invalidEmails = 0;
   let emptyEmailCells = 0;
 
-
   let validPhones = 0;
   let invalidPhones = 0;
   let emptyPhoneCells = 0;
-
 
   let validDates = 0;
   let invalidDates = 0;
@@ -1964,10 +2185,6 @@ function analyzeSpreadsheet(rows){
     const row =
       safeRows[r] || [];
 
-
-    /*
-       Email
-    */
 
     if(eIdx >= 0){
 
@@ -1994,10 +2211,6 @@ function analyzeSpreadsheet(rows){
     }
 
 
-    /*
-       Phone
-    */
-
     if(pIdx >= 0){
 
       const v =
@@ -2023,14 +2236,11 @@ function analyzeSpreadsheet(rows){
     }
 
 
-    /*
-       Date
-    */
-
     if(dIdx >= 0){
 
       const v =
         row[dIdx];
+
 
       const info =
         parseDateValue(v);
@@ -2065,17 +2275,23 @@ function analyzeSpreadsheet(rows){
   }
 
 
-  const missing =
-    analyzeMissingData(
-      safeRows,
-      width
-    );
-
+  /*
+     Detect empty columns BEFORE
+     missing-data analysis.
+  */
 
   const emptyColumns =
     detectEmptyColumns(
       safeRows,
       width
+    );
+
+
+  const missing =
+    analyzeMissingData(
+      safeRows,
+      width,
+      emptyColumns
     );
 
 
@@ -2143,42 +2359,22 @@ function analyzeSpreadsheet(rows){
 
     emailColumn:
       eIdx >= 0
-      ? headers[eIdx]
-      : "Not detected",
+        ? headers[eIdx]
+        : "Not detected",
 
     phoneColumn:
       pIdx >= 0
-      ? headers[pIdx]
-      : "Not detected",
+        ? headers[pIdx]
+        : "Not detected",
 
     dateColumn:
       dIdx >= 0
-      ? headers[dIdx]
-      : "Not detected",
+        ? headers[dIdx]
+        : "Not detected",
 
     headers
 
   };
-
-}
-
-
-
-function statCard(label,value){
-
-  return `
-    <div class="stat">
-
-      <div class="label">
-        ${escapeHtml(label)}
-      </div>
-
-      <div class="value">
-        ${escapeHtml(String(value))}
-      </div>
-
-    </div>
-  `;
 
 }
 
@@ -2202,9 +2398,27 @@ function escapeHtml(value){
 
 
 
-/*
-   RENDER ANALYSIS
-*/
+function statCard(label,value){
+
+  return `
+
+    <div class="stat">
+
+      <div class="label">
+        ${escapeHtml(label)}
+      </div>
+
+      <div class="value">
+        ${escapeHtml(String(value))}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
 
 function renderOriginalAnalysis(){
 
@@ -2378,11 +2592,13 @@ function renderOriginalAnalysis(){
               </td>
 
               <td class="${x[2]}">
+
                 ${
                   x[1] === 0
-                  ? "OK"
-                  : "Review"
+                    ? "OK"
+                    : "Review"
                 }
+
               </td>
 
             </tr>
@@ -2505,10 +2721,6 @@ function renderOriginalAnalysis(){
 
 
 
-/*
-   DATA TYPE TABLE
-*/
-
 function renderTypeMap(){
 
   const cols =
@@ -2581,7 +2793,8 @@ function renderTypeMap(){
 
                 <td>
                   ${escapeHtml(
-                    summary || "No values"
+                    summary ||
+                    "No values"
                   )}
                 </td>
 
@@ -2602,10 +2815,6 @@ function renderTypeMap(){
 
 
 
-/*
-   CLEAN SPREADSHEET
-*/
-
 function cleanSpreadsheet(){
 
   if(!originalRows.length){
@@ -2615,12 +2824,12 @@ function cleanSpreadsheet(){
 
   const width =
     originalRows.reduce(
-      (m,r)=>
+      (m,r) =>
         Math.max(
           m,
           Array.isArray(r)
-          ? r.length
-          : 0
+            ? r.length
+            : 0
         ),
       0
     );
@@ -2710,7 +2919,9 @@ function cleanSpreadsheet(){
     if(
       isEntireRowBlank(src)
     ){
+
       continue;
+
     }
 
 
@@ -2722,7 +2933,9 @@ function cleanSpreadsheet(){
 
 
     const comparableKey =
-      JSON.stringify(comparable);
+      JSON.stringify(
+        comparable
+      );
 
 
     if(
@@ -2853,6 +3066,7 @@ function cleanSpreadsheet(){
 
       }
 
+
       else if(
         parsed.status === "ambiguous"
       ){
@@ -2963,7 +3177,7 @@ function cleanSpreadsheet(){
 
 
   /*
-     Remove fully empty columns
+     Remove completely empty columns
   */
 
   const keepIndexes = [];
@@ -3095,10 +3309,6 @@ function cleanSpreadsheet(){
 
 
 
-/*
-   PREVIEW
-*/
-
 function renderPreview(rows){
 
   if(!rows.length){
@@ -3111,7 +3321,10 @@ function renderPreview(rows){
 
 
   const display =
-    rows.slice(0,11);
+    rows.slice(
+      0,
+      11
+    );
 
 
   const head =
@@ -3119,22 +3332,22 @@ function renderPreview(rows){
 
 
   let html =
-    '<table><thead><tr>';
+    "<table><thead><tr>";
 
 
   html +=
     head
       .map(
         h =>
-          '<th>' +
+          "<th>" +
           escapeHtml(h) +
-          '</th>'
+          "</th>"
       )
       .join("");
 
 
   html +=
-    '</tr></thead><tbody>';
+    "</tr></thead><tbody>";
 
 
   for(
@@ -3178,18 +3391,21 @@ function renderPreview(rows){
 
 
 
-/*
-   DOWNLOAD
-*/
-
-function downloadBlob(blob,filename){
+function downloadBlob(
+  blob,
+  filename
+){
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
 
   const a =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
 
 
   a.href = url;
@@ -3322,7 +3538,10 @@ function downloadCsv(){
 
   const blob =
     new Blob(
-      ["\uFEFF" + csv],
+      [
+        "\uFEFF" +
+        csv
+      ],
       {
         type:
           "text/csv;charset=utf-8"
@@ -3339,10 +3558,6 @@ function downloadCsv(){
 }
 
 
-
-/*
-   RESET
-*/
 
 function resetAll(){
 
@@ -3392,20 +3607,12 @@ function resetAll(){
 
 
 
-/*
-   FILE READER
-*/
-
 async function handleFile(file){
 
   if(!file){
     return;
   }
 
-
-  /*
-     XLSX library check
-  */
 
   if(
     typeof XLSX === "undefined"
@@ -3461,10 +3668,6 @@ async function handleFile(file){
   );
 
 
-  /*
-     Modern file reading
-  */
-
   const buffer =
     await file.arrayBuffer();
 
@@ -3480,10 +3683,6 @@ async function handleFile(file){
 
   }
 
-
-  /*
-     Read workbook
-  */
 
   const workbook =
     XLSX.read(
@@ -3526,10 +3725,6 @@ async function handleFile(file){
   }
 
 
-  /*
-     Convert to array-of-arrays
-  */
-
   const rows =
     XLSX.utils.sheet_to_json(
       worksheet,
@@ -3554,13 +3749,10 @@ async function handleFile(file){
   }
 
 
-  /*
-     Keep only valid row arrays
-  */
-
   const useful =
     rows.filter(
-      row => Array.isArray(row)
+      row =>
+        Array.isArray(row)
     );
 
 
@@ -3578,13 +3770,9 @@ async function handleFile(file){
   }
 
 
-  /*
-     Normalize every row to same width
-  */
-
   const width =
     useful.reduce(
-      (m,r)=>
+      (m,r) =>
         Math.max(
           m,
           r.length
@@ -3619,19 +3807,11 @@ async function handleFile(file){
     );
 
 
-  /*
-     Analyze original spreadsheet
-  */
-
   originalAnalysis =
     analyzeSpreadsheet(
       originalRows
     );
 
-
-  /*
-     STEP 33 DATA TYPES
-  */
 
   originalAnalysis.typeAnalysis =
     analyzeColumnTypes(
@@ -3690,10 +3870,6 @@ async function handleFile(file){
 
 
 
-/*
-   FILE INPUT
-*/
-
 $("fileInput")
   .addEventListener(
     "change",
@@ -3730,18 +3906,12 @@ $("fileInput")
 
         showMessage(
 
-          (
-            err &&
-            err.message
-          )
-
-          ?
-
+          err &&
           err.message
 
-          :
+            ? err.message
 
-          "This spreadsheet could not be processed. Please refresh the page and try again.",
+            : "This spreadsheet could not be processed. Please refresh the page and try again.",
 
           "error"
 
@@ -3753,10 +3923,6 @@ $("fileInput")
   );
 
 
-
-/*
-   CLEAN BUTTON
-*/
 
 $("cleanBtn")
   .addEventListener(
@@ -3779,18 +3945,12 @@ $("cleanBtn")
 
         showMessage(
 
-          (
-            err &&
-            err.message
-          )
-
-          ?
-
+          err &&
           err.message
 
-          :
+            ? err.message
 
-          "The spreadsheet could not be cleaned.",
+            : "The spreadsheet could not be cleaned.",
 
           "error"
 
@@ -3803,15 +3963,12 @@ $("cleanBtn")
 
 
 
-/*
-   DOWNLOAD BUTTONS
-*/
-
 $("xlsxBtn")
   .addEventListener(
     "click",
     downloadXlsx
   );
+
 
 
 $("csvBtn")
@@ -3821,10 +3978,6 @@ $("csvBtn")
   );
 
 
-
-/*
-   RESET BUTTON
-*/
 
 $("resetBtn")
   .addEventListener(
