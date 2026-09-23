@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -191,7 +192,8 @@ table{
   min-width:640px;
 }
 
-th,td{
+th,
+td{
   padding:11px 12px;
   border-bottom:1px solid #edf0f4;
   text-align:left;
@@ -286,13 +288,27 @@ small{
   line-height:1.5;
 }
 
+.formula-note{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#eff8ff;
+  border:1px solid #b2ddff;
+  color:#175cd3;
+  font-size:13px;
+  line-height:1.5;
+}
+
 @media(max-width:900px){
+
   .grid{
     grid-template-columns:repeat(2,1fr);
   }
+
 }
 
 @media(max-width:600px){
+
   .container{
     padding:24px 12px 45px;
   }
@@ -308,7 +324,9 @@ small{
   .card{
     padding:17px;
   }
+
 }
+
 </style>
 </head>
 
@@ -319,7 +337,7 @@ small{
   <div class="hero">
 
     <div class="badge">
-      Step 35 • Formula & Errors
+      Step 36 • Formula Preservation
     </div>
 
     <h1>
@@ -342,6 +360,7 @@ small{
       <span class="feature">✓ Missing Data Detection</span>
       <span class="feature">✓ Data Type Detection</span>
       <span class="feature">✓ Formula & Error Detection</span>
+      <span class="feature">✓ Formula Preservation</span>
       <span class="feature">✓ Duplicate Detection</span>
       <span class="feature">✓ Empty Column Detection</span>
       <span class="feature">✓ XLSX + CSV Export</span>
@@ -353,7 +372,9 @@ small{
 
   <div class="card upload">
 
-    <div class="icon">📊</div>
+    <div class="icon">
+      📊
+    </div>
 
     <h2>
       Upload your spreadsheet
@@ -365,7 +386,10 @@ small{
 
     <div class="btnrow">
 
-      <label class="btn primary" for="fileInput">
+      <label
+        class="btn primary"
+        for="fileInput"
+      >
         Choose Spreadsheet
       </label>
 
@@ -396,6 +420,7 @@ small{
     id="results"
     class="hidden"
   >
+
 
     <div class="card">
 
@@ -520,6 +545,16 @@ small{
       ></div>
 
 
+      <div
+        class="formula-note"
+      >
+
+        Formula cells are preserved in the downloaded XLSX.
+        CSV exports contain values only because CSV does not support spreadsheet formulas.
+
+      </div>
+
+
       <div class="btnrow">
 
         <button
@@ -573,11 +608,15 @@ let originalRows = [];
 
 let cleanedRows = [];
 
+let cleanedFormulaRows = [];
+
 let originalAnalysis = null;
 
 let cleanedAnalysis = null;
 
 let currentFileName = "spreadsheet";
+
+let originalWorksheet = null;
 
 
 const $ = (id) =>
@@ -585,7 +624,10 @@ const $ = (id) =>
 
 
 
-function showMessage(text,kind){
+function showMessage(
+  text,
+  kind
+){
 
   const el =
     $("message");
@@ -684,9 +726,13 @@ function normalizeCellForDuplicate(value){
 
 
 
-function getComparableRow(row,width){
+function getComparableRow(
+  row,
+  width
+){
 
   const out = [];
+
 
   for(
     let i=0;
@@ -701,6 +747,7 @@ function getComparableRow(row,width){
     );
 
   }
+
 
   return out;
 
@@ -722,7 +769,7 @@ function countDuplicateRows(rows){
 
   const width =
     rows.reduce(
-      (m,r) =>
+      (m,r)=>
         Math.max(
           m,
           Array.isArray(r)
@@ -1277,7 +1324,11 @@ function excelSerialToDate(serial){
 
 
 
-function validYMD(y,m,d){
+function validYMD(
+  y,
+  m,
+  d
+){
 
   const dt =
     new Date(
@@ -1299,7 +1350,11 @@ function validYMD(y,m,d){
 
 
 
-function formatDate(y,m,d){
+function formatDate(
+  y,
+  m,
+  d
+){
 
   return (
     String(d).padStart(2,"0") +
@@ -1655,110 +1710,6 @@ function standardizeCategory(
 
 
 
-function countCategoryChanges(
-  rows,
-  headers
-){
-
-  const g =
-    genderColumn(headers);
-
-  const c =
-    consentColumn(headers);
-
-  const s =
-    statusColumn(headers);
-
-
-  let changes = 0;
-
-
-  for(
-    let i=1;
-    i<rows.length;
-    i++
-  ){
-
-    if(
-      g >= 0 &&
-      !isBlank(rows[i]?.[g])
-    ){
-
-      const changed =
-        standardizeCategory(
-          rows[i][g],
-          "gender"
-        );
-
-
-      if(
-        changed !==
-        rows[i][g]
-      ){
-
-        changes++;
-
-      }
-
-    }
-
-
-    if(
-      c >= 0 &&
-      !isBlank(rows[i]?.[c])
-    ){
-
-      const changed =
-        standardizeCategory(
-          rows[i][c],
-          "consent"
-        );
-
-
-      if(
-        changed !==
-        rows[i][c]
-      ){
-
-        changes++;
-
-      }
-
-    }
-
-
-    if(
-      s >= 0 &&
-      !isBlank(rows[i]?.[s])
-    ){
-
-      const changed =
-        standardizeCategory(
-          rows[i][s],
-          "status"
-        );
-
-
-      if(
-        changed !==
-        rows[i][s]
-      ){
-
-        changes++;
-
-      }
-
-    }
-
-  }
-
-
-  return changes;
-
-}
-
-
-
 function countWhitespaceValues(rows){
 
   let count = 0;
@@ -1859,7 +1810,7 @@ function analyzeMissingData(
   emptyColumnIndexes
 ){
 
-  const emptyColumnSet =
+  const emptySet =
     new Set(
       emptyColumnIndexes || []
     );
@@ -1890,7 +1841,7 @@ function analyzeMissingData(
     ){
 
       if(
-        emptyColumnSet.has(c)
+        emptySet.has(c)
       ){
 
         continue;
@@ -1928,7 +1879,7 @@ function analyzeMissingData(
     missingByColumn.reduce(
       (arr,n,i)=>{
 
-        if(n > 0){
+        if(n>0){
 
           arr.push(i);
 
@@ -2105,20 +2056,23 @@ function detectColumnType(
 
 
   const entries =
-    Object.entries(counts)
-      .filter(
-        ([k]) =>
-          k !== "Empty" &&
-          counts[k] > 0
-      )
-      .sort(
-        (a,b) =>
-          b[1] - a[1]
-      );
+    Object.entries(
+      counts
+    )
+    .filter(
+      ([k]) =>
+        k !== "Empty" &&
+        counts[k] > 0
+    )
+    .sort(
+      (a,b) =>
+        b[1] - a[1]
+    );
 
 
   const dominant =
     entries[0][0];
+
 
   const top =
     entries[0][1];
@@ -2243,14 +2197,6 @@ function analyzeFormulaAndErrors(
   const formulaCells = [];
 
 
-  /*
-     Inspect real worksheet cells.
-
-     This catches:
-     - formulas
-     - native Excel error cells
-  */
-
   if(
     worksheet &&
     worksheet["!ref"]
@@ -2286,7 +2232,9 @@ function analyzeFormulaAndErrors(
 
 
         if(!cell){
+
           continue;
+
         }
 
 
@@ -2297,7 +2245,8 @@ function analyzeFormulaAndErrors(
             cell:address,
 
             formula:
-              "=" + String(cell.f),
+              "=" +
+              String(cell.f),
 
             value:
               cell.w ??
@@ -2350,12 +2299,6 @@ function analyzeFormulaAndErrors(
 
   }
 
-
-  /*
-     Also inspect visible imported
-     values. This catches text such as
-     #ERROR! in ordinary spreadsheet cells.
-  */
 
   const safeRows =
     Array.isArray(rows)
@@ -2499,9 +2442,7 @@ function analyzeSpreadsheet(rows){
       : [];
 
 
-  if(
-    !safeRows.length
-  ){
+  if(!safeRows.length){
 
     throw new Error(
       "The spreadsheet is empty."
@@ -2523,9 +2464,7 @@ function analyzeSpreadsheet(rows){
     );
 
 
-  if(
-    width === 0
-  ){
+  if(width === 0){
 
     throw new Error(
       "No columns were found in the spreadsheet."
@@ -2557,19 +2496,13 @@ function analyzeSpreadsheet(rows){
 
 
   const eIdx =
-    emailColumn(
-      headers
-    );
+    emailColumn(headers);
 
   const pIdx =
-    phoneColumn(
-      headers
-    );
+    phoneColumn(headers);
 
   const dIdx =
-    dateColumn(
-      headers
-    );
+    dateColumn(headers);
 
 
   let validEmails = 0;
@@ -2605,9 +2538,7 @@ function analyzeSpreadsheet(rows){
       safeRows[r] || [];
 
 
-    if(
-      eIdx >= 0
-    ){
+    if(eIdx >= 0){
 
       const v =
         row[eIdx];
@@ -2638,9 +2569,7 @@ function analyzeSpreadsheet(rows){
     }
 
 
-    if(
-      pIdx >= 0
-    ){
+    if(pIdx >= 0){
 
       const v =
         row[pIdx];
@@ -2671,9 +2600,7 @@ function analyzeSpreadsheet(rows){
     }
 
 
-    if(
-      dIdx >= 0
-    ){
+    if(dIdx >= 0){
 
       const v =
         row[dIdx];
@@ -2893,7 +2820,7 @@ function renderOriginalAnalysis(){
     originalAnalysis;
 
 
-  const errorAnalysis =
+  const errors =
     a.formulaErrorAnalysis;
 
 
@@ -2961,17 +2888,22 @@ function renderOriginalAnalysis(){
 
     statCard(
       "Spreadsheet Errors",
-      errorAnalysis.errorCount
+      errors.errorCount
     ),
 
     statCard(
       "Formula Cells",
-      errorAnalysis.formulaCount
+      errors.formulaCount
     ),
 
     statCard(
       "Rows With Errors",
-      errorAnalysis.rowsWithErrors
+      errors.rowsWithErrors
+    ),
+
+    statCard(
+      "Formulas Preserved",
+      errors.formulaCount
     )
 
   ].join("");
@@ -3029,18 +2961,24 @@ function renderOriginalAnalysis(){
 
     [
       "Spreadsheet Errors",
-      errorAnalysis.errorCount,
-      errorAnalysis.errorCount === 0
+      errors.errorCount,
+      errors.errorCount === 0
         ? "good"
         : "bad"
     ],
 
     [
       "Formula Cells",
-      errorAnalysis.formulaCount,
-      errorAnalysis.formulaCount === 0
+      errors.formulaCount,
+      errors.formulaCount === 0
         ? "good"
         : "good"
+    ],
+
+    [
+      "Formulas Preserved",
+      errors.formulaCount,
+      "good"
     ],
 
     [
@@ -3105,11 +3043,19 @@ function renderOriginalAnalysis(){
                             : "None"
                         )
 
-                      : (
-                          x[1] === 0
-                            ? "OK"
-                            : "Review"
-                        )
+                      : x[0] === "Formulas Preserved"
+
+                        ? (
+                            x[1] > 0
+                              ? "Protected"
+                              : "None"
+                          )
+
+                        : (
+                            x[1] === 0
+                              ? "OK"
+                              : "Review"
+                          )
                   }
 
                 </td>
@@ -3186,17 +3132,22 @@ function renderOriginalAnalysis(){
 
     [
       "Spreadsheet Errors",
-      errorAnalysis.errorCount
+      errors.errorCount
     ],
 
     [
       "Rows With Errors",
-      errorAnalysis.rowsWithErrors
+      errors.rowsWithErrors
     ],
 
     [
       "Formula Cells",
-      errorAnalysis.formulaCount
+      errors.formulaCount
+    ],
+
+    [
+      "Formulas Preserved",
+      errors.formulaCount
     ]
 
   ];
@@ -3227,7 +3178,9 @@ function renderOriginalAnalysis(){
               <tr>
 
                 <td>
-                  ${escapeHtml(x[0])}
+                  ${escapeHtml(
+                    x[0]
+                  )}
                 </td>
 
                 <td>
@@ -3296,8 +3249,11 @@ function renderErrorDetails(){
           <tr>
 
             <th>Cell</th>
+
             <th>Error</th>
+
             <th>Formula</th>
+
             <th>Value</th>
 
           </tr>
@@ -3317,12 +3273,16 @@ function renderErrorDetails(){
 
           <td>
             <strong>
-              ${escapeHtml(item.cell)}
+              ${escapeHtml(
+                item.cell
+              )}
             </strong>
           </td>
 
           <td class="bad">
-            ${escapeHtml(item.error)}
+            ${escapeHtml(
+              item.error
+            )}
           </td>
 
           <td>
@@ -3354,9 +3314,7 @@ function renderErrorDetails(){
 
       <div class="error-note">
 
-        ${
-          errors.length
-        }
+        ${errors.length}
         spreadsheet error value(s) detected.
         These values are reported exactly as found and are not automatically replaced.
 
@@ -3389,7 +3347,9 @@ function renderErrorDetails(){
             <tr>
 
               <th>Cell</th>
+
               <th>Formula</th>
+
               <th>Value</th>
 
             </tr>
@@ -3408,7 +3368,9 @@ function renderErrorDetails(){
 
                       <td>
                         <strong>
-                          ${escapeHtml(item.cell)}
+                          ${escapeHtml(
+                            item.cell
+                          )}
                         </strong>
                       </td>
 
@@ -3448,7 +3410,10 @@ function renderErrorDetails(){
 
       html += `
 
-        <div class="muted" style="margin-top:10px">
+        <div
+          class="muted"
+          style="margin-top:10px"
+        >
 
           Showing the first 50 formula cells.
 
@@ -3471,7 +3436,9 @@ function renderErrorDetails(){
       <div style="padding:16px">
 
         <span class="good">
+
           No spreadsheet errors or formula cells detected.
+
         </span>
 
       </div>
@@ -3517,7 +3484,9 @@ function renderTypeMap(){
         <tr>
 
           <th>Column</th>
+
           <th>Detected Type</th>
+
           <th>Values</th>
 
         </tr>
@@ -3562,11 +3531,13 @@ function renderTypeMap(){
                   </td>
 
                   <td>
+
                     <strong>
                       ${escapeHtml(
                         c.type
                       )}
                     </strong>
+
                   </td>
 
                   <td>
@@ -3589,6 +3560,80 @@ function renderTypeMap(){
     </table>
 
   `;
+
+}
+
+
+
+function getFormulaMapForRow(
+  worksheet,
+  rowIndex,
+  width
+){
+
+  const map =
+    new Array(width)
+      .fill(null);
+
+
+  if(
+    !worksheet
+  ){
+
+    return map;
+
+  }
+
+
+  for(
+    let c=0;
+    c<width;
+    c++
+  ){
+
+    const address =
+      XLSX.utils.encode_cell({
+
+        r:rowIndex,
+
+        c
+
+      });
+
+
+    const cell =
+      worksheet[address];
+
+
+    if(
+      cell &&
+      cell.f
+    ){
+
+      map[c] =
+        "=" +
+        String(cell.f);
+
+    }
+
+  }
+
+
+  return map;
+
+}
+
+
+
+function hasFormulaAt(
+  formulaRow,
+  columnIndex
+){
+
+  return Boolean(
+    formulaRow &&
+    formulaRow[columnIndex]
+  );
 
 }
 
@@ -3680,9 +3725,16 @@ function cleanSpreadsheet(){
 
   let duplicatesRemoved = 0;
 
+  let formulasPreserved = 0;
+
 
   const working = [
     newHeaders.slice()
+  ];
+
+
+  const formulaWorking = [
+    new Array(width).fill(null)
   ];
 
 
@@ -3707,6 +3759,14 @@ function cleanSpreadsheet(){
       continue;
 
     }
+
+
+    const formulaRow =
+      getFormulaMapForRow(
+        originalWorksheet,
+        r,
+        width
+      );
 
 
     const comparable =
@@ -3741,7 +3801,8 @@ function cleanSpreadsheet(){
 
 
     const out =
-      new Array(width).fill("");
+      new Array(width)
+        .fill("");
 
 
     for(
@@ -3757,12 +3818,20 @@ function cleanSpreadsheet(){
 
 
     /*
-       STEP 34
-       EMAIL NORMALIZATION
+       IMPORTANT:
+
+       Formula cells are not modified.
+       Their exact formulas are carried
+       into the exported XLSX.
     */
+
 
     if(
       eIdx >= 0 &&
+      !hasFormulaAt(
+        formulaRow,
+        eIdx
+      ) &&
       !isBlank(out[eIdx]) &&
       isValidEmail(out[eIdx])
     ){
@@ -3795,6 +3864,10 @@ function cleanSpreadsheet(){
 
     if(
       pIdx >= 0 &&
+      !hasFormulaAt(
+        formulaRow,
+        pIdx
+      ) &&
       isValidPhone(
         out[pIdx]
       )
@@ -3828,6 +3901,10 @@ function cleanSpreadsheet(){
 
     if(
       dIdx >= 0 &&
+      !hasFormulaAt(
+        formulaRow,
+        dIdx
+      ) &&
       !isBlank(out[dIdx])
     ){
 
@@ -3873,6 +3950,10 @@ function cleanSpreadsheet(){
 
     if(
       gIdx >= 0 &&
+      !hasFormulaAt(
+        formulaRow,
+        gIdx
+      ) &&
       !isBlank(out[gIdx])
     ){
 
@@ -3905,6 +3986,10 @@ function cleanSpreadsheet(){
 
     if(
       cIdx >= 0 &&
+      !hasFormulaAt(
+        formulaRow,
+        cIdx
+      ) &&
       !isBlank(out[cIdx])
     ){
 
@@ -3937,6 +4022,10 @@ function cleanSpreadsheet(){
 
     if(
       sIdx >= 0 &&
+      !hasFormulaAt(
+        formulaRow,
+        sIdx
+      ) &&
       !isBlank(out[sIdx])
     ){
 
@@ -3964,21 +4053,26 @@ function cleanSpreadsheet(){
 
 
     /*
-       IMPORTANT:
-       Spreadsheet errors are NOT changed.
+       Count formulas that survived.
     */
+
+    formulasPreserved +=
+      formulaRow.filter(
+        Boolean
+      ).length;
 
 
     working.push(
       out
     );
 
+
+    formulaWorking.push(
+      formulaRow
+    );
+
   }
 
-
-  /*
-     Remove completely empty columns
-  */
 
   const keepIndexes = [];
 
@@ -4009,6 +4103,15 @@ function cleanSpreadsheet(){
     );
 
 
+  cleanedFormulaRows =
+    formulaWorking.map(
+      row =>
+        keepIndexes.map(
+          c => row[c] || null
+        )
+    );
+
+
   cleanedAnalysis =
     analyzeSpreadsheet(
       cleanedRows
@@ -4034,13 +4137,6 @@ function cleanSpreadsheet(){
       .numericColumns;
 
 
-  /*
-     The cleaned export contains
-     values only, so formula count
-     is intentionally not recreated.
-  */
-
-
   const originalDataRows =
     Math.max(
       0,
@@ -4064,7 +4160,7 @@ function cleanSpreadsheet(){
     emptyCols.size;
 
 
-  const originalErrorCount =
+  const originalErrors =
     originalAnalysis
       ?.formulaErrorAnalysis
       ?.errorCount || 0;
@@ -4078,7 +4174,9 @@ function cleanSpreadsheet(){
 
   $("summary").innerHTML = `
 
-    <strong>Cleaning complete.</strong>
+    <strong>
+      Cleaning complete.
+    </strong>
 
     ${removedDataRows}
     row(s) removed,
@@ -4104,15 +4202,16 @@ function cleanSpreadsheet(){
     ${categoryChanges}
     category value(s) standardized,
 
-    ${originalErrorCount}
+    ${originalErrors}
     spreadsheet error value(s) detected,
 
-    and
-
     ${originalFormulaCount}
-    formula cell(s) detected.
+    formula cell(s) detected,
 
-    Spreadsheet errors are preserved rather than guessed or automatically repaired.
+    ${formulasPreserved}
+    formula cell(s) preserved.
+
+    Formula cells were not modified during cleaning.
 
   `;
 
@@ -4122,13 +4221,16 @@ function cleanSpreadsheet(){
   );
 
 
-  $("xlsxBtn").disabled = false;
+  $("xlsxBtn").disabled =
+    false;
 
-  $("csvBtn").disabled = false;
+
+  $("csvBtn").disabled =
+    false;
 
 
   showMessage(
-    "Spreadsheet cleaned successfully.",
+    "Spreadsheet cleaned successfully. Formulas are protected in the XLSX export.",
     "success"
   );
 
@@ -4296,11 +4398,87 @@ function downloadXlsx(){
     );
 
 
+  /*
+     Restore formulas into
+     their corresponding cells.
+  */
+
+  for(
+    let r=0;
+    r<cleanedFormulaRows.length;
+    r++
+  ){
+
+    const formulaRow =
+      cleanedFormulaRows[r] || [];
+
+
+    for(
+      let c=0;
+      c<formulaRow.length;
+      c++
+    ){
+
+      const formula =
+        formulaRow[c];
+
+
+      if(
+        formula
+      ){
+
+        const address =
+          XLSX.utils.encode_cell({
+
+            r,
+
+            c
+
+          });
+
+
+        ws[address] = {
+
+          f:
+            String(formula)
+              .replace(
+                /^=/,
+                ""
+              )
+
+        };
+
+      }
+
+    }
+
+  }
+
+
   XLSX.utils.book_append_sheet(
     wb,
     ws,
     "Cleaned Data"
   );
+
+
+  /*
+     Ask spreadsheet software
+     to recalculate formulas when
+     the file is opened.
+  */
+
+  wb.Workbook =
+    wb.Workbook || {};
+
+
+  wb.Workbook.CalcPr = {
+
+    fullCalcOnLoad:true,
+
+    forceFullCalc:true
+
+  };
 
 
   const out =
@@ -4411,9 +4589,13 @@ function resetAll(){
 
   cleanedRows = [];
 
+  cleanedFormulaRows = [];
+
   originalAnalysis = null;
 
   cleanedAnalysis = null;
+
+  originalWorksheet = null;
 
   currentFileName =
     "spreadsheet";
@@ -4459,7 +4641,6 @@ function resetAll(){
   $("csvBtn").disabled =
     true;
 
-
   $("cleanBtn").disabled =
     true;
 
@@ -4473,7 +4654,9 @@ function resetAll(){
 async function handleFile(file){
 
   if(!file){
+
     return;
+
   }
 
 
@@ -4589,6 +4772,10 @@ async function handleFile(file){
   }
 
 
+  originalWorksheet =
+    worksheet;
+
+
   const rows =
     XLSX.utils.sheet_to_json(
       worksheet,
@@ -4636,7 +4823,7 @@ async function handleFile(file){
 
   const width =
     useful.reduce(
-      (m,r) =>
+      (m,r)=>
         Math.max(
           m,
           r.length
@@ -4763,9 +4950,9 @@ async function handleFile(file){
 
     " formula cell(s) were detected. " +
 
-    "Errors are reported but not automatically repaired.";
+    "Formula cells will be preserved in the cleaned XLSX.";
 
-
+  
   showMessage(
     "Spreadsheet processed successfully.",
     "success"
