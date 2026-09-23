@@ -4,373 +4,311 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clean My Spreadsheet</title>
+
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
-
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #172033;
-      --muted: #6d7788;
-      --border: #e4e9f0;
-      --soft: #f8fafc;
-      --dark: #172033;
-      --green: #177245;
-      --green-bg: #e9f7ef;
-      --red: #b42318;
-      --orange: #9a5b00;
-      --blue: #2456a6;
-      --blue-bg: #eef5ff;
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
     }
-
-    button, input { font: inherit; }
 
     .container {
-      width: min(1200px, calc(100% - 28px));
-      margin: 28px auto 60px;
-    }
-
-    .hero,
-    .section,
-    .empty-state {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(20, 30, 50, 0.06);
+      width: min(1200px, 94%);
+      margin: 0 auto;
     }
 
     .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 32px;
-      background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 230px;
-      height: 230px;
-      right: -100px;
-      top: -100px;
-      border-radius: 50%;
-      background: rgba(36, 86, 166, 0.06);
-    }
-
-    .brand-row {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
+      padding: 42px 0 24px;
     }
 
     .brand {
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: #687386;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo-wrap h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+    }
+
+    .logo-wrap p {
+      margin: 10px 0 0;
+      color: #6d7687;
+      font-size: 15px;
     }
 
     .step-badge {
-      padding: 7px 11px;
+      background: #172033;
+      color: #fff;
+      padding: 10px 16px;
       border-radius: 999px;
-      background: #eef2f7;
-      color: #465264;
-      border: 1px solid #e1e6ed;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    h1 {
-      position: relative;
-      z-index: 1;
-      margin: 14px 0 8px;
-      font-size: clamp(30px, 5vw, 42px);
-      line-height: 1.08;
-    }
-
-    .hero-text {
-      position: relative;
-      z-index: 1;
-      max-width: 820px;
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    .chips {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .chip {
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: #fff;
-      border: 1px solid #e4eaf2;
-      color: #546073;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
     }
 
-    .upload-box {
-      position: relative;
-      z-index: 1;
-      margin-top: 22px;
-      min-height: 175px;
-      border: 2px dashed #cad3df;
-      border-radius: 18px;
-      background: rgba(255,255,255,.86);
+    .chips {
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #e2e6ee;
+      color: #4d586b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .main-card {
+      background: #fff;
+      border: 1px solid #e6eaf0;
+      border-radius: 22px;
+      box-shadow: 0 12px 34px rgba(23, 32, 51, 0.06);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .upload-section {
+      padding: 28px;
+    }
+
+    .upload-box {
+      border: 2px dashed #cfd6e2;
+      border-radius: 18px;
+      padding: 34px 22px;
       text-align: center;
-      cursor: pointer;
-      transition: .2s ease;
-      padding: 24px;
+      background: #fafbfe;
+      transition: 0.2s ease;
     }
 
     .upload-box:hover {
-      border-color: #7f8b9c;
-      background: #fff;
-      transform: translateY(-1px);
+      border-color: #9ca8bb;
+      background: #f8faff;
     }
 
     .upload-icon {
-      font-size: 34px;
-      margin-bottom: 8px;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 16px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eef2f8;
+      font-size: 27px;
     }
 
-    .upload-box strong {
-      display: block;
-      font-size: 19px;
-      margin-bottom: 7px;
+    .upload-box h2 {
+      margin: 0;
+      font-size: 21px;
     }
 
-    .upload-box span {
-      display: block;
-      color: #7a8494;
+    .upload-box p {
+      margin: 9px 0 19px;
+      color: #717b8d;
       font-size: 14px;
     }
 
-    .supported {
-      margin-top: 8px;
-      font-size: 12px !important;
-      color: #98a1af !important;
+    .upload-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 19px;
+      border-radius: 10px;
+      background: #172033;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
     }
 
-    #fileInput { display: none; }
+    #fileInput {
+      display: none;
+    }
 
     .file-info {
-      min-height: 20px;
-      margin-top: 12px;
-      color: #596477;
-      font-size: 14px;
+      margin-top: 15px;
+      display: none;
+      padding: 13px 15px;
+      border-radius: 11px;
+      background: #f1f5f9;
+      color: #4d586b;
+      font-size: 13px;
     }
 
     .action-bar {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
-      margin-top: 18px;
+      flex-wrap: wrap;
+      padding: 0 28px 28px;
     }
 
     button {
       border: 0;
-      border-radius: 11px;
-      padding: 11px 16px;
-      font-size: 14px;
-      font-weight: 800;
+      border-radius: 10px;
+      padding: 12px 17px;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
-      transition: .18s ease;
-    }
-
-    button:hover:not(:disabled) {
-      transform: translateY(-1px);
+      transition: 0.2s ease;
     }
 
     button:disabled {
-      opacity: .45;
+      opacity: 0.45;
       cursor: not-allowed;
-      transform: none;
     }
 
-    .btn-dark {
-      background: var(--dark);
+    .btn-primary {
+      background: #172033;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #eef2f7;
+      color: #283246;
+    }
+
+    .btn-success {
+      background: #0f766e;
       color: #fff;
     }
 
-    .btn-green {
-      background: var(--green-bg);
-      color: var(--green);
-      border: 1px solid #ccebd8;
-    }
-
-    .btn-soft {
-      background: #eef2f7;
-      color: #263144;
-      border: 1px solid #e0e5ec;
+    button:not(:disabled):hover {
+      transform: translateY(-1px);
     }
 
     .notice {
-      margin-top: 18px;
-      padding: 14px 15px;
-      border-radius: 13px;
-      font-size: 14px;
-      line-height: 1.5;
-      border: 1px solid #e6ebf1;
-      background: #f8fafc;
-      color: #5f6b7c;
-    }
-
-    .notice.success {
-      background: var(--green-bg);
-      color: #22683f;
-      border-color: #cfe9da;
-    }
-
-    .notice.warning {
-      background: #fff7e7;
-      color: #7c5100;
-      border-color: #f0dbab;
-    }
-
-    .section {
-      margin-top: 20px;
-      padding: 22px;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .section-description {
-      margin: 5px 0 0;
-      color: #778293;
+      display: none;
+      margin: 0 28px 28px;
+      padding: 14px 16px;
+      border-radius: 12px;
       font-size: 13px;
       line-height: 1.5;
     }
 
+    .notice.info {
+      display: block;
+      background: #eef6ff;
+      border: 1px solid #d5e7ff;
+      color: #24527a;
+    }
+
+    .notice.success {
+      display: block;
+      background: #edf9f5;
+      border: 1px solid #ccefe2;
+      color: #11614f;
+    }
+
+    .notice.warning {
+      display: block;
+      background: #fff8eb;
+      border: 1px solid #f6dfb1;
+      color: #795a19;
+    }
+
+    .section {
+      padding: 0 28px 28px;
+    }
+
+    .section-title {
+      margin-bottom: 15px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .section-title p {
+      margin: 5px 0 0;
+      color: #7a8494;
+      font-size: 13px;
+    }
+
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 11px;
     }
 
     .stat-card {
-      background: #fff;
-      border: 1px solid #e5eaf0;
-      border-radius: 14px;
       padding: 16px;
+      background: #f8fafc;
+      border: 1px solid #e7ebf2;
+      border-radius: 14px;
+      min-width: 0;
     }
 
     .stat-label {
-      font-size: 12px;
-      color: #707b8c;
+      color: #788294;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
       margin-bottom: 8px;
     }
 
     .stat-value {
-      font-size: 27px;
+      font-size: 23px;
       font-weight: 800;
-      line-height: 1;
+      overflow-wrap: anywhere;
     }
 
-    .stat-sub {
-      margin-top: 7px;
-      color: #8892a0;
-      font-size: 11px;
-    }
-
-    .checks-grid {
+    .quality-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 11px;
     }
 
-    .check-card {
-      padding: 16px;
-      border: 1px solid #e5eaf0;
+    .quality-item {
+      border: 1px solid #e7ebf2;
       border-radius: 14px;
+      padding: 15px;
       background: #fff;
     }
 
-    .check-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .check-name {
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .check-value {
-      margin-top: 9px;
-      font-size: 23px;
-      font-weight: 800;
-    }
-
-    .check-desc {
-      margin-top: 6px;
-      color: #7a8594;
+    .quality-item .label {
       font-size: 12px;
-      line-height: 1.45;
+      color: #798394;
+      margin-bottom: 8px;
     }
 
-    .status-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #bec6d1;
-      flex: 0 0 auto;
+    .quality-item .value {
+      font-size: 18px;
+      font-weight: 800;
+      word-break: break-word;
     }
-
-    .status-dot.good { background: #3c9d64; }
-    .status-dot.issue { background: #d65145; }
 
     .details-box {
-      border: 1px solid #e6ebf1;
-      border-radius: 13px;
+      border: 1px solid #e7ebf2;
+      border-radius: 14px;
       overflow: hidden;
+      background: #fbfcfe;
     }
 
     .detail-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      padding: 12px 14px;
-      border-bottom: 1px solid #edf1f5;
+      gap: 15px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e9edf3;
       font-size: 13px;
     }
 
@@ -379,1679 +317,878 @@
     }
 
     .detail-label {
-      color: #6d7888;
+      color: #758093;
     }
 
-    .pill {
-      max-width: 65%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eef2f7;
-      color: #354154;
-      font-weight: 800;
+    .detail-value {
+      font-weight: 750;
+      color: #263044;
+      text-align: right;
+      word-break: break-word;
     }
 
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 11px;
     }
 
     .summary-item {
-      padding: 14px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 1px solid #e7ecf2;
+      padding: 15px;
+      border: 1px solid #e7ebf2;
+      border-radius: 14px;
+      background: #fff;
     }
 
-    .summary-item strong {
-      display: block;
+    .summary-item .label {
+      font-size: 11px;
+      color: #7a8494;
+      margin-bottom: 8px;
+    }
+
+    .summary-item .value {
       font-size: 20px;
-      margin-bottom: 5px;
+      font-weight: 800;
     }
 
-    .summary-item span {
-      color: #748092;
-      font-size: 12px;
-    }
-
-    .table-shell {
-      border: 1px solid #e4e9ef;
-      border-radius: 13px;
-      overflow: auto;
-      max-height: 460px;
+    .preview-wrap {
+      overflow-x: auto;
+      border: 1px solid #e3e8f0;
+      border-radius: 14px;
       background: #fff;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 850px;
+      min-width: 900px;
     }
 
     th,
     td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #edf1f5;
+      padding: 11px 12px;
+      border-bottom: 1px solid #edf0f4;
       text-align: left;
-      white-space: nowrap;
       font-size: 12px;
+      white-space: nowrap;
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     th {
       position: sticky;
       top: 0;
-      z-index: 2;
-      background: #f8fafc;
-      color: #5c6879;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
+      background: #f7f9fc;
+      font-weight: 800;
+      color: #364156;
     }
 
-    tr:last-child td {
+    tbody tr:last-child td {
       border-bottom: 0;
     }
 
-    .preview-note {
-      margin-top: 10px;
-      color: #8a94a3;
-      font-size: 12px;
-    }
-
     .empty-state {
-      margin-top: 20px;
-      padding: 28px;
+      padding: 45px 20px;
       text-align: center;
-      color: #778293;
-    }
-
-    .empty-state .big {
-      font-size: 30px;
-      margin-bottom: 8px;
+      color: #7d8798;
+      font-size: 14px;
     }
 
     .hidden {
       display: none !important;
     }
 
+    .footer {
+      text-align: center;
+      color: #8891a1;
+      font-size: 12px;
+      padding: 0 0 30px;
+    }
+
     @media (max-width: 1000px) {
       .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(4, 1fr);
       }
 
       .summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .checks-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(4, 1fr);
       }
     }
 
-    @media (max-width: 620px) {
-      .container {
-        width: min(100% - 16px, 1200px);
-        margin: 12px auto 30px;
-      }
-
-      .hero,
-      .section {
-        padding: 17px;
+    @media (max-width: 720px) {
+      .logo-wrap h1 {
+        font-size: 28px;
       }
 
       .stats-grid,
-      .summary-grid,
-      .checks-grid {
+      .quality-grid,
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .upload-section,
+      .section {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .action-bar {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .notice {
+        margin-left: 18px;
+        margin-right: 18px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .stats-grid,
+      .quality-grid,
+      .summary-grid {
         grid-template-columns: 1fr;
-      }
-
-      .action-bar button {
-        width: 100%;
-      }
-
-      .detail-row {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .pill {
-        max-width: 100%;
       }
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
+    <div class="hero">
+      <div class="brand">
+        <div class="logo-wrap">
+          <h1>Clean My Spreadsheet</h1>
+          <p>Clean, validate and standardize messy spreadsheet data in seconds.</p>
+        </div>
 
-  <main class="container">
-
-    <section class="hero">
-
-      <div class="brand-row">
-        <div class="brand">Clean My Spreadsheet</div>
-        <div class="step-badge">Step 28 • Phone Tools</div>
+        <div class="step-badge">Step 29 • Date Tools</div>
       </div>
-
-      <h1>Clean My Spreadsheet</h1>
-
-      <p class="hero-text">
-        Upload your spreadsheet to inspect data quality, detect phone-number
-        problems, preview your data, and create a cleaner copy without guessing
-        or inventing missing information.
-      </p>
 
       <div class="chips">
-        <span class="chip">Email validation</span>
-        <span class="chip">Phone detection</span>
-        <span class="chip">Phone validation</span>
-        <span class="chip">Phone standardization</span>
-        <span class="chip">Duplicate detection</span>
-        <span class="chip">Spreadsheet preview</span>
-        <span class="chip">Cleaned download</span>
+        <div class="chip">✓ Email Validation</div>
+        <div class="chip">✓ Phone Standardization</div>
+        <div class="chip">✓ Date Detection</div>
+        <div class="chip">✓ Date Standardization</div>
+        <div class="chip">✓ Duplicate Detection</div>
+        <div class="chip">✓ Empty Column Detection</div>
+        <div class="chip">✓ XLSX + CSV Export</div>
       </div>
-
-      <label class="upload-box" for="fileInput">
-        <div>
-          <div class="upload-icon">📊</div>
-          <strong>Click to upload your spreadsheet</strong>
-          <span>Select an Excel or CSV file from your device</span>
-          <span class="supported">Supported: .xlsx • .xls • .csv</span>
-        </div>
-      </label>
-
-      <input
-        id="fileInput"
-        type="file"
-        accept=".xlsx,.xls,.csv"
-      />
-
-      <div id="fileInfo" class="file-info"></div>
-
-      <div id="actionBar" class="action-bar hidden">
-
-        <button
-          id="cleanBtn"
-          class="btn-dark"
-        >
-          ✨ Clean Spreadsheet
-        </button>
-
-        <button
-          id="downloadBtn"
-          class="btn-green"
-          disabled
-        >
-          ↓ Download Cleaned XLSX
-        </button>
-
-        <button
-          id="downloadCsvBtn"
-          class="btn-soft"
-          disabled
-        >
-          ↓ Download Cleaned CSV
-        </button>
-
-        <button
-          id="resetBtn"
-          class="btn-soft"
-        >
-          ↻ Reset
-        </button>
-
-      </div>
-
-      <div id="notice" class="notice hidden"></div>
-
-    </section>
-
-
-    <section id="statsSection" class="section hidden">
-
-      <div class="section-header">
-
-        <div>
-          <h2 class="section-title">
-            Spreadsheet Stats
-          </h2>
-
-          <p class="section-description">
-            Statistics from the uploaded spreadsheet. These values remain based
-            on the original file even after cleaning.
-          </p>
-        </div>
-
-      </div>
-
-
-      <div class="stats-grid">
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Total Rows
-          </div>
-
-          <div id="totalRows" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Data rows detected
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Total Columns
-          </div>
-
-          <div id="totalColumns" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Columns detected
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Valid Emails
-          </div>
-
-          <div id="validEmails" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Valid email values
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Invalid Emails
-          </div>
-
-          <div id="invalidEmails" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Malformed email values
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Empty Email Cells
-          </div>
-
-          <div id="emptyEmails" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Blank email values
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Valid Phones
-          </div>
-
-          <div id="validPhones" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Recognized phone values
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Invalid Phones
-          </div>
-
-          <div id="invalidPhones" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Phone values needing attention
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-label">
-            Empty Phone Cells
-          </div>
-
-          <div id="emptyPhones" class="stat-value">
-            0
-          </div>
-
-          <div class="stat-sub">
-            Blank phone values
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section id="checksSection" class="section hidden">
-
-      <div class="section-header">
-
-        <div>
-          <h2 class="section-title">
-            Data Quality Checks
-          </h2>
-
-          <p class="section-description">
-            Common issues detected before any cleaning is applied.
-          </p>
-        </div>
-
-      </div>
-
-
-      <div class="checks-grid">
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Invalid Emails
-            </div>
-
-            <div
-              id="dotInvalidEmail"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkInvalidEmails"
-            class="check-value"
-          >
-            0
-          </div>
-
-          <div class="check-desc">
-            Email values that do not match a basic email format.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Phone Numbers
-            </div>
-
-            <div
-              id="dotPhone"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkPhone"
-            class="check-value"
-          >
-            Not found
-          </div>
-
-          <div class="check-desc">
-            Automatically detected phone or mobile column.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Invalid Phones
-            </div>
-
-            <div
-              id="dotInvalidPhone"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkInvalidPhones"
-            class="check-value"
-          >
-            0
-          </div>
-
-          <div class="check-desc">
-            Phone values with an unexpected number of digits.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Duplicate Rows
-            </div>
-
-            <div
-              id="dotDuplicate"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkDuplicateRows"
-            class="check-value"
-          >
-            0
-          </div>
-
-          <div class="check-desc">
-            Rows that repeat an earlier complete row.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Empty Rows
-            </div>
-
-            <div
-              id="dotEmptyRows"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkEmptyRows"
-            class="check-value"
-          >
-            0
-          </div>
-
-          <div class="check-desc">
-            Rows containing no information.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Empty Columns
-            </div>
-
-            <div
-              id="dotEmptyColumns"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkEmptyColumns"
-            class="check-value"
-          >
-            0
-          </div>
-
-          <div class="check-desc">
-            Columns containing no data values.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Whitespace Values
-            </div>
-
-            <div
-              id="dotWhitespace"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkWhitespace"
-            class="check-value"
-          >
-            0
-          </div>
-
-          <div class="check-desc">
-            Text cells with leading or trailing spaces.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Email Column
-            </div>
-
-            <div
-              id="dotEmailColumn"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkEmailColumn"
-            class="check-value"
-            style="font-size:18px;"
-          >
-            Not found
-          </div>
-
-          <div class="check-desc">
-            Automatically detected email column.
-          </div>
-
-        </div>
-
-
-        <div class="check-card">
-
-          <div class="check-top">
-
-            <div class="check-name">
-              Phone Column
-            </div>
-
-            <div
-              id="dotPhoneColumn"
-              class="status-dot"
-            ></div>
-
-          </div>
-
-          <div
-            id="checkPhoneColumn"
-            class="check-value"
-            style="font-size:18px;"
-          >
-            Not found
-          </div>
-
-          <div class="check-desc">
-            Column used for phone validation and standardization.
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section id="detailsSection" class="section hidden">
-
-      <div class="section-header">
-
-        <div>
-          <h2 class="section-title">
-            Validation Details
-          </h2>
-
-          <p class="section-description">
-            File, email, and phone detection information.
-          </p>
-        </div>
-
-      </div>
-
-
-      <div class="details-box">
-
-        <div class="detail-row">
-
-          <span class="detail-label">
-            Current File
-          </span>
-
-          <span
-            id="detailFile"
-            class="pill"
-          >
-            —
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span class="detail-label">
-            Current Sheet
-          </span>
-
-          <span
-            id="detailSheet"
-            class="pill"
-          >
-            —
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span class="detail-label">
-            Detected Email Column
-          </span>
-
-          <span
-            id="detailEmailColumn"
-            class="pill"
-          >
-            Not found
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span class="detail-label">
-            Detected Phone Column
-          </span>
-
-          <span
-            id="detailPhoneColumn"
-            class="pill"
-          >
-            Not found
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span class="detail-label">
-            Validation Status
-          </span>
-
-          <span
-            id="detailValidation"
-            class="pill"
-          >
-            Waiting
-          </span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section id="summarySection" class="section hidden">
-
-      <div class="section-header">
-
-        <div>
-          <h2 class="section-title">
-            Cleaning Summary
-          </h2>
-
-          <p class="section-description">
-            What the cleaning operation changed in the cleaned copy.
-          </p>
-        </div>
-
-      </div>
-
-
-      <div class="summary-grid">
-
-        <div class="summary-item">
-
-          <strong
-            id="summaryRowsRemoved"
-          >
-            0
-          </strong>
-
-          <span>
-            Blank rows removed
-          </span>
-
-        </div>
-
-
-        <div class="summary-item">
-
-          <strong
-            id="summaryColumnsRemoved"
-          >
-            0
-          </strong>
-
-          <span>
-            Empty columns removed
-          </span>
-
-        </div>
-
-
-        <div class="summary-item">
-
-          <strong
-            id="summaryDuplicatesRemoved"
-          >
-            0
-          </strong>
-
-          <span>
-            Duplicate rows removed
-          </span>
-
-        </div>
-
-
-        <div class="summary-item">
-
-          <strong
-            id="summaryPhonesFormatted"
-          >
-            0
-          </strong>
-
-          <span>
-            Phone values standardized
-          </span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section id="previewSection" class="section hidden">
-
-      <div class="section-header">
-
-        <div>
-
-          <h2
-            id="previewTitle"
-            class="section-title"
-          >
-            Spreadsheet Preview
-          </h2>
-
-          <p
-            id="previewDescription"
-            class="section-description"
-          >
-            Showing a preview of the spreadsheet values.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div class="table-shell">
-
-        <table id="previewTable"></table>
-
-      </div>
-
-
-      <div class="preview-note">
-        Preview shows up to the first 20 data rows.
-      </div>
-
-    </section>
-
-
-    <div
-      id="emptyState"
-      class="empty-state"
-    >
-
-      <div class="big">
-        📁
-      </div>
-
-      <strong>
-        Upload a spreadsheet to begin
-      </strong>
-
-      <div style="margin-top:6px;">
-        Your file is analyzed directly in your browser.
-      </div>
-
     </div>
 
-  </main>
+    <div class="main-card">
+      <div class="upload-section">
+        <div class="upload-box">
+          <div class="upload-icon">📊</div>
 
+          <h2>Upload your spreadsheet</h2>
+
+          <p>
+            Supported formats: XLSX, XLS and CSV
+          </p>
+
+          <label class="upload-label" for="fileInput">
+            Choose Spreadsheet
+          </label>
+
+          <input
+            id="fileInput"
+            type="file"
+            accept=".xlsx,.xls,.csv"
+          />
+
+          <div id="fileInfo" class="file-info"></div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button id="cleanBtn" class="btn-primary" disabled>
+          Clean Spreadsheet
+        </button>
+
+        <button id="downloadXlsxBtn" class="btn-success" disabled>
+          Download Cleaned XLSX
+        </button>
+
+        <button id="downloadCsvBtn" class="btn-success" disabled>
+          Download Cleaned CSV
+        </button>
+
+        <button id="resetBtn" class="btn-secondary">
+          Reset
+        </button>
+      </div>
+
+      <div id="notice" class="notice"></div>
+
+      <div class="section">
+        <div class="section-title">
+          <h3>Spreadsheet Stats</h3>
+          <p>Original spreadsheet analysis before cleaning.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Rows</div>
+            <div id="totalRows" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Total Columns</div>
+            <div id="totalColumns" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Valid Emails</div>
+            <div id="validEmails" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Invalid Emails</div>
+            <div id="invalidEmails" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Valid Phones</div>
+            <div id="validPhones" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Invalid Phones</div>
+            <div id="invalidPhones" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Valid Dates</div>
+            <div id="validDates" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Invalid Dates</div>
+            <div id="invalidDates" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Ambiguous Dates</div>
+            <div id="ambiguousDates" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Empty Email Cells</div>
+            <div id="emptyEmails" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Empty Phone Cells</div>
+            <div id="emptyPhones" class="stat-value">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h3>Data Quality Checks</h3>
+          <p>Potential data problems detected in the original spreadsheet.</p>
+        </div>
+
+        <div class="quality-grid">
+          <div class="quality-item">
+            <div class="label">Invalid Emails</div>
+            <div id="qualityInvalidEmails" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Valid Phones</div>
+            <div id="qualityValidPhones" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Invalid Phones</div>
+            <div id="qualityInvalidPhones" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Valid Dates</div>
+            <div id="qualityValidDates" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Invalid Dates</div>
+            <div id="qualityInvalidDates" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Ambiguous Dates</div>
+            <div id="qualityAmbiguousDates" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Duplicate Rows</div>
+            <div id="qualityDuplicateRows" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Empty Rows</div>
+            <div id="qualityEmptyRows" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Empty Columns</div>
+            <div id="qualityEmptyColumns" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Whitespace Values</div>
+            <div id="qualityWhitespace" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Email Column</div>
+            <div id="qualityEmailColumn" class="value">Not detected</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Phone Column</div>
+            <div id="qualityPhoneColumn" class="value">Not detected</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Date Column</div>
+            <div id="qualityDateColumn" class="value">Not detected</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h3>Validation Details</h3>
+          <p>Columns identified automatically from your spreadsheet headers.</p>
+        </div>
+
+        <div class="details-box">
+          <div class="detail-row">
+            <div class="detail-label">Detected Email Column</div>
+            <div id="detailEmailColumn" class="detail-value">Not detected</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Detected Phone Column</div>
+            <div id="detailPhoneColumn" class="detail-value">Not detected</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Detected Date Column</div>
+            <div id="detailDateColumn" class="detail-value">Not detected</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Date Output Format</div>
+            <div class="detail-value">DD-MM-YYYY</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Ambiguous Dates</div>
+            <div id="detailAmbiguousDates" class="detail-value">
+              Left unchanged
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h3>Cleaning Summary</h3>
+          <p>Changes applied when you clean the spreadsheet.</p>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="label">Blank Rows Removed</div>
+            <div id="summaryBlankRows" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">Empty Columns Removed</div>
+            <div id="summaryEmptyColumns" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">Duplicate Rows Removed</div>
+            <div id="summaryDuplicates" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">Phone Values Standardized</div>
+            <div id="summaryPhones" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">Date Values Standardized</div>
+            <div id="summaryDates" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">Emails Normalized</div>
+            <div id="summaryEmails" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">Rows After Cleaning</div>
+            <div id="summaryRowsAfter" class="value">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h3>Spreadsheet Preview</h3>
+          <p id="previewDescription">
+            Upload a spreadsheet to preview your data.
+          </p>
+        </div>
+
+        <div class="preview-wrap">
+          <div id="previewEmpty" class="empty-state">
+            Your spreadsheet preview will appear here.
+          </div>
+
+          <table id="previewTable" class="hidden">
+            <thead id="previewHead"></thead>
+            <tbody id="previewBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Clean My Spreadsheet • Step 29
+    </div>
+  </div>
 
   <script>
+    const fileInput = document.getElementById("fileInput");
+    const fileInfo = document.getElementById("fileInfo");
+    const cleanBtn = document.getElementById("cleanBtn");
+    const downloadXlsxBtn = document.getElementById("downloadXlsxBtn");
+    const downloadCsvBtn = document.getElementById("downloadCsvBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const notice = document.getElementById("notice");
 
-    const fileInput =
-      document.getElementById("fileInput");
-
-    const fileInfo =
-      document.getElementById("fileInfo");
-
-    const actionBar =
-      document.getElementById("actionBar");
-
-    const cleanBtn =
-      document.getElementById("cleanBtn");
-
-    const downloadBtn =
-      document.getElementById("downloadBtn");
-
-    const downloadCsvBtn =
-      document.getElementById("downloadCsvBtn");
-
-    const resetBtn =
-      document.getElementById("resetBtn");
-
-    const notice =
-      document.getElementById("notice");
-
-    const statsSection =
-      document.getElementById("statsSection");
-
-    const checksSection =
-      document.getElementById("checksSection");
-
-    const detailsSection =
-      document.getElementById("detailsSection");
-
-    const summarySection =
-      document.getElementById("summarySection");
-
-    const previewSection =
-      document.getElementById("previewSection");
-
-    const emptyState =
-      document.getElementById("emptyState");
-
-    const previewTable =
-      document.getElementById("previewTable");
-
-    const previewTitle =
-      document.getElementById("previewTitle");
-
-    const previewDescription =
-      document.getElementById("previewDescription");
-
+    const previewTable = document.getElementById("previewTable");
+    const previewHead = document.getElementById("previewHead");
+    const previewBody = document.getElementById("previewBody");
+    const previewEmpty = document.getElementById("previewEmpty");
+    const previewDescription = document.getElementById("previewDescription");
 
     let originalRows = [];
-
-    let cleanedRows = null;
-
+    let cleanedRows = [];
     let originalAnalysis = null;
-
     let currentFileName = "";
 
-    let currentSheetName = "";
-
-
-    fileInput.addEventListener(
-      "change",
-      handleFileUpload
-    );
-
-
-    cleanBtn.addEventListener(
-      "click",
-      cleanSpreadsheet
-    );
-
-
-    downloadBtn.addEventListener(
-      "click",
-      function () {
-        downloadCleanedFile("xlsx");
-      }
-    );
-
-
-    downloadCsvBtn.addEventListener(
-      "click",
-      function () {
-        downloadCleanedFile("csv");
-      }
-    );
-
-
-    resetBtn.addEventListener(
-      "click",
-      resetApp
-    );
-
-
     function normalizeHeader(value) {
-
       return String(value ?? "")
         .trim()
         .toLowerCase()
-        .replace(
-          /[\s_-]+/g,
-          ""
-        );
-
+        .replace(/[^a-z0-9]/g, "");
     }
 
+    function findColumn(headers, type) {
+      const normalized = headers.map(normalizeHeader);
 
-    function findColumn(
-      headers,
-      type
-    ) {
+      const exactSets = {
+        email: [
+          "email",
+          "emailaddress",
+          "emailid",
+          "emailaddress1",
+          "emailaddress2"
+        ],
 
-      const exactNames =
-        type === "email"
-          ? new Set([
-              "email",
-              "emailaddress",
-              "emailid",
-              "emailaddress1",
-              "emailaddress2"
-            ])
-          : new Set([
-              "phone",
-              "phonenumber",
-              "mobilenumber",
-              "mobilephone",
-              "contactnumber",
-              "telephone",
-              "tel"
-            ]);
+        phone: [
+          "phone",
+          "phonenumber",
+          "mobilenumber",
+          "mobilephone",
+          "contactnumber",
+          "telephone",
+          "tel"
+        ],
 
+        date: [
+          "date",
+          "dateofbirth",
+          "dob",
+          "birthdate",
+          "birth",
+          "joindate",
+          "joiningdate",
+          "startdate",
+          "enddate",
+          "createddate",
+          "updateddate",
+          "registrationdate"
+        ]
+      };
 
-      for (
-        let i = 0;
-        i < headers.length;
-        i++
-      ) {
+      const exactIndex = normalized.findIndex((header) =>
+        exactSets[type].includes(header)
+      );
 
-        const normalized =
-          normalizeHeader(
-            headers[i]
-          );
-
-
-        if (
-          exactNames.has(
-            normalized
-          )
-        ) {
-
-          return i;
-
-        }
-
+      if (exactIndex !== -1) {
+        return exactIndex;
       }
 
+      const fallbackWords = {
+        email: ["email"],
+        phone: ["phone", "mobile", "contact", "telephone"],
+        date: ["date", "dob", "birth", "join", "created", "updated"]
+      };
 
-      const searchWords =
-        type === "email"
-          ? ["email"]
-          : [
-              "phone",
-              "mobile",
-              "telephone"
-            ];
-
-
-      for (
-        let i = 0;
-        i < headers.length;
-        i++
-      ) {
-
-        const normalized =
-          normalizeHeader(
-            headers[i]
-          );
-
-
-        if (
-          searchWords.some(
-            word =>
-              normalized.includes(
-                word
-              )
-          )
-        ) {
-
-          return i;
-
-        }
-
-      }
-
-
-      return -1;
-
+      return normalized.findIndex((header) =>
+        fallbackWords[type].some((word) => header.includes(word))
+      );
     }
 
+    function isBlank(value) {
+      return String(value ?? "").trim() === "";
+    }
+
+    function isEntireRowBlank(row) {
+      return row.every((cell) => isBlank(cell));
+    }
 
     function isValidEmail(value) {
+      const text = String(value ?? "").trim();
 
-      const email =
-        String(value ?? "")
-          .trim();
+      if (!text) return false;
 
-
-      if (!email) {
-
-        return false;
-
-      }
-
-
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        email
-      );
-
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
     }
 
-
-    function extractPhoneDigits(
-      value
-    ) {
-
-      return String(
-        value ?? ""
-      ).replace(
-        /\D/g,
-        ""
-      );
-
+    function extractPhoneDigits(value) {
+      return String(value ?? "").replace(/\D/g, "");
     }
 
+    function isPhoneErrorValue(value) {
+      const text = String(value ?? "").trim().toUpperCase();
 
-    function isPhoneErrorValue(
-      value
-    ) {
-
-      return /#(?:ERROR|N\/A|REF|VALUE|NAME|DIV\/0|NUM|NULL|SPILL|CALC)!?/i.test(
-        String(
-          value ?? ""
-        ).trim()
-      );
-
-    }
-
-
-    function isValidPhone(
-      value
-    ) {
-
-      const phone =
-        String(
-          value ?? ""
-        ).trim();
-
-
-      if (!phone) {
-
-        return false;
-
-      }
-
-
-      if (
-        isPhoneErrorValue(
-          phone
-        )
-      ) {
-
-        return false;
-
-      }
-
-
-      if (
-        /^\+/.test(phone) &&
-        !/^\+[0-9\s().-]+$/.test(
-          phone
-        )
-      ) {
-
-        return false;
-
-      }
-
-
-      if (
-        !/^\+?[0-9\s().-]+$/.test(
-          phone
-        )
-      ) {
-
-        return false;
-
-      }
-
-
-      const digits =
-        extractPhoneDigits(
-          phone
-        );
-
+      if (!text) return false;
 
       return (
-        digits.length >= 7 &&
-        digits.length <= 15
+        text.startsWith("#") ||
+        text === "N/A" ||
+        text === "NA" ||
+        text === "NULL" ||
+        text === "NONE"
       );
-
     }
 
+    function isValidPhone(value) {
+      const text = String(value ?? "").trim();
 
-    function standardizePhone(
-      value
-    ) {
-
-      const original =
-        String(
-          value ?? ""
-        ).trim();
-
-
-      if (!original) {
-
-        return "";
-
+      if (!text || isPhoneErrorValue(text)) {
+        return false;
       }
 
+      const digits = extractPhoneDigits(text);
 
-      if (
-        !isValidPhone(
-          original
-        )
-      ) {
-
-        return original;
-
+      if (digits.length < 7 || digits.length > 15) {
+        return false;
       }
 
+      return /^[+()\d\s.\-]+$/.test(text);
+    }
 
-      const digits =
-        extractPhoneDigits(
-          original
-        );
+    function standardizePhone(value) {
+      const text = String(value ?? "").trim();
 
+      if (!isValidPhone(text)) {
+        return text;
+      }
 
-      if (
-        original.startsWith("+")
-      ) {
+      const digits = extractPhoneDigits(text);
 
+      if (text.startsWith("+")) {
         return "+" + digits;
-
       }
-
 
       return digits;
-
     }
 
-
-    function isEmptyRow(
-      row
-    ) {
-
-      return row.every(
-        cell =>
-          String(
-            cell ?? ""
-          ).trim() === ""
-      );
-
+    function daysInMonth(year, month) {
+      return new Date(year, month, 0).getDate();
     }
 
-
-    function makeRowKey(
-      row
-    ) {
-
-      return row
-        .map(
-          cell =>
-            String(
-              cell ?? ""
-            )
-              .trim()
-              .toLowerCase()
-        )
-        .join(
-          "\u001f"
-        );
-
-    }
-
-
-    function countWhitespaceCells(
-      rows
-    ) {
-
-      let count = 0;
-
-
-      for (
-        const row of rows
+    function isValidDateParts(day, month, year) {
+      if (
+        !Number.isInteger(day) ||
+        !Number.isInteger(month) ||
+        !Number.isInteger(year)
       ) {
-
-        for (
-          const cell of row
-        ) {
-
-          if (
-            typeof cell ===
-              "string" &&
-            cell !==
-              cell.trim()
-          ) {
-
-            count++;
-
-          }
-
-        }
-
+        return false;
       }
 
-
-      return count;
-
-    }
-
-
-    function getColumnCount(
-      rows
-    ) {
-
-      return Math.max(
-        ...rows.map(
-          row =>
-            row.length
-        ),
-        0
-      );
-
-    }
-
-
-    function getEmptyColumnIndexes(
-      rows,
-      columnCount
-    ) {
-
-      const emptyIndexes =
-        [];
-
-
-      for (
-        let column = 0;
-        column < columnCount;
-        column++
-      ) {
-
-        let hasData =
-          false;
-
-
-        for (
-          const row of rows
-        ) {
-
-          if (
-            String(
-              row[column] ??
-              ""
-            ).trim() !== ""
-          ) {
-
-            hasData =
-              true;
-
-            break;
-
-          }
-
-        }
-
-
-        if (!hasData) {
-
-          emptyIndexes.push(
-            column
-          );
-
-        }
-
+      if (year < 1000 || year > 9999) {
+        return false;
       }
 
+      if (month < 1 || month > 12) {
+        return false;
+      }
 
-      return emptyIndexes;
+      if (day < 1 || day > daysInMonth(year, month)) {
+        return false;
+      }
 
+      return true;
     }
 
+    function formatDate(day, month, year) {
+      const dd = String(day).padStart(2, "0");
+      const mm = String(month).padStart(2, "0");
+      const yyyy = String(year);
 
-    function analyzeSpreadsheet(
-      rows
-    ) {
+      return `${dd}-${mm}-${yyyy}`;
+    }
 
-      if (!rows.length) {
+    /*
+      Date rules:
+      1. YYYY-MM-DD / YYYY/MM/DD -> valid and standardized.
+      2. DD/MM/YYYY or DD-MM-YYYY:
+         - if only DD/MM is possible -> standardize.
+         - if both DD/MM and MM/DD are possible -> ambiguous, leave unchanged.
+         - if only MM/DD is possible -> leave unchanged because the
+           spreadsheet does not tell us the intended locale.
+      3. Invalid/unrecognized date values remain unchanged.
+    */
+    function parseDateValue(value) {
+      const text = String(value ?? "").trim();
+
+      if (!text) {
+        return {
+          status: "empty",
+          value: text
+        };
+      }
+
+      let match = text.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+
+      if (match) {
+        const year = Number(match[1]);
+        const month = Number(match[2]);
+        const day = Number(match[3]);
+
+        if (isValidDateParts(day, month, year)) {
+          return {
+            status: "valid",
+            value: formatDate(day, month, year)
+          };
+        }
 
         return {
-
-          headers: [],
-          dataRows: [],
-          rowCount: 0,
-          columnCount: 0,
-
-          validEmails: 0,
-          invalidEmails: 0,
-          emptyEmails: 0,
-
-          validPhones: 0,
-          invalidPhones: 0,
-          emptyPhones: 0,
-
-          duplicateRows: 0,
-          emptyRows: 0,
-          emptyColumns: 0,
-
-          whitespaceCells: 0,
-
-          emailIndex: -1,
-          phoneIndex: -1,
-
-          emptyColumnIndexes: []
-
+          status: "invalid",
+          value: text
         };
-
       }
 
+      match = text.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
 
-      const headers =
-        rows[0].map(
-          value =>
-            String(
-              value ?? ""
-            )
-        );
-
-
-      const dataRows =
-        rows.slice(1);
-
-
-      const columnCount =
-        getColumnCount(
-          rows
-        );
-
-
-      const emailIndex =
-        findColumn(
-          headers,
-          "email"
-        );
-
-
-      const phoneIndex =
-        findColumn(
-          headers,
-          "phone"
-        );
-
-
-      let validEmails =
-        0;
-
-      let invalidEmails =
-        0;
-
-      let emptyEmails =
-        0;
-
-
-      if (
-        emailIndex !== -1
-      ) {
-
-        for (
-          const row of dataRows
-        ) {
-
-          const value =
-            String(
-              row[emailIndex] ??
-              ""
-            ).trim();
-
-
-          if (!value) {
-
-            emptyEmails++;
-
-          }
-          else if (
-            isValidEmail(
-              value
-            )
-          ) {
-
-            validEmails++;
-
-          }
-          else {
-
-            invalidEmails++;
-
-          }
-
-        }
-
+      if (!match) {
+        return {
+          status: "invalid",
+          value: text
+        };
       }
 
+      const first = Number(match[1]);
+      const second = Number(match[2]);
+      const year = Number(match[3]);
 
-      let validPhones =
-        0;
+      const ddmmValid = isValidDateParts(first, second, year);
+      const mmddValid = isValidDateParts(second, first, year);
 
-      let invalidPhones =
-        0;
-
-      let emptyPhones =
-        0;
-
-
-      if (
-        phoneIndex !== -1
-      ) {
-
-        for (
-          const row of dataRows
-        ) {
-
-          const value =
-            String(
-              row[phoneIndex] ??
-              ""
-            ).trim();
-
-
-          if (!value) {
-
-            emptyPhones++;
-
-          }
-          else if (
-            isValidPhone(
-              value
-            )
-          ) {
-
-            validPhones++;
-
-          }
-          else {
-
-            invalidPhones++;
-
-          }
-
+      if (ddmmValid && mmddValid) {
+        if (first === second) {
+          return {
+            status: "valid",
+            value: formatDate(first, second, year)
+          };
         }
 
+        return {
+          status: "ambiguous",
+          value: text
+        };
       }
 
-
-      const seen =
-        new Set();
-
-
-      let duplicateRows =
-        0;
-
-      let emptyRows =
-        0;
-
-
-      for (
-        const row of dataRows
-      ) {
-
-        if (
-          isEmptyRow(
-            row
-          )
-        ) {
-
-          emptyRows++;
-
-          continue;
-
-        }
-
-
-        const key =
-          makeRowKey(
-            row
-          );
-
-
-        if (
-          seen.has(
-            key
-          )
-        ) {
-
-          duplicateRows++;
-
-        }
-        else {
-
-          seen.add(
-            key
-          );
-
-        }
-
+      if (ddmmValid && !mmddValid) {
+        return {
+          status: "valid",
+          value: formatDate(first, second, year)
+        };
       }
 
-
-      const emptyColumnIndexes =
-        getEmptyColumnIndexes(
-          dataRows,
-          columnCount
-        );
-
+      if (!ddmmValid && mmddValid) {
+        return {
+          status: "ambiguous",
+          value: text
+        };
+      }
 
       return {
+        status: "invalid",
+        value: text
+      };
+    }
 
-        headers,
+    function countDuplicateRows(rows) {
+      const seen = new Set();
+      let duplicates = 0;
 
-        dataRows,
+      for (const row of rows) {
+        const key = JSON.stringify(row);
 
-        rowCount:
-          dataRows.length,
+        if (seen.has(key)) {
+          duplicates++;
+        } else {
+          seen.add(key);
+        }
+      }
 
-        columnCount,
+      return duplicates;
+    }
+
+    function countWhitespaceValues(rows) {
+      let count = 0;
+
+      for (const row of rows) {
+        for (const cell of row) {
+          if (
+            typeof cell === "string" &&
+            cell.length > 0 &&
+            cell.trim() !== cell
+          ) {
+            count++;
+          }
+        }
+      }
+
+      return count;
+    }
+
+    function detectEmptyColumns(rows, columnCount) {
+      const emptyIndexes = [];
+
+      for (let col = 0; col < columnCount; col++) {
+        let hasValue = false;
+
+        for (let row = 1; row < rows.length; row++) {
+          if (!isBlank(rows[row][col])) {
+            hasValue = true;
+            break;
+          }
+        }
+
+        if (!hasValue) {
+          emptyIndexes.push(col);
+        }
+      }
+
+      return emptyIndexes;
+    }
+
+    function analyzeSpreadsheet(rows) {
+      const headers = rows[0] || [];
+      const dataRows = rows.slice(1);
+
+      const emailColumnIndex = findColumn(headers, "email");
+      const phoneColumnIndex = findColumn(headers, "phone");
+      const dateColumnIndex = findColumn(headers, "date");
+
+      let validEmails = 0;
+      let invalidEmails = 0;
+      let emptyEmails = 0;
+
+      let validPhones = 0;
+      let invalidPhones = 0;
+      let emptyPhones = 0;
+
+      let validDates = 0;
+      let invalidDates = 0;
+      let ambiguousDates = 0;
+      let emptyDates = 0;
+
+      for (const row of dataRows) {
+        if (emailColumnIndex !== -1) {
+          const value = row[emailColumnIndex];
+
+          if (isBlank(value)) {
+            emptyEmails++;
+          } else if (isValidEmail(value)) {
+            validEmails++;
+          } else {
+            invalidEmails++;
+          }
+        }
+
+        if (phoneColumnIndex !== -1) {
+          const value = row[phoneColumnIndex];
+
+          if (isBlank(value)) {
+            emptyPhones++;
+          } else if (isValidPhone(value)) {
+            validPhones++;
+          } else {
+            invalidPhones++;
+          }
+        }
+
+        if (dateColumnIndex !== -1) {
+          const value = row[dateColumnIndex];
+          const result = parseDateValue(value);
+
+          if (result.status === "empty") {
+            emptyDates++;
+          } else if (result.status === "valid") {
+            validDates++;
+          } else if (result.status === "ambiguous") {
+            ambiguousDates++;
+          } else {
+            invalidDates++;
+          }
+        }
+      }
+
+      const emptyRows = dataRows.filter(isEntireRowBlank).length;
+
+      const emptyColumnIndexes = detectEmptyColumns(
+        rows,
+        headers.length
+      );
+
+      return {
+        totalRows: dataRows.length,
+        totalColumns: headers.length,
+
+        emailColumnIndex,
+        phoneColumnIndex,
+        dateColumnIndex,
+
+        emailColumnName:
+          emailColumnIndex !== -1
+            ? headers[emailColumnIndex]
+            : "Not detected",
+
+        phoneColumnName:
+          phoneColumnIndex !== -1
+            ? headers[phoneColumnIndex]
+            : "Not detected",
+
+        dateColumnName:
+          dateColumnIndex !== -1
+            ? headers[dateColumnIndex]
+            : "Not detected",
 
         validEmails,
         invalidEmails,
@@ -2061,1031 +1198,353 @@
         invalidPhones,
         emptyPhones,
 
-        duplicateRows,
+        validDates,
+        invalidDates,
+        ambiguousDates,
+        emptyDates,
 
         emptyRows,
+        emptyColumnIndexes,
 
-        emptyColumns:
-          emptyColumnIndexes.length,
-
-        whitespaceCells:
-          countWhitespaceCells(
-            rows
-          ),
-
-        emailIndex,
-
-        phoneIndex,
-
-        emptyColumnIndexes
-
+        duplicateRows: countDuplicateRows(dataRows),
+        whitespaceValues: countWhitespaceValues(dataRows)
       };
-
     }
 
-
-    function setText(
-      id,
-      value
-    ) {
-
-      const element =
-        document.getElementById(
-          id
-        );
-
-
-      if (element) {
-
-        element.textContent =
-          value;
-
-      }
-
+    function setText(id, value) {
+      document.getElementById(id).textContent = value;
     }
 
+    function displayOriginalAnalysis(analysis) {
+      setText("totalRows", analysis.totalRows);
+      setText("totalColumns", analysis.totalColumns);
 
-    function setDot(
-      id,
-      hasIssue
-    ) {
+      setText("validEmails", analysis.validEmails);
+      setText("invalidEmails", analysis.invalidEmails);
+      setText("emptyEmails", analysis.emptyEmails);
 
-      const element =
-        document.getElementById(
-          id
-        );
+      setText("validPhones", analysis.validPhones);
+      setText("invalidPhones", analysis.invalidPhones);
+      setText("emptyPhones", analysis.emptyPhones);
 
+      setText("validDates", analysis.validDates);
+      setText("invalidDates", analysis.invalidDates);
+      setText("ambiguousDates", analysis.ambiguousDates);
 
-      if (!element) {
+      setText("qualityInvalidEmails", analysis.invalidEmails);
+      setText("qualityValidPhones", analysis.validPhones);
+      setText("qualityInvalidPhones", analysis.invalidPhones);
 
-        return;
+      setText("qualityValidDates", analysis.validDates);
+      setText("qualityInvalidDates", analysis.invalidDates);
+      setText("qualityAmbiguousDates", analysis.ambiguousDates);
 
-      }
-
-
-      element.classList.remove(
-        "good",
-        "issue"
+      setText("qualityDuplicateRows", analysis.duplicateRows);
+      setText("qualityEmptyRows", analysis.emptyRows);
+      setText(
+        "qualityEmptyColumns",
+        analysis.emptyColumnIndexes.length
       );
+      setText("qualityWhitespace", analysis.whitespaceValues);
 
+      setText("qualityEmailColumn", analysis.emailColumnName);
+      setText("qualityPhoneColumn", analysis.phoneColumnName);
+      setText("qualityDateColumn", analysis.dateColumnName);
 
-      element.classList.add(
-        hasIssue
-          ? "issue"
-          : "good"
-      );
-
-    }
-
-
-    function displayOriginalAnalysis(
-      result
-    ) {
+      setText("detailEmailColumn", analysis.emailColumnName);
+      setText("detailPhoneColumn", analysis.phoneColumnName);
+      setText("detailDateColumn", analysis.dateColumnName);
 
       setText(
-        "totalRows",
-        result.rowCount
+        "detailAmbiguousDates",
+        analysis.ambiguousDates > 0
+          ? `${analysis.ambiguousDates} left unchanged`
+          : "None"
       );
 
-
-      setText(
-        "totalColumns",
-        result.columnCount
-      );
-
-
-      setText(
-        "validEmails",
-        result.validEmails
-      );
-
-
-      setText(
-        "invalidEmails",
-        result.invalidEmails
-      );
-
-
-      setText(
-        "emptyEmails",
-        result.emptyEmails
-      );
-
-
-      setText(
-        "validPhones",
-        result.validPhones
-      );
-
-
-      setText(
-        "invalidPhones",
-        result.invalidPhones
-      );
-
-
-      setText(
-        "emptyPhones",
-        result.emptyPhones
-      );
-
-
-      setText(
-        "checkInvalidEmails",
-        result.invalidEmails
-      );
-
-
-      setText(
-        "checkInvalidPhones",
-        result.invalidPhones
-      );
-
-
-      setText(
-        "checkDuplicateRows",
-        result.duplicateRows
-      );
-
-
-      setText(
-        "checkEmptyRows",
-        result.emptyRows
-      );
-
-
-      setText(
-        "checkEmptyColumns",
-        result.emptyColumns
-      );
-
-
-      setText(
-        "checkWhitespace",
-        result.whitespaceCells
-      );
-
-
-      const emailColumn =
-        result.emailIndex === -1
-          ? "Not found"
-          : (
-              result.headers[
-                result.emailIndex
-              ] ||
-              `Column ${
-                result.emailIndex + 1
-              }`
-            );
-
-
-      const phoneColumn =
-        result.phoneIndex === -1
-          ? "Not found"
-          : (
-              result.headers[
-                result.phoneIndex
-              ] ||
-              `Column ${
-                result.phoneIndex + 1
-              }`
-            );
-
-
-      setText(
-        "checkEmailColumn",
-        emailColumn
-      );
-
-
-      setText(
-        "checkPhoneColumn",
-        phoneColumn
-      );
-
-
-      setText(
-        "detailEmailColumn",
-        emailColumn
-      );
-
-
-      setText(
-        "detailPhoneColumn",
-        phoneColumn
-      );
-
-
-      setText(
-        "detailFile",
-        currentFileName || "—"
-      );
-
-
-      setText(
-        "detailSheet",
-        currentSheetName || "—"
-      );
-
-
-      setText(
-        "checkPhone",
-        result.phoneIndex === -1
-          ? "Not found"
-          :
-            `${result.validPhones} valid`
-      );
-
-
-      let validationStatus =
-        "Waiting";
-
-
-      if (
-        result.emailIndex === -1 &&
-        result.phoneIndex === -1
-      ) {
-
-        validationStatus =
-          "No contact columns";
-
-      }
-      else if (
-        result.invalidEmails > 0 ||
-        result.invalidPhones > 0
-      ) {
-
-        validationStatus =
-          "Issues detected";
-
-      }
-      else {
-
-        validationStatus =
-          "No email/phone issues";
-
-      }
-
-
-      setText(
-        "detailValidation",
-        validationStatus
-      );
-
-
-      setDot(
-        "dotInvalidEmail",
-        result.invalidEmails > 0
-      );
-
-
-      setDot(
-        "dotPhone",
-        result.phoneIndex !== -1
-      );
-
-
-      setDot(
-        "dotInvalidPhone",
-        result.invalidPhones > 0
-      );
-
-
-      setDot(
-        "dotDuplicate",
-        result.duplicateRows > 0
-      );
-
-
-      setDot(
-        "dotEmptyRows",
-        result.emptyRows > 0
-      );
-
-
-      setDot(
-        "dotEmptyColumns",
-        result.emptyColumns > 0
-      );
-
-
-      setDot(
-        "dotWhitespace",
-        result.whitespaceCells > 0
-      );
-
-
-      setDot(
-        "dotEmailColumn",
-        result.emailIndex !== -1
-      );
-
-
-      setDot(
-        "dotPhoneColumn",
-        result.phoneIndex !== -1
-      );
-
-
-      statsSection.classList.remove(
-        "hidden"
-      );
-
-
-      checksSection.classList.remove(
-        "hidden"
-      );
-
-
-      detailsSection.classList.remove(
-        "hidden"
-      );
-
-
-      previewSection.classList.remove(
-        "hidden"
-      );
-
-
-      summarySection.classList.add(
-        "hidden"
-      );
-
-
-      emptyState.classList.add(
-        "hidden"
-      );
-
-
-      previewTitle.textContent =
-        "Original Spreadsheet Preview";
-
+      setText("summaryBlankRows", 0);
+      setText("summaryEmptyColumns", 0);
+      setText("summaryDuplicates", 0);
+      setText("summaryPhones", 0);
+      setText("summaryDates", 0);
+      setText("summaryEmails", 0);
+      setText("summaryRowsAfter", 0);
+
+      const detectedDateMessage =
+        analysis.dateColumnIndex !== -1
+          ? `Date column detected: "${analysis.dateColumnName}". Clearly identified dates will be standardized to DD-MM-YYYY. Ambiguous dates will be left unchanged.`
+          : "No date column was detected. The rest of the cleaning tools are still available.";
+
+      showNotice(detectedDateMessage, "info");
 
       previewDescription.textContent =
-        "This preview shows the values from the uploaded spreadsheet before cleaning.";
+        "Showing the original spreadsheet before cleaning.";
 
-
-      renderPreview(
-        originalRows,
-        false
-      );
-
+      renderPreview(rowsToPreview(originalRows), "Original Preview");
     }
 
+    function rowsToPreview(rows) {
+      return rows.slice(0, 21);
+    }
 
-    function renderPreview(
-      rows,
-      cleaned
-    ) {
-
-      previewTable.innerHTML =
-        "";
-
-
-      if (!rows.length) {
-
+    function renderPreview(rows, label) {
+      if (!rows || rows.length === 0) {
+        previewTable.classList.add("hidden");
+        previewEmpty.classList.remove("hidden");
+        previewEmpty.textContent = "No spreadsheet data available.";
         return;
-
       }
 
+      previewHead.innerHTML = "";
+      previewBody.innerHTML = "";
 
-      const columnCount =
-        getColumnCount(
-          rows
-        );
+      const headerRow = rows[0];
 
+      const headerTr = document.createElement("tr");
 
-      const thead =
-        document.createElement(
-          "thead"
-        );
+      headerRow.forEach((header) => {
+        const th = document.createElement("th");
+        th.textContent = header ?? "";
+        headerTr.appendChild(th);
+      });
 
+      previewHead.appendChild(headerTr);
 
-      const headerRow =
-        document.createElement(
-          "tr"
-        );
+      rows.slice(1).forEach((row) => {
+        const tr = document.createElement("tr");
 
+        headerRow.forEach((_, index) => {
+          const td = document.createElement("td");
+          td.textContent = row[index] ?? "";
+          tr.appendChild(td);
+        });
 
-      for (
-        let column = 0;
-        column < columnCount;
-        column++
-      ) {
+        previewBody.appendChild(tr);
+      });
 
-        const th =
-          document.createElement(
-            "th"
-          );
-
-
-        th.textContent =
-          String(
-            rows[0][column] ??
-            ""
-          ).trim() ||
-          `Column ${
-            column + 1
-          }`;
-
-
-        headerRow.appendChild(
-          th
-        );
-
-      }
-
-
-      thead.appendChild(
-        headerRow
-      );
-
-
-      previewTable.appendChild(
-        thead
-      );
-
-
-      const tbody =
-        document.createElement(
-          "tbody"
-        );
-
-
-      const maxRows =
-        Math.min(
-          rows.length,
-          21
-        );
-
-
-      for (
-        let rowIndex = 1;
-        rowIndex < maxRows;
-        rowIndex++
-      ) {
-
-        const tr =
-          document.createElement(
-            "tr"
-          );
-
-
-        for (
-          let column = 0;
-          column < columnCount;
-          column++
-        ) {
-
-          const td =
-            document.createElement(
-              "td"
-            );
-
-
-          td.textContent =
-            String(
-              rows[rowIndex][column] ??
-              ""
-            );
-
-
-          tr.appendChild(
-            td
-          );
-
-        }
-
-
-        tbody.appendChild(
-          tr
-        );
-
-      }
-
-
-      previewTable.appendChild(
-        tbody
-      );
-
-
-      if (cleaned) {
-
-        previewTitle.textContent =
-          "Cleaned Spreadsheet Preview";
-
-
-        previewDescription.textContent =
-          "This preview shows the cleaned copy with recognized phone values standardized.";
-
-      }
-
+      previewEmpty.classList.add("hidden");
+      previewTable.classList.remove("hidden");
+      previewDescription.textContent = label;
     }
 
-
-    async function handleFileUpload(
-      event
-    ) {
-
-      const file =
-        event.target.files[0];
-
-
-      if (!file) {
-
-        return;
-
-      }
-
-
-      originalRows = [];
-
-      cleanedRows = null;
-
-      originalAnalysis =
-        null;
-
-      currentFileName =
-        file.name;
-
-      currentSheetName =
-        "";
-
-
-      downloadBtn.disabled =
-        true;
-
-
-      downloadCsvBtn.disabled =
-        true;
-
-
-      cleanBtn.disabled =
-        false;
-
-
-      notice.className =
-        "notice hidden";
-
-
-      fileInfo.textContent =
-        `Reading: ${file.name}`;
-
-
-      try {
-
-        const arrayBuffer =
-          await file.arrayBuffer();
-
-
-        const workbook =
-          XLSX.read(
-            arrayBuffer,
-            {
-              type: "array"
-            }
-          );
-
-
-        if (
-          !workbook.SheetNames.length
-        ) {
-
-          throw new Error(
-            "No worksheet was found."
-          );
-
-        }
-
-
-        currentSheetName =
-          workbook.SheetNames[0];
-
-
-        const worksheet =
-          workbook.Sheets[
-            currentSheetName
-          ];
-
-
-        const rows =
-          XLSX.utils.sheet_to_json(
-            worksheet,
-            {
-              header: 1,
-              defval: "",
-              raw: false,
-              blankrows: true
-            }
-          );
-
-
-        if (!rows.length) {
-
-          throw new Error(
-            "The spreadsheet is empty."
-          );
-
-        }
-
-
-        originalRows =
-          rows;
-
-
-        originalAnalysis =
-          analyzeSpreadsheet(
-            rows
-          );
-
-
-        fileInfo.textContent =
-          `Loaded: ${file.name} • Sheet: ${currentSheetName}`;
-
-
-        actionBar.classList.remove(
-          "hidden"
-        );
-
-
-        displayOriginalAnalysis(
-          originalAnalysis
-        );
-
-      }
-      catch (error) {
-
-        resetDisplayOnly();
-
-
-        emptyState.classList.remove(
-          "hidden"
-        );
-
-
-        emptyState.innerHTML = `
-          <div class="big">⚠️</div>
-          <strong>Could not read this spreadsheet</strong>
-          <div style="margin-top:6px;">
-            ${escapeHtml(error.message)}
-          </div>
-        `;
-
-
-        fileInfo.textContent =
-          "";
-
-      }
-
+    function showNotice(message, type) {
+      notice.className = `notice ${type}`;
+      notice.textContent = message;
     }
 
+    function hideNotice() {
+      notice.className = "notice";
+      notice.textContent = "";
+    }
 
     function cleanSpreadsheet() {
-
-      if (
-        !originalRows.length
-      ) {
-
+      if (!originalRows.length || !originalAnalysis) {
         return;
-
       }
 
+      let rows = originalRows.map((row) => [...row]);
 
-      const before =
-        originalAnalysis ||
-        analyzeSpreadsheet(
-          originalRows
-        );
+      const headers = rows[0] || [];
 
+      // 1. Remove completely blank rows.
+      const rowsBeforeBlankRemoval = rows.length;
 
-      const originalHeaders =
-        originalRows[0] || [];
-
-
-      const originalColumnCount =
-        getColumnCount(
-          originalRows
-        );
-
-
-      const nonEmptyRows =
-        originalRows
+      rows = [
+        headers,
+        ...rows
           .slice(1)
-          .filter(
-            row =>
-              !isEmptyRow(
-                row
-              )
-          );
-
-
-      const rowsRemoved =
-        originalRows.length -
-        1 -
-        nonEmptyRows.length;
-
-
-      const emptyColumnIndexes =
-        getEmptyColumnIndexes(
-          nonEmptyRows,
-          originalColumnCount
-        );
-
-
-      const emptyColumnSet =
-        new Set(
-          emptyColumnIndexes
-        );
-
-
-      const emailIndex =
-        findColumn(
-          originalHeaders,
-          "email"
-        );
-
-
-      const phoneIndex =
-        findColumn(
-          originalHeaders,
-          "phone"
-        );
-
-
-      const cleanedHeaders =
-        [];
-
-
-      for (
-        let column = 0;
-        column < originalColumnCount;
-        column++
-      ) {
-
-        if (
-          emptyColumnSet.has(
-            column
-          )
-        ) {
-
-          continue;
-
-        }
-
-
-        let header =
-          String(
-            originalHeaders[
-              column
-            ] ?? ""
-          ).trim();
-
-
-        if (!header) {
-
-          header =
-            `Column ${
-              column + 1
-            }`;
-
-        }
-
-
-        cleanedHeaders.push(
-          header
-        );
-
-      }
-
-
-      const cleanedDataRows =
-        [];
-
-
-      const seenRows =
-        new Set();
-
-
-      let duplicateRowsRemoved =
-        0;
-
-
-      let phonesFormatted =
-        0;
-
-
-      for (
-        const row of nonEmptyRows
-      ) {
-
-        const newRow =
-          [];
-
-
-        for (
-          let column = 0;
-          column < originalColumnCount;
-          column++
-        ) {
-
-          if (
-            emptyColumnSet.has(
-              column
-            )
-          ) {
-
-            continue;
-
-          }
-
-
-          let value =
-            row[column] ??
-            "";
-
-
-          if (
-            typeof value ===
-            "string"
-          ) {
-
-            value =
-              value.trim();
-
-          }
-
-
-          if (
-            column === emailIndex &&
-            typeof value ===
-            "string" &&
-            value
-          ) {
-
-            value =
-              value.toLowerCase();
-
-          }
-
-
-          if (
-            column === phoneIndex &&
-            String(
-              value
-            ).trim() !== ""
-          ) {
-
-            const standardized =
-              standardizePhone(
-                value
-              );
-
-
-            if (
-              standardized !==
-                String(
-                  value
-                ).trim() &&
-              isValidPhone(
-                value
-              )
-            ) {
-
-              phonesFormatted++;
-
-            }
-
-
-            value =
-              standardized;
-
-          }
-
-
-          newRow.push(
-            value
-          );
-
-        }
-
-
-        const key =
-          makeRowKey(
-            newRow
-          );
-
-
-        if (
-          seenRows.has(
-            key
-          )
-        ) {
-
-          duplicateRowsRemoved++;
-
-          continue;
-
-        }
-
-
-        seenRows.add(
-          key
-        );
-
-
-        cleanedDataRows.push(
-          newRow
-        );
-
-      }
-
-
-      cleanedRows = [
-        cleanedHeaders,
-        ...cleanedDataRows
+          .filter((row) => !isEntireRowBlank(row))
       ];
 
+      const blankRowsRemoved =
+        rowsBeforeBlankRemoval - rows.length;
 
-      setText(
-        "summaryRowsRemoved",
-        rowsRemoved
+      // 2. Remove completely empty columns.
+      const columnsToRemove = new Set(
+        originalAnalysis.emptyColumnIndexes
       );
 
-
-      setText(
-        "summaryColumnsRemoved",
-        emptyColumnIndexes.length
+      const trimmedRows = rows.map((row) =>
+        row.filter((_, index) => !columnsToRemove.has(index))
       );
 
+      rows = trimmedRows;
+
+      // 3. Trim all string values.
+      rows = rows.map((row) =>
+        row.map((cell) =>
+          typeof cell === "string" ? cell.trim() : cell
+        )
+      );
+
+      let emailStandardized = 0;
+      let phoneStandardized = 0;
+      let dateStandardized = 0;
+
+      // 4. Detect columns again after removing columns.
+      const cleanedHeaders = rows[0] || [];
+
+      const emailColumnIndex = findColumn(
+        cleanedHeaders,
+        "email"
+      );
+
+      const phoneColumnIndex = findColumn(
+        cleanedHeaders,
+        "phone"
+      );
+
+      const dateColumnIndex = findColumn(
+        cleanedHeaders,
+        "date"
+      );
+
+      // 5. Normalize values.
+      for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+        const row = rows[rowIndex];
+
+        if (emailColumnIndex !== -1) {
+          const originalValue = String(
+            row[emailColumnIndex] ?? ""
+          ).trim();
+
+          if (originalValue && isValidEmail(originalValue)) {
+            const normalizedEmail =
+              originalValue.toLowerCase();
+
+            if (normalizedEmail !== originalValue) {
+              emailStandardized++;
+              row[emailColumnIndex] = normalizedEmail;
+            } else {
+              row[emailColumnIndex] = normalizedEmail;
+            }
+          }
+        }
+
+        if (phoneColumnIndex !== -1) {
+          const originalValue = String(
+            row[phoneColumnIndex] ?? ""
+          ).trim();
+
+          if (isValidPhone(originalValue)) {
+            const standardized =
+              standardizePhone(originalValue);
+
+            if (standardized !== originalValue) {
+              phoneStandardized++;
+              row[phoneColumnIndex] = standardized;
+            }
+          }
+        }
+
+        if (dateColumnIndex !== -1) {
+          const originalValue = String(
+            row[dateColumnIndex] ?? ""
+          ).trim();
+
+          const result = parseDateValue(originalValue);
+
+          if (result.status === "valid") {
+            if (result.value !== originalValue) {
+              dateStandardized++;
+            }
+
+            row[dateColumnIndex] = result.value;
+          } else {
+            // Invalid and ambiguous dates remain unchanged.
+            row[dateColumnIndex] = originalValue;
+          }
+        }
+      }
+
+      // 6. Remove exact duplicate rows after normalization.
+      const seen = new Set();
+      const uniqueDataRows = [];
+      let duplicateRowsRemoved = 0;
+
+      for (let i = 1; i < rows.length; i++) {
+        const key = JSON.stringify(rows[i]);
+
+        if (seen.has(key)) {
+          duplicateRowsRemoved++;
+        } else {
+          seen.add(key);
+          uniqueDataRows.push(rows[i]);
+        }
+      }
+
+      cleanedRows = [
+        rows[0],
+        ...uniqueDataRows
+      ];
+
+      setText("summaryBlankRows", blankRowsRemoved);
+      setText(
+        "summaryEmptyColumns",
+        columnsToRemove.size
+      );
 
       setText(
-        "summaryDuplicatesRemoved",
+        "summaryDuplicates",
         duplicateRowsRemoved
       );
 
+      setText(
+        "summaryPhones",
+        phoneStandardized
+      );
 
       setText(
-        "summaryPhonesFormatted",
-        phonesFormatted
+        "summaryDates",
+        dateStandardized
       );
 
-
-      summarySection.classList.remove(
-        "hidden"
+      setText(
+        "summaryEmails",
+        emailStandardized
       );
 
+      setText(
+        "summaryRowsAfter",
+        cleanedRows.length - 1
+      );
 
-      downloadBtn.disabled =
-        false;
+      downloadXlsxBtn.disabled = false;
+      downloadCsvBtn.disabled = false;
 
+      const dateMessage =
+        dateStandardized > 0
+          ? `${dateStandardized} clear date value(s) were standardized to DD-MM-YYYY.`
+          : "No date values required standardization.";
 
-      downloadCsvBtn.disabled =
-        false;
+      const ambiguousMessage =
+        originalAnalysis.ambiguousDates > 0
+          ? ` ${originalAnalysis.ambiguousDates} ambiguous date value(s) were left unchanged rather than guessed.`
+          : "";
 
+      showNotice(
+        `Cleaning complete. ${dateMessage}${ambiguousMessage} Invalid or ambiguous values were not guessed.`,
+        "success"
+      );
 
-      notice.className =
-        "notice success";
-
-
-      notice.textContent =
-        `Cleaning complete. ${phonesFormatted} recognized phone value(s) were standardized. Invalid or ambiguous phone values were left unchanged rather than guessed.`;
-
-
-      fileInfo.textContent =
-        `Cleaned preview: ${currentFileName} • Sheet: ${currentSheetName}`;
-
+      previewDescription.textContent =
+        "Showing the cleaned spreadsheet preview.";
 
       renderPreview(
-        cleanedRows,
-        true
+        rowsToPreview(cleanedRows),
+        "Cleaned Preview"
       );
-
     }
 
-
-    function downloadCleanedFile(
-      type
-    ) {
-
-      if (
-        !cleanedRows ||
-        !cleanedRows.length
-      ) {
-
+    function downloadFile(type) {
+      if (!cleanedRows.length) {
         return;
-
       }
 
-
-      const workbook =
-        XLSX.utils.book_new();
-
-
       const worksheet =
-        XLSX.utils.aoa_to_sheet(
-          cleanedRows
-        );
+        XLSX.utils.aoa_to_sheet(cleanedRows);
 
+      const workbook = XLSX.utils.book_new();
 
       XLSX.utils.book_append_sheet(
         workbook,
@@ -3093,173 +1552,208 @@
         "Cleaned Data"
       );
 
-
-      const safeBase =
+      const baseName =
         currentFileName
-          .replace(
-            /\.[^/.]+$/,
-            ""
-          )
-          .replace(
-            /[\\/:*?"<>|]+/g,
-            "_"
-          );
+          .replace(/\.[^/.]+$/, "")
+          .replace(/[^a-zA-Z0-9_-]+/g, "_");
 
-
-      if (
-        type === "csv"
-      ) {
-
+      if (type === "xlsx") {
         XLSX.writeFile(
           workbook,
-          `${safeBase}_cleaned.csv`,
-          {
-            bookType:
-              "csv"
-          }
+          `${baseName}_cleaned.xlsx`
         );
-
-      }
-      else {
-
+      } else {
         XLSX.writeFile(
           workbook,
-          `${safeBase}_cleaned.xlsx`,
+          `${baseName}_cleaned.csv`,
           {
-            bookType:
-              "xlsx"
+            bookType: "csv"
           }
         );
-
       }
-
     }
-
-
-    function resetDisplayOnly() {
-
-      actionBar.classList.add(
-        "hidden"
-      );
-
-
-      statsSection.classList.add(
-        "hidden"
-      );
-
-
-      checksSection.classList.add(
-        "hidden"
-      );
-
-
-      detailsSection.classList.add(
-        "hidden"
-      );
-
-
-      summarySection.classList.add(
-        "hidden"
-      );
-
-
-      previewSection.classList.add(
-        "hidden"
-      );
-
-
-      notice.className =
-        "notice hidden";
-
-
-      downloadBtn.disabled =
-        true;
-
-
-      downloadCsvBtn.disabled =
-        true;
-
-
-      previewTable.innerHTML =
-        "";
-
-    }
-
 
     function resetApp() {
-
-      fileInput.value =
-        "";
-
-
       originalRows = [];
+      cleanedRows = [];
+      originalAnalysis = null;
+      currentFileName = "";
 
-      cleanedRows = null;
+      fileInput.value = "";
+      fileInfo.style.display = "none";
+      fileInfo.textContent = "";
 
-      originalAnalysis =
-        null;
+      cleanBtn.disabled = true;
+      downloadXlsxBtn.disabled = true;
+      downloadCsvBtn.disabled = true;
 
-      currentFileName =
-        "";
+      hideNotice();
 
-      currentSheetName =
-        "";
+      [
+        "totalRows",
+        "totalColumns",
+        "validEmails",
+        "invalidEmails",
+        "emptyEmails",
+        "validPhones",
+        "invalidPhones",
+        "emptyPhones",
+        "validDates",
+        "invalidDates",
+        "ambiguousDates",
+        "qualityInvalidEmails",
+        "qualityValidPhones",
+        "qualityInvalidPhones",
+        "qualityValidDates",
+        "qualityInvalidDates",
+        "qualityAmbiguousDates",
+        "qualityDuplicateRows",
+        "qualityEmptyRows",
+        "qualityEmptyColumns",
+        "qualityWhitespace",
+        "summaryBlankRows",
+        "summaryEmptyColumns",
+        "summaryDuplicates",
+        "summaryPhones",
+        "summaryDates",
+        "summaryEmails",
+        "summaryRowsAfter"
+      ].forEach((id) => setText(id, "0"));
 
+      setText("qualityEmailColumn", "Not detected");
+      setText("qualityPhoneColumn", "Not detected");
+      setText("qualityDateColumn", "Not detected");
 
-      fileInfo.textContent =
-        "";
+      setText("detailEmailColumn", "Not detected");
+      setText("detailPhoneColumn", "Not detected");
+      setText("detailDateColumn", "Not detected");
+      setText("detailAmbiguousDates", "Left unchanged");
 
+      previewHead.innerHTML = "";
+      previewBody.innerHTML = "";
+      previewTable.classList.add("hidden");
+      previewEmpty.classList.remove("hidden");
+      previewEmpty.textContent =
+        "Your spreadsheet preview will appear here.";
 
-      resetDisplayOnly();
-
-
-      emptyState.classList.remove(
-        "hidden"
-      );
-
-
-      emptyState.innerHTML = `
-        <div class="big">📁</div>
-        <strong>Upload a spreadsheet to begin</strong>
-        <div style="margin-top:6px;">
-          Your file is analyzed directly in your browser.
-        </div>
-      `;
-
+      previewDescription.textContent =
+        "Upload a spreadsheet to preview your data.";
     }
 
+    fileInput.addEventListener("change", async function () {
+      const file = this.files[0];
 
-    function escapeHtml(
-      value
-    ) {
+      if (!file) {
+        return;
+      }
 
-      return String(
-        value
-      )
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+
+        const workbook = XLSX.read(arrayBuffer, {
+          type: "array",
+          cellDates: false
+        });
+
+        const firstSheetName = workbook.SheetNames[0];
+
+        if (!firstSheetName) {
+          throw new Error("No worksheet found.");
+        }
+
+        const worksheet =
+          workbook.Sheets[firstSheetName];
+
+        const rows = XLSX.utils.sheet_to_json(
+          worksheet,
+          {
+            header: 1,
+            defval: "",
+            raw: false,
+            blankrows: true
+          }
         );
 
+        if (!rows.length || !rows[0] || rows[0].length === 0) {
+          throw new Error(
+            "The spreadsheet appears to be empty."
+          );
+        }
+
+        originalRows = rows;
+        cleanedRows = [];
+        currentFileName = file.name;
+
+        originalAnalysis =
+          analyzeSpreadsheet(originalRows);
+
+        fileInfo.style.display = "block";
+        fileInfo.innerHTML =
+          `<strong>${escapeHtml(file.name)}</strong> • ` +
+          `${formatFileSize(file.size)} • ` +
+          `${originalAnalysis.totalRows} data row(s) • ` +
+          `${originalAnalysis.totalColumns} column(s)`;
+
+        cleanBtn.disabled = false;
+        downloadXlsxBtn.disabled = true;
+        downloadCsvBtn.disabled = true;
+
+        displayOriginalAnalysis(originalAnalysis);
+
+      } catch (error) {
+        console.error(error);
+
+        showNotice(
+          "Could not read this spreadsheet. Please check that the file is a valid XLSX, XLS or CSV file.",
+          "warning"
+        );
+
+        cleanBtn.disabled = true;
+        downloadXlsxBtn.disabled = true;
+        downloadCsvBtn.disabled = true;
+      }
+    });
+
+    cleanBtn.addEventListener(
+      "click",
+      cleanSpreadsheet
+    );
+
+    downloadXlsxBtn.addEventListener(
+      "click",
+      () => downloadFile("xlsx")
+    );
+
+    downloadCsvBtn.addEventListener(
+      "click",
+      () => downloadFile("csv")
+    );
+
+    resetBtn.addEventListener(
+      "click",
+      resetApp
+    );
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) {
+        return `${bytes} B`;
+      }
+
+      if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+      }
+
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
   </script>
-
 </body>
 </html>
