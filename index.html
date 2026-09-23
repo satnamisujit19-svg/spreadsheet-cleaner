@@ -129,6 +129,15 @@
             opacity: 0.85;
         }
 
+        #resetButton {
+            background: #666;
+            margin-top: 15px;
+        }
+
+        #resetButton:hover {
+            background: #444;
+        }
+
         #status {
             margin-top: 20px;
             font-weight: bold;
@@ -320,6 +329,15 @@
 
             <button onclick="cleanSpreadsheet()">
                 🧹 Clean My Spreadsheet
+            </button>
+
+            <br>
+
+            <button
+                id="resetButton"
+                onclick="resetTool()"
+                style="display:none;">
+                🔄 Choose Another File
             </button>
 
             <div id="status"></div>
@@ -656,8 +674,15 @@ function createDownloadFile(
         );
 
 
+    const cleanBaseName =
+        nameWithoutExtension.replace(
+            /(-cleaned)+$/i,
+            ""
+        );
+
+
     const cleanedFileName =
-        nameWithoutExtension +
+        cleanBaseName +
         "-cleaned." +
         fileExtension;
 
@@ -956,6 +981,12 @@ function cleanSpreadsheet() {
                 );
 
 
+                document.getElementById(
+                    "resetButton"
+                ).style.display =
+                    "inline-block";
+
+
                 if (
                     fileName.endsWith(".xlsx") ||
                     fileName.endsWith(".xls")
@@ -1007,13 +1038,56 @@ function cleanSpreadsheet() {
 }
 
 
+function resetTool() {
+
+    document.getElementById(
+        "fileInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "status"
+    ).textContent = "";
+
+
+    document.getElementById(
+        "report"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "preview"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "previewTable"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "download"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "resetButton"
+    ).style.display = "none";
+
+}
+
+
 /* Drag and Drop */
 
 const uploadBox =
-    document.getElementById("uploadBox");
+    document.getElementById(
+        "uploadBox"
+    );
 
 const fileInput =
-    document.getElementById("fileInput");
+    document.getElementById(
+        "fileInput"
+    );
 
 
 uploadBox.addEventListener(
@@ -1059,6 +1133,7 @@ uploadBox.addEventListener(
 
             fileInput.files =
                 event.dataTransfer.files;
+
 
             document.getElementById(
                 "status"
