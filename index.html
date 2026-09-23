@@ -1,514 +1,543 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Clean My Spreadsheet</title>
+```
+<title>Clean My Spreadsheet</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            margin: 0;
-            padding: 0;
-            color: #222;
-        }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fb;
+        margin: 0;
+        padding: 0;
+        color: #222;
+    }
+
+    .container {
+        max-width: 850px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 35px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .upload-area {
+        border: 2px dashed #999;
+        border-radius: 12px;
+        padding: 35px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+        background: #fafafa;
+    }
+
+    .upload-area:hover,
+    .upload-area.dragover {
+        background: #f0f4ff;
+        border-color: #4a67ff;
+    }
+
+    .upload-area input {
+        display: none;
+    }
+
+    .upload-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .upload-text {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .upload-help {
+        color: #777;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .file-name {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .options {
+        margin-top: 25px;
+        padding: 20px;
+        background: #f8f9fc;
+        border-radius: 12px;
+    }
+
+    .options-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .options-header h3 {
+        margin: 0;
+    }
+
+    .selection-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .selection-buttons button {
+        width: auto;
+        margin: 0;
+        padding: 8px 12px;
+        font-size: 13px;
+        background: #e9edf7;
+        color: #333;
+        border: 1px solid #d5dbea;
+    }
+
+    .selection-buttons button:hover {
+        background: #dce2f2;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 12px 0;
+        cursor: pointer;
+    }
+
+    .option input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .option label {
+        cursor: pointer;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        background: #4a67ff;
+        color: white;
+    }
+
+    button:hover {
+        background: #3854e8;
+    }
+
+    #resetButton {
+        background: #555;
+        display: none;
+    }
+
+    #resetButton:hover {
+        background: #333;
+    }
+
+    .status {
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .report {
+        margin-top: 25px;
+        padding: 20px;
+        background: #f8f9fc;
+        border-radius: 12px;
+        display: none;
+    }
+
+    .report h2 {
+        margin-top: 0;
+    }
+
+    .report-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .report-item:last-child {
+        border-bottom: none;
+    }
+
+    .preview {
+        margin-top: 25px;
+        display: none;
+    }
+
+    .preview h2 {
+        margin-bottom: 15px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 500px;
+    }
+
+    th,
+    td {
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    th {
+        background: #f1f3f7;
+    }
+
+    #downloadButton {
+        display: none;
+        background: #198754;
+    }
+
+    #downloadButton:hover {
+        background: #157347;
+    }
+
+    footer {
+        text-align: center;
+        color: #777;
+        font-size: 13px;
+        margin-top: 25px;
+    }
+
+    @media (max-width: 600px) {
 
         .container {
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 20px;
+            margin: 20px auto;
+            padding: 12px;
         }
 
         .card {
-            background: white;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 22px;
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .upload-area {
-            border: 2px dashed #999;
-            border-radius: 12px;
-            padding: 35px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            background: #fafafa;
-        }
-
-        .upload-area:hover,
-        .upload-area.dragover {
-            background: #f0f4ff;
-            border-color: #4a67ff;
-        }
-
-        .upload-area input {
-            display: none;
-        }
-
-        .upload-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        .upload-text {
-            font-size: 17px;
-            font-weight: bold;
-        }
-
-        .upload-help {
-            color: #777;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .file-name {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .options {
-            margin-top: 25px;
-            padding: 20px;
-            background: #f8f9fc;
-            border-radius: 12px;
+            font-size: 27px;
         }
 
         .options-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .options-header h3 {
-            margin: 0;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .selection-buttons {
-            display: flex;
-            gap: 8px;
+            width: 100%;
         }
 
         .selection-buttons button {
-            width: auto;
-            margin: 0;
-            padding: 8px 12px;
-            font-size: 13px;
-            background: #e9edf7;
-            color: #333;
-            border: 1px solid #d5dbea;
+            flex: 1;
         }
+    }
+</style>
+```
 
-        .selection-buttons button:hover {
-            background: #dce2f2;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 12px 0;
-            cursor: pointer;
-        }
-
-        .option input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .option label {
-            cursor: pointer;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            background: #4a67ff;
-            color: white;
-        }
-
-        button:hover {
-            background: #3854e8;
-        }
-
-        #resetButton {
-            background: #555;
-            display: none;
-        }
-
-        #resetButton:hover {
-            background: #333;
-        }
-
-        .status {
-            margin-top: 20px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .report {
-            margin-top: 25px;
-            padding: 20px;
-            background: #f8f9fc;
-            border-radius: 12px;
-            display: none;
-        }
-
-        .report h2 {
-            margin-top: 0;
-        }
-
-        .report-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .report-item:last-child {
-            border-bottom: none;
-        }
-
-        .preview {
-            margin-top: 25px;
-            display: none;
-        }
-
-        .preview h2 {
-            margin-bottom: 15px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 500px;
-        }
-
-        th,
-        td {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            white-space: nowrap;
-        }
-
-        th {
-            background: #f1f3f7;
-        }
-
-        #downloadButton {
-            display: none;
-            background: #198754;
-        }
-
-        #downloadButton:hover {
-            background: #157347;
-        }
-
-        footer {
-            text-align: center;
-            color: #777;
-            font-size: 13px;
-            margin-top: 25px;
-        }
-
-        @media (max-width: 600px) {
-
-            .container {
-                margin: 20px auto;
-                padding: 12px;
-            }
-
-            .card {
-                padding: 22px;
-            }
-
-            h1 {
-                font-size: 27px;
-            }
-
-            .options-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .selection-buttons {
-                width: 100%;
-            }
-
-            .selection-buttons button {
-                flex: 1;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="card">
+```
+<div class="card">
 
-        <h1>Clean My Spreadsheet</h1>
+    <h1>Clean My Spreadsheet</h1>
 
-        <div class="subtitle">
-            Clean and organize your Excel and CSV files directly in your browser.
+    <div class="subtitle">
+        Clean and organize your Excel and CSV files directly in your browser.
+    </div>
+
+
+    <!-- Upload Area -->
+
+    <div class="upload-area" id="uploadArea">
+
+        <div class="upload-icon">📂</div>
+
+        <div class="upload-text">
+            Click to choose a file or drag & drop
         </div>
 
-
-        <!-- Upload Area -->
-
-        <div class="upload-area" id="uploadArea">
-
-            <div class="upload-icon">📂</div>
-
-            <div class="upload-text">
-                Click to choose a file or drag & drop
-            </div>
-
-            <div class="upload-help">
-                Supported formats: CSV, XLS, XLSX
-            </div>
-
-            <input
-                type="file"
-                id="fileInput"
-                accept=".csv,.xls,.xlsx"
-            >
-
-            <div class="file-name" id="fileName"></div>
-
+        <div class="upload-help">
+            Supported formats: CSV, XLS, XLSX
         </div>
 
+        <input
+            type="file"
+            id="fileInput"
+            accept=".csv,.xls,.xlsx"
+        >
 
-        <!-- Cleaning Options -->
-
-        <div class="options">
-
-            <div class="options-header">
-
-                <h3>Choose what you want to clean</h3>
-
-                <div class="selection-buttons">
-
-                    <button
-                        id="selectAllButton"
-                        type="button"
-                    >
-                        Select All
-                    </button>
-
-                    <button
-                        id="clearAllButton"
-                        type="button"
-                    >
-                        Clear All
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="option">
-
-                <input
-                    type="checkbox"
-                    id="removeEmptyRows"
-                    checked
-                >
-
-                <label for="removeEmptyRows">
-                    Remove completely empty rows
-                </label>
-
-            </div>
-
-
-            <div class="option">
-
-                <input
-                    type="checkbox"
-                    id="removeDuplicates"
-                    checked
-                >
-
-                <label for="removeDuplicates">
-                    Remove duplicate rows
-                </label>
-
-            </div>
-
-
-            <div class="option">
-
-                <input
-                    type="checkbox"
-                    id="cleanSpaces"
-                    checked
-                >
-
-                <label for="cleanSpaces">
-                    Clean extra spaces
-                </label>
-
-            </div>
-
-
-            <div class="option">
-
-                <input
-                    type="checkbox"
-                    id="standardizeNames"
-                    checked
-                >
-
-                <label for="standardizeNames">
-                    Standardize customer names
-                </label>
-
-            </div>
-
-
-            <div class="option">
-
-                <input
-                    type="checkbox"
-                    id="removeEmptyColumns"
-                    checked
-                >
-
-                <label for="removeEmptyColumns">
-                    Remove completely empty columns
-                </label>
-
-            </div>
-
-        </div>
-
-
-        <button id="cleanButton">
-            🧹 Clean Spreadsheet
-        </button>
-
-
-        <button id="resetButton">
-            🔄 Choose Another File
-        </button>
-
-
-        <div class="status" id="status"></div>
-
-
-        <!-- Cleaning Report -->
-
-        <div class="report" id="report">
-
-            <h2>Cleaning Report</h2>
-
-            <div class="report-item">
-                <span>Rows before cleaning</span>
-                <strong id="rowsBefore">0</strong>
-            </div>
-
-            <div class="report-item">
-                <span>Empty rows removed</span>
-                <strong id="emptyRowsRemoved">0</strong>
-            </div>
-
-            <div class="report-item">
-                <span>Duplicate rows removed</span>
-                <strong id="duplicatesRemoved">0</strong>
-            </div>
-
-            <div class="report-item">
-                <span>Spaces cleaned</span>
-                <strong id="spacesCleaned">0</strong>
-            </div>
-
-            <div class="report-item">
-                <span>Names standardized</span>
-                <strong id="namesStandardized">0</strong>
-            </div>
-
-            <div class="report-item">
-                <span>Empty columns removed</span>
-                <strong id="emptyColumnsRemoved">0</strong>
-            </div>
-
-            <div class="report-item">
-                <span>Rows after cleaning</span>
-                <strong id="rowsAfter">0</strong>
-            </div>
-
-        </div>
-
-
-        <!-- Preview -->
-
-        <div class="preview" id="preview">
-
-            <h2>Spreadsheet Preview</h2>
-
-            <div class="table-container">
-
-                <table id="previewTable"></table>
-
-            </div>
-
-        </div>
-
-
-        <button id="downloadButton">
-            ⬇️ Download Cleaned File
-        </button>
+        <div class="file-name" id="fileName"></div>
 
     </div>
 
 
-    <footer>
+    <!-- Cleaning Options -->
 
-        Your files are processed in your browser and are not uploaded to a server.
+    <div class="options">
 
-        <br><br>
+        <div class="options-header">
 
-        © 2026 Clean My Spreadsheet
+            <h3>Choose what you want to clean</h3>
 
-    </footer>
+            <div class="selection-buttons">
+
+                <button
+                    id="selectAllButton"
+                    type="button"
+                >
+                    Select All
+                </button>
+
+                <button
+                    id="clearAllButton"
+                    type="button"
+                >
+                    Clear All
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="removeEmptyRows"
+                checked
+            >
+
+            <label for="removeEmptyRows">
+                Remove completely empty rows
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="removeDuplicates"
+                checked
+            >
+
+            <label for="removeDuplicates">
+                Remove duplicate rows
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="cleanSpaces"
+                checked
+            >
+
+            <label for="cleanSpaces">
+                Clean extra spaces
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="standardizeNames"
+                checked
+            >
+
+            <label for="standardizeNames">
+                Standardize customer names
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="removeEmptyColumns"
+                checked
+            >
+
+            <label for="removeEmptyColumns">
+                Remove completely empty columns
+            </label>
+
+        </div>
+
+
+        <!-- Step 20 -->
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="standardizeEmails"
+                checked
+            >
+
+            <label for="standardizeEmails">
+                Standardize email addresses
+            </label>
+
+        </div>
+
+    </div>
+
+
+    <button id="cleanButton">
+        🧹 Clean Spreadsheet
+    </button>
+
+
+    <button id="resetButton">
+        🔄 Choose Another File
+    </button>
+
+
+    <div class="status" id="status"></div>
+
+
+    <!-- Cleaning Report -->
+
+    <div class="report" id="report">
+
+        <h2>Cleaning Report</h2>
+
+        <div class="report-item">
+            <span>Rows before cleaning</span>
+            <strong id="rowsBefore">0</strong>
+        </div>
+
+        <div class="report-item">
+            <span>Empty rows removed</span>
+            <strong id="emptyRowsRemoved">0</strong>
+        </div>
+
+        <div class="report-item">
+            <span>Duplicate rows removed</span>
+            <strong id="duplicatesRemoved">0</strong>
+        </div>
+
+        <div class="report-item">
+            <span>Spaces cleaned</span>
+            <strong id="spacesCleaned">0</strong>
+        </div>
+
+        <div class="report-item">
+            <span>Names standardized</span>
+            <strong id="namesStandardized">0</strong>
+        </div>
+
+        <div class="report-item">
+            <span>Empty columns removed</span>
+            <strong id="emptyColumnsRemoved">0</strong>
+        </div>
+
+        <!-- Step 20 Report -->
+
+        <div class="report-item">
+            <span>Emails standardized</span>
+            <strong id="emailsStandardized">0</strong>
+        </div>
+
+        <div class="report-item">
+            <span>Rows after cleaning</span>
+            <strong id="rowsAfter">0</strong>
+        </div>
+
+    </div>
+
+
+    <!-- Preview -->
+
+    <div class="preview" id="preview">
+
+        <h2>Spreadsheet Preview</h2>
+
+        <div class="table-container">
+
+            <table id="previewTable"></table>
+
+        </div>
+
+    </div>
+
+
+    <button id="downloadButton">
+        ⬇️ Download Cleaned File
+    </button>
 
 </div>
 
+
+<footer>
+
+    Your files are processed in your browser and are not uploaded to a server.
+
+    <br><br>
+
+    © 2026 Clean My Spreadsheet
+
+</footer>
+```
+
+</div>
 
 <script>
 
@@ -558,7 +587,8 @@
         "removeDuplicates",
         "cleanSpaces",
         "standardizeNames",
-        "removeEmptyColumns"
+        "removeEmptyColumns",
+        "standardizeEmails"
 
     ];
 
@@ -744,6 +774,11 @@
                     removeEmptyColumns:
                         document.getElementById(
                             "removeEmptyColumns"
+                        ).checked,
+
+                    standardizeEmails:
+                        document.getElementById(
+                            "standardizeEmails"
                         ).checked
 
                 };
@@ -841,6 +876,7 @@
                 let spacesCleaned = 0;
                 let namesStandardized = 0;
                 let emptyColumnsRemoved = 0;
+                let emailsStandardized = 0;
 
 
                 // Remove empty rows
@@ -998,6 +1034,102 @@
                             }
 
                         }
+
+                    }
+
+                }
+
+
+                // Standardize email addresses - Step 20
+
+                if (
+                    options.standardizeEmails &&
+                    rows.length > 0
+                ) {
+
+                    const headers =
+                        rows[0].map(
+                            function(header) {
+
+                                return String(header)
+                                    .trim()
+                                    .toLowerCase()
+                                    .replace(
+                                        /[-_\s]+/g,
+                                        ""
+                                    );
+
+                            }
+                        );
+
+
+                    const emailIndexes = [];
+
+
+                    headers.forEach(
+                        function(header, index) {
+
+                            if (
+                                header === "email" ||
+                                header === "emailaddress" ||
+                                header === "emailid" ||
+                                header === "mail" ||
+                                header === "mailid"
+                            ) {
+
+                                emailIndexes.push(
+                                    index
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                    for (
+                        let i = 1;
+                        i < rows.length;
+                        i++
+                    ) {
+
+                        emailIndexes.forEach(
+                            function(index) {
+
+                                const original =
+                                    String(
+                                        rows[i][index] ??
+                                        ""
+                                    );
+
+
+                                if (
+                                    original.trim() !== ""
+                                ) {
+
+                                    const standardized =
+                                        original
+                                            .trim()
+                                            .toLowerCase();
+
+
+                                    if (
+                                        standardized !==
+                                        original
+                                    ) {
+
+                                        emailsStandardized++;
+
+                                    }
+
+
+                                    rows[i][index] =
+                                        standardized;
+
+                                }
+
+                            }
+                        );
 
                     }
 
@@ -1200,6 +1332,12 @@
                     "emptyColumnsRemoved"
                 ).textContent =
                     emptyColumnsRemoved;
+
+
+                document.getElementById(
+                    "emailsStandardized"
+                ).textContent =
+                    emailsStandardized;
 
 
                 document.getElementById(
