@@ -1,189 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clean My Spreadsheet</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<title>Clean My Spreadsheet</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fa;
-            color: #222;
-        }
+<style>
 
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    color: #222;
+}
 
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
 
-        .upload-box {
-            display: block;
-            border: 2px dashed #999;
-            padding: 35px;
-            text-align: center;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.15s ease;
-        }
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
 
-        .upload-box:hover {
-            background: #f8f8f8;
-        }
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
 
-        .upload-box input[type="file"] {
-            display: none !important;
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
+.upload-box {
+    display: block;
+    border: 2px dashed #999;
+    padding: 35px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .file-name {
-            margin-top: 15px;
-            font-weight: bold;
-        }
+.upload-box:hover {
+    background: #f8f8f8;
+}
 
-        .buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
+input[type="file"] {
+    display: none;
+}
 
-        button {
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-        }
+.file-name {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+}
 
-        .select-btn {
-            background: #222;
-            color: white;
-        }
+.status {
+    margin-top: 15px;
+    color: #555;
+    text-align: center;
+}
 
-        .clear-btn {
-            background: #ddd;
-            color: #222;
-        }
+.top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
 
-        .clean-btn {
-            background: #222;
-            color: white;
-            width: 100%;
-            margin-top: 20px;
-            font-size: 16px;
-        }
+button {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
 
-        .download-btn {
-            background: #222;
-            color: white;
-            width: 100%;
-            margin-top: 20px;
-            font-size: 16px;
-        }
+button:hover {
+    opacity: 0.9;
+}
 
-        .reset-btn {
-            background: #eee;
-            color: #222;
-            width: 100%;
-            margin-top: 10px;
-        }
+.select-btn {
+    background: #222;
+    color: white;
+}
 
-        .option {
-            margin: 12px 0;
-        }
+.clear-btn {
+    background: #ddd;
+    color: #222;
+}
 
-        .option label {
-            cursor: pointer;
-        }
+.option-group {
+    border: 1px solid #e3e6ea;
+    border-radius: 10px;
+    padding: 18px;
+    margin-top: 18px;
+    background: #fafbfc;
+}
 
-        .report {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-        }
+.option-group h3 {
+    margin: 0 0 14px 0;
+    font-size: 17px;
+}
 
-        .report-item {
-            background: #f5f7fa;
-            padding: 15px;
-            border-radius: 8px;
-        }
+.option-group-description {
+    margin: -5px 0 15px 0;
+    color: #777;
+    font-size: 13px;
+}
 
-        .report-item strong {
-            display: block;
-            font-size: 22px;
-            margin-top: 5px;
-        }
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
 
-        .preview-wrapper {
-            overflow-x: auto;
-        }
+.option {
+    background: white;
+    border: 1px solid #e5e5e5;
+    padding: 12px;
+    border-radius: 8px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
+.option label {
+    cursor: pointer;
+    display: block;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            white-space: nowrap;
-        }
+.option input {
+    margin-right: 8px;
+}
 
-        th {
-            background: #f1f1f1;
-        }
+.clean-btn {
+    background: #222;
+    color: white;
+    width: 100%;
+    margin-top: 22px;
+    font-size: 16px;
+    padding: 14px;
+}
 
-        .hidden {
-            display: none;
-        }
+.report {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
 
-        .status {
-            margin-top: 15px;
-            color: #555;
-        }
+.report-item {
+    background: #f5f7fa;
+    padding: 15px;
+    border-radius: 8px;
+}
 
-        footer {
-            text-align: center;
-            color: #777;
-            font-size: 13px;
-            margin-top: 30px;
-        }
-    </style>
+.report-item strong {
+    display: block;
+    font-size: 22px;
+    margin-top: 5px;
+}
+
+.preview-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #f1f1f1;
+}
+
+.hidden {
+    display: none;
+}
+
+.download-btn {
+    background: #222;
+    color: white;
+    width: 100%;
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.reset-btn {
+    background: #eee;
+    color: #222;
+    width: 100%;
+    margin-top: 10px;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+
+    .container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .option-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
@@ -195,155 +252,370 @@
         Clean, standardize and organize your spreadsheet easily.
     </div>
 
+
     <!-- Upload -->
+
     <div class="card">
-        <label class="upload-box">
-            <strong>Click to upload your spreadsheet</strong>
+
+        <label class="upload-box" for="fileInput">
+
+            <strong>
+                Click to upload your spreadsheet
+            </strong>
+
             <br><br>
+
             CSV, XLS or XLSX files
-            <input type="file" id="fileInput" accept=".csv,.xls,.xlsx">
+
         </label>
 
-        <div class="file-name" id="fileName"></div>
 
-        <div class="status" id="status"></div>
+        <input
+            type="file"
+            id="fileInput"
+            accept=".csv,.xls,.xlsx"
+        >
+
+
+        <div
+            class="file-name"
+            id="fileName"
+        ></div>
+
+
+        <div
+            class="status"
+            id="status"
+        ></div>
+
     </div>
 
+
     <!-- Cleaning Options -->
+
     <div class="card">
 
         <h2>Cleaning Options</h2>
 
-        <div class="buttons">
-            <button class="select-btn" onclick="selectAll()">Select All</button>
-            <button class="clear-btn" onclick="clearAll()">Clear All</button>
+        <div class="top-actions">
+
+            <button
+                class="select-btn"
+                onclick="selectAll()"
+            >
+                Select All
+            </button>
+
+
+            <button
+                class="clear-btn"
+                onclick="clearAll()"
+            >
+                Clear All
+            </button>
+
         </div>
 
-        <div class="option">
-            <label>
-                <input type="checkbox" id="removeEmptyRows">
-                Remove completely empty rows
-            </label>
+
+        <!-- Basic Cleaning -->
+
+        <div class="option-group">
+
+            <h3>Basic Cleaning</h3>
+
+            <div class="option-group-description">
+                Remove common problems from your spreadsheet.
+            </div>
+
+
+            <div class="option-grid">
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="removeEmptyRows"
+                        >
+
+                        Remove completely empty rows
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="removeDuplicates"
+                        >
+
+                        Remove duplicate rows
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="cleanSpaces"
+                        >
+
+                        Clean extra spaces
+
+                    </label>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="option">
-            <label>
-                <input type="checkbox" id="removeDuplicates">
-                Remove duplicate rows
-            </label>
+
+        <!-- Standardization -->
+
+        <div class="option-group">
+
+            <h3>Standardization</h3>
+
+            <div class="option-group-description">
+                Make common data formats consistent.
+            </div>
+
+
+            <div class="option-grid">
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizeNames"
+                        >
+
+                        Standardize customer names
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizeEmails"
+                        >
+
+                        Standardize email addresses
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizePhones"
+                        >
+
+                        Standardize phone numbers
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizeDates"
+                        >
+
+                        Standardize dates
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizeGender"
+                        >
+
+                        Standardize gender values
+
+                    </label>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="option">
-            <label>
-                <input type="checkbox" id="cleanSpaces">
-                Clean extra spaces
-            </label>
+
+        <!-- Columns & Structure -->
+
+        <div class="option-group">
+
+            <h3>Columns & Structure</h3>
+
+            <div class="option-group-description">
+                Keep your spreadsheet structure clean and consistent.
+            </div>
+
+
+            <div class="option-grid">
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizeHeaders"
+                        >
+
+                        Standardize column headers
+
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="removeEmptyColumns"
+                        >
+
+                        Remove completely empty columns
+
+                    </label>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="option">
-            <label>
-                <input type="checkbox" id="standardizeNames">
-                Standardize customer names
-            </label>
-        </div>
 
-        <div class="option">
-            <label>
-                <input type="checkbox" id="standardizeEmails">
-                Standardize email addresses
-            </label>
-        </div>
-
-        <div class="option">
-            <label>
-                <input type="checkbox" id="standardizePhones">
-                Standardize phone numbers
-            </label>
-        </div>
-
-        <div class="option">
-            <label>
-                <input type="checkbox" id="standardizeDates">
-                Standardize dates
-            </label>
-        </div>
-
-        <div class="option">
-            <label>
-                <input type="checkbox" id="standardizeGender">
-                Standardize gender values
-            </label>
-        </div>
-
-        <div class="option">
-            <label>
-                <input type="checkbox" id="removeEmptyColumns">
-                Remove completely empty columns
-            </label>
-        </div>
-
-        <button class="clean-btn" onclick="cleanSpreadsheet()">
+        <button
+            class="clean-btn"
+            onclick="cleanSpreadsheet()"
+        >
             Clean Spreadsheet
         </button>
 
     </div>
 
-    <!-- Report -->
-    <div class="card hidden" id="reportSection">
+
+    <!-- Cleaning Report -->
+
+    <div
+        class="card hidden"
+        id="reportSection"
+    >
 
         <h2>Cleaning Report</h2>
 
+
         <div class="report">
+
 
             <div class="report-item">
                 Rows before cleaning
                 <strong id="rowsBefore">0</strong>
             </div>
 
+
             <div class="report-item">
                 Empty rows removed
                 <strong id="emptyRowsRemoved">0</strong>
             </div>
+
 
             <div class="report-item">
                 Duplicate rows removed
                 <strong id="duplicatesRemoved">0</strong>
             </div>
 
+
             <div class="report-item">
                 Spaces cleaned
                 <strong id="spacesCleaned">0</strong>
             </div>
+
 
             <div class="report-item">
                 Names standardized
                 <strong id="namesStandardized">0</strong>
             </div>
 
+
             <div class="report-item">
                 Emails standardized
                 <strong id="emailsStandardized">0</strong>
             </div>
+
 
             <div class="report-item">
                 Phone numbers standardized
                 <strong id="phonesStandardized">0</strong>
             </div>
 
+
             <div class="report-item">
                 Dates standardized
                 <strong id="datesStandardized">0</strong>
             </div>
+
 
             <div class="report-item">
                 Gender values standardized
                 <strong id="genderStandardized">0</strong>
             </div>
 
+
+            <div class="report-item">
+                Column headers standardized
+                <strong id="headersStandardized">0</strong>
+            </div>
+
+
             <div class="report-item">
                 Empty columns removed
                 <strong id="emptyColumnsRemoved">0</strong>
             </div>
+
 
             <div class="report-item">
                 Rows after cleaning
@@ -354,29 +626,49 @@
 
     </div>
 
+
     <!-- Preview -->
-    <div class="card hidden" id="previewSection">
+
+    <div
+        class="card hidden"
+        id="previewSection"
+    >
 
         <h2>Preview</h2>
 
         <div class="preview-wrapper">
+
             <table id="previewTable"></table>
+
         </div>
 
     </div>
 
-    <!-- Download -->
-    <div class="card hidden" id="downloadSection">
 
-        <button class="download-btn" onclick="downloadFile()">
+    <!-- Download -->
+
+    <div
+        class="card hidden"
+        id="downloadSection"
+    >
+
+        <button
+            class="download-btn"
+            onclick="downloadFile()"
+        >
             Download Cleaned File
         </button>
 
-        <button class="reset-btn" onclick="resetTool()">
+
+        <button
+            class="reset-btn"
+            onclick="resetTool()"
+        >
             Reset / Choose Another File
         </button>
 
     </div>
+
 
     <footer>
         Your files are processed in your browser and are not uploaded to a server.
@@ -385,1210 +677,1983 @@
 </div>
 
 
+
 <script>
 
-    let originalRows = [];
-    let cleanedRows = [];
-    let originalFileName = "";
-    let outputFileName = "";
+let originalRows = [];
+let cleanedRows = [];
+let originalFileName = "";
+let outputFileName = "";
 
 
-    const fileInput = document.getElementById("fileInput");
+const fileInput =
+    document.getElementById("fileInput");
 
-    fileInput.addEventListener("change", function(event) {
 
-        const file = event.target.files[0];
+fileInput.addEventListener(
+    "change",
+    function(event) {
 
-        if (!file) {
-            return;
-        }
+        const file =
+            event.target.files[0];
 
-        originalFileName = file.name;
+        if (!file) return;
 
-        document.getElementById("fileName").textContent =
+
+        originalFileName =
+            file.name;
+
+
+        document.getElementById(
+            "fileName"
+        ).textContent =
             "Selected file: " + file.name;
 
-        document.getElementById("status").textContent =
+
+        document.getElementById(
+            "status"
+        ).textContent =
             "Reading your spreadsheet...";
 
-        const extension = file.name.split(".").pop().toLowerCase();
+
+        const extension =
+            file.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
 
         if (extension === "csv") {
 
-            const reader = new FileReader();
+            const reader =
+                new FileReader();
 
-            reader.onload = function(e) {
 
-                const text = e.target.result;
+            reader.onload =
+                function(e) {
 
-                originalRows = text
-                    .trim()
-                    .split(/\r?\n/)
-                    .map(function(row) {
-                        return row.split(",");
-                    });
+                    const text =
+                        e.target.result;
 
-                document.getElementById("status").textContent =
-                    "File loaded successfully.";
 
-            };
+                    originalRows =
+                        text
+                            .trim()
+                            .split(/\r?\n/)
+                            .map(
+                                function(row) {
+
+                                    return row.split(",");
+
+                                }
+                            );
+
+
+                    document.getElementById(
+                        "status"
+                    ).textContent =
+                        "File loaded successfully.";
+
+                };
+
 
             reader.readAsText(file);
 
         } else {
 
-            const reader = new FileReader();
+            const reader =
+                new FileReader();
 
-            reader.onload = function(e) {
 
-                try {
+            reader.onload =
+                function(e) {
 
-                    const data = new Uint8Array(e.target.result);
+                    try {
 
-                    const workbook = XLSX.read(data, {
-                        type: "array"
-                    });
+                        const data =
+                            new Uint8Array(
+                                e.target.result
+                            );
 
-                    const worksheet =
-                        workbook.Sheets[workbook.SheetNames[0]];
 
-                    originalRows = XLSX.utils.sheet_to_json(
-                        worksheet,
-                        {
-                            header: 1,
-                            defval: ""
-                        }
-                    );
+                        const workbook =
+                            XLSX.read(
+                                data,
+                                {
+                                    type: "array"
+                                }
+                            );
 
-                    document.getElementById("status").textContent =
-                        "File loaded successfully.";
 
-                } catch (error) {
+                        const worksheet =
+                            workbook.Sheets[
+                                workbook.SheetNames[0]
+                            ];
 
-                    document.getElementById("status").textContent =
-                        "There was a problem reading the file.";
 
-                }
+                        originalRows =
+                            XLSX.utils.sheet_to_json(
+                                worksheet,
+                                {
+                                    header: 1,
+                                    defval: ""
+                                }
+                            );
 
-            };
+
+                        document.getElementById(
+                            "status"
+                        ).textContent =
+                            "File loaded successfully.";
+
+
+                    } catch (error) {
+
+                        document.getElementById(
+                            "status"
+                        ).textContent =
+                            "There was a problem reading the file.";
+
+                    }
+
+                };
+
 
             reader.readAsArrayBuffer(file);
 
         }
 
-    });
-
-
-    function selectAll() {
-
-        document.querySelectorAll(
-            '.option input[type="checkbox"]'
-        ).forEach(function(checkbox) {
-
-            checkbox.checked = true;
-
-        });
-
     }
+);
 
 
-    function clearAll() {
 
-        document.querySelectorAll(
+function selectAll() {
+
+    document
+        .querySelectorAll(
             '.option input[type="checkbox"]'
-        ).forEach(function(checkbox) {
+        )
+        .forEach(
+            function(checkbox) {
 
-            checkbox.checked = false;
+                checkbox.checked = true;
 
-        });
+            }
+        );
 
-    }
+}
 
 
-    function isEmptyRow(row) {
 
-        return row.every(function(cell) {
+function clearAll() {
+
+    document
+        .querySelectorAll(
+            '.option input[type="checkbox"]'
+        )
+        .forEach(
+            function(checkbox) {
+
+                checkbox.checked = false;
+
+            }
+        );
+
+}
+
+
+
+function isEmptyRow(row) {
+
+    return row.every(
+        function(cell) {
 
             return String(cell).trim() === "";
 
-        });
+        }
+    );
 
-    }
-
-
-    function cleanSpaces(rows) {
-
-        let count = 0;
-
-        const result = rows.map(function(row) {
-
-            return row.map(function(cell) {
-
-                const original = String(cell);
-
-                const cleaned = original
-                    .replace(/\s+/g, " ")
-                    .trim();
-
-                if (cleaned !== original) {
-                    count++;
-                }
-
-                return cleaned;
-
-            });
-
-        });
-
-        return {
-            rows: result,
-            count: count
-        };
-
-    }
+}
 
 
-    function standardizeNames(rows) {
 
-        let count = 0;
+function cleanSpaces(rows) {
 
-        const headers = rows[0].map(function(header) {
+    let count = 0;
 
-            return String(header)
-                .trim()
-                .toLowerCase()
-                .replace(/[-_\s]/g, "");
 
-        });
+    const result =
+        rows.map(
+            function(row) {
 
-        const nameHeaders = [
-            "name",
-            "customername",
-            "fullname",
-            "customerfullname"
-        ];
+                return row.map(
+                    function(cell) {
 
-        const nameIndexes = [];
+                        const original =
+                            String(cell);
 
-        headers.forEach(function(header, index) {
 
-            if (nameHeaders.includes(header)) {
-                nameIndexes.push(index);
+                        const cleaned =
+                            original
+                                .replace(/\s+/g, " ")
+                                .trim();
+
+
+                        if (
+                            cleaned !== original
+                        ) {
+                            count++;
+                        }
+
+
+                        return cleaned;
+
+                    }
+                );
+
             }
-
-        });
-
-        const result = rows.map(function(row, rowIndex) {
-
-            if (rowIndex === 0) {
-                return row;
-            }
-
-            return row.map(function(cell, columnIndex) {
-
-                if (!nameIndexes.includes(columnIndex)) {
-                    return cell;
-                }
-
-                const original = String(cell).trim();
-
-                if (original === "") {
-                    return cell;
-                }
-
-                const standardized = original
-                    .toLowerCase()
-                    .replace(/\b\w/g, function(letter) {
-                        return letter.toUpperCase();
-                    });
-
-                if (standardized !== String(cell)) {
-                    count++;
-                }
-
-                return standardized;
-
-            });
-
-        });
-
-        return {
-            rows: result,
-            count: count
-        };
-
-    }
+        );
 
 
-    function standardizeEmails(rows) {
+    return {
+        rows: result,
+        count: count
+    };
 
-        let count = 0;
+}
 
-        const headers = rows[0].map(function(header) {
 
-            return String(header)
-                .trim()
-                .toLowerCase()
-                .replace(/[-_\s]/g, "");
 
-        });
+function standardizeNames(rows) {
 
-        const emailHeaders = [
-            "email",
-            "emailaddress",
-            "emailid",
-            "mail",
-            "mailid"
-        ];
+    let count = 0;
 
-        const emailIndexes = [];
 
-        headers.forEach(function(header, index) {
+    const headers =
+        rows[0].map(
+            function(header) {
 
-            if (emailHeaders.includes(header)) {
-                emailIndexes.push(index);
-            }
-
-        });
-
-        const result = rows.map(function(row, rowIndex) {
-
-            if (rowIndex === 0) {
-                return row;
-            }
-
-            return row.map(function(cell, columnIndex) {
-
-                if (!emailIndexes.includes(columnIndex)) {
-                    return cell;
-                }
-
-                const original = String(cell);
-
-                if (original.trim() === "") {
-                    return cell;
-                }
-
-                const standardized = original
+                return String(header)
                     .trim()
-                    .toLowerCase();
-
-                if (standardized !== original) {
-                    count++;
-                }
-
-                return standardized;
-
-            });
-
-        });
-
-        return {
-            rows: result,
-            count: count
-        };
-
-    }
-
-
-    function standardizePhone(phone) {
-
-        const original = String(phone).trim();
-
-        if (original === "") {
-            return original;
-        }
-
-        const hasPlus = original.startsWith("+");
-
-        const digits = original.replace(/\D/g, "");
-
-        if (digits === "") {
-            return original;
-        }
-
-        return hasPlus ? "+" + digits : digits;
-
-    }
-
-
-    function standardizePhones(rows) {
-
-        let count = 0;
-
-        const headers = rows[0].map(function(header) {
-
-            return String(header)
-                .trim()
-                .toLowerCase()
-                .replace(/[-_\s]/g, "");
-
-        });
-
-        const phoneHeaders = [
-            "phone",
-            "phonenumber",
-            "mobile",
-            "mobilenumber",
-            "contact",
-            "contactnumber",
-            "telephone",
-            "telephonenumber"
-        ];
-
-        const phoneIndexes = [];
-
-        headers.forEach(function(header, index) {
-
-            if (phoneHeaders.includes(header)) {
-                phoneIndexes.push(index);
-            }
-
-        });
-
-        const result = rows.map(function(row, rowIndex) {
-
-            if (rowIndex === 0) {
-                return row;
-            }
-
-            return row.map(function(cell, columnIndex) {
-
-                if (!phoneIndexes.includes(columnIndex)) {
-                    return cell;
-                }
-
-                const original = String(cell);
-
-                if (original.trim() === "") {
-                    return cell;
-                }
-
-                const standardized =
-                    standardizePhone(original);
-
-                if (standardized !== original) {
-                    count++;
-                }
-
-                return standardized;
-
-            });
-
-        });
-
-        return {
-            rows: result,
-            count: count
-        };
-
-    }
-
-
-    function formatDate(day, month, year) {
-
-        const dd = String(day).padStart(2, "0");
-        const mm = String(month).padStart(2, "0");
-
-        return dd + "-" + mm + "-" + year;
-
-    }
-
-
-    function standardizeDate(value) {
-
-        const original = String(value).trim();
-
-        if (original === "") {
-            return null;
-        }
-
-
-        // Excel serial date
-        if (/^\d+(\.\d+)?$/.test(original)) {
-
-            const serial = Number(original);
-
-            if (
-                Number.isFinite(serial) &&
-                serial >= 20000 &&
-                serial <= 80000
-            ) {
-
-                const date =
-                    new Date(
-                        Date.UTC(
-                            1899,
-                            11,
-                            30
-                        ) +
-                        serial * 86400000
+                    .toLowerCase()
+                    .replace(
+                        /[-_\s]/g,
+                        ""
                     );
 
-                return formatDate(
-                    date.getUTCDate(),
-                    date.getUTCMonth() + 1,
-                    date.getUTCFullYear()
+            }
+        );
+
+
+    const nameHeaders = [
+        "name",
+        "customername",
+        "fullname",
+        "customerfullname"
+    ];
+
+
+    const nameIndexes = [];
+
+
+    headers.forEach(
+        function(header, index) {
+
+            if (
+                nameHeaders.includes(header)
+            ) {
+
+                nameIndexes.push(index);
+
+            }
+
+        }
+    );
+
+
+    const result =
+        rows.map(
+            function(row, rowIndex) {
+
+                if (rowIndex === 0) {
+                    return row;
+                }
+
+
+                return row.map(
+                    function(
+                        cell,
+                        columnIndex
+                    ) {
+
+                        if (
+                            !nameIndexes.includes(
+                                columnIndex
+                            )
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const original =
+                            String(cell).trim();
+
+
+                        if (
+                            original === ""
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const standardized =
+                            original
+                                .toLowerCase()
+                                .replace(
+                                    /\b\w/g,
+                                    function(letter) {
+                                        return letter.toUpperCase();
+                                    }
+                                );
+
+
+                        if (
+                            standardized !==
+                            String(cell)
+                        ) {
+
+                            count++;
+
+                        }
+
+
+                        return standardized;
+
+                    }
                 );
 
             }
-
-        }
-
-
-        // DD/MM/YYYY
-        let match = original.match(
-            /^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/
         );
 
-        if (match) {
 
-            return formatDate(
-                match[1],
-                match[2],
-                match[3]
-            );
+    return {
+        rows: result,
+        count: count
+    };
 
-        }
+}
 
 
-        // YYYY/MM/DD
-        match = original.match(
-            /^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})$/
+
+function standardizeEmails(rows) {
+
+    let count = 0;
+
+
+    const headers =
+        rows[0].map(
+            function(header) {
+
+                return String(header)
+                    .trim()
+                    .toLowerCase()
+                    .replace(
+                        /[-_\s]/g,
+                        ""
+                    );
+
+            }
         );
 
-        if (match) {
 
-            return formatDate(
-                match[3],
-                match[2],
-                match[1]
-            );
+    const emailHeaders = [
+        "email",
+        "emailaddress",
+        "emailid",
+        "mail",
+        "mailid"
+    ];
+
+
+    const emailIndexes = [];
+
+
+    headers.forEach(
+        function(header, index) {
+
+            if (
+                emailHeaders.includes(header)
+            ) {
+
+                emailIndexes.push(index);
+
+            }
 
         }
+    );
 
 
-        // DD Month YYYY
-        match = original.match(
-            /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/
-        );
+    const result =
+        rows.map(
+            function(row, rowIndex) {
 
-        if (match) {
+                if (rowIndex === 0) {
+                    return row;
+                }
 
-            const months = {
-                january: 1,
-                february: 2,
-                march: 3,
-                april: 4,
-                may: 5,
-                june: 6,
-                july: 7,
-                august: 8,
-                september: 9,
-                october: 10,
-                november: 11,
-                december: 12,
 
-                jan: 1,
-                feb: 2,
-                mar: 3,
-                apr: 4,
-                jun: 6,
-                jul: 7,
-                aug: 8,
-                sep: 9,
-                oct: 10,
-                nov: 11,
-                dec: 12
-            };
+                return row.map(
+                    function(
+                        cell,
+                        columnIndex
+                    ) {
 
-            const month =
-                months[match[2].toLowerCase()];
+                        if (
+                            !emailIndexes.includes(
+                                columnIndex
+                            )
+                        ) {
 
-            if (month) {
+                            return cell;
 
-                return formatDate(
-                    match[1],
-                    month,
-                    match[3]
+                        }
+
+
+                        const original =
+                            String(cell);
+
+
+                        if (
+                            original.trim() === ""
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const standardized =
+                            original
+                                .trim()
+                                .toLowerCase();
+
+
+                        if (
+                            standardized !== original
+                        ) {
+
+                            count++;
+
+                        }
+
+
+                        return standardized;
+
+                    }
                 );
 
             }
-
-        }
-
-        return null;
-
-    }
+        );
 
 
-    function standardizeDates(rows) {
+    return {
+        rows: result,
+        count: count
+    };
 
-        let count = 0;
-
-        const headers = rows[0].map(function(header) {
-
-            return String(header)
-                .trim()
-                .toLowerCase()
-                .replace(/[-_\s]/g, "");
-
-        });
-
-        const dateHeaders = [
-            "date",
-            "orderdate",
-            "purchasedate",
-            "invoicedate",
-            "deliverydate",
-            "duedate",
-            "paymentdate",
-            "bookingdate",
-            "registrationdate",
-            "createddate",
-            "updateddate",
-            "dob",
-            "dateofbirth"
-        ];
-
-        const dateIndexes = [];
-
-        headers.forEach(function(header, index) {
-
-            if (dateHeaders.includes(header)) {
-                dateIndexes.push(index);
-            }
-
-        });
-
-        const result = rows.map(function(row, rowIndex) {
-
-            if (rowIndex === 0) {
-                return row;
-            }
-
-            return row.map(function(cell, columnIndex) {
-
-                if (!dateIndexes.includes(columnIndex)) {
-                    return cell;
-                }
-
-                const original = String(cell).trim();
-
-                if (original === "") {
-                    return cell;
-                }
-
-                const standardized =
-                    standardizeDate(original);
-
-                if (
-                    standardized !== null &&
-                    standardized !== original
-                ) {
-
-                    count++;
-
-                    return standardized;
-
-                }
-
-                return cell;
-
-            });
-
-        });
-
-        return {
-            rows: result,
-            count: count
-        };
-
-    }
+}
 
 
-    function standardizeGender(value) {
 
-        const original = String(value).trim();
+function standardizePhone(phone) {
 
-        if (original === "") {
-            return original;
-        }
+    const original =
+        String(phone).trim();
 
-        const normalized =
-            original.toLowerCase();
 
-        if (
-            normalized === "m" ||
-            normalized === "male"
-        ) {
-            return "Male";
-        }
-
-        if (
-            normalized === "f" ||
-            normalized === "female"
-        ) {
-            return "Female";
-        }
-
-        if (
-            normalized === "o" ||
-            normalized === "other"
-        ) {
-            return "Other";
-        }
+    if (
+        original === ""
+    ) {
 
         return original;
 
     }
 
 
-    function standardizeGenderValues(rows) {
+    const hasPlus =
+        original.startsWith("+");
 
-        let count = 0;
 
-        const headers = rows[0].map(function(header) {
+    const digits =
+        original.replace(
+            /\D/g,
+            ""
+        );
 
-            return String(header)
-                .trim()
-                .toLowerCase()
-                .replace(/[-_\s]/g, "");
 
-        });
+    if (
+        digits === ""
+    ) {
 
-        const genderHeaders = [
-            "gender",
-            "sex",
-            "customergender",
-            "customersex"
-        ];
+        return original;
 
-        const genderIndexes = [];
+    }
 
-        headers.forEach(function(header, index) {
 
-            if (genderHeaders.includes(header)) {
+    return hasPlus
+        ? "+" + digits
+        : digits;
+
+}
+
+
+
+function standardizePhones(rows) {
+
+    let count = 0;
+
+
+    const headers =
+        rows[0].map(
+            function(header) {
+
+                return String(header)
+                    .trim()
+                    .toLowerCase()
+                    .replace(
+                        /[-_\s]/g,
+                        ""
+                    );
+
+            }
+        );
+
+
+    const phoneHeaders = [
+        "phone",
+        "phonenumber",
+        "mobile",
+        "mobilenumber",
+        "contact",
+        "contactnumber",
+        "telephone",
+        "telephonenumber"
+    ];
+
+
+    const phoneIndexes = [];
+
+
+    headers.forEach(
+        function(header, index) {
+
+            if (
+                phoneHeaders.includes(header)
+            ) {
+
+                phoneIndexes.push(index);
+
+            }
+
+        }
+    );
+
+
+    const result =
+        rows.map(
+            function(row, rowIndex) {
+
+                if (rowIndex === 0) {
+                    return row;
+                }
+
+
+                return row.map(
+                    function(
+                        cell,
+                        columnIndex
+                    ) {
+
+                        if (
+                            !phoneIndexes.includes(
+                                columnIndex
+                            )
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const original =
+                            String(cell);
+
+
+                        if (
+                            original.trim() === ""
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const standardized =
+                            standardizePhone(
+                                original
+                            );
+
+
+                        if (
+                            standardized !==
+                            original
+                        ) {
+
+                            count++;
+
+                        }
+
+
+                        return standardized;
+
+                    }
+                );
+
+            }
+        );
+
+
+    return {
+        rows: result,
+        count: count
+    };
+
+}
+
+
+
+function formatDate(
+    day,
+    month,
+    year
+) {
+
+    const dd =
+        String(day).padStart(
+            2,
+            "0"
+        );
+
+
+    const mm =
+        String(month).padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        dd +
+        "-" +
+        mm +
+        "-" +
+        year
+    );
+
+}
+
+
+
+function standardizeDate(value) {
+
+    const original =
+        String(value).trim();
+
+
+    if (
+        original === ""
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        /^\d+(\.\d+)?$/.test(original)
+    ) {
+
+        const serial =
+            Number(original);
+
+
+        if (
+            Number.isFinite(serial) &&
+            serial >= 20000 &&
+            serial <= 80000
+        ) {
+
+            const date =
+                new Date(
+                    Date.UTC(
+                        1899,
+                        11,
+                        30
+                    ) +
+                    serial *
+                    86400000
+                );
+
+
+            return formatDate(
+                date.getUTCDate(),
+                date.getUTCMonth() + 1,
+                date.getUTCFullYear()
+            );
+
+        }
+
+    }
+
+
+    let match =
+        original.match(
+            /^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/
+        );
+
+
+    if (match) {
+
+        return formatDate(
+            match[1],
+            match[2],
+            match[3]
+        );
+
+    }
+
+
+    match =
+        original.match(
+            /^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})$/
+        );
+
+
+    if (match) {
+
+        return formatDate(
+            match[3],
+            match[2],
+            match[1]
+        );
+
+    }
+
+
+    match =
+        original.match(
+            /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/
+        );
+
+
+    if (match) {
+
+        const months = {
+
+            january: 1,
+            february: 2,
+            march: 3,
+            april: 4,
+            may: 5,
+            june: 6,
+            july: 7,
+            august: 8,
+            september: 9,
+            october: 10,
+            november: 11,
+            december: 12,
+
+            jan: 1,
+            feb: 2,
+            mar: 3,
+            apr: 4,
+            jun: 6,
+            jul: 7,
+            aug: 8,
+            sep: 9,
+            oct: 10,
+            nov: 11,
+            dec: 12
+
+        };
+
+
+        const month =
+            months[
+                match[2].toLowerCase()
+            ];
+
+
+        if (month) {
+
+            return formatDate(
+                match[1],
+                month,
+                match[3]
+            );
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+function standardizeDates(rows) {
+
+    let count = 0;
+
+
+    const headers =
+        rows[0].map(
+            function(header) {
+
+                return String(header)
+                    .trim()
+                    .toLowerCase()
+                    .replace(
+                        /[-_\s]/g,
+                        ""
+                    );
+
+            }
+        );
+
+
+    const dateHeaders = [
+        "date",
+        "orderdate",
+        "purchasedate",
+        "invoicedate",
+        "deliverydate",
+        "duedate",
+        "paymentdate",
+        "bookingdate",
+        "registrationdate",
+        "createddate",
+        "updateddate",
+        "dob",
+        "dateofbirth"
+    ];
+
+
+    const dateIndexes = [];
+
+
+    headers.forEach(
+        function(header, index) {
+
+            if (
+                dateHeaders.includes(header)
+            ) {
+
+                dateIndexes.push(index);
+
+            }
+
+        }
+    );
+
+
+    const result =
+        rows.map(
+            function(row, rowIndex) {
+
+                if (
+                    rowIndex === 0
+                ) {
+
+                    return row;
+
+                }
+
+
+                return row.map(
+                    function(
+                        cell,
+                        columnIndex
+                    ) {
+
+                        if (
+                            !dateIndexes.includes(
+                                columnIndex
+                            )
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const original =
+                            String(cell).trim();
+
+
+                        if (
+                            original === ""
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const standardized =
+                            standardizeDate(
+                                original
+                            );
+
+
+                        if (
+                            standardized !== null &&
+                            standardized !== original
+                        ) {
+
+                            count++;
+
+                            return standardized;
+
+                        }
+
+
+                        return cell;
+
+                    }
+                );
+
+            }
+        );
+
+
+    return {
+        rows: result,
+        count: count
+    };
+
+}
+
+
+
+function standardizeGender(value) {
+
+    const original =
+        String(value).trim();
+
+
+    if (
+        original === ""
+    ) {
+
+        return original;
+
+    }
+
+
+    const normalized =
+        original.toLowerCase();
+
+
+    if (
+        normalized === "m" ||
+        normalized === "male"
+    ) {
+
+        return "Male";
+
+    }
+
+
+    if (
+        normalized === "f" ||
+        normalized === "female"
+    ) {
+
+        return "Female";
+
+    }
+
+
+    if (
+        normalized === "o" ||
+        normalized === "other"
+    ) {
+
+        return "Other";
+
+    }
+
+
+    return original;
+
+}
+
+
+
+function standardizeGenderValues(rows) {
+
+    let count = 0;
+
+
+    const headers =
+        rows[0].map(
+            function(header) {
+
+                return String(header)
+                    .trim()
+                    .toLowerCase()
+                    .replace(
+                        /[-_\s]/g,
+                        ""
+                    );
+
+            }
+        );
+
+
+    const genderHeaders = [
+        "gender",
+        "sex",
+        "customergender",
+        "customersex"
+    ];
+
+
+    const genderIndexes = [];
+
+
+    headers.forEach(
+        function(header, index) {
+
+            if (
+                genderHeaders.includes(header)
+            ) {
+
                 genderIndexes.push(index);
+
             }
 
-        });
+        }
+    );
 
-        const result = rows.map(function(row, rowIndex) {
 
-            if (rowIndex === 0) {
-                return row;
+    const result =
+        rows.map(
+            function(row, rowIndex) {
+
+                if (
+                    rowIndex === 0
+                ) {
+
+                    return row;
+
+                }
+
+
+                return row.map(
+                    function(
+                        cell,
+                        columnIndex
+                    ) {
+
+                        if (
+                            !genderIndexes.includes(
+                                columnIndex
+                            )
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const original =
+                            String(cell);
+
+
+                        if (
+                            original.trim() === ""
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const standardized =
+                            standardizeGender(
+                                original
+                            );
+
+
+                        if (
+                            standardized !== original
+                        ) {
+
+                            count++;
+
+                        }
+
+
+                        return standardized;
+
+                    }
+                );
+
             }
+        );
 
-            return row.map(function(cell, columnIndex) {
 
-                if (!genderIndexes.includes(columnIndex)) {
-                    return cell;
+    return {
+        rows: result,
+        count: count
+    };
+
+}
+
+
+
+/* COLUMN HEADER STANDARDIZATION */
+
+function standardizeHeader(value) {
+
+    const original =
+        String(value);
+
+
+    let cleaned =
+        original
+            .replace(/\s+/g, " ")
+            .trim();
+
+
+    cleaned =
+        cleaned.replace(
+            /[_-]+/g,
+            " "
+        );
+
+
+    cleaned =
+        cleaned
+            .replace(/\s+/g, " ")
+            .trim();
+
+
+    if (
+        cleaned === ""
+    ) {
+
+        return cleaned;
+
+    }
+
+
+    cleaned =
+        cleaned
+            .toLowerCase()
+            .replace(
+                /\b\w/g,
+                function(letter) {
+
+                    return letter.toUpperCase();
+
                 }
+            );
 
-                const original = String(cell);
 
-                if (original.trim() === "") {
-                    return cell;
-                }
+    return cleaned;
+
+}
+
+
+
+function standardizeHeaders(rows) {
+
+    if (
+        !rows ||
+        rows.length === 0 ||
+        !rows[0]
+    ) {
+
+        return {
+            rows: rows,
+            count: 0
+        };
+
+    }
+
+
+    let count = 0;
+
+
+    const result =
+        rows.map(
+            function(row) {
+
+                return [...row];
+
+            }
+        );
+
+
+    result[0] =
+        result[0].map(
+            function(header) {
+
+                const original =
+                    String(header);
+
 
                 const standardized =
-                    standardizeGender(original);
+                    standardizeHeader(
+                        original
+                    );
 
-                if (standardized !== original) {
+
+                if (
+                    standardized !== original
+                ) {
+
                     count++;
+
                 }
+
 
                 return standardized;
 
-            });
-
-        });
-
-        return {
-            rows: result,
-            count: count
-        };
-
-    }
-
-
-    function removeEmptyColumns(rows) {
-
-        if (rows.length === 0) {
-            return {
-                rows: rows,
-                count: 0
-            };
-        }
-
-        const columnCount = Math.max.apply(
-            null,
-            rows.map(function(row) {
-                return row.length;
-            })
+            }
         );
 
-        const keepColumns = [];
 
-        for (let column = 0; column < columnCount; column++) {
+    return {
+        rows: result,
+        count: count
+    };
 
-            let hasValue = false;
+}
 
-            for (let row = 0; row < rows.length; row++) {
 
-                if (
-                    String(rows[row][column] ?? "").trim() !== ""
-                ) {
-                    hasValue = true;
-                    break;
-                }
 
-            }
+function removeEmptyColumns(rows) {
 
-            if (hasValue) {
-                keepColumns.push(column);
-            }
-
-        }
-
-        const result = rows.map(function(row) {
-
-            return keepColumns.map(function(column) {
-
-                return row[column] ?? "";
-
-            });
-
-        });
+    if (
+        rows.length === 0
+    ) {
 
         return {
-            rows: result,
-            count: columnCount - keepColumns.length
+            rows: rows,
+            count: 0
         };
 
     }
 
 
-    function cleanSpreadsheet() {
+    const columnCount =
+        Math.max.apply(
+            null,
+            rows.map(
+                function(row) {
 
-        if (
-            !originalRows ||
-            originalRows.length === 0
-        ) {
-
-            alert("Please upload a spreadsheet first.");
-
-            return;
-
-        }
-
-
-        let rows = originalRows.map(function(row) {
-            return [...row];
-        });
-
-
-        const rowsBefore = rows.length;
-
-        let emptyRowsRemoved = 0;
-        let duplicatesRemoved = 0;
-        let spacesCleaned = 0;
-        let namesStandardized = 0;
-        let emailsStandardized = 0;
-        let phonesStandardized = 0;
-        let datesStandardized = 0;
-        let genderStandardized = 0;
-        let emptyColumnsRemoved = 0;
-
-
-        // Remove empty rows
-        if (
-            document.getElementById(
-                "removeEmptyRows"
-            ).checked
-        ) {
-
-            const before = rows.length;
-
-            rows = rows.filter(function(row) {
-                return !isEmptyRow(row);
-            });
-
-            emptyRowsRemoved =
-                before - rows.length;
-
-        }
-
-
-        // Remove duplicate rows
-        if (
-            document.getElementById(
-                "removeDuplicates"
-            ).checked
-        ) {
-
-            const header = rows[0] || [];
-
-            const seen = new Set();
-
-            const newRows = [header];
-
-            for (let i = 1; i < rows.length; i++) {
-
-                const key = JSON.stringify(rows[i]);
-
-                if (!seen.has(key)) {
-
-                    seen.add(key);
-
-                    newRows.push(rows[i]);
-
-                } else {
-
-                    duplicatesRemoved++;
+                    return row.length;
 
                 }
+            )
+        );
+
+
+    const keepColumns = [];
+
+
+    for (
+        let column = 0;
+        column < columnCount;
+        column++
+    ) {
+
+        let hasValue = false;
+
+
+        for (
+            let row = 0;
+            row < rows.length;
+            row++
+        ) {
+
+            if (
+                String(
+                    rows[row][column] ?? ""
+                ).trim() !== ""
+            ) {
+
+                hasValue = true;
+
+                break;
 
             }
 
-            rows = newRows;
-
         }
 
 
-        // Clean spaces
-        if (
-            document.getElementById(
-                "cleanSpaces"
-            ).checked
-        ) {
-
-            const result =
-                cleanSpaces(rows);
-
-            rows = result.rows;
-
-            spacesCleaned =
-                result.count;
-
-        }
-
-
-        // Standardize names
-        if (
-            document.getElementById(
-                "standardizeNames"
-            ).checked
-        ) {
-
-            const result =
-                standardizeNames(rows);
-
-            rows = result.rows;
-
-            namesStandardized =
-                result.count;
-
-        }
-
-
-        // Standardize emails
-        if (
-            document.getElementById(
-                "standardizeEmails"
-            ).checked
-        ) {
-
-            const result =
-                standardizeEmails(rows);
-
-            rows = result.rows;
-
-            emailsStandardized =
-                result.count;
-
-        }
-
-
-        // Standardize phones
-        if (
-            document.getElementById(
-                "standardizePhones"
-            ).checked
-        ) {
-
-            const result =
-                standardizePhones(rows);
-
-            rows = result.rows;
-
-            phonesStandardized =
-                result.count;
-
-        }
-
-
-        // Standardize dates
-        if (
-            document.getElementById(
-                "standardizeDates"
-            ).checked
-        ) {
-
-            const result =
-                standardizeDates(rows);
-
-            rows = result.rows;
-
-            datesStandardized =
-                result.count;
-
-        }
-
-
-        // Standardize gender
-        if (
-            document.getElementById(
-                "standardizeGender"
-            ).checked
-        ) {
-
-            const result =
-                standardizeGenderValues(rows);
-
-            rows = result.rows;
-
-            genderStandardized =
-                result.count;
-
-        }
-
-
-        // Remove empty columns
-        if (
-            document.getElementById(
-                "removeEmptyColumns"
-            ).checked
-        ) {
-
-            const result =
-                removeEmptyColumns(rows);
-
-            rows = result.rows;
-
-            emptyColumnsRemoved =
-                result.count;
-
-        }
-
-
-        cleanedRows = rows;
-
-
-        // Report
-        document.getElementById(
-            "rowsBefore"
-        ).textContent = rowsBefore;
-
-        document.getElementById(
-            "emptyRowsRemoved"
-        ).textContent = emptyRowsRemoved;
-
-        document.getElementById(
-            "duplicatesRemoved"
-        ).textContent = duplicatesRemoved;
-
-        document.getElementById(
-            "spacesCleaned"
-        ).textContent = spacesCleaned;
-
-        document.getElementById(
-            "namesStandardized"
-        ).textContent = namesStandardized;
-
-        document.getElementById(
-            "emailsStandardized"
-        ).textContent = emailsStandardized;
-
-        document.getElementById(
-            "phonesStandardized"
-        ).textContent = phonesStandardized;
-
-        document.getElementById(
-            "datesStandardized"
-        ).textContent = datesStandardized;
-
-        document.getElementById(
-            "genderStandardized"
-        ).textContent = genderStandardized;
-
-        document.getElementById(
-            "emptyColumnsRemoved"
-        ).textContent = emptyColumnsRemoved;
-
-        document.getElementById(
-            "rowsAfter"
-        ).textContent = rows.length;
-
-
-        document.getElementById(
-            "reportSection"
-        ).classList.remove("hidden");
-
-
-        showPreview(rows);
-
-
-        document.getElementById(
-            "downloadSection"
-        ).classList.remove("hidden");
-
-
-        const dotIndex =
-            originalFileName.lastIndexOf(".");
-
-        if (dotIndex !== -1) {
-
-            outputFileName =
-                originalFileName.substring(
-                    0,
-                    dotIndex
-                ) +
-                "-cleaned.xlsx";
-
-        } else {
-
-            outputFileName =
-                originalFileName +
-                "-cleaned.xlsx";
+        if (hasValue) {
+
+            keepColumns.push(
+                column
+            );
 
         }
 
     }
 
 
-    function showPreview(rows) {
+    const result =
+        rows.map(
+            function(row) {
 
-        const table =
-            document.getElementById(
-                "previewTable"
+                return keepColumns.map(
+                    function(column) {
+
+                        return (
+                            row[column] ?? ""
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    return {
+        rows: result,
+        count:
+            columnCount -
+            keepColumns.length
+    };
+
+}
+
+
+
+/* MAIN CLEANING FUNCTION */
+
+function cleanSpreadsheet() {
+
+    if (
+        !originalRows ||
+        originalRows.length === 0
+    ) {
+
+        alert(
+            "Please upload a spreadsheet first."
+        );
+
+        return;
+
+    }
+
+
+    let rows =
+        originalRows.map(
+            function(row) {
+
+                return [...row];
+
+            }
+        );
+
+
+    const rowsBefore =
+        rows.length;
+
+
+    let emptyRowsRemoved = 0;
+    let duplicatesRemoved = 0;
+    let spacesCleaned = 0;
+    let namesStandardized = 0;
+    let emailsStandardized = 0;
+    let phonesStandardized = 0;
+    let datesStandardized = 0;
+    let genderStandardized = 0;
+    let headersStandardized = 0;
+    let emptyColumnsRemoved = 0;
+
+
+    /* EMPTY ROWS */
+
+    if (
+        document.getElementById(
+            "removeEmptyRows"
+        ).checked
+    ) {
+
+        const before =
+            rows.length;
+
+
+        rows =
+            rows.filter(
+                function(row) {
+
+                    return !isEmptyRow(row);
+
+                }
             );
 
-        table.innerHTML = "";
+
+        emptyRowsRemoved =
+            before - rows.length;
+
+    }
 
 
-        const previewRows =
-            rows.slice(0, 11);
+    /* DUPLICATES */
+
+    if (
+        document.getElementById(
+            "removeDuplicates"
+        ).checked
+    ) {
+
+        const header =
+            rows[0] || [];
 
 
-        previewRows.forEach(function(row, rowIndex) {
+        const seen =
+            new Set();
+
+
+        const newRows = [
+            header
+        ];
+
+
+        for (
+            let i = 1;
+            i < rows.length;
+            i++
+        ) {
+
+            const key =
+                JSON.stringify(
+                    rows[i]
+                );
+
+
+            if (
+                !seen.has(key)
+            ) {
+
+                seen.add(key);
+
+                newRows.push(
+                    rows[i]
+                );
+
+            } else {
+
+                duplicatesRemoved++;
+
+            }
+
+        }
+
+
+        rows =
+            newRows;
+
+    }
+
+
+    /* SPACES */
+
+    if (
+        document.getElementById(
+            "cleanSpaces"
+        ).checked
+    ) {
+
+        const result =
+            cleanSpaces(rows);
+
+
+        rows =
+            result.rows;
+
+
+        spacesCleaned =
+            result.count;
+
+    }
+
+
+    /* NAMES */
+
+    if (
+        document.getElementById(
+            "standardizeNames"
+        ).checked
+    ) {
+
+        const result =
+            standardizeNames(rows);
+
+
+        rows =
+            result.rows;
+
+
+        namesStandardized =
+            result.count;
+
+    }
+
+
+    /* EMAILS */
+
+    if (
+        document.getElementById(
+            "standardizeEmails"
+        ).checked
+    ) {
+
+        const result =
+            standardizeEmails(rows);
+
+
+        rows =
+            result.rows;
+
+
+        emailsStandardized =
+            result.count;
+
+    }
+
+
+    /* PHONES */
+
+    if (
+        document.getElementById(
+            "standardizePhones"
+        ).checked
+    ) {
+
+        const result =
+            standardizePhones(rows);
+
+
+        rows =
+            result.rows;
+
+
+        phonesStandardized =
+            result.count;
+
+    }
+
+
+    /* DATES */
+
+    if (
+        document.getElementById(
+            "standardizeDates"
+        ).checked
+    ) {
+
+        const result =
+            standardizeDates(rows);
+
+
+        rows =
+            result.rows;
+
+
+        datesStandardized =
+            result.count;
+
+    }
+
+
+    /* GENDER */
+
+    if (
+        document.getElementById(
+            "standardizeGender"
+        ).checked
+    ) {
+
+        const result =
+            standardizeGenderValues(rows);
+
+
+        rows =
+            result.rows;
+
+
+        genderStandardized =
+            result.count;
+
+    }
+
+
+    /* HEADERS */
+
+    if (
+        document.getElementById(
+            "standardizeHeaders"
+        ).checked
+    ) {
+
+        const result =
+            standardizeHeaders(rows);
+
+
+        rows =
+            result.rows;
+
+
+        headersStandardized =
+            result.count;
+
+    }
+
+
+    /* EMPTY COLUMNS */
+
+    if (
+        document.getElementById(
+            "removeEmptyColumns"
+        ).checked
+    ) {
+
+        const result =
+            removeEmptyColumns(rows);
+
+
+        rows =
+            result.rows;
+
+
+        emptyColumnsRemoved =
+            result.count;
+
+    }
+
+
+    cleanedRows =
+        rows;
+
+
+    /* REPORT */
+
+    document.getElementById(
+        "rowsBefore"
+    ).textContent =
+        rowsBefore;
+
+
+    document.getElementById(
+        "emptyRowsRemoved"
+    ).textContent =
+        emptyRowsRemoved;
+
+
+    document.getElementById(
+        "duplicatesRemoved"
+    ).textContent =
+        duplicatesRemoved;
+
+
+    document.getElementById(
+        "spacesCleaned"
+    ).textContent =
+        spacesCleaned;
+
+
+    document.getElementById(
+        "namesStandardized"
+    ).textContent =
+        namesStandardized;
+
+
+    document.getElementById(
+        "emailsStandardized"
+    ).textContent =
+        emailsStandardized;
+
+
+    document.getElementById(
+        "phonesStandardized"
+    ).textContent =
+        phonesStandardized;
+
+
+    document.getElementById(
+        "datesStandardized"
+    ).textContent =
+        datesStandardized;
+
+
+    document.getElementById(
+        "genderStandardized"
+    ).textContent =
+        genderStandardized;
+
+
+    document.getElementById(
+        "headersStandardized"
+    ).textContent =
+        headersStandardized;
+
+
+    document.getElementById(
+        "emptyColumnsRemoved"
+    ).textContent =
+        emptyColumnsRemoved;
+
+
+    document.getElementById(
+        "rowsAfter"
+    ).textContent =
+        rows.length;
+
+
+    document.getElementById(
+        "reportSection"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    showPreview(rows);
+
+
+    document.getElementById(
+        "downloadSection"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    const dotIndex =
+        originalFileName.lastIndexOf(".");
+
+
+    if (
+        dotIndex !== -1
+    ) {
+
+        outputFileName =
+            originalFileName.substring(
+                0,
+                dotIndex
+            ) +
+            "-cleaned.xlsx";
+
+    } else {
+
+        outputFileName =
+            originalFileName +
+            "-cleaned.xlsx";
+
+    }
+
+}
+
+
+
+/* PREVIEW */
+
+function showPreview(rows) {
+
+    const table =
+        document.getElementById(
+            "previewTable"
+        );
+
+
+    table.innerHTML =
+        "";
+
+
+    const previewRows =
+        rows.slice(
+            0,
+            11
+        );
+
+
+    previewRows.forEach(
+        function(
+            row,
+            rowIndex
+        ) {
 
             const tr =
-                document.createElement("tr");
+                document.createElement(
+                    "tr"
+                );
 
 
-            row.forEach(function(cell) {
+            row.forEach(
+                function(cell) {
 
-                const cellElement =
-                    document.createElement(
-                        rowIndex === 0
-                            ? "th"
-                            : "td"
+                    const cellElement =
+                        document.createElement(
+                            rowIndex === 0
+                                ? "th"
+                                : "td"
+                        );
+
+
+                    cellElement.textContent =
+                        cell;
+
+
+                    tr.appendChild(
+                        cellElement
                     );
 
-                cellElement.textContent =
-                    cell;
-
-                tr.appendChild(cellElement);
-
-            });
-
-
-            table.appendChild(tr);
-
-        });
-
-
-        document.getElementById(
-            "previewSection"
-        ).classList.remove("hidden");
-
-    }
-
-
-    function downloadFile() {
-
-        if (
-            !cleanedRows ||
-            cleanedRows.length === 0
-        ) {
-
-            alert("Please clean the spreadsheet first.");
-
-            return;
-
-        }
-
-
-        const worksheet =
-            XLSX.utils.aoa_to_sheet(
-                cleanedRows
+                }
             );
 
-        const workbook =
-            XLSX.utils.book_new();
+
+            table.appendChild(
+                tr
+            );
+
+        }
+    );
 
 
-        XLSX.utils.book_append_sheet(
-            workbook,
-            worksheet,
-            "Cleaned Data"
+    document.getElementById(
+        "previewSection"
+    ).classList.remove(
+        "hidden"
+    );
+
+}
+
+
+
+/* DOWNLOAD */
+
+function downloadFile() {
+
+    if (
+        !cleanedRows ||
+        cleanedRows.length === 0
+    ) {
+
+        alert(
+            "Please clean the spreadsheet first."
         );
 
-
-        XLSX.writeFile(
-            workbook,
-            outputFileName
-        );
+        return;
 
     }
 
 
-    function resetTool() {
+    const worksheet =
+        XLSX.utils.aoa_to_sheet(
+            cleanedRows
+        );
 
-        originalRows = [];
-        cleanedRows = [];
-        originalFileName = "";
-        outputFileName = "";
 
-        document.getElementById(
-            "fileInput"
-        ).value = "";
+    const workbook =
+        XLSX.utils.book_new();
 
-        document.getElementById(
-            "fileName"
-        ).textContent = "";
 
-        document.getElementById(
-            "status"
-        ).textContent = "";
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Cleaned Data"
+    );
 
-        document.getElementById(
-            "reportSection"
-        ).classList.add("hidden");
 
-        document.getElementById(
-            "previewSection"
-        ).classList.add("hidden");
+    XLSX.writeFile(
+        workbook,
+        outputFileName
+    );
 
-        document.getElementById(
-            "downloadSection"
-        ).classList.add("hidden");
+}
 
-        clearAll();
 
-    }
+
+/* RESET */
+
+function resetTool() {
+
+    originalRows = [];
+
+    cleanedRows = [];
+
+    originalFileName = "";
+
+    outputFileName = "";
+
+
+    document.getElementById(
+        "fileInput"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "fileName"
+    ).textContent =
+        "";
+
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        "";
+
+
+    document.getElementById(
+        "reportSection"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "previewSection"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "downloadSection"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    clearAll();
+
+}
 
 </script>
 
