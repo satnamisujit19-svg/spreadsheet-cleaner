@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -371,6 +372,13 @@
             </div>
 
             <div class="option">
+                <input type="checkbox" id="standardizeDates" checked>
+                <label for="standardizeDates">
+                    Standardize dates
+                </label>
+            </div>
+
+            <div class="option">
                 <input type="checkbox" id="removeEmptyColumns" checked>
                 <label for="removeEmptyColumns">
                     Remove completely empty columns
@@ -426,6 +434,11 @@
             <div class="report-item">
                 <span>Phone numbers standardized</span>
                 <strong id="phonesStandardized">0</strong>
+            </div>
+
+            <div class="report-item">
+                <span>Dates standardized</span>
+                <strong id="datesStandardized">0</strong>
             </div>
 
             <div class="report-item">
@@ -492,6 +505,7 @@ const optionIds = [
     "standardizeNames",
     "standardizeEmails",
     "standardizePhones",
+    "standardizeDates",
     "removeEmptyColumns"
 ];
 
@@ -604,6 +618,9 @@ cleanButton.addEventListener("click", async function() {
             standardizePhones:
                 document.getElementById("standardizePhones").checked,
 
+            standardizeDates:
+                document.getElementById("standardizeDates").checked,
+
             removeEmptyColumns:
                 document.getElementById("removeEmptyColumns").checked
 
@@ -669,6 +686,7 @@ cleanButton.addEventListener("click", async function() {
         let namesStandardized = 0;
         let emailsStandardized = 0;
         let phonesStandardized = 0;
+        let datesStandardized = 0;
         let emptyColumnsRemoved = 0;
 
         // Remove empty rows
@@ -916,6 +934,84 @@ cleanButton.addEventListener("click", async function() {
             }
         }
 
+        // Standardize dates
+
+        if (
+            options.standardizeDates &&
+            rows.length > 0
+        ) {
+
+            const headers =
+                rows[0].map(function(header) {
+
+                    return String(header)
+                        .trim()
+                        .toLowerCase()
+                        .replace(/[-_\s]/g, "");
+
+                });
+
+            const dateHeaders = [
+                "date",
+                "orderdate",
+                "purchasedate",
+                "invoicedate",
+                "deliverydate",
+                "duedate",
+                "paymentdate",
+                "bookingdate",
+                "registrationdate",
+                "createddate",
+                "updateddate",
+                "dob",
+                "dateofbirth"
+            ];
+
+            for (
+                let columnIndex = 0;
+                columnIndex < headers.length;
+                columnIndex++
+            ) {
+
+                if (
+                    dateHeaders.includes(
+                        headers[columnIndex]
+                    )
+                ) {
+
+                    for (
+                        let rowIndex = 1;
+                        rowIndex < rows.length;
+                        rowIndex++
+                    ) {
+
+                        const original =
+                            String(
+                                rows[rowIndex][columnIndex] || ""
+                            ).trim();
+
+                        if (original === "") {
+                            continue;
+                        }
+
+                        const standardized =
+                            standardizeDate(original);
+
+                        if (
+                            standardized !== null &&
+                            standardized !== original
+                        ) {
+
+                            datesStandardized++;
+
+                            rows[rowIndex][columnIndex] =
+                                standardized;
+                        }
+                    }
+                }
+            }
+        }
+
         // Remove duplicate rows
 
         if (options.removeDuplicates) {
@@ -1037,6 +1133,9 @@ cleanButton.addEventListener("click", async function() {
 
         document.getElementById("phonesStandardized").textContent =
             phonesStandardized;
+
+        document.getElementById("datesStandardized").textContent =
+            datesStandardized;
 
         document.getElementById("emptyColumnsRemoved").textContent =
             emptyColumnsRemoved;
@@ -1168,6 +1267,185 @@ function standardizePhone(phone) {
         ? "+" + digits
         : digits;
 
+}
+
+// Standardize date
+
+function standardizeDate(value) {
+
+    const text =
+        String(value).trim();
+
+    let day;
+    let month;
+    let year;
+
+    // DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+
+    let match =
+        text.match(
+            /^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/
+        );
+
+    if (match) {
+
+        day = Number(match[1]);
+        month = Number(match[2]);
+        year = Number(match[3]);
+
+        if (
+            !isValidDate(
+                day,
+                month,
+                year
+            )
+        ) {
+            return null;
+        }
+
+        return formatDate(
+            day,
+            month,
+            year
+        );
+    }
+
+    // YYYY/MM/DD or YYYY-MM-DD
+
+    match =
+        text.match(
+            /^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/
+        );
+
+    if (match) {
+
+        year = Number(match[1]);
+        month = Number(match[2]);
+        day = Number(match[3]);
+
+        if (
+            !isValidDate(
+                day,
+                month,
+                year
+            )
+        ) {
+            return null;
+        }
+
+        return formatDate(
+            day,
+            month,
+            year
+        );
+    }
+
+    // DD Month YYYY / DD Mon YYYY
+
+    match =
+        text.match(
+            /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/
+        );
+
+    if (match) {
+
+        day = Number(match[1]);
+        year = Number(match[3]);
+
+        month =
+            getMonthNumber(match[2]);
+
+        if (
+            month === null ||
+            !isValidDate(
+                day,
+                month,
+                year
+            )
+        ) {
+            return null;
+        }
+
+        return formatDate(
+            day,
+            month,
+            year
+        );
+    }
+
+    return null;
+}
+
+function getMonthNumber(monthName) {
+
+    const months = {
+        jan: 1,
+        january: 1,
+        feb: 2,
+        february: 2,
+        mar: 3,
+        march: 3,
+        apr: 4,
+        april: 4,
+        may: 5,
+        jun: 6,
+        june: 6,
+        jul: 7,
+        july: 7,
+        aug: 8,
+        august: 8,
+        sep: 9,
+        sept: 9,
+        september: 9,
+        oct: 10,
+        october: 10,
+        nov: 11,
+        november: 11,
+        dec: 12,
+        december: 12
+    };
+
+    return months[
+        String(monthName).toLowerCase()
+    ] || null;
+}
+
+function isValidDate(day, month, year) {
+
+    if (
+        month < 1 ||
+        month > 12 ||
+        day < 1 ||
+        day > 31 ||
+        year < 1900 ||
+        year > 2200
+    ) {
+        return false;
+    }
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+    );
+}
+
+function formatDate(day, month, year) {
+
+    return (
+        String(day).padStart(2, "0") +
+        "-" +
+        String(month).padStart(2, "0") +
+        "-" +
+        String(year)
+    );
 }
 
 // Show preview
@@ -1309,3 +1587,4 @@ function resetTool() {
 
 </body>
 </html>
+```
