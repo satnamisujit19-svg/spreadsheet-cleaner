@@ -107,7 +107,8 @@
         <h2>Turn a messy spreadsheet into a clean one</h2>
 
         <p>
-            Remove duplicate rows, empty rows and unnecessary spaces.
+            Remove duplicate rows, empty rows, unnecessary spaces
+            and standardize customer names.
         </p>
 
         <div class="upload-box">
@@ -153,6 +154,11 @@
                 </p>
 
                 <p>
+                    👤 Names standardized:
+                    <strong id="names"></strong>
+                </p>
+
+                <p>
                     ✅ Rows after cleaning:
                     <strong id="after"></strong>
                 </p>
@@ -174,6 +180,17 @@
 
     <script>
 
+        function standardizeName(name) {
+
+            return name
+                .trim()
+                .replace(/\s+/g, " ")
+                .toLowerCase()
+                .replace(/\b\w/g, letter => letter.toUpperCase());
+
+        }
+
+
         function cleanCSV() {
 
             const fileInput = document.getElementById("fileInput");
@@ -182,7 +199,8 @@
             const download = document.getElementById("download");
 
             if (!fileInput.files.length) {
-                status.textContent = "Please choose a CSV file first.";
+                status.textContent =
+                    "Please choose a CSV file first.";
                 return;
             }
 
@@ -196,7 +214,7 @@
 
                 let rows = text.split(/\r?\n/);
 
-                // Remove the final empty line if present
+                // Remove final empty line
                 if (
                     rows.length > 0 &&
                     rows[rows.length - 1].trim() === ""
@@ -213,6 +231,7 @@
 
                 const emptyRowsRemoved =
                     rows.length - nonEmptyRows.length;
+
 
                 // Clean unnecessary spaces
                 let spacesCleaned = 0;
@@ -231,20 +250,72 @@
                     return cleanedRow;
                 });
 
+
+                // Standardize customer names
+                let namesStandardized = 0;
+
+                const header = cleanedRows[0]
+                    .split(",")
+                    .map(cell => cell.toLowerCase().trim());
+
+                const nameColumn = header.indexOf("name");
+
+                let standardizedRows = cleanedRows;
+
+                if (nameColumn !== -1) {
+
+                    standardizedRows = cleanedRows.map(
+                        (row, index) => {
+
+                            if (index === 0) {
+                                return row;
+                            }
+
+                            const cells = row.split(",");
+
+                            if (cells[nameColumn]) {
+
+                                const oldName =
+                                    cells[nameColumn];
+
+                                const newName =
+                                    standardizeName(oldName);
+
+                                if (oldName !== newName) {
+                                    namesStandardized++;
+                                }
+
+                                cells[nameColumn] = newName;
+                            }
+
+                            return cells.join(",");
+                        }
+                    );
+                }
+
+
                 // Remove duplicate rows
-                const uniqueRows = [...new Set(cleanedRows)];
+                const uniqueRows =
+                    [...new Set(standardizedRows)];
 
                 const duplicatesRemoved =
-                    cleanedRows.length - uniqueRows.length;
+                    standardizedRows.length -
+                    uniqueRows.length;
 
-                const rowsAfter = uniqueRows.length;
+                const rowsAfter =
+                    uniqueRows.length;
+
 
                 if (rowsAfter === 0) {
-                    status.textContent = "The CSV file is empty.";
+                    status.textContent =
+                        "The CSV file is empty.";
                     return;
                 }
 
-                const cleanedCSV = uniqueRows.join("\n");
+
+                const cleanedCSV =
+                    uniqueRows.join("\n");
+
 
                 // Create downloadable file
                 const blob = new Blob(
@@ -252,29 +323,36 @@
                     { type: "text/csv" }
                 );
 
-                const url = URL.createObjectURL(blob);
+                const url =
+                    URL.createObjectURL(blob);
+
 
                 // Show status
                 status.textContent =
                     "✅ Spreadsheet cleaned successfully!";
 
+
                 // Show report
-                document.getElementById("before").textContent =
-                    rowsBefore;
+                document.getElementById("before")
+                    .textContent = rowsBefore;
 
-                document.getElementById("empty").textContent =
-                    emptyRowsRemoved;
+                document.getElementById("empty")
+                    .textContent = emptyRowsRemoved;
 
-                document.getElementById("duplicates").textContent =
-                    duplicatesRemoved;
+                document.getElementById("duplicates")
+                    .textContent = duplicatesRemoved;
 
-                document.getElementById("spaces").textContent =
-                    spacesCleaned;
+                document.getElementById("spaces")
+                    .textContent = spacesCleaned;
 
-                document.getElementById("after").textContent =
-                    rowsAfter;
+                document.getElementById("names")
+                    .textContent = namesStandardized;
+
+                document.getElementById("after")
+                    .textContent = rowsAfter;
 
                 report.style.display = "block";
+
 
                 // Create download link
                 download.innerHTML = "";
@@ -294,6 +372,7 @@
                     "download-link";
 
                 download.appendChild(downloadLink);
+
             };
 
             reader.readAsText(file);
