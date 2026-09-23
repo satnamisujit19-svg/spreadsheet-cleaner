@@ -10,7 +10,6 @@
 
     <title>Clean My Spreadsheet</title>
 
-    <!-- Excel file support -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
     <style>
@@ -223,8 +222,6 @@
             </div>
 
 
-            <!-- Spreadsheet Preview -->
-
             <div id="preview">
 
                 <h3>👀 Cleaned Spreadsheet Preview</h3>
@@ -278,8 +275,6 @@
 
         function processRows(rows) {
 
-            // Remove completely empty rows
-
             const nonEmptyRows = rows.filter(
                 row => row.some(cell =>
                     String(cell).trim() !== ""
@@ -289,8 +284,6 @@
             const emptyRowsRemoved =
                 rows.length - nonEmptyRows.length;
 
-
-            // Clean spaces
 
             let spacesCleaned = 0;
 
@@ -329,8 +322,6 @@
             }
 
 
-            // Find Name column
-
             const header =
                 cleanedRows[0].map(cell =>
                     String(cell).toLowerCase().trim()
@@ -339,8 +330,6 @@
             const nameColumn =
                 header.indexOf("name");
 
-
-            // Standardize names
 
             let namesStandardized = 0;
 
@@ -378,8 +367,6 @@
 
             }
 
-
-            // Remove duplicate rows
 
             const uniqueRows = [];
 
@@ -439,8 +426,44 @@
                 rows.slice(0, 10);
 
 
-            previewRows.forEach(
-                (row, rowIndex) => {
+            if (previewRows.length === 0) {
+
+                return;
+
+            }
+
+
+            // Create header row
+
+            const headerRow =
+                document.createElement("tr");
+
+
+            previewRows[0].forEach(cell => {
+
+                const headerCell =
+                    document.createElement("th");
+
+                headerCell.textContent =
+                    String(cell);
+
+                headerRow.appendChild(
+                    headerCell
+                );
+
+            });
+
+
+            table.appendChild(
+                headerRow
+            );
+
+
+            // Create data rows
+
+            previewRows
+                .slice(1)
+                .forEach(row => {
 
                     const tableRow =
                         document.createElement("tr");
@@ -448,18 +471,14 @@
 
                     row.forEach(cell => {
 
-                        const cellElement =
-                            document.createElement(
-                                rowIndex === 0
-                                    ? "th"
-                                    : "td"
-                            );
+                        const tableCell =
+                            document.createElement("td");
 
-                        cellElement.textContent =
-                            cell;
+                        tableCell.textContent =
+                            String(cell);
 
                         tableRow.appendChild(
-                            cellElement
+                            tableCell
                         );
 
                     });
@@ -469,8 +488,7 @@
                         tableRow
                     );
 
-                }
-            );
+                });
 
 
             preview.style.display =
@@ -654,8 +672,6 @@
                         let rows = [];
 
 
-                        // Excel file
-
                         if (
                             fileName.endsWith(".xlsx") ||
                             fileName.endsWith(".xls")
@@ -683,11 +699,7 @@
                                     }
                                 );
 
-                        }
-
-                        // CSV file
-
-                        else {
+                        } else {
 
                             const text =
                                 event.target.result;
@@ -726,13 +738,9 @@
                             result.rows.length;
 
 
-                        // Show status
-
                         status.textContent =
                             "✅ Spreadsheet cleaned successfully!";
 
-
-                        // Show report
 
                         document.getElementById(
                             "before"
@@ -774,14 +782,10 @@
                             "block";
 
 
-                        // Show cleaned preview
-
                         showPreview(
                             result.rows
                         );
 
-
-                        // Download cleaned file
 
                         if (
                             fileName.endsWith(".xlsx") ||
@@ -816,8 +820,6 @@
                 };
 
 
-            // Read Excel as binary
-
             if (
                 fileName.endsWith(".xlsx") ||
                 fileName.endsWith(".xls")
@@ -825,11 +827,7 @@
 
                 reader.readAsArrayBuffer(file);
 
-            }
-
-            // Read CSV as text
-
-            else {
+            } else {
 
                 reader.readAsText(file);
 
