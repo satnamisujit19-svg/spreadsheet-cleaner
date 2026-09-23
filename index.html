@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -474,6 +475,22 @@ footer {
 
                 </div>
 
+
+                <div class="option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="standardizeYesNo"
+                        >
+
+                        Standardize Yes / No values
+
+                    </label>
+
+                </div>
+
             </div>
 
         </div>
@@ -602,6 +619,12 @@ footer {
             <div class="report-item">
                 Gender values standardized
                 <strong id="genderStandardized">0</strong>
+            </div>
+
+
+            <div class="report-item">
+                Yes / No values standardized
+                <strong id="yesNoStandardized">0</strong>
             </div>
 
 
@@ -1831,6 +1854,184 @@ function standardizeGenderValues(rows) {
 
 
 
+/* YES / NO STANDARDIZATION */
+
+function standardizeYesNo(value) {
+
+    const original =
+        String(value).trim();
+
+
+    if (
+        original === ""
+    ) {
+
+        return original;
+
+    }
+
+
+    const normalized =
+        original.toLowerCase();
+
+
+    if (
+        normalized === "yes" ||
+        normalized === "y"
+    ) {
+
+        return "Yes";
+
+    }
+
+
+    if (
+        normalized === "no" ||
+        normalized === "n"
+    ) {
+
+        return "No";
+
+    }
+
+
+    return original;
+
+}
+
+
+
+function standardizeYesNoValues(rows) {
+
+    let count = 0;
+
+
+    const headers =
+        rows[0].map(
+            function(header) {
+
+                return String(header)
+                    .trim()
+                    .toLowerCase()
+                    .replace(
+                        /[-_\s]/g,
+                        ""
+                    );
+
+            }
+        );
+
+
+    const yesNoHeaders = [
+        "yesno",
+        "consent",
+        "subscribed",
+        "newsletter",
+        "active",
+        "verified",
+        "approved",
+        "enabled",
+        "isactive",
+        "isverified",
+        "isapproved",
+        "isenabled"
+    ];
+
+
+    const yesNoIndexes = [];
+
+
+    headers.forEach(
+        function(header, index) {
+
+            if (
+                yesNoHeaders.includes(header)
+            ) {
+
+                yesNoIndexes.push(index);
+
+            }
+
+        }
+    );
+
+
+    const result =
+        rows.map(
+            function(row, rowIndex) {
+
+                if (
+                    rowIndex === 0
+                ) {
+
+                    return row;
+
+                }
+
+
+                return row.map(
+                    function(
+                        cell,
+                        columnIndex
+                    ) {
+
+                        if (
+                            !yesNoIndexes.includes(
+                                columnIndex
+                            )
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const original =
+                            String(cell);
+
+
+                        if (
+                            original.trim() === ""
+                        ) {
+
+                            return cell;
+
+                        }
+
+
+                        const standardized =
+                            standardizeYesNo(
+                                original
+                            );
+
+
+                        if (
+                            standardized !== original
+                        ) {
+
+                            count++;
+
+                        }
+
+
+                        return standardized;
+
+                    }
+                );
+
+            }
+        );
+
+
+    return {
+        rows: result,
+        count: count
+    };
+
+}
+
+
+
 /* COLUMN HEADER STANDARDIZATION */
 
 function standardizeHeader(value) {
@@ -2093,6 +2294,7 @@ function cleanSpreadsheet() {
     let phonesStandardized = 0;
     let datesStandardized = 0;
     let genderStandardized = 0;
+    let yesNoStandardized = 0;
     let headersStandardized = 0;
     let emptyColumnsRemoved = 0;
 
@@ -2315,6 +2517,28 @@ function cleanSpreadsheet() {
     }
 
 
+    /* YES / NO */
+
+    if (
+        document.getElementById(
+            "standardizeYesNo"
+        ).checked
+    ) {
+
+        const result =
+            standardizeYesNoValues(rows);
+
+
+        rows =
+            result.rows;
+
+
+        yesNoStandardized =
+            result.count;
+
+    }
+
+
     /* HEADERS */
 
     if (
@@ -2417,6 +2641,12 @@ function cleanSpreadsheet() {
         "genderStandardized"
     ).textContent =
         genderStandardized;
+
+
+    document.getElementById(
+        "yesNoStandardized"
+    ).textContent =
+        yesNoStandardized;
 
 
     document.getElementById(
@@ -2659,3 +2889,4 @@ function resetTool() {
 
 </body>
 </html>
+```
