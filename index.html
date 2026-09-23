@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Clean My Spreadsheet</title>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -12,70 +13,172 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #6d7788;
+      --border: #e4e9f0;
+      --soft: #f8fafc;
+      --dark: #172033;
+      --green: #177245;
+      --green-bg: #e9f7ef;
+      --red: #b42318;
+      --red-bg: #fff1f0;
+      --orange: #9a5b00;
+      --orange-bg: #fff7e7;
+      --blue: #2456a6;
+      --blue-bg: #eef5ff;
+    }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #f5f7fb;
-      color: #182230;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input {
+      font: inherit;
     }
 
     .container {
       width: min(1180px, calc(100% - 28px));
-      margin: 28px auto 50px;
+      margin: 28px auto 60px;
     }
 
-    .card {
-      background: #ffffff;
-      border: 1px solid #e6ebf2;
-      border-radius: 18px;
-      box-shadow: 0 8px 30px rgba(20, 30, 50, 0.07);
-    }
-
+    /* HERO */
     .hero {
-      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 32px;
+      box-shadow: 0 10px 35px rgba(20, 30, 50, 0.07);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -90px;
+      top: -90px;
+      border-radius: 50%;
+      background: rgba(36, 86, 166, 0.06);
+    }
+
+    .brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6a7485;
+    }
+
+    .step-badge {
+      background: #eef2f7;
+      color: #465264;
+      border: 1px solid #e1e6ed;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
+      position: relative;
+      z-index: 1;
+      margin: 14px 0 8px;
+      font-size: clamp(30px, 5vw, 42px);
+      line-height: 1.08;
     }
 
-    .subtitle {
+    .hero-text {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
       margin: 0;
-      color: #687386;
+      color: var(--muted);
+      line-height: 1.65;
       font-size: 15px;
-      line-height: 1.6;
     }
 
+    .feature-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .feature-chip {
+      background: #ffffff;
+      border: 1px solid #e4eaf2;
+      color: #546073;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* UPLOAD */
     .upload-box {
+      position: relative;
+      z-index: 1;
       margin-top: 22px;
-      min-height: 150px;
-      border: 2px dashed #cfd7e3;
-      border-radius: 16px;
-      background: #fafcff;
-      cursor: pointer;
+      min-height: 178px;
+      border: 2px dashed #cad3df;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 20px;
+      padding: 24px;
+      cursor: pointer;
       transition: 0.2s ease;
     }
 
     .upload-box:hover {
-      border-color: #8793a4;
-      background: #f7faff;
+      border-color: #7f8b9c;
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .upload-icon {
+      font-size: 34px;
+      margin-bottom: 8px;
     }
 
     .upload-box strong {
       display: block;
-      font-size: 18px;
-      margin-bottom: 8px;
+      font-size: 19px;
+      margin-bottom: 7px;
     }
 
     .upload-box span {
-      color: #748096;
+      display: block;
+      color: #7a8494;
       font-size: 14px;
+    }
+
+    .supported {
+      margin-top: 8px;
+      font-size: 12px !important;
+      color: #98a1af !important;
     }
 
     #fileInput {
@@ -85,11 +188,12 @@
     .file-info {
       margin-top: 12px;
       min-height: 20px;
-      color: #566173;
+      color: #596477;
       font-size: 14px;
     }
 
-    .actions {
+    /* BUTTONS */
+    .action-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -98,123 +202,227 @@
 
     button {
       border: 0;
-      border-radius: 10px;
+      border-radius: 11px;
       padding: 11px 16px;
-      font-weight: 700;
-      cursor: pointer;
       font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.18s ease;
     }
 
-    .primary {
-      background: #182230;
-      color: white;
-    }
-
-    .secondary {
-      background: #eef2f7;
-      color: #182230;
-    }
-
-    .success {
-      background: #e8f6ed;
-      color: #1f6b3a;
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
     }
 
     button:disabled {
-      opacity: 0.5;
+      opacity: 0.45;
       cursor: not-allowed;
+      transform: none;
     }
 
+    .btn-dark {
+      background: var(--dark);
+      color: #ffffff;
+    }
+
+    .btn-green {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid #ccebd8;
+    }
+
+    .btn-soft {
+      background: #eef2f7;
+      color: #263144;
+      border: 1px solid #e0e5ec;
+    }
+
+    /* INFO */
     .notice {
-      margin-top: 16px;
-      padding: 13px 14px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 1px solid #e9edf3;
-      color: #5c6878;
+      margin-top: 18px;
+      padding: 14px 15px;
+      border-radius: 13px;
       font-size: 14px;
+      line-height: 1.5;
+      border: 1px solid #e6ebf1;
+      background: #f8fafc;
+      color: #5f6b7c;
     }
 
-    .hidden {
-      display: none !important;
+    .notice.success {
+      background: var(--green-bg);
+      color: #22683f;
+      border-color: #cfe9da;
     }
 
+    .notice.warning {
+      background: var(--orange-bg);
+      color: #7c5100;
+      border-color: #f0dbab;
+    }
+
+    /* GENERAL SECTION */
     .section {
       margin-top: 20px;
       padding: 22px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 7px 25px rgba(20, 30, 50, 0.05);
     }
 
-    .section h2 {
-      margin: 0 0 16px;
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      margin: 0;
       font-size: 20px;
     }
 
+    .section-description {
+      margin: 5px 0 0;
+      color: #778293;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* STATS */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
     }
 
-    .stat {
-      border: 1px solid #e7ecf3;
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #e5eaf0;
       border-radius: 14px;
       padding: 16px;
-      background: #ffffff;
     }
 
     .stat-label {
-      color: #6d7889;
-      font-size: 13px;
-      margin-bottom: 9px;
+      font-size: 12px;
+      color: #707b8c;
+      margin-bottom: 8px;
     }
 
     .stat-value {
       font-size: 28px;
       font-weight: 800;
+      line-height: 1;
     }
 
     .stat-sub {
-      margin-top: 6px;
-      color: #7a8595;
-      font-size: 12px;
+      margin-top: 7px;
+      color: #8892a0;
+      font-size: 11px;
     }
 
-    .issue-grid {
+    /* CHECKS */
+    .checks-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
 
-    .issue-card {
-      border: 1px solid #e7ecf3;
-      border-radius: 14px;
+    .check-card {
       padding: 16px;
+      border: 1px solid #e5eaf0;
+      border-radius: 14px;
       background: #ffffff;
     }
 
-    .issue-title {
-      font-weight: 700;
+    .check-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .check-name {
       font-size: 14px;
-    }
-
-    .issue-count {
-      font-size: 24px;
       font-weight: 800;
-      margin-top: 7px;
     }
 
-    .issue-help {
-      color: #768193;
+    .check-value {
+      font-size: 23px;
+      font-weight: 800;
+      margin-top: 9px;
+    }
+
+    .check-desc {
+      margin-top: 6px;
       font-size: 12px;
-      margin-top: 5px;
+      color: #7a8594;
       line-height: 1.45;
     }
 
-    .table-wrap {
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #bec6d1;
+      flex: 0 0 auto;
+    }
+
+    .status-dot.good {
+      background: #3c9d64;
+    }
+
+    .status-dot.issue {
+      background: #d65145;
+    }
+
+    /* DETAILS */
+    .details-box {
+      border: 1px solid #e6ebf1;
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf1f5;
+      font-size: 13px;
+      align-items: center;
+    }
+
+    .detail-row:last-child {
+      border-bottom: 0;
+    }
+
+    .detail-label {
+      color: #6d7888;
+    }
+
+    .pill {
+      max-width: 60%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #354154;
+      font-weight: 800;
+    }
+
+    /* PREVIEW */
+    .table-shell {
+      border: 1px solid #e4e9ef;
+      border-radius: 13px;
       overflow: auto;
-      border: 1px solid #e5eaf1;
-      border-radius: 12px;
-      max-height: 430px;
+      max-height: 460px;
+      background: #ffffff;
     }
 
     table {
@@ -225,59 +433,53 @@
 
     th,
     td {
-      border-bottom: 1px solid #edf1f5;
       padding: 10px 12px;
+      border-bottom: 1px solid #edf1f5;
       text-align: left;
-      font-size: 13px;
       white-space: nowrap;
+      font-size: 12px;
     }
 
     th {
       position: sticky;
       top: 0;
+      z-index: 2;
       background: #f8fafc;
-      z-index: 1;
+      color: #5c6879;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     tr:last-child td {
       border-bottom: 0;
     }
 
-    .result-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 0;
-      border-bottom: 1px solid #edf1f5;
-      font-size: 14px;
+    .preview-note {
+      margin-top: 10px;
+      color: #8a94a3;
+      font-size: 12px;
     }
 
-    .result-line:last-child {
-      border-bottom: 0;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eef2f7;
-      font-weight: 700;
-      max-width: 65%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .empty {
-      margin-top: 18px;
-      padding: 22px;
-      text-align: center;
-      color: #748096;
+    /* EMPTY */
+    .empty-state {
+      margin-top: 20px;
       background: #ffffff;
-      border: 1px solid #e7ecf3;
-      border-radius: 14px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      text-align: center;
+      color: #778293;
+      box-shadow: 0 7px 25px rgba(20, 30, 50, 0.04);
+    }
+
+    .empty-state .big {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     @media (max-width: 980px) {
@@ -285,15 +487,15 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .issue-grid {
+      .checks-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 620px) {
       .container {
-        width: min(100% - 18px, 1180px);
-        margin: 14px auto 30px;
+        width: min(100% - 16px, 1180px);
+        margin: 12px auto 30px;
       }
 
       .hero,
@@ -301,17 +503,22 @@
         padding: 17px;
       }
 
-      h1 {
-        font-size: 26px;
-      }
-
       .stats-grid,
-      .issue-grid {
+      .checks-grid {
         grid-template-columns: 1fr;
       }
 
-      .actions button {
+      .action-bar button {
         width: 100%;
+      }
+
+      .detail-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .pill {
+        max-width: 100%;
       }
     }
   </style>
@@ -321,21 +528,54 @@
 
   <main class="container">
 
-    <section class="card hero">
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="brand-row">
+        <div class="brand">Clean My Spreadsheet</div>
+        <div class="step-badge">Step 27 • Stats & Polish</div>
+      </div>
 
       <h1>Clean My Spreadsheet</h1>
 
-      <p class="subtitle">
-        Upload a spreadsheet to inspect data quality, find common issues,
-        preview the data, and create a cleaned copy.
+      <p class="hero-text">
+        Upload your spreadsheet to inspect its data quality, identify common
+        problems, preview the information, and create a cleaner copy.
       </p>
 
-      <label class="upload-box" for="fileInput">
+      <div class="feature-row">
+        <span class="feature-chip">Email validation</span>
+        <span class="feature-chip">Duplicate detection</span>
+        <span class="feature-chip">Empty row detection</span>
+        <span class="feature-chip">Empty column detection</span>
+        <span class="feature-chip">Spreadsheet preview</span>
+        <span class="feature-chip">Cleaned download</span>
+      </div>
+
+
+      <label
+        class="upload-box"
+        for="fileInput"
+      >
         <div>
-          <strong>Click to upload your spreadsheet</strong>
-          <span>Supported files: .xlsx, .xls, .csv</span>
+
+          <div class="upload-icon">📊</div>
+
+          <strong>
+            Click to upload your spreadsheet
+          </strong>
+
+          <span>
+            Select an Excel or CSV file from your device
+          </span>
+
+          <span class="supported">
+            Supported: .xlsx • .xls • .csv
+          </span>
+
         </div>
       </label>
+
 
       <input
         id="fileInput"
@@ -343,57 +583,83 @@
         accept=".xlsx,.xls,.csv"
       />
 
-      <div id="fileInfo" class="file-info"></div>
 
-      <div id="actionBar" class="actions hidden">
+      <div
+        id="fileInfo"
+        class="file-info"
+      ></div>
+
+
+      <div
+        id="actionBar"
+        class="action-bar hidden"
+      >
 
         <button
           id="cleanBtn"
-          class="primary"
+          class="btn-dark"
         >
-          Clean Spreadsheet
+          ✨ Clean Spreadsheet
         </button>
 
         <button
           id="downloadBtn"
-          class="success"
+          class="btn-green"
           disabled
         >
-          Download Cleaned XLSX
+          ↓ Download Cleaned XLSX
         </button>
 
         <button
           id="downloadCsvBtn"
-          class="secondary"
+          class="btn-soft"
           disabled
         >
-          Download Cleaned CSV
+          ↓ Download Cleaned CSV
         </button>
 
         <button
           id="resetBtn"
-          class="secondary"
+          class="btn-soft"
         >
-          Reset
+          ↻ Reset
         </button>
 
       </div>
 
-      <div id="notice" class="notice hidden"></div>
+
+      <div
+        id="notice"
+        class="notice hidden"
+      ></div>
 
     </section>
 
 
+    <!-- STATS -->
     <section
       id="statsSection"
-      class="card section hidden"
+      class="section hidden"
     >
 
-      <h2>Spreadsheet Stats</h2>
+      <div class="section-header">
+
+        <div>
+          <h2 class="section-title">
+            Spreadsheet Stats
+          </h2>
+
+          <p class="section-description">
+            A quick overview of the uploaded spreadsheet before cleaning.
+          </p>
+        </div>
+
+      </div>
+
 
       <div class="stats-grid">
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Total Rows
@@ -407,13 +673,13 @@
           </div>
 
           <div class="stat-sub">
-            Data rows
+            Data rows detected
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Total Columns
@@ -427,13 +693,13 @@
           </div>
 
           <div class="stat-sub">
-            Detected columns
+            Columns detected
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Valid Emails
@@ -453,7 +719,7 @@
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Invalid Emails
@@ -473,7 +739,7 @@
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Empty Email Cells
@@ -487,13 +753,13 @@
           </div>
 
           <div class="stat-sub">
-            Blank email cells
+            Blank email values
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Duplicate Rows
@@ -507,13 +773,13 @@
           </div>
 
           <div class="stat-sub">
-            Repeated complete rows
+            Exact duplicate rows
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Empty Rows
@@ -533,7 +799,7 @@
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Empty Columns
@@ -547,7 +813,7 @@
           </div>
 
           <div class="stat-sub">
-            Completely blank columns
+            Columns with no data
           </div>
 
         </div>
@@ -557,130 +823,199 @@
     </section>
 
 
+    <!-- DATA QUALITY -->
     <section
-      id="issueSection"
-      class="card section hidden"
+      id="checksSection"
+      class="section hidden"
     >
 
-      <h2>Data Quality Checks</h2>
+      <div class="section-header">
 
-      <div class="issue-grid">
+        <div>
+          <h2 class="section-title">
+            Data Quality Checks
+          </h2>
+
+          <p class="section-description">
+            Common issues detected in the original spreadsheet.
+          </p>
+        </div>
+
+      </div>
 
 
-        <div class="issue-card">
+      <div class="checks-grid">
 
-          <div class="issue-title">
-            Invalid Emails
+
+        <div class="check-card">
+
+          <div class="check-top">
+
+            <div class="check-name">
+              Invalid Emails
+            </div>
+
+            <div
+              id="dotInvalidEmail"
+              class="status-dot"
+            ></div>
+
           </div>
 
           <div
-            id="issueInvalidEmails"
-            class="issue-count"
+            id="checkInvalidEmails"
+            class="check-value"
           >
             0
           </div>
 
-          <div class="issue-help">
+          <div class="check-desc">
             Email values that do not match a basic email format.
           </div>
 
         </div>
 
 
-        <div class="issue-card">
+        <div class="check-card">
 
-          <div class="issue-title">
-            Duplicate Rows
+          <div class="check-top">
+
+            <div class="check-name">
+              Duplicate Rows
+            </div>
+
+            <div
+              id="dotDuplicate"
+              class="status-dot"
+            ></div>
+
           </div>
 
           <div
-            id="issueDuplicateRows"
-            class="issue-count"
+            id="checkDuplicateRows"
+            class="check-value"
           >
             0
           </div>
 
-          <div class="issue-help">
-            Rows that are exact duplicates of a previous row.
+          <div class="check-desc">
+            Rows that repeat an earlier complete row.
           </div>
 
         </div>
 
 
-        <div class="issue-card">
+        <div class="check-card">
 
-          <div class="issue-title">
-            Empty Rows
+          <div class="check-top">
+
+            <div class="check-name">
+              Empty Rows
+            </div>
+
+            <div
+              id="dotEmptyRows"
+              class="status-dot"
+            ></div>
+
           </div>
 
           <div
-            id="issueEmptyRows"
-            class="issue-count"
+            id="checkEmptyRows"
+            class="check-value"
           >
             0
           </div>
 
-          <div class="issue-help">
-            Rows containing no data at all.
+          <div class="check-desc">
+            Rows containing no information.
           </div>
 
         </div>
 
 
-        <div class="issue-card">
+        <div class="check-card">
 
-          <div class="issue-title">
-            Empty Columns
+          <div class="check-top">
+
+            <div class="check-name">
+              Empty Columns
+            </div>
+
+            <div
+              id="dotEmptyColumns"
+              class="status-dot"
+            ></div>
+
           </div>
 
           <div
-            id="issueEmptyColumns"
-            class="issue-count"
+            id="checkEmptyColumns"
+            class="check-value"
           >
             0
           </div>
 
-          <div class="issue-help">
-            Columns containing no data at all.
+          <div class="check-desc">
+            Columns containing no data values.
           </div>
 
         </div>
 
 
-        <div class="issue-card">
+        <div class="check-card">
 
-          <div class="issue-title">
-            Whitespace Values
+          <div class="check-top">
+
+            <div class="check-name">
+              Whitespace Values
+            </div>
+
+            <div
+              id="dotWhitespace"
+              class="status-dot"
+            ></div>
+
           </div>
 
           <div
-            id="issueWhitespace"
-            class="issue-count"
+            id="checkWhitespace"
+            class="check-value"
           >
             0
           </div>
 
-          <div class="issue-help">
+          <div class="check-desc">
             Text cells with leading or trailing spaces.
           </div>
 
         </div>
 
 
-        <div class="issue-card">
+        <div class="check-card">
 
-          <div class="issue-title">
-            Email Column
+          <div class="check-top">
+
+            <div class="check-name">
+              Email Column
+            </div>
+
+            <div
+              id="dotEmailColumn"
+              class="status-dot"
+            ></div>
+
           </div>
 
           <div
-            id="issueEmailColumn"
-            class="issue-count"
+            id="checkEmailColumn"
+            class="check-value"
+            style="font-size: 18px;"
           >
             Not found
           </div>
 
-          <div class="issue-help">
+          <div class="check-desc">
             Automatically detected email column.
           </div>
 
@@ -691,102 +1026,150 @@
     </section>
 
 
+    <!-- DETAILS -->
     <section
       id="detailsSection"
-      class="card section hidden"
+      class="section hidden"
     >
 
-      <h2>Validation Details</h2>
+      <div class="section-header">
 
-      <div class="result-line">
+        <div>
+          <h2 class="section-title">
+            Validation Details
+          </h2>
 
-        <span>
-          Detected Email Column
-        </span>
-
-        <span
-          id="detailEmailColumn"
-          class="pill"
-        >
-          Not found
-        </span>
+          <p class="section-description">
+            File and validation information.
+          </p>
+        </div>
 
       </div>
 
 
-      <div class="result-line">
+      <div class="details-box">
 
-        <span>
-          Validation Status
-        </span>
+        <div class="detail-row">
 
-        <span
-          id="validationStatus"
-          class="pill"
-        >
-          Waiting
-        </span>
+          <span class="detail-label">
+            Current File
+          </span>
 
-      </div>
+          <span
+            id="detailFile"
+            class="pill"
+          >
+            —
+          </span>
 
-
-      <div class="result-line">
-
-        <span>
-          Current File
-        </span>
-
-        <span
-          id="currentFile"
-          class="pill"
-        >
-          —
-        </span>
-
-      </div>
+        </div>
 
 
-      <div class="result-line">
+        <div class="detail-row">
 
-        <span>
-          Current Sheet
-        </span>
+          <span class="detail-label">
+            Current Sheet
+          </span>
 
-        <span
-          id="currentSheet"
-          class="pill"
-        >
-          —
-        </span>
+          <span
+            id="detailSheet"
+            class="pill"
+          >
+            —
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span class="detail-label">
+            Detected Email Column
+          </span>
+
+          <span
+            id="detailEmailColumn"
+            class="pill"
+          >
+            Not found
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span class="detail-label">
+            Validation Status
+          </span>
+
+          <span
+            id="detailValidation"
+            class="pill"
+          >
+            Waiting
+          </span>
+
+        </div>
 
       </div>
 
     </section>
 
 
+    <!-- PREVIEW -->
     <section
       id="previewSection"
-      class="card section hidden"
+      class="section hidden"
     >
 
-      <h2>
-        Spreadsheet Preview
-      </h2>
+      <div class="section-header">
 
-      <div class="table-wrap">
+        <div>
+          <h2 class="section-title">
+            Spreadsheet Preview
+          </h2>
+
+          <p class="section-description">
+            Showing a preview of the spreadsheet values.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="table-shell">
 
         <table id="previewTable"></table>
 
       </div>
 
+
+      <div class="preview-note">
+        Preview shows up to the first 20 data rows.
+      </div>
+
     </section>
 
 
+    <!-- EMPTY STATE -->
     <div
       id="emptyState"
-      class="empty"
+      class="empty-state"
     >
-      Upload a spreadsheet to begin.
+
+      <div class="big">
+        📁
+      </div>
+
+      <strong>
+        Upload a spreadsheet to begin
+      </strong>
+
+      <div style="margin-top: 6px;">
+        Your file will be analyzed directly in your browser.
+      </div>
+
     </div>
 
   </main>
@@ -799,9 +1182,6 @@
 
     const fileInfo =
       document.getElementById("fileInfo");
-
-    const notice =
-      document.getElementById("notice");
 
     const actionBar =
       document.getElementById("actionBar");
@@ -818,12 +1198,14 @@
     const resetBtn =
       document.getElementById("resetBtn");
 
+    const notice =
+      document.getElementById("notice");
 
     const statsSection =
       document.getElementById("statsSection");
 
-    const issueSection =
-      document.getElementById("issueSection");
+    const checksSection =
+      document.getElementById("checksSection");
 
     const detailsSection =
       document.getElementById("detailsSection");
@@ -862,7 +1244,7 @@
     downloadBtn.addEventListener(
       "click",
       function () {
-        downloadWorkbook(false);
+        downloadCleanedFile("xlsx");
       }
     );
 
@@ -870,7 +1252,7 @@
     downloadCsvBtn.addEventListener(
       "click",
       function () {
-        downloadWorkbook(true);
+        downloadCleanedFile("csv");
       }
     );
 
@@ -893,7 +1275,7 @@
 
     function findEmailColumn(headers) {
 
-      const preferred =
+      const exactNames =
         new Set([
           "email",
           "emailaddress",
@@ -910,11 +1292,15 @@
       ) {
 
         const normalized =
-          normalizeHeader(headers[i]);
+          normalizeHeader(
+            headers[i]
+          );
 
 
         if (
-          preferred.has(normalized)
+          exactNames.has(
+            normalized
+          )
         ) {
 
           return i;
@@ -931,11 +1317,15 @@
       ) {
 
         const normalized =
-          normalizeHeader(headers[i]);
+          normalizeHeader(
+            headers[i]
+          );
 
 
         if (
-          normalized.includes("email")
+          normalized.includes(
+            "email"
+          )
         ) {
 
           return i;
@@ -953,7 +1343,8 @@
     function isValidEmail(value) {
 
       const email =
-        String(value ?? "").trim();
+        String(value ?? "")
+          .trim();
 
 
       if (!email) {
@@ -974,13 +1365,14 @@
 
       return row.every(
         cell =>
-          String(cell ?? "").trim() === ""
+          String(cell ?? "")
+            .trim() === ""
       );
 
     }
 
 
-    function rowKey(row) {
+    function makeRowKey(row) {
 
       return row
         .map(
@@ -1022,30 +1414,44 @@
     }
 
 
+    function getColumnCount(rows) {
+
+      return Math.max(
+        ...rows.map(
+          row => row.length
+        ),
+        0
+      );
+
+    }
+
+
     function getEmptyColumnIndexes(
       rows,
       columnCount
     ) {
 
-      const empty = [];
+      const emptyIndexes = [];
 
 
       for (
-        let c = 0;
-        c < columnCount;
-        c++
+        let column = 0;
+        column < columnCount;
+        column++
       ) {
 
-        let hasValue = false;
+        let hasData = false;
 
 
         for (const row of rows) {
 
           if (
-            String(row[c] ?? "").trim() !== ""
+            String(
+              row[column] ?? ""
+            ).trim() !== ""
           ) {
 
-            hasValue = true;
+            hasData = true;
 
             break;
 
@@ -1054,26 +1460,27 @@
         }
 
 
-        if (!hasValue) {
+        if (!hasData) {
 
-          empty.push(c);
+          emptyIndexes.push(
+            column
+          );
 
         }
 
       }
 
 
-      return empty;
+      return emptyIndexes;
 
     }
 
 
-    function analyzeRows(rows) {
+    function analyzeSpreadsheet(rows) {
 
       if (!rows.length) {
 
         return {
-
           headers: [],
           dataRows: [],
           rowCount: 0,
@@ -1087,7 +1494,6 @@
           whitespaceCells: 0,
           emailIndex: -1,
           emptyColumnIndexes: []
-
         };
 
       }
@@ -1096,17 +1502,9 @@
       const headers =
         rows[0].map(
           value =>
-            String(value ?? "").trim()
-        );
-
-
-      const columnCount =
-        Math.max(
-          headers.length,
-          ...rows
-            .slice(1)
-            .map(row => row.length),
-          0
+            String(
+              value ?? ""
+            )
         );
 
 
@@ -1114,8 +1512,16 @@
         rows.slice(1);
 
 
+      const columnCount =
+        getColumnCount(
+          rows
+        );
+
+
       const emailIndex =
-        findEmailColumn(headers);
+        findEmailColumn(
+          headers
+        );
 
 
       let validEmails = 0;
@@ -1125,9 +1531,13 @@
       let emptyEmails = 0;
 
 
-      if (emailIndex !== -1) {
+      if (
+        emailIndex !== -1
+      ) {
 
-        for (const row of dataRows) {
+        for (
+          const row of dataRows
+        ) {
 
           const value =
             String(
@@ -1158,16 +1568,24 @@
       }
 
 
-      const seen =
-        new Set();
-
+      let emptyRows = 0;
 
       let duplicateRows = 0;
 
 
-      for (const row of dataRows) {
+      const seen =
+        new Set();
 
-        if (isEmptyRow(row)) {
+
+      for (
+        const row of dataRows
+      ) {
+
+        if (
+          isEmptyRow(row)
+        ) {
+
+          emptyRows++;
 
           continue;
 
@@ -1175,10 +1593,14 @@
 
 
         const key =
-          rowKey(row);
+          makeRowKey(
+            row
+          );
 
 
-        if (seen.has(key)) {
+        if (
+          seen.has(key)
+        ) {
 
           duplicateRows++;
 
@@ -1190,12 +1612,6 @@
         }
 
       }
-
-
-      const emptyRows =
-        dataRows.filter(
-          isEmptyRow
-        ).length;
 
 
       const emptyColumnIndexes =
@@ -1230,7 +1646,9 @@
           emptyColumnIndexes.length,
 
         whitespaceCells:
-          countWhitespaceCells(rows),
+          countWhitespaceCells(
+            rows
+          ),
 
         emailIndex,
 
@@ -1246,13 +1664,15 @@
       value
     ) {
 
-      const el =
-        document.getElementById(id);
+      const element =
+        document.getElementById(
+          id
+        );
 
 
-      if (el) {
+      if (element) {
 
-        el.textContent =
+        element.textContent =
           value;
 
       }
@@ -1260,13 +1680,47 @@
     }
 
 
+    function setDot(
+      id,
+      hasIssue
+    ) {
+
+      const element =
+        document.getElementById(
+          id
+        );
+
+
+      if (!element) {
+
+        return;
+
+      }
+
+
+      element.classList.remove(
+        "good",
+        "issue"
+      );
+
+
+      element.classList.add(
+        hasIssue
+          ? "issue"
+          : "good"
+      );
+
+    }
+
+
     function displayAnalysis(
-      rows,
-      cleaned = false
+      rows
     ) {
 
       const result =
-        analyzeRows(rows);
+        analyzeSpreadsheet(
+          rows
+        );
 
 
       setText(
@@ -1318,36 +1772,36 @@
 
 
       setText(
-        "issueInvalidEmails",
+        "checkInvalidEmails",
         result.invalidEmails
       );
 
 
       setText(
-        "issueDuplicateRows",
+        "checkDuplicateRows",
         result.duplicateRows
       );
 
 
       setText(
-        "issueEmptyRows",
+        "checkEmptyRows",
         result.emptyRows
       );
 
 
       setText(
-        "issueEmptyColumns",
+        "checkEmptyColumns",
         result.emptyColumns
       );
 
 
       setText(
-        "issueWhitespace",
+        "checkWhitespace",
         result.whitespaceCells
       );
 
 
-      const emailLabel =
+      const emailColumn =
         result.emailIndex === -1
           ? "Not found"
           :
@@ -1362,39 +1816,96 @@
 
 
       setText(
-        "issueEmailColumn",
-        emailLabel
+        "checkEmailColumn",
+        emailColumn
       );
 
 
       setText(
         "detailEmailColumn",
-        emailLabel
+        emailColumn
       );
 
 
       setText(
-        "currentFile",
+        "detailFile",
         currentFileName || "—"
       );
 
 
       setText(
-        "currentSheet",
+        "detailSheet",
         currentSheetName || "—"
       );
 
 
-      setText(
-        "validationStatus",
+      let validationText =
+        "Waiting";
+
+
+      if (
         result.emailIndex === -1
-          ? "No email column"
-          :
-            (
-              result.invalidEmails === 0
-                ? "No invalid emails"
-                : "Issues detected"
-            )
+      ) {
+
+        validationText =
+          "No email column";
+
+      }
+      else if (
+        result.invalidEmails > 0
+      ) {
+
+        validationText =
+          "Issues detected";
+
+      }
+      else {
+
+        validationText =
+          "No invalid emails";
+
+      }
+
+
+      setText(
+        "detailValidation",
+        validationText
+      );
+
+
+      setDot(
+        "dotInvalidEmail",
+        result.invalidEmails > 0
+      );
+
+
+      setDot(
+        "dotDuplicate",
+        result.duplicateRows > 0
+      );
+
+
+      setDot(
+        "dotEmptyRows",
+        result.emptyRows > 0
+      );
+
+
+      setDot(
+        "dotEmptyColumns",
+        result.emptyColumns > 0
+      );
+
+
+      setDot(
+        "dotWhitespace",
+        result.whitespaceCells > 0
+      );
+
+
+      setDot(
+        "dotEmailColumn",
+        result.emailIndex !== -1
       );
 
 
@@ -1403,7 +1914,7 @@
       );
 
 
-      issueSection.classList.remove(
+      checksSection.classList.remove(
         "hidden"
       );
 
@@ -1423,27 +1934,17 @@
       );
 
 
-      renderPreview(rows);
-
-
-      if (cleaned) {
-
-        notice.classList.remove(
-          "hidden"
-        );
-
-
-        notice.textContent =
-          "Cleaned copy prepared. The preview now shows the cleaned data.";
-
-      }
+      renderPreview(
+        rows
+      );
 
     }
 
 
     function renderPreview(rows) {
 
-      previewTable.innerHTML = "";
+      previewTable.innerHTML =
+        "";
 
 
       if (!rows.length) {
@@ -1453,11 +1954,47 @@
       }
 
 
-      const maxPreviewRows =
-        Math.min(
-          rows.length,
-          21
+      const headerRow =
+        document.createElement(
+          "tr"
         );
+
+
+      const columnCount =
+        getColumnCount(
+          rows
+        );
+
+
+      for (
+        let column = 0;
+        column < columnCount;
+        column++
+      ) {
+
+        const th =
+          document.createElement(
+            "th"
+          );
+
+
+        const headerValue =
+          rows[0][column];
+
+
+        th.textContent =
+          String(
+            headerValue ??
+            `Column ${column + 1}`
+          ).trim() ||
+          `Column ${column + 1}`;
+
+
+        headerRow.appendChild(
+          th
+        );
+
+      }
 
 
       const thead =
@@ -1466,39 +2003,8 @@
         );
 
 
-      const headRow =
-        document.createElement(
-          "tr"
-        );
-
-
-      rows[0].forEach(
-        (
-          header,
-          index
-        ) => {
-
-          const th =
-            document.createElement(
-              "th"
-            );
-
-
-          th.textContent =
-            String(
-              header ||
-              `Column ${index + 1}`
-            );
-
-
-          headRow.appendChild(th);
-
-        }
-      );
-
-
       thead.appendChild(
-        headRow
+        headerRow
       );
 
 
@@ -1513,10 +2019,17 @@
         );
 
 
+      const maxRows =
+        Math.min(
+          rows.length,
+          21
+        );
+
+
       for (
-        let r = 1;
-        r < maxPreviewRows;
-        r++
+        let rowIndex = 1;
+        rowIndex < maxRows;
+        rowIndex++
       ) {
 
         const tr =
@@ -1526,9 +2039,9 @@
 
 
         for (
-          let c = 0;
-          c < rows[0].length;
-          c++
+          let column = 0;
+          column < columnCount;
+          column++
         ) {
 
           const td =
@@ -1539,11 +2052,13 @@
 
           td.textContent =
             String(
-              rows[r][c] ?? ""
+              rows[rowIndex][column] ?? ""
             );
 
 
-          tr.appendChild(td);
+          tr.appendChild(
+            td
+          );
 
         }
 
@@ -1577,11 +2092,17 @@
       }
 
 
+      originalRows = [];
+
+      cleanedRows = null;
+
+
       currentFileName =
         file.name;
 
 
-      cleanedRows = null;
+      currentSheetName =
+        "";
 
 
       downloadBtn.disabled =
@@ -1592,13 +2113,8 @@
         true;
 
 
-      cleanBtn.disabled =
-        true;
-
-
-      notice.classList.add(
-        "hidden"
-      );
+      notice.className =
+        "notice hidden";
 
 
       fileInfo.textContent =
@@ -1641,17 +2157,27 @@
           ];
 
 
-        const rawRows =
+        /*
+          raw:false is important here.
+
+          It asks SheetJS for the displayed
+          spreadsheet values instead of turning
+          formatted dates and phone-like values
+          into raw Excel serial numbers.
+        */
+        const rows =
           XLSX.utils.sheet_to_json(
             worksheet,
             {
               header: 1,
-              defval: ""
+              defval: "",
+              raw: false,
+              blankrows: true
             }
           );
 
 
-        if (!rawRows.length) {
+        if (!rows.length) {
 
           throw new Error(
             "The spreadsheet is empty."
@@ -1661,7 +2187,7 @@
 
 
         originalRows =
-          rawRows;
+          rows;
 
 
         fileInfo.textContent =
@@ -1678,8 +2204,7 @@
 
 
         displayAnalysis(
-          originalRows,
-          false
+          originalRows
         );
 
       }
@@ -1700,7 +2225,7 @@
         );
 
 
-        issueSection.classList.add(
+        checksSection.classList.add(
           "hidden"
         );
 
@@ -1720,8 +2245,13 @@
         );
 
 
-        emptyState.textContent =
-          `Could not read this spreadsheet: ${error.message}`;
+        emptyState.innerHTML = `
+          <div class="big">⚠️</div>
+          <strong>Could not read this spreadsheet</strong>
+          <div style="margin-top:6px;">
+            ${escapeHtml(error.message)}
+          </div>
+        `;
 
 
         fileInfo.textContent =
@@ -1734,33 +2264,17 @@
 
     function cleanSpreadsheet() {
 
-      if (!originalRows.length) {
+      if (
+        !originalRows.length
+      ) {
 
         return;
 
       }
 
 
-      const headers =
-        originalRows[0].map(
-          (
-            value,
-            index
-          ) => {
-
-            const trimmed =
-              String(
-                value ?? ""
-              ).trim();
-
-
-            return (
-              trimmed ||
-              `Column ${index + 1}`
-            );
-
-          }
-        );
+      const originalHeaders =
+        originalRows[0] || [];
 
 
       const dataRows =
@@ -1771,70 +2285,108 @@
           );
 
 
-      const columnCount =
-        Math.max(
-          headers.length,
-          ...dataRows.map(
-            row => row.length
-          ),
-          0
+      const originalColumnCount =
+        getColumnCount(
+          originalRows
         );
 
 
-      const emptyColumnIndexes =
+      const emailIndex =
+        findEmailColumn(
+          originalHeaders
+        );
+
+
+      const emptyColumns =
         getEmptyColumnIndexes(
           dataRows,
-          columnCount
+          originalColumnCount
         );
 
 
-      const removeColumn =
+      const emptyColumnSet =
         new Set(
-          emptyColumnIndexes
+          emptyColumns
         );
 
 
-      const emailIndexOriginal =
-        findEmailColumn(
-          headers
+      const cleanedHeaders =
+        [];
+
+
+      for (
+        let column = 0;
+        column < originalColumnCount;
+        column++
+      ) {
+
+        if (
+          emptyColumnSet.has(
+            column
+          )
+        ) {
+
+          continue;
+
+        }
+
+
+        let header =
+          originalHeaders[
+            column
+          ] ?? "";
+
+
+        if (
+          typeof header === "string"
+        ) {
+
+          header =
+            header.trim();
+
+        }
+
+
+        if (!header) {
+
+          header =
+            `Column ${column + 1}`;
+
+        }
+
+
+        cleanedHeaders.push(
+          header
         );
 
+      }
 
-      const seen =
+
+      const cleanedDataRows =
+        [];
+
+
+      const seenRows =
         new Set();
-
-
-      const result = [
-
-
-        headers.filter(
-          (
-            _,
-            index
-          ) =>
-            !removeColumn.has(
-              index
-            )
-        )
-
-      ];
 
 
       for (
         const row of dataRows
       ) {
 
-        const normalized = [];
+        const newRow = [];
 
 
         for (
-          let c = 0;
-          c < columnCount;
-          c++
+          let column = 0;
+          column < originalColumnCount;
+          column++
         ) {
 
           if (
-            removeColumn.has(c)
+            emptyColumnSet.has(
+              column
+            )
           ) {
 
             continue;
@@ -1843,12 +2395,11 @@
 
 
           let value =
-            row[c] ?? "";
+            row[column] ?? "";
 
 
           if (
-            typeof value ===
-            "string"
+            typeof value === "string"
           ) {
 
             value =
@@ -1857,10 +2408,14 @@
           }
 
 
+          /*
+            Normalize email values to lowercase,
+            but do not attempt to "invent" corrections
+            for malformed email addresses.
+          */
           if (
-            c === emailIndexOriginal &&
-            typeof value ===
-            "string" &&
+            column === emailIndex &&
+            typeof value === "string" &&
             value
           ) {
 
@@ -1870,19 +2425,23 @@
           }
 
 
-          normalized.push(
+          newRow.push(
             value
           );
 
         }
 
 
-        const key =
-          rowKey(normalized);
+        const rowKey =
+          makeRowKey(
+            newRow
+          );
 
 
         if (
-          seen.has(key)
+          seenRows.has(
+            rowKey
+          )
         ) {
 
           continue;
@@ -1890,22 +2449,26 @@
         }
 
 
-        seen.add(key);
+        seenRows.add(
+          rowKey
+        );
 
-        result.push(
-          normalized
+
+        cleanedDataRows.push(
+          newRow
         );
 
       }
 
 
-      cleanedRows =
-        result;
+      cleanedRows = [
+        cleanedHeaders,
+        ...cleanedDataRows
+      ];
 
 
       displayAnalysis(
-        cleanedRows,
-        true
+        cleanedRows
       );
 
 
@@ -1917,8 +2480,12 @@
         false;
 
 
-      cleanBtn.disabled =
-        false;
+      notice.className =
+        "notice success";
+
+
+      notice.textContent =
+        `Cleaning complete. Blank rows, completely empty columns, exact duplicate rows, and surrounding text whitespace were cleaned. Email values were normalized to lowercase; malformed emails were not automatically guessed or changed.`;
 
 
       fileInfo.textContent =
@@ -1927,27 +2494,8 @@
     }
 
 
-    function buildSafeName(
-      base,
-      extension
-    ) {
-
-      const withoutExt =
-        base.replace(
-          /\.[^.]+$/,
-          ""
-        );
-
-
-      return (
-        `${withoutExt}_cleaned.${extension}`
-      );
-
-    }
-
-
-    function downloadWorkbook(
-      csvOnly
+    function downloadCleanedFile(
+      type
     ) {
 
       if (
@@ -1977,14 +2525,25 @@
       );
 
 
-      if (csvOnly) {
+      const safeBase =
+        currentFileName
+          .replace(
+            /\.[^/.]+$/,
+            ""
+          )
+          .replace(
+            /[\\/:*?"<>|]+/g,
+            "_"
+          );
+
+
+      if (
+        type === "csv"
+      ) {
 
         XLSX.writeFile(
           workbook,
-          buildSafeName(
-            currentFileName,
-            "csv"
-          ),
+          `${safeBase}_cleaned.csv`,
           {
             bookType: "csv"
           }
@@ -1995,10 +2554,7 @@
 
         XLSX.writeFile(
           workbook,
-          buildSafeName(
-            currentFileName,
-            "xlsx"
-          ),
+          `${safeBase}_cleaned.xlsx`,
           {
             bookType: "xlsx"
           }
@@ -2011,25 +2567,23 @@
 
     function resetApp() {
 
-      fileInput.value = "";
+      fileInput.value =
+        "";
 
 
       originalRows = [];
 
       cleanedRows = null;
 
-      currentFileName = "";
+      currentFileName =
+        "";
 
-      currentSheetName = "";
+      currentSheetName =
+        "";
 
 
       fileInfo.textContent =
         "";
-
-
-      notice.classList.add(
-        "hidden"
-      );
 
 
       actionBar.classList.add(
@@ -2042,7 +2596,7 @@
       );
 
 
-      issueSection.classList.add(
+      checksSection.classList.add(
         "hidden"
       );
 
@@ -2057,13 +2611,8 @@
       );
 
 
-      emptyState.classList.remove(
-        "hidden"
-      );
-
-
-      emptyState.textContent =
-        "Upload a spreadsheet to begin.";
+      notice.className =
+        "notice hidden";
 
 
       downloadBtn.disabled =
@@ -2074,8 +2623,55 @@
         true;
 
 
+      cleanBtn.disabled =
+        false;
+
+
       previewTable.innerHTML =
         "";
+
+
+      emptyState.classList.remove(
+        "hidden"
+      );
+
+
+      emptyState.innerHTML = `
+        <div class="big">📁</div>
+        <strong>Upload a spreadsheet to begin</strong>
+        <div style="margin-top:6px;">
+          Your file will be analyzed directly in your browser.
+        </div>
+      `;
+
+    }
+
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(value)
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
 
     }
 
