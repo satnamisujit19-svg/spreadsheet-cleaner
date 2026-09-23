@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Clean My Spreadsheet</title>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -176,7 +177,7 @@
 
     .btn-primary {
       background: #172033;
-      color: white;
+      color: #fff;
     }
 
     .btn-secondary {
@@ -455,45 +456,73 @@
 </head>
 
 <body>
+
   <div class="container">
 
     <div class="hero">
+
       <div class="brand">
+
         <div class="logo-wrap">
           <h1>Clean My Spreadsheet</h1>
-          <p>Clean, validate and standardize messy spreadsheet data in seconds.</p>
+
+          <p>
+            Clean, validate and standardize messy spreadsheet data in seconds.
+          </p>
         </div>
 
         <div class="step-badge">
-          Step 30 • Column Tools
+          Step 31 • Value Tools
         </div>
+
       </div>
 
       <div class="chips">
+
         <div class="chip">✓ Email Validation</div>
+
         <div class="chip">✓ Phone Standardization</div>
+
         <div class="chip">✓ Date Detection</div>
+
         <div class="chip">✓ Date Standardization</div>
+
         <div class="chip">✓ Header Cleanup</div>
+
+        <div class="chip">✓ Category Standardization</div>
+
         <div class="chip">✓ Duplicate Detection</div>
+
         <div class="chip">✓ Empty Column Detection</div>
+
         <div class="chip">✓ XLSX + CSV Export</div>
+
       </div>
+
     </div>
 
     <div class="main-card">
 
       <div class="upload-section">
-        <div class="upload-box">
-          <div class="upload-icon">📊</div>
 
-          <h2>Upload your spreadsheet</h2>
+        <div class="upload-box">
+
+          <div class="upload-icon">
+            📊
+          </div>
+
+          <h2>
+            Upload your spreadsheet
+          </h2>
 
           <p>
             Supported formats: XLSX, XLS and CSV
           </p>
 
-          <label class="upload-label" for="fileInput">
+          <label
+            class="upload-label"
+            for="fileInput"
+          >
             Choose Spreadsheet
           </label>
 
@@ -507,7 +536,9 @@
             id="fileInfo"
             class="file-info"
           ></div>
+
         </div>
+
       </div>
 
       <div class="action-bar">
@@ -550,268 +581,493 @@
         class="notice"
       ></div>
 
-      <!-- Spreadsheet Stats -->
+      <!-- STATS -->
+
       <div class="section">
 
         <div class="section-title">
-          <h3>Spreadsheet Stats</h3>
+
+          <h3>
+            Spreadsheet Stats
+          </h3>
+
           <p>
             Original spreadsheet analysis before cleaning.
           </p>
+
         </div>
 
         <div class="stats-grid">
 
           <div class="stat-card">
-            <div class="stat-label">Total Rows</div>
+            <div class="stat-label">
+              Total Rows
+            </div>
+
             <div
               id="totalRows"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Total Columns</div>
+            <div class="stat-label">
+              Total Columns
+            </div>
+
             <div
               id="totalColumns"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Valid Emails</div>
+            <div class="stat-label">
+              Valid Emails
+            </div>
+
             <div
               id="validEmails"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Invalid Emails</div>
+            <div class="stat-label">
+              Invalid Emails
+            </div>
+
             <div
               id="invalidEmails"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Valid Phones</div>
+            <div class="stat-label">
+              Valid Phones
+            </div>
+
             <div
               id="validPhones"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Invalid Phones</div>
+            <div class="stat-label">
+              Invalid Phones
+            </div>
+
             <div
               id="invalidPhones"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Valid Dates</div>
+            <div class="stat-label">
+              Valid Dates
+            </div>
+
             <div
               id="validDates"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Invalid Dates</div>
+            <div class="stat-label">
+              Invalid Dates
+            </div>
+
             <div
               id="invalidDates"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Ambiguous Dates</div>
+            <div class="stat-label">
+              Ambiguous Dates
+            </div>
+
             <div
               id="ambiguousDates"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Duplicate Headers</div>
+            <div class="stat-label">
+              Duplicate Headers
+            </div>
+
             <div
               id="duplicateHeaders"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Blank Headers</div>
+            <div class="stat-label">
+              Blank Headers
+            </div>
+
             <div
               id="blankHeaders"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Empty Email Cells</div>
+            <div class="stat-label">
+              Category Changes
+            </div>
+
+            <div
+              id="categoryChanges"
+              class="stat-value"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">
+              Empty Email Cells
+            </div>
+
             <div
               id="emptyEmails"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-label">Empty Phone Cells</div>
+            <div class="stat-label">
+              Empty Phone Cells
+            </div>
+
             <div
               id="emptyPhones"
               class="stat-value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
         </div>
+
       </div>
 
-      <!-- Data Quality -->
+      <!-- QUALITY -->
+
       <div class="section">
 
         <div class="section-title">
-          <h3>Data Quality Checks</h3>
+
+          <h3>
+            Data Quality Checks
+          </h3>
+
           <p>
             Potential data problems detected in the original spreadsheet.
           </p>
+
         </div>
 
         <div class="quality-grid">
 
           <div class="quality-item">
-            <div class="label">Invalid Emails</div>
+            <div class="label">
+              Invalid Emails
+            </div>
+
             <div
               id="qualityInvalidEmails"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Valid Phones</div>
+            <div class="label">
+              Valid Phones
+            </div>
+
             <div
               id="qualityValidPhones"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Invalid Phones</div>
+            <div class="label">
+              Invalid Phones
+            </div>
+
             <div
               id="qualityInvalidPhones"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Valid Dates</div>
+            <div class="label">
+              Valid Dates
+            </div>
+
             <div
               id="qualityValidDates"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Invalid Dates</div>
+            <div class="label">
+              Invalid Dates
+            </div>
+
             <div
               id="qualityInvalidDates"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Ambiguous Dates</div>
+            <div class="label">
+              Ambiguous Dates
+            </div>
+
             <div
               id="qualityAmbiguousDates"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Duplicate Headers</div>
+            <div class="label">
+              Category Changes
+            </div>
+
+            <div
+              id="qualityCategoryChanges"
+              class="value"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">
+              Duplicate Headers
+            </div>
+
             <div
               id="qualityDuplicateHeaders"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Blank Headers</div>
+            <div class="label">
+              Blank Headers
+            </div>
+
             <div
               id="qualityBlankHeaders"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Duplicate Rows</div>
+            <div class="label">
+              Duplicate Rows
+            </div>
+
             <div
               id="qualityDuplicateRows"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Empty Rows</div>
+            <div class="label">
+              Empty Rows
+            </div>
+
             <div
               id="qualityEmptyRows"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Empty Columns</div>
+            <div class="label">
+              Empty Columns
+            </div>
+
             <div
               id="qualityEmptyColumns"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Whitespace Values</div>
+            <div class="label">
+              Whitespace Values
+            </div>
+
             <div
               id="qualityWhitespace"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Email Column</div>
+            <div class="label">
+              Email Column
+            </div>
+
             <div
               id="qualityEmailColumn"
               class="value"
-            >Not detected</div>
+            >
+              Not detected
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Phone Column</div>
+            <div class="label">
+              Phone Column
+            </div>
+
             <div
               id="qualityPhoneColumn"
               class="value"
-            >Not detected</div>
+            >
+              Not detected
+            </div>
           </div>
 
           <div class="quality-item">
-            <div class="label">Date Column</div>
+            <div class="label">
+              Date Column
+            </div>
+
             <div
               id="qualityDateColumn"
               class="value"
-            >Not detected</div>
+            >
+              Not detected
+            </div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">
+              Gender Column
+            </div>
+
+            <div
+              id="qualityGenderColumn"
+              class="value"
+            >
+              Not detected
+            </div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">
+              Consent Column
+            </div>
+
+            <div
+              id="qualityConsentColumn"
+              class="value"
+            >
+              Not detected
+            </div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">
+              Status Column
+            </div>
+
+            <div
+              id="qualityStatusColumn"
+              class="value"
+            >
+              Not detected
+            </div>
           </div>
 
         </div>
+
       </div>
 
-      <!-- Validation Details -->
+      <!-- VALIDATION -->
+
       <div class="section">
 
         <div class="section-title">
-          <h3>Validation Details</h3>
+
+          <h3>
+            Validation Details
+          </h3>
+
           <p>
             Columns identified automatically from your spreadsheet headers.
           </p>
+
         </div>
 
         <div class="details-box">
@@ -857,11 +1113,63 @@
 
           <div class="detail-row">
             <div class="detail-label">
+              Detected Gender Column
+            </div>
+
+            <div
+              id="detailGenderColumn"
+              class="detail-value"
+            >
+              Not detected
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              Detected Consent Column
+            </div>
+
+            <div
+              id="detailConsentColumn"
+              class="detail-value"
+            >
+              Not detected
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              Detected Status Column
+            </div>
+
+            <div
+              id="detailStatusColumn"
+              class="detail-value"
+            >
+              Not detected
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
               Date Output Format
             </div>
 
             <div class="detail-value">
               DD-MM-YYYY
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">
+              Category Standardization
+            </div>
+
+            <div
+              id="detailCategoryStandardization"
+              class="detail-value"
+            >
+              Ready
             </div>
           </div>
 
@@ -892,96 +1200,162 @@
           </div>
 
         </div>
+
       </div>
 
-      <!-- Cleaning Summary -->
+      <!-- SUMMARY -->
+
       <div class="section">
 
         <div class="section-title">
-          <h3>Cleaning Summary</h3>
+
+          <h3>
+            Cleaning Summary
+          </h3>
+
           <p>
             Changes applied when you clean the spreadsheet.
           </p>
+
         </div>
 
         <div class="summary-grid">
 
           <div class="summary-item">
-            <div class="label">Blank Rows Removed</div>
+            <div class="label">
+              Blank Rows Removed
+            </div>
+
             <div
               id="summaryBlankRows"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Empty Columns Removed</div>
+            <div class="label">
+              Empty Columns Removed
+            </div>
+
             <div
               id="summaryEmptyColumns"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Duplicate Rows Removed</div>
+            <div class="label">
+              Duplicate Rows Removed
+            </div>
+
             <div
               id="summaryDuplicates"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Phone Values Standardized</div>
+            <div class="label">
+              Phone Values Standardized
+            </div>
+
             <div
               id="summaryPhones"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Date Values Standardized</div>
+            <div class="label">
+              Date Values Standardized
+            </div>
+
             <div
               id="summaryDates"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Emails Normalized</div>
+            <div class="label">
+              Emails Normalized
+            </div>
+
             <div
               id="summaryEmails"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Headers Cleaned</div>
+            <div class="label">
+              Headers Cleaned
+            </div>
+
             <div
               id="summaryHeaders"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
           <div class="summary-item">
-            <div class="label">Rows After Cleaning</div>
+            <div class="label">
+              Category Values Standardized
+            </div>
+
+            <div
+              id="summaryCategories"
+              class="value"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <div class="label">
+              Rows After Cleaning
+            </div>
+
             <div
               id="summaryRowsAfter"
               class="value"
-            >0</div>
+            >
+              0
+            </div>
           </div>
 
         </div>
+
       </div>
 
-      <!-- Preview -->
+      <!-- PREVIEW -->
+
       <div class="section">
 
         <div class="section-title">
-          <h3>Spreadsheet Preview</h3>
+
+          <h3>
+            Spreadsheet Preview
+          </h3>
 
           <p id="previewDescription">
             Upload a spreadsheet to preview your data.
           </p>
+
         </div>
 
         <div class="preview-wrap">
@@ -997,18 +1371,27 @@
             id="previewTable"
             class="hidden"
           >
-            <thead id="previewHead"></thead>
-            <tbody id="previewBody"></tbody>
+
+            <thead
+              id="previewHead"
+            ></thead>
+
+            <tbody
+              id="previewBody"
+            ></tbody>
+
           </table>
 
         </div>
+
       </div>
 
     </div>
 
     <div class="footer">
-      Clean My Spreadsheet • Step 30
+      Clean My Spreadsheet • Step 31
     </div>
+
   </div>
 
   <script>
@@ -1059,13 +1442,22 @@
       return String(value ?? "")
         .trim()
         .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
+        .replace(
+          /[^a-z0-9]/g,
+          ""
+        );
     }
 
     function cleanHeaderText(value) {
       return String(value ?? "")
-        .replace(/[\r\n\t]+/g, " ")
-        .replace(/\s+/g, " ")
+        .replace(
+          /[\r\n\t]+/g,
+          " "
+        )
+        .replace(
+          /\s+/g,
+          " "
+        )
         .trim();
     }
 
@@ -1077,10 +1469,16 @@
         return "";
       }
 
-      if (typeof value === "string") {
+      if (
+        typeof value ===
+        "string"
+      ) {
         return value
           .trim()
-          .replace(/\s+/g, " ")
+          .replace(
+            /\s+/g,
+            " "
+          )
           .toLowerCase();
       }
 
@@ -1110,7 +1508,9 @@
       return normalized;
     }
 
-    function countDuplicateRows(rows) {
+    function countDuplicateRows(
+      rows
+    ) {
       if (
         !rows ||
         rows.length <= 1
@@ -1322,6 +1722,7 @@
         );
 
       const exactSets = {
+
         email: [
           "email",
           "emailaddress",
@@ -1353,7 +1754,29 @@
           "createddate",
           "updateddate",
           "registrationdate"
+        ],
+
+        gender: [
+          "gender",
+          "sex"
+        ],
+
+        consent: [
+          "consent",
+          "permission",
+          "marketingconsent",
+          "optin",
+          "optinconsent"
+        ],
+
+        status: [
+          "status",
+          "accountstatus",
+          "accountstate",
+          "customerstatus",
+          "userstatus"
         ]
+
       };
 
       const exactIndex =
@@ -1371,6 +1794,7 @@
       }
 
       const fallbackWords = {
+
         email: [
           "email"
         ],
@@ -1389,7 +1813,24 @@
           "join",
           "created",
           "updated"
+        ],
+
+        gender: [
+          "gender",
+          "sex"
+        ],
+
+        consent: [
+          "consent",
+          "permission",
+          "optin"
+        ],
+
+        status: [
+          "status",
+          "state"
         ]
+
       };
 
       return normalized.findIndex(
@@ -1580,10 +2021,10 @@
       if (
         day < 1 ||
         day >
-          daysInMonth(
-            year,
-            month
-          )
+        daysInMonth(
+          year,
+          month
+        )
       ) {
         return false;
       }
@@ -1635,6 +2076,7 @@
         );
 
       if (match) {
+
         const year =
           Number(
             match[1]
@@ -1719,8 +2161,10 @@
         ddmmValid &&
         mmddValid
       ) {
+
         if (
-          first === second
+          first ===
+          second
         ) {
           return {
             status: "valid",
@@ -1770,6 +2214,131 @@
       };
     }
 
+    function standardizeGender(
+      value
+    ) {
+      const key =
+        String(
+          value ?? ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const map = {
+        "m": "Male",
+        "male": "Male",
+        "f": "Female",
+        "female": "Female",
+        "o": "Other",
+        "other": "Other"
+      };
+
+      return Object.prototype.hasOwnProperty.call(
+        map,
+        key
+      )
+        ? map[key]
+        : String(
+            value ?? ""
+          ).trim();
+    }
+
+    function standardizeConsent(
+      value
+    ) {
+      const key =
+        String(
+          value ?? ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const map = {
+        "y": "Yes",
+        "yes": "Yes",
+        "n": "No",
+        "no": "No"
+      };
+
+      return Object.prototype.hasOwnProperty.call(
+        map,
+        key
+      )
+        ? map[key]
+        : String(
+            value ?? ""
+          ).trim();
+    }
+
+    function standardizeStatus(
+      value
+    ) {
+      const key =
+        String(
+          value ?? ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const map = {
+        "active": "Active",
+        "inactive": "Inactive"
+      };
+
+      return Object.prototype.hasOwnProperty.call(
+        map,
+        key
+      )
+        ? map[key]
+        : String(
+            value ?? ""
+          ).trim();
+    }
+
+    function countCategoryChanges(
+      rows,
+      columnIndex,
+      standardizer
+    ) {
+      if (
+        columnIndex === -1
+      ) {
+        return 0;
+      }
+
+      let count = 0;
+
+      for (
+        let i = 1;
+        i < rows.length;
+        i++
+      ) {
+        const original =
+          String(
+            rows[i][columnIndex] ??
+              ""
+          ).trim();
+
+        if (!original) {
+          continue;
+        }
+
+        const standardized =
+          standardizer(
+            original
+          );
+
+        if (
+          standardized !==
+          original
+        ) {
+          count++;
+        }
+      }
+
+      return count;
+    }
+
     function countWhitespaceValues(
       rows
     ) {
@@ -1800,8 +2369,7 @@
       rows,
       columnCount
     ) {
-      const emptyIndexes =
-        [];
+      const emptyIndexes = [];
 
       for (
         let col = 0;
@@ -1864,6 +2432,24 @@
           "date"
         );
 
+      const genderColumnIndex =
+        findColumn(
+          headers,
+          "gender"
+        );
+
+      const consentColumnIndex =
+        findColumn(
+          headers,
+          "consent"
+        );
+
+      const statusColumnIndex =
+        findColumn(
+          headers,
+          "status"
+        );
+
       let validEmails = 0;
       let invalidEmails = 0;
       let emptyEmails = 0;
@@ -1875,11 +2461,11 @@
       let validDates = 0;
       let invalidDates = 0;
       let ambiguousDates = 0;
-      let emptyDates = 0;
 
       for (
         const row of dataRows
       ) {
+
         if (
           emailColumnIndex !== -1
         ) {
@@ -1941,11 +2527,6 @@
 
           if (
             result.status ===
-            "empty"
-          ) {
-            emptyDates++;
-          } else if (
-            result.status ===
             "valid"
           ) {
             validDates++;
@@ -1954,16 +2535,46 @@
             "ambiguous"
           ) {
             ambiguousDates++;
-          } else {
+          } else if (
+            result.status ===
+            "invalid"
+          ) {
             invalidDates++;
           }
         }
+
       }
 
       const headerAnalysis =
         analyzeHeaders(
           headers
         );
+
+      const genderChanges =
+        countCategoryChanges(
+          rows,
+          genderColumnIndex,
+          standardizeGender
+        );
+
+      const consentChanges =
+        countCategoryChanges(
+          rows,
+          consentColumnIndex,
+          standardizeConsent
+        );
+
+      const statusChanges =
+        countCategoryChanges(
+          rows,
+          statusColumnIndex,
+          standardizeStatus
+        );
+
+      const categoryChanges =
+        genderChanges +
+        consentChanges +
+        statusChanges;
 
       const emptyRows =
         dataRows.filter(
@@ -1977,6 +2588,7 @@
         );
 
       return {
+
         totalRows:
           dataRows.length,
 
@@ -1986,6 +2598,10 @@
         emailColumnIndex,
         phoneColumnIndex,
         dateColumnIndex,
+
+        genderColumnIndex,
+        consentColumnIndex,
+        statusColumnIndex,
 
         emailColumnName:
           emailColumnIndex !== -1
@@ -2008,6 +2624,27 @@
               ]
             : "Not detected",
 
+        genderColumnName:
+          genderColumnIndex !== -1
+            ? headers[
+                genderColumnIndex
+              ]
+            : "Not detected",
+
+        consentColumnName:
+          consentColumnIndex !== -1
+            ? headers[
+                consentColumnIndex
+              ]
+            : "Not detected",
+
+        statusColumnName:
+          statusColumnIndex !== -1
+            ? headers[
+                statusColumnIndex
+              ]
+            : "Not detected",
+
         validEmails,
         invalidEmails,
         emptyEmails,
@@ -2019,13 +2656,18 @@
         validDates,
         invalidDates,
         ambiguousDates,
-        emptyDates,
 
         duplicateHeaders:
           headerAnalysis.duplicateHeaders,
 
         blankHeaders:
           headerAnalysis.blankHeaders,
+
+        categoryChanges,
+
+        genderChanges,
+        consentChanges,
+        statusChanges,
 
         emptyRows,
 
@@ -2121,6 +2763,11 @@
       );
 
       setText(
+        "categoryChanges",
+        analysis.categoryChanges
+      );
+
+      setText(
         "qualityInvalidEmails",
         analysis.invalidEmails
       );
@@ -2148,6 +2795,11 @@
       setText(
         "qualityAmbiguousDates",
         analysis.ambiguousDates
+      );
+
+      setText(
+        "qualityCategoryChanges",
+        analysis.categoryChanges
       );
 
       setText(
@@ -2196,6 +2848,21 @@
       );
 
       setText(
+        "qualityGenderColumn",
+        analysis.genderColumnName
+      );
+
+      setText(
+        "qualityConsentColumn",
+        analysis.consentColumnName
+      );
+
+      setText(
+        "qualityStatusColumn",
+        analysis.statusColumnName
+      );
+
+      setText(
         "detailEmailColumn",
         analysis.emailColumnName
       );
@@ -2208,6 +2875,28 @@
       setText(
         "detailDateColumn",
         analysis.dateColumnName
+      );
+
+      setText(
+        "detailGenderColumn",
+        analysis.genderColumnName
+      );
+
+      setText(
+        "detailConsentColumn",
+        analysis.consentColumnName
+      );
+
+      setText(
+        "detailStatusColumn",
+        analysis.statusColumnName
+      );
+
+      setText(
+        "detailCategoryStandardization",
+        analysis.categoryChanges > 0
+          ? `${analysis.categoryChanges} value(s) can be standardized`
+          : "No supported category changes detected"
       );
 
       setText(
@@ -2261,29 +2950,30 @@
       );
 
       setText(
+        "summaryCategories",
+        0
+      );
+
+      setText(
         "summaryRowsAfter",
         0
       );
 
       let message =
-        "Column analysis complete.";
+        "Spreadsheet analysis complete.";
 
       if (
-        analysis.duplicateHeaders > 0 ||
-        analysis.blankHeaders > 0
+        analysis.categoryChanges > 0
       ) {
         message +=
-          ` Found ${analysis.duplicateHeaders} duplicate header(s) and ${analysis.blankHeaders} blank header(s). They will be safely handled during cleaning.`;
-      } else {
-        message +=
-          " No duplicate or blank headers were detected.";
+          ` Found ${analysis.categoryChanges} category value(s) that can be standardized.`;
       }
 
       if (
         analysis.duplicateRows > 0
       ) {
         message +=
-          ` ${analysis.duplicateRows} duplicate row(s) were detected.`;
+          ` Found ${analysis.duplicateRows} duplicate row(s).`;
       }
 
       showNotice(
@@ -2349,6 +3039,7 @@
 
       headerRow.forEach(
         (header) => {
+
           const th =
             document.createElement(
               "th"
@@ -2367,8 +3058,11 @@
         headerTr
       );
 
-      rows.slice(1).forEach(
+      rows.slice(
+        1
+      ).forEach(
         (row) => {
+
           const tr =
             document.createElement(
               "tr"
@@ -2376,6 +3070,7 @@
 
           headerRow.forEach(
             (_, index) => {
+
               const td =
                 document.createElement(
                   "td"
@@ -2443,7 +3138,7 @@
       const originalHeaders =
         rows[0] || [];
 
-      // Remove completely blank rows.
+      // 1. Remove blank rows.
       const rowsBeforeBlankRemoval =
         rows.length;
 
@@ -2463,7 +3158,7 @@
         rowsBeforeBlankRemoval -
         rows.length;
 
-      // Remove completely empty columns.
+      // 2. Remove empty columns.
       const columnsToRemove =
         new Set(
           originalAnalysis.emptyColumnIndexes
@@ -2480,7 +3175,7 @@
             )
         );
 
-      // Clean headers.
+      // 3. Clean headers.
       const headerResult =
         buildCleanHeaders(
           rows[0] || []
@@ -2492,7 +3187,7 @@
       const headersCleaned =
         headerResult.cleanedCount;
 
-      // Trim all text values.
+      // 4. Trim all text values.
       rows =
         rows.map(
           (row) =>
@@ -2514,7 +3209,10 @@
       let dateStandardized =
         0;
 
-      // Detect columns after cleaning headers.
+      let categoryValuesStandardized =
+        0;
+
+      // 5. Detect columns again.
       const cleanedHeaders =
         rows[0] || [];
 
@@ -2536,16 +3234,36 @@
           "date"
         );
 
-      // Normalize values.
+      const genderColumnIndex =
+        findColumn(
+          cleanedHeaders,
+          "gender"
+        );
+
+      const consentColumnIndex =
+        findColumn(
+          cleanedHeaders,
+          "consent"
+        );
+
+      const statusColumnIndex =
+        findColumn(
+          cleanedHeaders,
+          "status"
+        );
+
+      // 6. Standardize values.
       for (
         let rowIndex = 1;
         rowIndex < rows.length;
         rowIndex++
       ) {
+
         const row =
           rows[rowIndex];
 
-        // Email
+        // EMAIL
+
         if (
           emailColumnIndex !== -1
         ) {
@@ -2579,7 +3297,8 @@
           }
         }
 
-        // Phone
+        // PHONE
+
         if (
           phoneColumnIndex !== -1
         ) {
@@ -2614,7 +3333,8 @@
           }
         }
 
-        // Date
+        // DATE
+
         if (
           dateColumnIndex !== -1
         ) {
@@ -2646,16 +3366,118 @@
             ] =
               result.value;
           } else {
-            // Invalid and ambiguous dates remain unchanged.
             row[
               dateColumnIndex
             ] =
               originalValue;
           }
         }
+
+        // GENDER
+
+        if (
+          genderColumnIndex !== -1
+        ) {
+          const originalValue =
+            String(
+              row[
+                genderColumnIndex
+              ] ?? ""
+            ).trim();
+
+          if (
+            originalValue
+          ) {
+            const standardized =
+              standardizeGender(
+                originalValue
+              );
+
+            if (
+              standardized !==
+              originalValue
+            ) {
+              categoryValuesStandardized++;
+            }
+
+            row[
+              genderColumnIndex
+            ] =
+              standardized;
+          }
+        }
+
+        // CONSENT
+
+        if (
+          consentColumnIndex !== -1
+        ) {
+          const originalValue =
+            String(
+              row[
+                consentColumnIndex
+              ] ?? ""
+            ).trim();
+
+          if (
+            originalValue
+          ) {
+            const standardized =
+              standardizeConsent(
+                originalValue
+              );
+
+            if (
+              standardized !==
+              originalValue
+            ) {
+              categoryValuesStandardized++;
+            }
+
+            row[
+              consentColumnIndex
+            ] =
+              standardized;
+          }
+        }
+
+        // STATUS
+
+        if (
+          statusColumnIndex !== -1
+        ) {
+          const originalValue =
+            String(
+              row[
+                statusColumnIndex
+              ] ?? ""
+            ).trim();
+
+          if (
+            originalValue
+          ) {
+            const standardized =
+              standardizeStatus(
+                originalValue
+              );
+
+            if (
+              standardized !==
+              originalValue
+            ) {
+              categoryValuesStandardized++;
+            }
+
+            row[
+              statusColumnIndex
+            ] =
+              standardized;
+          }
+        }
+
       }
 
-      // Remove duplicates using normalized comparison.
+      // 7. Remove duplicate rows after normalization.
       const seen =
         new Set();
 
@@ -2675,6 +3497,7 @@
         i < rows.length;
         i++
       ) {
+
         const comparableRow =
           getComparableRow(
             rows[i],
@@ -2687,11 +3510,15 @@
           );
 
         if (
-          seen.has(key)
+          seen.has(
+            key
+          )
         ) {
           duplicateRowsRemoved++;
         } else {
-          seen.add(key);
+          seen.add(
+            key
+          );
 
           uniqueDataRows.push(
             rows[i]
@@ -2740,6 +3567,11 @@
       );
 
       setText(
+        "summaryCategories",
+        categoryValuesStandardized
+      );
+
+      setText(
         "summaryRowsAfter",
         cleanedRows.length - 1
       );
@@ -2779,6 +3611,14 @@
       ) {
         successMessage +=
           ` ${dateStandardized} date value(s) standardized.`;
+      }
+
+      if (
+        categoryValuesStandardized >
+        0
+      ) {
+        successMessage +=
+          ` ${categoryValuesStandardized} category value(s) standardized.`;
       }
 
       if (
@@ -2899,12 +3739,14 @@
         "ambiguousDates",
         "duplicateHeaders",
         "blankHeaders",
+        "categoryChanges",
         "qualityInvalidEmails",
         "qualityValidPhones",
         "qualityInvalidPhones",
         "qualityValidDates",
         "qualityInvalidDates",
         "qualityAmbiguousDates",
+        "qualityCategoryChanges",
         "qualityDuplicateHeaders",
         "qualityBlankHeaders",
         "qualityDuplicateRows",
@@ -2918,6 +3760,7 @@
         "summaryDates",
         "summaryEmails",
         "summaryHeaders",
+        "summaryCategories",
         "summaryRowsAfter"
       ].forEach(
         (id) => {
@@ -2944,6 +3787,21 @@
       );
 
       setText(
+        "qualityGenderColumn",
+        "Not detected"
+      );
+
+      setText(
+        "qualityConsentColumn",
+        "Not detected"
+      );
+
+      setText(
+        "qualityStatusColumn",
+        "Not detected"
+      );
+
+      setText(
         "detailEmailColumn",
         "Not detected"
       );
@@ -2956,6 +3814,26 @@
       setText(
         "detailDateColumn",
         "Not detected"
+      );
+
+      setText(
+        "detailGenderColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailConsentColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailStatusColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailCategoryStandardization",
+        "Ready"
       );
 
       setText(
@@ -2992,6 +3870,7 @@
     fileInput.addEventListener(
       "change",
       async function () {
+
         const file =
           this.files[0];
 
@@ -3000,6 +3879,7 @@
         }
 
         try {
+
           const arrayBuffer =
             await file.arrayBuffer();
 
@@ -3095,6 +3975,7 @@
         } catch (
           error
         ) {
+
           console.error(
             error
           );
@@ -3198,5 +4079,6 @@
         );
     }
   </script>
+
 </body>
 </html>
