@@ -322,11 +322,17 @@
 
                 <div class="selection-buttons">
 
-                    <button id="selectAllButton" type="button">
+                    <button
+                        id="selectAllButton"
+                        type="button"
+                    >
                         Select All
                     </button>
 
-                    <button id="clearAllButton" type="button">
+                    <button
+                        id="clearAllButton"
+                        type="button"
+                    >
                         Clear All
                     </button>
 
@@ -394,6 +400,21 @@
 
             </div>
 
+
+            <div class="option">
+
+                <input
+                    type="checkbox"
+                    id="removeEmptyColumns"
+                    checked
+                >
+
+                <label for="removeEmptyColumns">
+                    Remove completely empty columns
+                </label>
+
+            </div>
+
         </div>
 
 
@@ -439,6 +460,11 @@
             <div class="report-item">
                 <span>Names standardized</span>
                 <strong id="namesStandardized">0</strong>
+            </div>
+
+            <div class="report-item">
+                <span>Empty columns removed</span>
+                <strong id="emptyColumnsRemoved">0</strong>
             </div>
 
             <div class="report-item">
@@ -527,540 +553,758 @@
 
 
     const optionIds = [
+
         "removeEmptyRows",
         "removeDuplicates",
         "cleanSpaces",
-        "standardizeNames"
+        "standardizeNames",
+        "removeEmptyColumns"
+
     ];
 
 
     // File picker
 
-    uploadArea.addEventListener("click", function() {
+    uploadArea.addEventListener(
+        "click",
+        function() {
 
-        fileInput.click();
-
-    });
-
-
-    fileInput.addEventListener("change", function() {
-
-        if (fileInput.files.length > 0) {
-
-            selectedFile =
-                fileInput.files[0];
-
-            fileName.textContent =
-                "Selected: " + selectedFile.name;
-
-            status.textContent = "";
+            fileInput.click();
 
         }
+    );
 
-    });
+
+    fileInput.addEventListener(
+        "change",
+        function() {
+
+            if (fileInput.files.length > 0) {
+
+                selectedFile =
+                    fileInput.files[0];
+
+                fileName.textContent =
+                    "Selected: " +
+                    selectedFile.name;
+
+                status.textContent = "";
+
+            }
+
+        }
+    );
 
 
     // Drag and Drop
 
-    uploadArea.addEventListener("dragover", function(event) {
+    uploadArea.addEventListener(
+        "dragover",
+        function(event) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        uploadArea.classList.add("dragover");
-
-    });
-
-
-    uploadArea.addEventListener("dragleave", function() {
-
-        uploadArea.classList.remove("dragover");
-
-    });
-
-
-    uploadArea.addEventListener("drop", function(event) {
-
-        event.preventDefault();
-
-        uploadArea.classList.remove("dragover");
-
-        const files =
-            event.dataTransfer.files;
-
-        if (files.length > 0) {
-
-            selectedFile =
-                files[0];
-
-            fileInput.files =
-                files;
-
-            fileName.textContent =
-                "Selected: " + selectedFile.name;
-
-            status.textContent = "";
+            uploadArea.classList.add(
+                "dragover"
+            );
 
         }
+    );
 
-    });
+
+    uploadArea.addEventListener(
+        "dragleave",
+        function() {
+
+            uploadArea.classList.remove(
+                "dragover"
+            );
+
+        }
+    );
+
+
+    uploadArea.addEventListener(
+        "drop",
+        function(event) {
+
+            event.preventDefault();
+
+            uploadArea.classList.remove(
+                "dragover"
+            );
+
+            const files =
+                event.dataTransfer.files;
+
+            if (files.length > 0) {
+
+                selectedFile =
+                    files[0];
+
+                fileInput.files =
+                    files;
+
+                fileName.textContent =
+                    "Selected: " +
+                    selectedFile.name;
+
+                status.textContent = "";
+
+            }
+
+        }
+    );
 
 
     // Select All
 
-    selectAllButton.addEventListener("click", function() {
+    selectAllButton.addEventListener(
+        "click",
+        function() {
 
-        optionIds.forEach(function(id) {
+            optionIds.forEach(
+                function(id) {
 
-            document.getElementById(id).checked = true;
+                    document.getElementById(
+                        id
+                    ).checked = true;
 
-        });
+                }
+            );
 
-    });
+        }
+    );
 
 
     // Clear All
 
-    clearAllButton.addEventListener("click", function() {
+    clearAllButton.addEventListener(
+        "click",
+        function() {
 
-        optionIds.forEach(function(id) {
+            optionIds.forEach(
+                function(id) {
 
-            document.getElementById(id).checked = false;
+                    document.getElementById(
+                        id
+                    ).checked = false;
 
-        });
+                }
+            );
 
-    });
+        }
+    );
 
 
     // Clean Spreadsheet
 
-    cleanButton.addEventListener("click", async function() {
+    cleanButton.addEventListener(
+        "click",
+        async function() {
 
-        if (!selectedFile) {
-
-            status.textContent =
-                "Please choose a CSV or Excel file first.";
-
-            return;
-
-        }
-
-
-        status.textContent =
-            "Cleaning your spreadsheet...";
-
-
-        try {
-
-            const options = {
-
-                removeEmptyRows:
-                    document.getElementById(
-                        "removeEmptyRows"
-                    ).checked,
-
-                removeDuplicates:
-                    document.getElementById(
-                        "removeDuplicates"
-                    ).checked,
-
-                cleanSpaces:
-                    document.getElementById(
-                        "cleanSpaces"
-                    ).checked,
-
-                standardizeNames:
-                    document.getElementById(
-                        "standardizeNames"
-                    ).checked
-
-            };
-
-
-            const extension =
-                selectedFile.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
-
-
-            let rows = [];
-
-
-            // Read Excel
-
-            if (
-                extension === "xlsx" ||
-                extension === "xls"
-            ) {
-
-                const arrayBuffer =
-                    await selectedFile.arrayBuffer();
-
-                const workbook =
-                    XLSX.read(
-                        arrayBuffer,
-                        {
-                            type: "array"
-                        }
-                    );
-
-                const firstSheetName =
-                    workbook.SheetNames[0];
-
-                const worksheet =
-                    workbook.Sheets[firstSheetName];
-
-                rows =
-                    XLSX.utils.sheet_to_json(
-                        worksheet,
-                        {
-                            header: 1,
-                            defval: ""
-                        }
-                    );
-
-            }
-
-
-            // Read CSV
-
-            else if (extension === "csv") {
-
-                const text =
-                    await selectedFile.text();
-
-                rows =
-                    text
-                        .trim()
-                        .split("\n")
-                        .map(row =>
-                            row.split(",")
-                        );
-
-            }
-
-
-            else {
+            if (!selectedFile) {
 
                 status.textContent =
-                    "Unsupported file format.";
+                    "Please choose a CSV or Excel file first.";
 
                 return;
 
             }
 
 
-            const rowsBefore =
-                rows.length;
+            status.textContent =
+                "Cleaning your spreadsheet...";
 
 
-            let emptyRowsRemoved = 0;
-            let duplicatesRemoved = 0;
-            let spacesCleaned = 0;
-            let namesStandardized = 0;
+            try {
 
+                const options = {
 
-            // Remove empty rows
+                    removeEmptyRows:
+                        document.getElementById(
+                            "removeEmptyRows"
+                        ).checked,
 
-            if (options.removeEmptyRows) {
+                    removeDuplicates:
+                        document.getElementById(
+                            "removeDuplicates"
+                        ).checked,
 
-                const cleanedRows = [];
+                    cleanSpaces:
+                        document.getElementById(
+                            "cleanSpaces"
+                        ).checked,
 
-                for (const row of rows) {
+                    standardizeNames:
+                        document.getElementById(
+                            "standardizeNames"
+                        ).checked,
 
-                    const isEmpty =
-                        row.every(
-                            cell =>
-                                String(cell).trim() === ""
-                        );
-
-                    if (isEmpty) {
-
-                        emptyRowsRemoved++;
-
-                    } else {
-
-                        cleanedRows.push(row);
-
-                    }
-
-                }
-
-                rows = cleanedRows;
-
-            }
-
-
-            // Clean spaces
-
-            if (options.cleanSpaces) {
-
-                rows = rows.map(row => {
-
-                    return row.map(cell => {
-
-                        const original =
-                            String(cell);
-
-                        const cleaned =
-                            original
-                                .trim()
-                                .replace(
-                                    /\s+/g,
-                                    " "
-                                );
-
-                        if (
-                            original !==
-                            cleaned
-                        ) {
-
-                            spacesCleaned++;
-
-                        }
-
-                        return cleaned;
-
-                    });
-
-                });
-
-            }
-
-
-            // Standardize names
-
-            if (
-                options.standardizeNames &&
-                rows.length > 0
-            ) {
-
-                const headers =
-                    rows[0].map(header =>
-                        String(header)
-                            .trim()
-                            .toLowerCase()
-                    );
-
-
-                const nameIndex =
-                    headers.indexOf("name");
-
-
-                if (nameIndex !== -1) {
-
-                    for (
-                        let i = 1;
-                        i < rows.length;
-                        i++
-                    ) {
-
-                        const original =
-                            String(
-                                rows[i][nameIndex] || ""
-                            );
-
-
-                        if (
-                            original.trim() !== ""
-                        ) {
-
-                            const standardized =
-                                standardizeName(
-                                    original
-                                );
-
-
-                            if (
-                                standardized !==
-                                original
-                            ) {
-
-                                namesStandardized++;
-
-                            }
-
-
-                            rows[i][nameIndex] =
-                                standardized;
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-
-            // Remove duplicate rows
-
-            if (options.removeDuplicates) {
-
-                const seen = new Set();
-
-                const uniqueRows = [];
-
-
-                for (const row of rows) {
-
-                    const key =
-                        JSON.stringify(row);
-
-
-                    if (seen.has(key)) {
-
-                        duplicatesRemoved++;
-
-                    } else {
-
-                        seen.add(key);
-
-                        uniqueRows.push(row);
-
-                    }
-
-                }
-
-
-                rows = uniqueRows;
-
-            }
-
-
-            const rowsAfter =
-                rows.length;
-
-
-            // Update report
-
-            document.getElementById(
-                "rowsBefore"
-            ).textContent =
-                rowsBefore;
-
-
-            document.getElementById(
-                "emptyRowsRemoved"
-            ).textContent =
-                emptyRowsRemoved;
-
-
-            document.getElementById(
-                "duplicatesRemoved"
-            ).textContent =
-                duplicatesRemoved;
-
-
-            document.getElementById(
-                "spacesCleaned"
-            ).textContent =
-                spacesCleaned;
-
-
-            document.getElementById(
-                "namesStandardized"
-            ).textContent =
-                namesStandardized;
-
-
-            document.getElementById(
-                "rowsAfter"
-            ).textContent =
-                rowsAfter;
-
-
-            report.style.display =
-                "block";
-
-
-            // Preview
-
-            showPreview(rows);
-
-
-            // Filename
-
-            const nameWithoutExtension =
-                selectedFile.name.replace(
-                    /\.[^/.]+$/,
-                    ""
-                );
-
-
-            const cleanBaseName =
-                nameWithoutExtension.replace(
-                    /(-cleaned)+$/i,
-                    ""
-                );
-
-
-            const cleanedFileName =
-                cleanBaseName +
-                "-cleaned." +
-                extension;
-
-
-            // Create download file
-
-            const blob =
-                createFileBlob(
-                    rows,
-                    extension
-                );
-
-
-            const url =
-                URL.createObjectURL(blob);
-
-
-            downloadButton.onclick =
-                function() {
-
-                    const link =
-                        document.createElement(
-                            "a"
-                        );
-
-                    link.href = url;
-
-                    link.download =
-                        cleanedFileName;
-
-                    link.click();
+                    removeEmptyColumns:
+                        document.getElementById(
+                            "removeEmptyColumns"
+                        ).checked
 
                 };
 
 
-            downloadButton.textContent =
-                "⬇️ Download " +
-                cleanedFileName;
+                const extension =
+                    selectedFile.name
+                        .split(".")
+                        .pop()
+                        .toLowerCase();
 
 
-            downloadButton.style.display =
-                "block";
+                let rows = [];
 
 
-            resetButton.style.display =
-                "block";
+                // Read Excel
+
+                if (
+                    extension === "xlsx" ||
+                    extension === "xls"
+                ) {
+
+                    const arrayBuffer =
+                        await selectedFile.arrayBuffer();
 
 
-            status.textContent =
-                "✅ Spreadsheet cleaned successfully!";
+                    const workbook =
+                        XLSX.read(
+                            arrayBuffer,
+                            {
+                                type: "array"
+                            }
+                        );
+
+
+                    const firstSheetName =
+                        workbook.SheetNames[0];
+
+
+                    const worksheet =
+                        workbook.Sheets[
+                            firstSheetName
+                        ];
+
+
+                    rows =
+                        XLSX.utils.sheet_to_json(
+                            worksheet,
+                            {
+                                header: 1,
+                                defval: ""
+                            }
+                        );
+
+                }
+
+
+                // Read CSV
+
+                else if (
+                    extension === "csv"
+                ) {
+
+                    const text =
+                        await selectedFile.text();
+
+
+                    rows =
+                        text
+                            .trim()
+                            .split("\n")
+                            .map(row =>
+                                row.split(",")
+                            );
+
+                }
+
+
+                else {
+
+                    status.textContent =
+                        "Unsupported file format.";
+
+                    return;
+
+                }
+
+
+                const rowsBefore =
+                    rows.length;
+
+
+                let emptyRowsRemoved = 0;
+                let duplicatesRemoved = 0;
+                let spacesCleaned = 0;
+                let namesStandardized = 0;
+                let emptyColumnsRemoved = 0;
+
+
+                // Remove empty rows
+
+                if (
+                    options.removeEmptyRows
+                ) {
+
+                    const cleanedRows = [];
+
+
+                    for (const row of rows) {
+
+                        const isEmpty =
+                            row.every(
+                                cell =>
+                                    String(cell)
+                                        .trim() === ""
+                            );
+
+
+                        if (isEmpty) {
+
+                            emptyRowsRemoved++;
+
+                        }
+
+                        else {
+
+                            cleanedRows.push(
+                                row
+                            );
+
+                        }
+
+                    }
+
+
+                    rows =
+                        cleanedRows;
+
+                }
+
+
+                // Clean spaces
+
+                if (
+                    options.cleanSpaces
+                ) {
+
+                    rows =
+                        rows.map(
+                            function(row) {
+
+                                return row.map(
+                                    function(cell) {
+
+                                        const original =
+                                            String(cell);
+
+
+                                        const cleaned =
+                                            original
+                                                .trim()
+                                                .replace(
+                                                    /\s+/g,
+                                                    " "
+                                                );
+
+
+                                        if (
+                                            original !==
+                                            cleaned
+                                        ) {
+
+                                            spacesCleaned++;
+
+                                        }
+
+
+                                        return cleaned;
+
+                                    }
+                                );
+
+                            }
+                        );
+
+                }
+
+
+                // Standardize names
+
+                if (
+                    options.standardizeNames &&
+                    rows.length > 0
+                ) {
+
+                    const headers =
+                        rows[0].map(
+                            function(header) {
+
+                                return String(header)
+                                    .trim()
+                                    .toLowerCase();
+
+                            }
+                        );
+
+
+                    const nameIndex =
+                        headers.indexOf("name");
+
+
+                    if (
+                        nameIndex !== -1
+                    ) {
+
+                        for (
+                            let i = 1;
+                            i < rows.length;
+                            i++
+                        ) {
+
+                            const original =
+                                String(
+                                    rows[i][nameIndex] ||
+                                    ""
+                                );
+
+
+                            if (
+                                original.trim() !== ""
+                            ) {
+
+                                const standardized =
+                                    standardizeName(
+                                        original
+                                    );
+
+
+                                if (
+                                    standardized !==
+                                    original
+                                ) {
+
+                                    namesStandardized++;
+
+                                }
+
+
+                                rows[i][nameIndex] =
+                                    standardized;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+                // Remove duplicate rows
+
+                if (
+                    options.removeDuplicates
+                ) {
+
+                    const seen =
+                        new Set();
+
+
+                    const uniqueRows =
+                        [];
+
+
+                    for (
+                        const row of rows
+                    ) {
+
+                        const key =
+                            JSON.stringify(row);
+
+
+                        if (
+                            seen.has(key)
+                        ) {
+
+                            duplicatesRemoved++;
+
+                        }
+
+                        else {
+
+                            seen.add(key);
+
+                            uniqueRows.push(
+                                row
+                            );
+
+                        }
+
+                    }
+
+
+                    rows =
+                        uniqueRows;
+
+                }
+
+
+                // Remove completely empty columns
+
+                if (
+                    options.removeEmptyColumns &&
+                    rows.length > 0
+                ) {
+
+                    let maxColumns = 0;
+
+
+                    rows.forEach(
+                        function(row) {
+
+                            if (
+                                row.length >
+                                maxColumns
+                            ) {
+
+                                maxColumns =
+                                    row.length;
+
+                            }
+
+                        }
+                    );
+
+
+                    const columnsToKeep = [];
+
+
+                    for (
+                        let columnIndex = 0;
+                        columnIndex < maxColumns;
+                        columnIndex++
+                    ) {
+
+                        let isEmpty = true;
+
+
+                        for (
+                            let rowIndex = 0;
+                            rowIndex < rows.length;
+                            rowIndex++
+                        ) {
+
+                            const cell =
+                                rows[rowIndex][
+                                    columnIndex
+                                ];
+
+
+                            if (
+                                String(
+                                    cell ?? ""
+                                ).trim() !== ""
+                            ) {
+
+                                isEmpty = false;
+
+                                break;
+
+                            }
+
+                        }
+
+
+                        if (isEmpty) {
+
+                            emptyColumnsRemoved++;
+
+                        }
+
+                        else {
+
+                            columnsToKeep.push(
+                                columnIndex
+                            );
+
+                        }
+
+                    }
+
+
+                    rows =
+                        rows.map(
+                            function(row) {
+
+                                return columnsToKeep.map(
+                                    function(
+                                        columnIndex
+                                    ) {
+
+                                        return (
+                                            row[
+                                                columnIndex
+                                            ] ?? ""
+                                        );
+
+                                    }
+                                );
+
+                            }
+                        );
+
+                }
+
+
+                const rowsAfter =
+                    rows.length;
+
+
+                // Update report
+
+                document.getElementById(
+                    "rowsBefore"
+                ).textContent =
+                    rowsBefore;
+
+
+                document.getElementById(
+                    "emptyRowsRemoved"
+                ).textContent =
+                    emptyRowsRemoved;
+
+
+                document.getElementById(
+                    "duplicatesRemoved"
+                ).textContent =
+                    duplicatesRemoved;
+
+
+                document.getElementById(
+                    "spacesCleaned"
+                ).textContent =
+                    spacesCleaned;
+
+
+                document.getElementById(
+                    "namesStandardized"
+                ).textContent =
+                    namesStandardized;
+
+
+                document.getElementById(
+                    "emptyColumnsRemoved"
+                ).textContent =
+                    emptyColumnsRemoved;
+
+
+                document.getElementById(
+                    "rowsAfter"
+                ).textContent =
+                    rowsAfter;
+
+
+                report.style.display =
+                    "block";
+
+
+                // Preview
+
+                showPreview(rows);
+
+
+                // Filename
+
+                const nameWithoutExtension =
+                    selectedFile.name.replace(
+                        /\.[^/.]+$/,
+                        ""
+                    );
+
+
+                const cleanBaseName =
+                    nameWithoutExtension.replace(
+                        /(-cleaned)+$/i,
+                        ""
+                    );
+
+
+                const cleanedFileName =
+                    cleanBaseName +
+                    "-cleaned." +
+                    extension;
+
+
+                // Create download file
+
+                const blob =
+                    createFileBlob(
+                        rows,
+                        extension
+                    );
+
+
+                const url =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+
+                downloadButton.onclick =
+                    function() {
+
+                        const link =
+                            document.createElement(
+                                "a"
+                            );
+
+
+                        link.href = url;
+
+
+                        link.download =
+                            cleanedFileName;
+
+
+                        link.click();
+
+                    };
+
+
+                downloadButton.textContent =
+                    "⬇️ Download " +
+                    cleanedFileName;
+
+
+                downloadButton.style.display =
+                    "block";
+
+
+                resetButton.style.display =
+                    "block";
+
+
+                status.textContent =
+                    "✅ Spreadsheet cleaned successfully!";
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                status.textContent =
+                    "Something went wrong while processing the file.";
+
+            }
 
         }
-
-
-        catch (error) {
-
-            console.error(error);
-
-            status.textContent =
-                "Something went wrong while processing the file.";
-
-        }
-
-    });
+    );
 
 
     // Standardize customer name
@@ -1072,20 +1316,25 @@
             .replace(/\s+/g, " ")
             .toLowerCase()
             .split(" ")
-            .map(word => {
+            .map(
+                function(word) {
 
-                if (word.length === 0) {
+                    if (
+                        word.length === 0
+                    ) {
 
-                    return word;
+                        return word;
+
+                    }
+
+
+                    return (
+                        word.charAt(0).toUpperCase() +
+                        word.slice(1)
+                    );
 
                 }
-
-                return (
-                    word.charAt(0).toUpperCase() +
-                    word.slice(1)
-                );
-
-            })
+            )
             .join(" ");
 
     }
@@ -1095,14 +1344,19 @@
 
     function showPreview(rows) {
 
-        previewTable.innerHTML = "";
+        previewTable.innerHTML =
+            "";
+
 
         const previewRows =
             rows.slice(0, 10);
 
 
         previewRows.forEach(
-            (row, rowIndex) => {
+            function(
+                row,
+                rowIndex
+            ) {
 
                 const tr =
                     document.createElement(
@@ -1110,28 +1364,32 @@
                     );
 
 
-                row.forEach(cell => {
+                row.forEach(
+                    function(cell) {
 
-                    const cellElement =
-                        document.createElement(
-                            rowIndex === 0
-                                ? "th"
-                                : "td"
+                        const cellElement =
+                            document.createElement(
+                                rowIndex === 0
+                                    ? "th"
+                                    : "td"
+                            );
+
+
+                        cellElement.textContent =
+                            cell;
+
+
+                        tr.appendChild(
+                            cellElement
                         );
 
-
-                    cellElement.textContent =
-                        cell;
-
-
-                    tr.appendChild(
-                        cellElement
-                    );
-
-                });
+                    }
+                );
 
 
-                previewTable.appendChild(tr);
+                previewTable.appendChild(
+                    tr
+                );
 
             }
         );
@@ -1150,12 +1408,18 @@
         extension
     ) {
 
-        if (extension === "csv") {
+        if (
+            extension === "csv"
+        ) {
 
             const csv =
                 rows
-                    .map(row =>
-                        row.join(",")
+                    .map(
+                        function(row) {
+
+                            return row.join(",");
+
+                        }
                     )
                     .join("\n");
 
@@ -1171,7 +1435,9 @@
 
 
         const worksheet =
-            XLSX.utils.aoa_to_sheet(rows);
+            XLSX.utils.aoa_to_sheet(
+                rows
+            );
 
 
         const workbook =
@@ -1230,23 +1496,33 @@
 
         status.textContent = "";
 
-        report.style.display = "none";
+        report.style.display =
+            "none";
 
-        preview.style.display = "none";
+        preview.style.display =
+            "none";
 
-        previewTable.innerHTML = "";
+        previewTable.innerHTML =
+            "";
 
-        downloadButton.style.display = "none";
+        downloadButton.style.display =
+            "none";
 
-        resetButton.style.display = "none";
+        resetButton.style.display =
+            "none";
 
-        // Restore all options to checked
 
-        optionIds.forEach(function(id) {
+        // Restore all options
 
-            document.getElementById(id).checked = true;
+        optionIds.forEach(
+            function(id) {
 
-        });
+                document.getElementById(
+                    id
+                ).checked = true;
+
+            }
+        );
 
     }
 
