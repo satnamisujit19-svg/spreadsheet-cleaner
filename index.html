@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clean My Spreadsheet</title>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -13,337 +12,719 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #697386;
+      --border: #e3e8f0;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #15803d;
+      --success-bg: #ecfdf3;
+      --warning: #b45309;
+      --warning-bg: #fff7ed;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --shadow: 0 10px 30px rgba(23, 32, 51, 0.07);
+      --radius: 18px;
+    }
+
     body {
       margin: 0;
+      background: var(--bg);
+      color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
+      line-height: 1.5;
     }
 
-    .container {
-      width: min(1180px, 92%);
-      margin: auto;
+    button,
+    input,
+    select {
+      font: inherit;
     }
 
-    header {
-      padding: 55px 0 30px;
+    .page {
+      width: min(1200px, 94%);
+      margin: 0 auto;
+      padding: 28px 0 50px;
+    }
+
+    /* =========================
+       BRAND / HERO
+    ========================= */
+
+    .hero {
       text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .brand-mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
+      flex-shrink: 0;
+    }
+
+    .brand-mark svg {
+      width: 31px;
+      height: 31px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
     }
 
     .badge {
-      display: inline-block;
-      background: #e9eefc;
-      color: #3157c8;
-      padding: 8px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
       border-radius: 999px;
-      font-size: 13px;
+      background: #eef4ff;
+      color: var(--primary);
+      border: 1px solid #d7e4ff;
+      font-size: 12px;
       font-weight: 700;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(34px, 6vw, 58px);
+      font-size: clamp(32px, 5vw, 52px);
       line-height: 1.05;
-      letter-spacing: -2px;
+      letter-spacing: -1.8px;
     }
 
-    .subtitle {
+    .hero-subtitle {
       max-width: 720px;
-      margin: 18px auto 0;
-      color: #667085;
-      font-size: 18px;
-      line-height: 1.6;
+      margin: 14px auto 20px;
+      color: var(--muted);
+      font-size: 16px;
     }
 
-    .chips {
+    .features {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
-      margin: 25px auto 10px;
-      max-width: 1000px;
+      gap: 9px;
+      max-width: 1050px;
+      margin: 0 auto;
     }
 
-    .chip {
-      background: white;
-      border: 1px solid #e1e6ef;
+    .feature {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      padding: 7px 11px;
       border-radius: 999px;
-      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #475569;
       font-size: 12px;
-      color: #475467;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(23, 32, 51, 0.03);
     }
+
+    .feature span {
+      color: var(--success);
+      margin-right: 5px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       CARDS
+    ========================= */
 
     .card {
-      background: white;
-      border: 1px solid #e4e7ec;
-      border-radius: 18px;
-      padding: 25px;
-      margin: 20px 0;
-      box-shadow: 0 8px 25px rgba(16, 24, 40, 0.05);
-    }
-
-    .card h2 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-
-    .upload-box {
-      border: 2px dashed #b8c2d6;
-      border-radius: 16px;
-      padding: 40px 20px;
-      text-align: center;
-      background: #fafbff;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .upload-box:hover {
-      border-color: #5574d8;
-      background: #f7f9ff;
-    }
-
-    .upload-box input {
-      display: none;
-    }
-
-    .upload-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .upload-text {
-      color: #667085;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
       margin-bottom: 20px;
     }
 
-    .choose-btn,
-    button {
-      border: none;
-      border-radius: 10px;
-      padding: 11px 17px;
+    .section-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .section-description {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================
+       UPLOAD
+    ========================= */
+
+    .upload-card {
+      text-align: center;
+      padding: 34px 24px;
+    }
+
+    .upload-icon {
+      width: 66px;
+      height: 66px;
+      margin: 0 auto 15px;
+      border-radius: 18px;
+      background: #eef4ff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 31px;
+    }
+
+    .upload-title {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .upload-description {
+      margin: 7px 0 4px;
+      color: var(--muted);
       font-size: 14px;
-      font-weight: 700;
+    }
+
+    .supported {
+      color: #8a94a6;
+      font-size: 12px;
+      margin-bottom: 18px;
+    }
+
+    .upload-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 15px;
+      padding: 24px;
+      transition: 0.2s ease;
+      background: #fbfdff;
+    }
+
+    .upload-zone.dragover {
+      border-color: var(--primary);
+      background: #f5f8ff;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .danger-button {
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 17px;
       cursor: pointer;
-      background: #3157c8;
-      color: white;
+      font-weight: 700;
+      transition: 0.2s ease;
     }
 
-    button:hover,
-    .choose-btn:hover {
-      opacity: 0.9;
+    .primary-button {
+      color: #ffffff;
+      background: var(--primary);
+      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.22);
     }
 
-    button.secondary {
+    .primary-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .secondary-button {
       background: #eef2f7;
-      color: #344054;
+      color: #334155;
     }
 
-    button.success {
-      background: #16845b;
+    .secondary-button:hover {
+      background: #e2e8f0;
     }
 
-    button.danger {
-      background: #d92d20;
+    .danger-button {
+      background: #fff1f2;
+      color: var(--danger);
     }
+
+    .danger-button:hover {
+      background: #ffe4e6;
+    }
+
+    /* =========================
+       MESSAGE
+    ========================= */
 
     .message {
-      padding: 13px 16px;
-      border-radius: 10px;
-      margin: 15px 0;
-      font-size: 14px;
       display: none;
+      padding: 12px 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .message.success {
       display: block;
-      background: #ecfdf3;
-      color: #067647;
-      border: 1px solid #abefc6;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #bbf7d0;
     }
 
     .message.error {
       display: block;
-      background: #fef3f2;
-      color: #b42318;
-      border: 1px solid #fecdca;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #fecaca;
     }
 
     .message.info {
       display: block;
-      background: #eff8ff;
-      color: #175cd3;
-      border: 1px solid #b2ddff;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
     }
 
-    #sheetSelectorCard {
+    /* =========================
+       FILE STATUS
+    ========================= */
+
+    .file-status {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      margin-bottom: 20px;
+    }
+
+    .file-status.show {
+      display: flex;
+    }
+
+    .file-info {
+      min-width: 0;
+    }
+
+    .file-name {
+      font-weight: 800;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .file-meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* =========================
+       SHEET SELECTOR
+    ========================= */
+
+    .sheet-card {
       display: none;
     }
 
-    .sheet-selector-row {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      flex-wrap: wrap;
+    .sheet-card.show {
+      display: block;
     }
 
-    .sheet-selector-row label {
+    .sheet-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 18px;
+      align-items: end;
+      margin-top: 18px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #475569;
+      margin-bottom: 7px;
+    }
+
+    .sheet-select {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      color: var(--text);
+      outline: none;
+    }
+
+    .sheet-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .sheet-info-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+    }
+
+    .sheet-info-label {
+      font-size: 11px;
+      color: var(--muted);
       font-weight: 700;
     }
 
-    select {
-      min-width: 260px;
-      padding: 11px 13px;
-      border: 1px solid #d0d5dd;
-      border-radius: 10px;
-      background: white;
+    .sheet-info-value {
       font-size: 14px;
-      color: #344054;
+      font-weight: 800;
+      margin-top: 2px;
     }
 
-    .sheet-info {
-      color: #667085;
-      font-size: 13px;
+    /* =========================
+       RESULTS
+    ========================= */
+
+    #results {
+      display: none;
     }
 
-    .stats {
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .step-label {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* =========================
+       STAT CARDS
+    ========================= */
+
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
     }
 
     .stat {
-      background: #f8f9fc;
-      border: 1px solid #eaecf0;
-      border-radius: 14px;
       padding: 17px;
-    }
-
-    .stat-label {
-      color: #667085;
-      font-size: 13px;
-      margin-bottom: 7px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      min-width: 0;
     }
 
     .stat-value {
       font-size: 25px;
       font-weight: 800;
+      letter-spacing: -0.7px;
     }
+
+    .stat-label {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* =========================
+       QUALITY GRID
+    ========================= */
 
     .quality-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
     }
 
     .quality-item {
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid #eaecf0;
-      background: #fff;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #ffffff;
     }
 
-    .quality-item strong {
-      display: block;
-      font-size: 18px;
-      margin-top: 5px;
+    .quality-name {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 7px;
     }
 
-    .good {
-      color: #067647;
+    .quality-value {
+      font-size: 22px;
+      font-weight: 800;
     }
 
-    .warning {
-      color: #b54708;
+    .quality-detail {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
     }
 
-    .bad {
-      color: #b42318;
-    }
+    /* =========================
+       TABLES
+    ========================= */
 
     .table-wrap {
+      width: 100%;
       overflow-x: auto;
-      border: 1px solid #eaecf0;
-      border-radius: 12px;
+      overflow-y: hidden;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #ffffff;
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 700px;
+      min-width: 650px;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      white-space: nowrap;
     }
 
     th,
     td {
-      border-bottom: 1px solid #eaecf0;
-      padding: 10px 12px;
+      padding: 12px 14px;
       text-align: left;
-      font-size: 13px;
       vertical-align: top;
-    }
-
-    th {
-      background: #f8f9fc;
-      font-weight: 800;
-      position: sticky;
-      top: 0;
+      border-bottom: 1px solid #edf1f5;
     }
 
     tr:last-child td {
-      border-bottom: none;
+      border-bottom: 0;
     }
 
-    .code-cell {
-      font-family: monospace;
+    tbody tr:hover {
+      background: #fafcff;
+    }
+
+    td {
+      color: #334155;
+    }
+
+    .empty-state {
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .formula-code {
+      display: inline-block;
+      max-width: 500px;
+      padding: 5px 8px;
+      border-radius: 7px;
+      background: #f1f5f9;
+      color: #334155;
+      font-family: "Courier New", monospace;
       font-size: 12px;
       white-space: pre-wrap;
-      word-break: break-word;
+      word-break: break-all;
     }
 
-    .button-row {
+    .error-text {
+      color: var(--danger);
+      font-weight: 800;
+    }
+
+    /* =========================
+       PREVIEW
+    ========================= */
+
+    .preview-wrap {
+      max-height: 460px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+    }
+
+    .preview-wrap table {
+      min-width: 900px;
+    }
+
+    .preview-wrap thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #f8fafc;
+    }
+
+    .preview-note {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* =========================
+       DOWNLOAD
+    ========================= */
+
+    .download-card {
+      background: linear-gradient(135deg, #f8fbff, #ffffff);
+    }
+
+    .download-actions {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
       margin-top: 18px;
     }
 
-    .note {
-      background: #f8f9fc;
-      border-left: 4px solid #5574d8;
-      padding: 13px 15px;
-      border-radius: 8px;
-      color: #475467;
-      font-size: 13px;
-      line-height: 1.5;
+    .download-actions button {
+      min-width: 170px;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    /* =========================
+       FOOTER
+    ========================= */
 
     footer {
       text-align: center;
-      padding: 35px 0 50px;
-      color: #98a2b3;
-      font-size: 13px;
+      color: #8a94a6;
+      font-size: 12px;
+      padding: 15px 0 5px;
     }
 
-    @media (max-width: 650px) {
-      header {
-        padding-top: 35px;
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quality-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sheet-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        width: 92%;
+        padding-top: 20px;
       }
 
       .card {
-        padding: 18px;
+        padding: 17px;
+        border-radius: 15px;
       }
 
-      .upload-box {
-        padding: 30px 15px;
+      .brand-mark {
+        width: 46px;
+        height: 46px;
       }
 
-      select {
+      .brand-name {
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .features {
+        justify-content: flex-start;
+      }
+
+      .feature {
+        font-size: 11px;
+      }
+
+      .stats-grid,
+      .quality-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .stat,
+      .quality-item {
+        padding: 13px;
+      }
+
+      .stat-value,
+      .quality-value {
+        font-size: 20px;
+      }
+
+      .file-status {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .download-actions {
+        flex-direction: column;
+      }
+
+      .download-actions button {
         width: 100%;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .stats-grid,
+      .quality-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -351,2823 +732,2358 @@
 
 <body>
 
-<div class="container">
+  <main class="page">
 
-  <header>
-    <div class="badge">Step 37 • Multi-Sheet Support</div>
+    <!-- =========================
+         HERO
+    ========================== -->
 
-    <h1>Clean My Spreadsheet</h1>
+    <header class="hero">
 
-    <p class="subtitle">
-      Clean, validate and standardize messy spreadsheet data in seconds.
-    </p>
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="9" y="7" width="38" height="50" rx="5" fill="white"/>
+            <path d="M19 18H37" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/>
+            <path d="M19 28H37" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/>
+            <path d="M19 38H29" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/>
+            <path d="M19 48H25" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/>
 
-    <div class="chips">
-      <span class="chip">✓ Email Validation</span>
-      <span class="chip">✓ Email Normalization</span>
-      <span class="chip">✓ Phone Standardization</span>
-      <span class="chip">✓ Date Detection</span>
-      <span class="chip">✓ Date Standardization</span>
-      <span class="chip">✓ Header Cleanup</span>
-      <span class="chip">✓ Category Standardization</span>
-      <span class="chip">✓ Missing Data Detection</span>
-      <span class="chip">✓ Data Type Detection</span>
-      <span class="chip">✓ Formula & Error Detection</span>
-      <span class="chip">✓ Formula Preservation</span>
-      <span class="chip">✓ Duplicate Detection</span>
-      <span class="chip">✓ Empty Column Detection</span>
-      <span class="chip">✓ Multi-Sheet Support</span>
-      <span class="chip">✓ XLSX + CSV Export</span>
-    </div>
-  </header>
+            <path d="M47 31L51 22L55 31L64 35L55 39L51 48L47 39L38 35L47 31Z"
+                  fill="#FBBF24"/>
+          </svg>
+        </div>
 
-
-  <!-- UPLOAD -->
-  <section class="card">
-    <div
-      class="upload-box"
-      id="uploadBox"
-      onclick="document.getElementById('fileInput').click()"
-    >
-      <div class="upload-title">📊 Upload your spreadsheet</div>
-
-      <div class="upload-text">
-        Supported formats: XLSX, XLS and CSV
+        <div class="brand-name">Clean My Spreadsheet</div>
       </div>
 
-      <span class="choose-btn">Choose Spreadsheet</span>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Step 37.1 • UI Polish & Formula Fix
+      </div>
 
-      <input
-        type="file"
-        id="fileInput"
-        accept=".xlsx,.xls,.csv"
-      >
-    </div>
-  </section>
+      <h1>Clean My Spreadsheet</h1>
 
+      <p class="hero-subtitle">
+        Clean, validate and standardize messy spreadsheet data in seconds.
+      </p>
 
-  <!-- MESSAGE -->
-  <div id="message" class="message"></div>
+      <div class="features">
+        <div class="feature"><span>✓</span>Email Validation</div>
+        <div class="feature"><span>✓</span>Email Normalization</div>
+        <div class="feature"><span>✓</span>Phone Standardization</div>
+        <div class="feature"><span>✓</span>Date Detection</div>
+        <div class="feature"><span>✓</span>Date Standardization</div>
+        <div class="feature"><span>✓</span>Header Cleanup</div>
+        <div class="feature"><span>✓</span>Category Standardization</div>
+        <div class="feature"><span>✓</span>Missing Data Detection</div>
+        <div class="feature"><span>✓</span>Data Type Detection</div>
+        <div class="feature"><span>✓</span>Formula & Error Detection</div>
+        <div class="feature"><span>✓</span>Duplicate Detection</div>
+        <div class="feature"><span>✓</span>Empty Column Detection</div>
+        <div class="feature"><span>✓</span>XLSX + CSV Export</div>
+        <div class="feature"><span>✓</span>Multi-Sheet Support</div>
+      </div>
 
+    </header>
 
-  <!-- SHEET SELECTOR -->
-  <section class="card" id="sheetSelectorCard">
+    <!-- =========================
+         UPLOAD
+    ========================== -->
 
-    <h2>📑 Select Worksheet</h2>
+    <section class="card upload-card">
 
-    <div class="sheet-selector-row">
+      <div class="upload-zone" id="uploadZone">
 
-      <label for="sheetSelector">
-        Worksheet:
-      </label>
+        <div class="upload-icon">📊</div>
 
-      <select id="sheetSelector"></select>
+        <h2 class="upload-title">Upload your spreadsheet</h2>
 
-      <span class="sheet-info" id="sheetInfo"></span>
+        <p class="upload-description">
+          Drop your spreadsheet here or choose a file from your device.
+        </p>
 
-    </div>
+        <div class="supported">
+          Supported formats: XLSX, XLS and CSV
+        </div>
 
-  </section>
+        <input
+          type="file"
+          id="fileInput"
+          class="file-input"
+          accept=".xlsx,.xls,.csv"
+        />
 
-
-  <!-- RESULTS -->
-  <div id="results" class="hidden">
-
-
-    <!-- OVERVIEW -->
-    <section class="card">
-
-      <h2>Spreadsheet Overview</h2>
-
-      <div id="overviewStats" class="stats"></div>
-
-    </section>
-
-
-    <!-- QUALITY -->
-    <section class="card">
-
-      <h2>Data Quality Checks</h2>
-
-      <div id="qualityChecks" class="quality-grid"></div>
-
-    </section>
-
-
-    <!-- VALIDATION DETAILS -->
-    <section class="card">
-
-      <h2>Validation Details</h2>
-
-      <div id="validationDetails"></div>
-
-    </section>
-
-
-    <!-- FORMULA / ERROR -->
-    <section class="card">
-
-      <h2>Formula & Cell Error Detection</h2>
-
-      <div id="formulaErrorDetails"></div>
-
-    </section>
-
-
-    <!-- TYPES -->
-    <section class="card">
-
-      <h2>Column Data Types</h2>
-
-      <div id="typeMap"></div>
-
-    </section>
-
-
-    <!-- CLEANING SUMMARY -->
-    <section class="card">
-
-      <h2>Cleaning Summary</h2>
-
-      <div id="cleaningSummary"></div>
-
-    </section>
-
-
-    <!-- PREVIEW -->
-    <section class="card">
-
-      <h2>Preview</h2>
-
-      <div id="preview"></div>
-
-      <div class="button-row">
-
-        <button id="downloadXlsxBtn" class="success" disabled>
-          Download Cleaned XLSX
-        </button>
-
-        <button id="downloadCsvBtn" disabled>
-          Download Cleaned CSV
-        </button>
-
-        <button id="resetBtn" class="secondary">
-          Reset
+        <button class="primary-button" id="chooseButton">
+          Choose Spreadsheet
         </button>
 
       </div>
 
-      <div class="note" style="margin-top:18px;">
-        Formula cells are preserved in the downloaded XLSX.
-        CSV exports contain values only because CSV does not support
-        spreadsheet formulas.
+    </section>
+
+    <!-- =========================
+         MESSAGE
+    ========================== -->
+
+    <div id="message" class="message"></div>
+
+    <!-- =========================
+         FILE STATUS
+    ========================== -->
+
+    <div id="fileStatus" class="file-status">
+
+      <div class="file-info">
+        <div id="fileName" class="file-name"></div>
+        <div id="fileMeta" class="file-meta"></div>
+      </div>
+
+      <button class="secondary-button" id="changeFileButton">
+        Change File
+      </button>
+
+    </div>
+
+    <!-- =========================
+         SHEET SELECTOR
+    ========================== -->
+
+    <section id="sheetCard" class="card sheet-card">
+
+      <div class="section-heading">
+
+        <div>
+          <h2 class="section-title">📑 Select Worksheet</h2>
+          <p class="section-description">
+            Choose which worksheet you want to clean and analyze.
+          </p>
+        </div>
+
+        <div class="step-label">MULTI-SHEET</div>
+
+      </div>
+
+      <div class="sheet-layout">
+
+        <div>
+          <label class="field-label" for="sheetSelector">
+            Worksheet
+          </label>
+
+          <select id="sheetSelector" class="sheet-select"></select>
+        </div>
+
+        <div class="sheet-info-box">
+          <div class="sheet-info-label">CURRENT WORKSHEET</div>
+          <div id="sheetInfoValue" class="sheet-info-value">
+            —
+          </div>
+        </div>
+
       </div>
 
     </section>
 
-  </div>
+    <!-- =========================
+         RESULTS
+    ========================== -->
 
-  <footer>
-    Clean My Spreadsheet • Browser-based spreadsheet cleaning utility
-  </footer>
+    <div id="results">
 
-</div>
+      <!-- OVERVIEW -->
 
+      <section class="card">
 
-<script>
+        <div class="section-heading">
 
-  /* =========================================================
-     GLOBAL STATE
-  ========================================================= */
+          <div>
+            <h2 class="section-title">📊 Overview</h2>
+            <p class="section-description">
+              Quick summary of the selected worksheet.
+            </p>
+          </div>
 
-  let originalRows = [];
-  let cleanedRows = [];
+          <div class="step-label">OVERVIEW</div>
 
-  let cleanedFormulaRows = [];
+        </div>
 
-  let originalAnalysis = null;
-  let cleanedAnalysis = null;
+        <div id="overviewStats" class="stats-grid"></div>
 
-  let currentFileName = "";
-  let originalWorksheet = null;
+      </section>
 
-  /* STEP 37 — MULTI-SHEET STATE */
+      <!-- QUALITY -->
 
-  let currentWorkbook = null;
-  let currentSheetName = "";
-  let availableSheetNames = [];
+      <section class="card">
 
+        <div class="section-heading">
 
-  /* =========================================================
-     BASIC HELPERS
-  ========================================================= */
+          <div>
+            <h2 class="section-title">🔎 Quality Checks</h2>
+            <p class="section-description">
+              Automatically detected data-quality issues.
+            </p>
+          </div>
 
-  function showMessage(text, type = "info") {
+          <div class="step-label">QUALITY</div>
+
+        </div>
+
+        <div id="qualityGrid" class="quality-grid"></div>
+
+      </section>
+
+      <!-- VALIDATION -->
+
+      <section class="card">
+
+        <div class="section-heading">
+
+          <div>
+            <h2 class="section-title">✅ Validation Details</h2>
+            <p class="section-description">
+              Validation results for important spreadsheet fields.
+            </p>
+          </div>
+
+          <div class="step-label">VALIDATION</div>
+
+        </div>
+
+        <div id="validationStats" class="stats-grid"></div>
+
+      </section>
+
+      <!-- FORMULAS / ERRORS -->
+
+      <section class="card">
+
+        <div class="section-heading">
+
+          <div>
+            <h2 class="section-title">🧮 Formula & Error Detection</h2>
+            <p class="section-description">
+              Formula cells and spreadsheet errors detected in the worksheet.
+            </p>
+          </div>
+
+          <div class="step-label">FORMULAS</div>
+
+        </div>
+
+        <div id="formulaStats" class="stats-grid"></div>
+
+        <div style="height: 18px;"></div>
+
+        <div id="formulaTableContainer"></div>
+
+        <div style="height: 18px;"></div>
+
+        <div id="errorTableContainer"></div>
+
+      </section>
+
+      <!-- COLUMN TYPES -->
+
+      <section class="card">
+
+        <div class="section-heading">
+
+          <div>
+            <h2 class="section-title">🧩 Column Types</h2>
+            <p class="section-description">
+              Detected data type for each column.
+            </p>
+          </div>
+
+          <div class="step-label">DATA TYPES</div>
+
+        </div>
+
+        <div id="columnTypesContainer"></div>
+
+      </section>
+
+      <!-- CLEANING SUMMARY -->
+
+      <section class="card">
+
+        <div class="section-heading">
+
+          <div>
+            <h2 class="section-title">🧹 Cleaning Summary</h2>
+            <p class="section-description">
+              Changes made automatically to the selected worksheet.
+            </p>
+          </div>
+
+          <div class="step-label">CLEANING</div>
+
+        </div>
+
+        <div id="cleaningStats" class="stats-grid"></div>
+
+      </section>
+
+      <!-- PREVIEW -->
+
+      <section class="card">
+
+        <div class="section-heading">
+
+          <div>
+            <h2 class="section-title">👀 Cleaned Data Preview</h2>
+            <p class="section-description">
+              Preview of the cleaned worksheet.
+            </p>
+          </div>
+
+          <div class="step-label">PREVIEW</div>
+
+        </div>
+
+        <div id="previewContainer"></div>
+
+        <div class="preview-note">
+          Preview shows the cleaned worksheet. Download the file to get the complete dataset.
+        </div>
+
+      </section>
+
+      <!-- DOWNLOAD -->
+
+      <section class="card download-card">
+
+        <div class="section-heading">
+
+          <div>
+            <h2 class="section-title">⬇️ Download Cleaned File</h2>
+            <p class="section-description">
+              Export the cleaned worksheet in your preferred format.
+            </p>
+          </div>
+
+          <div class="step-label">EXPORT</div>
+
+        </div>
+
+        <div class="download-actions">
+
+          <button class="primary-button" id="downloadXlsx">
+            Download Cleaned XLSX
+          </button>
+
+          <button class="secondary-button" id="downloadCsv">
+            Download Cleaned CSV
+          </button>
+
+          <button class="danger-button" id="resetButton">
+            Reset
+          </button>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <footer>
+      Clean My Spreadsheet • Browser-based spreadsheet cleaning utility
+    </footer>
+
+  </main>
+
+  <script>
+    /* =========================================================
+       GLOBAL STATE
+    ========================================================= */
+
+    let currentWorkbook = null;
+    let currentSheetName = "";
+    let availableSheetNames = [];
+
+    let currentOriginalRows = [];
+    let currentCleanedRows = [];
+    let currentAnalysis = null;
+
+    /* =========================================================
+       DOM ELEMENTS
+    ========================================================= */
+
+    const fileInput = document.getElementById("fileInput");
+    const chooseButton = document.getElementById("chooseButton");
+    const changeFileButton = document.getElementById("changeFileButton");
+    const uploadZone = document.getElementById("uploadZone");
 
     const message = document.getElementById("message");
 
-    message.textContent = text;
-    message.className = "message " + type;
-  }
+    const fileStatus = document.getElementById("fileStatus");
+    const fileName = document.getElementById("fileName");
+    const fileMeta = document.getElementById("fileMeta");
 
+    const sheetCard = document.getElementById("sheetCard");
+    const sheetSelector = document.getElementById("sheetSelector");
+    const sheetInfoValue = document.getElementById("sheetInfoValue");
 
-  function hideMessage() {
+    const results = document.getElementById("results");
 
-    const message = document.getElementById("message");
+    /* =========================================================
+       MESSAGE
+    ========================================================= */
 
-    message.textContent = "";
-    message.className = "message";
-  }
-
-
-  function isBlank(value) {
-
-    return value === null ||
-           value === undefined ||
-           String(value).trim() === "";
-  }
-
-
-  function isEntireRowBlank(row) {
-
-    return !row || row.every(cell => isBlank(cell));
-  }
-
-
-  /* =========================================================
-     HEADER CLEANING
-  ========================================================= */
-
-  function normalizeHeader(value) {
-
-    if (isBlank(value)) {
-      return "";
+    function showMessage(text, type = "info") {
+      message.textContent = text;
+      message.className = "message " + type;
     }
 
-    return String(value)
-      .trim()
-      .replace(/\s+/g, " ")
-      .toLowerCase();
-  }
-
-
-  function cleanHeaderText(value) {
-
-    if (isBlank(value)) {
-      return "Column";
+    function hideMessage() {
+      message.textContent = "";
+      message.className = "message";
     }
 
-    let text = String(value)
-      .trim()
-      .replace(/\s+/g, " ");
+    /* =========================================================
+       BASIC HELPERS
+    ========================================================= */
 
-    text = text
-      .replace(/[_-]+/g, " ")
-      .replace(/\s+/g, " ");
-
-    return text
-      .split(" ")
-      .map(word => {
-        if (!word) return "";
-        return word.charAt(0).toUpperCase() +
-               word.slice(1).toLowerCase();
-      })
-      .join(" ");
-  }
-
-
-  /* =========================================================
-     DUPLICATE DETECTION
-  ========================================================= */
-
-  function normalizeCellForDuplicate(value) {
-
-    if (isBlank(value)) {
-      return "";
+    function isBlank(value) {
+      return value === null ||
+             value === undefined ||
+             String(value).trim() === "";
     }
 
-    return String(value)
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ");
-  }
-
-
-  function getComparableRow(row) {
-
-    return row
-      .map(normalizeCellForDuplicate)
-      .join("||");
-  }
-
-
-  function countDuplicateRows(rows) {
-
-    if (!rows || rows.length <= 1) {
-      return 0;
+    function isEntireRowBlank(row) {
+      return row.every(cell => isBlank(cell));
     }
 
-    const seen = new Set();
-    let duplicates = 0;
-
-    for (let i = 1; i < rows.length; i++) {
-
-      const key = getComparableRow(rows[i]);
-
-      if (!key.replace(/\|/g, "")) {
-        continue;
+    function cleanText(value) {
+      if (value === null || value === undefined) {
+        return "";
       }
 
-      if (seen.has(key)) {
-        duplicates++;
-      } else {
-        seen.add(key);
-      }
+      return String(value)
+        .replace(/\s+/g, " ")
+        .trim();
     }
 
-    return duplicates;
-  }
+    function normalizeHeader(header) {
+      let value = cleanText(header);
 
+      value = value
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
 
-  /* =========================================================
-     HEADER ANALYSIS
-  ========================================================= */
+      return value
+        .split(" ")
+        .map(word => {
+          if (!word) return "";
+          return word.charAt(0).toUpperCase() +
+                 word.slice(1).toLowerCase();
+        })
+        .join(" ");
+    }
 
-  function analyzeHeaders(headers) {
+    function normalizeHeaderKey(header) {
+      return cleanText(header)
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
 
-    const normalized = headers.map(normalizeHeader);
+    function findColumnIndex(headers, keywords) {
+      const normalizedHeaders = headers.map(normalizeHeaderKey);
 
-    const blankHeaders = normalized.filter(x => x === "").length;
+      for (const keyword of keywords) {
+        const normalizedKeyword = normalizeHeaderKey(keyword);
 
-    const counts = {};
+        const exact = normalizedHeaders.indexOf(normalizedKeyword);
 
-    normalized.forEach(header => {
+        if (exact !== -1) {
+          return exact;
+        }
 
-      if (!header) return;
+        const partial = normalizedHeaders.findIndex(header =>
+          header.includes(normalizedKeyword)
+        );
 
-      counts[header] = (counts[header] || 0) + 1;
-    });
-
-    const duplicateHeaders = Object.values(counts)
-      .filter(count => count > 1)
-      .reduce((total, count) => total + count - 1, 0);
-
-    return {
-      blankHeaders,
-      duplicateHeaders
-    };
-  }
-
-
-  function buildCleanHeaders(headers) {
-
-    const used = {};
-
-    return headers.map((header, index) => {
-
-      let cleaned = cleanHeaderText(header);
-
-      if (!cleaned) {
-        cleaned = "Column";
+        if (partial !== -1) {
+          return partial;
+        }
       }
 
-      if (used[cleaned]) {
+      return -1;
+    }
 
-        used[cleaned]++;
+    /* =========================================================
+       EMAIL
+    ========================================================= */
 
-        cleaned = cleaned + " " + used[cleaned];
+    function isValidEmail(value) {
+      if (isBlank(value)) return false;
 
-      } else {
+      const email = String(value).trim();
 
-        used[cleaned] = 1;
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function normalizeEmail(value) {
+      if (isBlank(value)) return "";
+
+      return String(value)
+        .trim()
+        .toLowerCase();
+    }
+
+    /* =========================================================
+       PHONE
+    ========================================================= */
+
+    function normalizePhone(value) {
+      if (isBlank(value)) return "";
+
+      let phone = String(value)
+        .trim()
+        .replace(/[^\d+]/g, "");
+
+      if (phone.startsWith("0091")) {
+        phone = "+91" + phone.slice(4);
       }
 
-      return cleaned;
-    });
-  }
-
-
-  function findColumn(headers, predicate) {
-
-    for (let i = 0; i < headers.length; i++) {
-
-      if (predicate(normalizeHeader(headers[i]))) {
-        return i;
+      if (phone.startsWith("91") && phone.length === 12) {
+        phone = "+91" + phone.slice(2);
       }
+
+      if (phone.startsWith("0") && phone.length === 11) {
+        phone = "+91" + phone.slice(1);
+      }
+
+      if (/^\d{10}$/.test(phone)) {
+        phone = "+91" + phone;
+      }
+
+      return phone;
     }
 
-    return -1;
-  }
+    function isValidPhone(value) {
+      if (isBlank(value)) return false;
 
+      const digits = String(value).replace(/\D/g, "");
 
-  function emailColumn(headers) {
-
-    return findColumn(headers, h =>
-      h.includes("email") ||
-      h.includes("e-mail")
-    );
-  }
-
-
-  function phoneColumn(headers) {
-
-    return findColumn(headers, h =>
-      h.includes("phone") ||
-      h.includes("mobile") ||
-      h.includes("contact") ||
-      h.includes("telephone")
-    );
-  }
-
-
-  function dateColumn(headers) {
-
-    return findColumn(headers, h =>
-      h === "date" ||
-      h.includes("date") ||
-      h.includes("dob") ||
-      h.includes("birth")
-    );
-  }
-
-
-  function genderColumn(headers) {
-
-    return findColumn(headers, h =>
-      h.includes("gender") ||
-      h.includes("sex")
-    );
-  }
-
-
-  function consentColumn(headers) {
-
-    return findColumn(headers, h =>
-      h.includes("consent") ||
-      h.includes("subscribed") ||
-      h.includes("marketing")
-    );
-  }
-
-
-  function statusColumn(headers) {
-
-    return findColumn(headers, h =>
-      h === "status" ||
-      h.includes("status")
-    );
-  }
-
-
-  /* =========================================================
-     EMAIL
-  ========================================================= */
-
-  function isValidEmail(value) {
-
-    if (isBlank(value)) {
-      return false;
+      return digits.length >= 10 && digits.length <= 15;
     }
 
-    const email = String(value).trim();
+    /* =========================================================
+       DATE
+    ========================================================= */
 
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
+    function parseDateValue(value) {
 
+      if (value instanceof Date && !isNaN(value.getTime())) {
+        return value;
+      }
 
-  function normalizeEmail(value) {
+      if (typeof value === "number") {
+        const date = XLSX.SSF.parse_date_code(value);
 
-    if (isBlank(value)) {
-      return "";
-    }
+        if (date) {
+          return new Date(
+            date.y,
+            date.m - 1,
+            date.d
+          );
+        }
+      }
 
-    return String(value)
-      .trim()
-      .toLowerCase();
-  }
+      if (isBlank(value)) {
+        return null;
+      }
 
+      const stringValue = String(value).trim();
 
-  /* =========================================================
-     SPREADSHEET ERRORS
-  ========================================================= */
+      const date = new Date(stringValue);
 
-  function isSpreadsheetErrorValue(value) {
-
-    if (isBlank(value)) {
-      return false;
-    }
-
-    const text = String(value).trim().toUpperCase();
-
-    const errors = [
-      "#ERROR!",
-      "#DIV/0!",
-      "#VALUE!",
-      "#REF!",
-      "#N/A",
-      "#NAME?",
-      "#NUM!",
-      "#NULL!",
-      "#SPILL!",
-      "#CALC!",
-      "#CONNECT!",
-      "#FIELD!",
-      "#BLOCKED!",
-      "#UNKNOWN!"
-    ];
-
-    return errors.includes(text);
-  }
-
-
-  function normalizeErrorLabel(value) {
-
-    return String(value)
-      .trim()
-      .toUpperCase();
-  }
-
-
-  function isPhoneErrorValue(value) {
-
-    if (isBlank(value)) {
-      return false;
-    }
-
-    const text = String(value).trim().toUpperCase();
-
-    return [
-      "#ERROR!",
-      "#VALUE!",
-      "#REF!",
-      "#N/A",
-      "#NAME?",
-      "#NUM!"
-    ].includes(text);
-  }
-
-
-  /* =========================================================
-     PHONE
-  ========================================================= */
-
-  function extractPhoneDigits(value) {
-
-    if (isBlank(value)) {
-      return "";
-    }
-
-    return String(value).replace(/\D/g, "");
-  }
-
-
-  function isValidPhone(value) {
-
-    if (isBlank(value)) {
-      return false;
-    }
-
-    if (isPhoneErrorValue(value)) {
-      return false;
-    }
-
-    const digits = extractPhoneDigits(value);
-
-    return digits.length >= 10 && digits.length <= 15;
-  }
-
-
-  function standardizePhone(value) {
-
-    if (isBlank(value)) {
-      return "";
-    }
-
-    if (isPhoneErrorValue(value)) {
-      return value;
-    }
-
-    let digits = extractPhoneDigits(value);
-
-    if (digits.length === 10) {
-      return "+91 " + digits;
-    }
-
-    if (digits.length === 12 && digits.startsWith("91")) {
-      return "+91 " + digits.slice(2);
-    }
-
-    if (digits.length >= 10) {
-      return "+" + digits;
-    }
-
-    return value;
-  }
-
-
-  /* =========================================================
-     DATE
-  ========================================================= */
-
-  function excelSerialToDate(serial) {
-
-    const excelEpoch = new Date(Date.UTC(1899, 11, 30));
-
-    return new Date(
-      excelEpoch.getTime() +
-      Number(serial) * 86400000
-    );
-  }
-
-
-  function validYMD(year, month, day) {
-
-    const date = new Date(
-      Date.UTC(year, month - 1, day)
-    );
-
-    return date.getUTCFullYear() === year &&
-           date.getUTCMonth() === month - 1 &&
-           date.getUTCDate() === day;
-  }
-
-
-  function formatDate(date) {
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  }
-
-
-  function parseDateValue(value) {
-
-    if (isBlank(value)) {
-      return null;
-    }
-
-    if (value instanceof Date && !isNaN(value)) {
-      return value;
-    }
-
-    if (typeof value === "number" && value > 0) {
-
-      const date = excelSerialToDate(value);
-
-      if (!isNaN(date)) {
+      if (!isNaN(date.getTime())) {
         return date;
       }
-    }
 
-    const text = String(value).trim();
+      const match = stringValue.match(
+        /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
+      );
 
-    let match;
+      if (match) {
+        const day = Number(match[1]);
+        const month = Number(match[2]) - 1;
+        const year = Number(match[3]);
 
-    /* YYYY-MM-DD */
+        const parsed = new Date(year, month, day);
 
-    match = text.match(
-      /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/
-    );
-
-    if (match) {
-
-      const year = Number(match[1]);
-      const month = Number(match[2]);
-      const day = Number(match[3]);
-
-      if (validYMD(year, month, day)) {
-        return new Date(year, month - 1, day);
+        if (!isNaN(parsed.getTime())) {
+          return parsed;
+        }
       }
 
       return null;
     }
 
+    function formatDate(value) {
+      const date = parseDateValue(value);
 
-    /* DD-MM-YYYY */
+      if (!date) return cleanText(value);
 
-    match = text.match(
-      /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/
-    );
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
 
-    if (match) {
-
-      const first = Number(match[1]);
-      const second = Number(match[2]);
-      const year = Number(match[3]);
-
-      /* If first > 12, it must be DD/MM/YYYY */
-
-      if (first > 12 && validYMD(year, second, first)) {
-
-        return new Date(year, second - 1, first);
-      }
-
-      /* If second > 12, it must be MM/DD/YYYY */
-
-      if (second > 12 && validYMD(year, first, second)) {
-
-        return new Date(year, first - 1, second);
-      }
-
-      /*
-        Both could be valid.
-        Leave ambiguous dates unchanged.
-      */
-
-      return null;
+      return `${day}/${month}/${year}`;
     }
 
+    /* =========================================================
+       CATEGORY STANDARDIZATION
+    ========================================================= */
 
-    const parsed = new Date(text);
+    function standardizeCategory(value) {
+      if (isBlank(value)) return "";
 
-    if (!isNaN(parsed)) {
-      return parsed;
-    }
+      const original = String(value).trim();
+      const lower = original.toLowerCase();
 
-    return null;
-  }
+      const categoryMap = {
+        "m": "Male",
+        "male": "Male",
+        "man": "Male",
+        "men": "Male",
 
+        "f": "Female",
+        "female": "Female",
+        "woman": "Female",
+        "women": "Female",
 
-  /* =========================================================
-     CATEGORY STANDARDIZATION
-  ========================================================= */
+        "y": "Yes",
+        "yes": "Yes",
+        "true": "Yes",
 
-  function standardizeCategory(value, type) {
+        "n": "No",
+        "no": "No",
+        "false": "No",
 
-    if (isBlank(value)) {
-      return "";
-    }
-
-    const text = String(value)
-      .trim()
-      .toLowerCase();
-
-    if (type === "gender") {
-
-      if (
-        ["m", "male", "man", "men"].includes(text)
-      ) {
-        return "Male";
-      }
-
-      if (
-        ["f", "female", "woman", "women"].includes(text)
-      ) {
-        return "Female";
-      }
-
-      if (
-        ["other", "others", "non-binary", "nonbinary"].includes(text)
-      ) {
-        return "Other";
-      }
-
-      return value;
-    }
-
-
-    if (type === "consent") {
-
-      if (
-        ["yes", "y", "true", "1", "subscribed"].includes(text)
-      ) {
-        return "Yes";
-      }
-
-      if (
-        ["no", "n", "false", "0", "unsubscribed"].includes(text)
-      ) {
-        return "No";
-      }
-
-      return value;
-    }
-
-
-    if (type === "status") {
-
-      const map = {
         "active": "Active",
         "act": "Active",
+
         "inactive": "Inactive",
         "inact": "Inactive",
+
         "pending": "Pending",
-        "completed": "Completed",
-        "complete": "Completed",
-        "cancelled": "Cancelled",
-        "canceled": "Cancelled"
+        "pend": "Pending",
+
+        "closed": "Closed",
+        "close": "Closed"
       };
 
-      return map[text] || value;
+      return categoryMap[lower] || original;
     }
 
-    return value;
-  }
+    /* =========================================================
+       ERROR DETECTION
+    ========================================================= */
 
+    function isSpreadsheetError(value) {
+      if (isBlank(value)) return false;
 
-  /* =========================================================
-     DATA QUALITY
-  ========================================================= */
+      const text = String(value).trim().toUpperCase();
 
-  function countWhitespaceValues(rows) {
+      const errors = [
+        "#ERROR!",
+        "#VALUE!",
+        "#REF!",
+        "#DIV/0!",
+        "#N/A",
+        "#NAME?",
+        "#NUM!",
+        "#NULL!"
+      ];
 
-    let count = 0;
+      return errors.includes(text);
+    }
 
-    rows.forEach(row => {
+    /* =========================================================
+       FORMULA / ERROR ANALYSIS
+    ========================================================= */
 
-      row.forEach(value => {
+    function analyzeFormulaAndErrors(worksheet, rows) {
 
-        if (
-          typeof value === "string" &&
-          value !== value.trim()
-        ) {
-          count++;
+      const formulaCells = [];
+      const errorCells = [];
+
+      if (worksheet) {
+
+        const range = XLSX.utils.decode_range(
+          worksheet["!ref"] || "A1:A1"
+        );
+
+        for (let rowNumber = range.s.r; rowNumber <= range.e.r; rowNumber++) {
+
+          for (
+            let columnNumber = range.s.c;
+            columnNumber <= range.e.c;
+            columnNumber++
+          ) {
+
+            const address = XLSX.utils.encode_cell({
+              r: rowNumber,
+              c: columnNumber
+            });
+
+            const cell = worksheet[address];
+
+            if (!cell) continue;
+
+            /* REAL FORMULA */
+            if (typeof cell.f === "string" && cell.f.trim() !== "") {
+
+              const formula = cell.f.startsWith("=")
+                ? cell.f
+                : "=" + cell.f;
+
+              formulaCells.push({
+                address,
+                row: rowNumber + 1,
+                column: XLSX.utils.encode_col(columnNumber),
+                formula,
+                result: cell.w !== undefined
+                  ? String(cell.w)
+                  : cell.v !== undefined
+                    ? String(cell.v)
+                    : ""
+              });
+            }
+
+            /* ERROR CELL */
+            if (
+              cell.t === "e" ||
+              isSpreadsheetError(cell.v) ||
+              isSpreadsheetError(cell.w)
+            ) {
+
+              errorCells.push({
+                address,
+                row: rowNumber + 1,
+                column: XLSX.utils.encode_col(columnNumber),
+                error: cell.w !== undefined
+                  ? String(cell.w)
+                  : String(cell.v || "")
+              });
+            }
+          }
         }
-
-      });
-
-    });
-
-    return count;
-  }
-
-
-  function detectEmptyColumns(rows, width) {
-
-    const emptyColumns = [];
-
-    for (let col = 0; col < width; col++) {
-
-      let hasValue = false;
-
-      for (let row = 1; row < rows.length; row++) {
-
-        if (!isBlank(rows[row]?.[col])) {
-
-          hasValue = true;
-          break;
-        }
       }
-
-      if (!hasValue) {
-        emptyColumns.push(col);
-      }
-    }
-
-    return emptyColumns;
-  }
-
-
-  function analyzeMissingData(rows, width) {
-
-    let missing = 0;
-    let totalCells = 0;
-
-    const columnMissing = Array(width).fill(0);
-
-    for (let r = 1; r < rows.length; r++) {
-
-      for (let c = 0; c < width; c++) {
-
-        totalCells++;
-
-        const value = rows[r]?.[c];
-
-        if (isBlank(value)) {
-
-          missing++;
-          columnMissing[c]++;
-        }
-      }
-    }
-
-    return {
-      missing,
-      totalCells,
-      columnMissing
-    };
-  }
-
-
-  /* =========================================================
-     DATA TYPES
-  ========================================================= */
-
-  function detectCellType(value) {
-
-    if (isBlank(value)) {
-      return "Empty";
-    }
-
-    if (isSpreadsheetErrorValue(value)) {
-      return "Error";
-    }
-
-    if (value instanceof Date) {
-      return "Date";
-    }
-
-    if (typeof value === "number") {
-      return "Number";
-    }
-
-    if (typeof value === "boolean") {
-      return "Boolean";
-    }
-
-    const text = String(value).trim();
-
-    if (isValidEmail(text)) {
-      return "Email";
-    }
-
-    if (isValidPhone(text)) {
-      return "Phone";
-    }
-
-    if (parseDateValue(text)) {
-      return "Date";
-    }
-
-    return "Text";
-  }
-
-
-  function detectColumnType(values) {
-
-    const types = {};
-
-    values.forEach(value => {
-
-      const type = detectCellType(value);
-
-      types[type] = (types[type] || 0) + 1;
-    });
-
-    const entries = Object.entries(types)
-      .sort((a, b) => b[1] - a[1]);
-
-    return entries.length
-      ? entries[0][0]
-      : "Empty";
-  }
-
-
-  function analyzeColumnTypes(rows, width) {
-
-    const result = [];
-
-    for (let c = 0; c < width; c++) {
-
-      const values = [];
-
-      for (let r = 1; r < rows.length; r++) {
-        values.push(rows[r]?.[c] ?? "");
-      }
-
-      result.push(detectColumnType(values));
-    }
-
-    return result;
-  }
-
-
-  /* =========================================================
-     FORMULA & ERROR ANALYSIS
-  ========================================================= */
-
-  function analyzeFormulaAndErrors(worksheet, rows) {
-
-    const formulaCells = [];
-    const errors = [];
-
-    const errorTypeCounts = {};
-    const rowsWithErrors = new Set();
-
-    if (!worksheet) {
 
       return {
         formulaCells,
-        errors,
-        errorCount: 0,
-        formulaCount: 0,
-        rowsWithErrors: [],
-        errorTypeCounts
+        errorCells
       };
     }
 
+    /* =========================================================
+       DUPLICATE DETECTION
+    ========================================================= */
 
-    const range = worksheet["!ref"]
-      ? XLSX.utils.decode_range(worksheet["!ref"])
-      : null;
+    function countDuplicateRows(rows) {
 
-    if (range) {
+      if (rows.length <= 1) {
+        return 0;
+      }
 
-      for (let r = range.s.r; r <= range.e.r; r++) {
+      const seen = new Set();
+      let duplicates = 0;
 
-        for (let c = range.s.c; c <= range.e.c; c++) {
+      for (let i = 1; i < rows.length; i++) {
 
-          const address = XLSX.utils.encode_cell({
-            r,
-            c
-          });
+        const key = rows[i]
+          .map(value => cleanText(value).toLowerCase())
+          .join("||");
 
-          const cell = worksheet[address];
-
-          if (!cell) {
-            continue;
-          }
-
-
-          if (cell.f) {
-
-            formulaCells.push({
-              cell: address,
-              row: r + 1,
-              column: c + 1,
-              formula: cell.f
-            });
-          }
-
-
-          if (cell.t === "e") {
-
-            const errorLabel =
-              normalizeErrorLabel(cell.w ?? cell.v ?? "Error");
-
-            errors.push({
-              cell: address,
-              row: r + 1,
-              column: c + 1,
-              error: errorLabel
-            });
-
-            errorTypeCounts[errorLabel] =
-              (errorTypeCounts[errorLabel] || 0) + 1;
-
-            rowsWithErrors.add(r + 1);
-          }
+        if (seen.has(key)) {
+          duplicates++;
+        } else {
+          seen.add(key);
         }
       }
+
+      return duplicates;
     }
 
+    function removeDuplicateRows(rows) {
 
-    /* Also detect visible error strings */
+      if (rows.length <= 1) {
+        return {
+          rows,
+          removed: 0
+        };
+      }
 
-    for (let r = 0; r < rows.length; r++) {
+      const result = [rows[0]];
+      const seen = new Set();
 
-      const row = rows[r] || [];
+      for (let i = 1; i < rows.length; i++) {
 
-      for (let c = 0; c < row.length; c++) {
+        const key = rows[i]
+          .map(value => cleanText(value).toLowerCase())
+          .join("||");
 
-        const value = row[c];
+        if (!seen.has(key)) {
+          seen.add(key);
+          result.push(rows[i]);
+        }
+      }
 
-        if (!isSpreadsheetErrorValue(value)) {
+      return {
+        rows: result,
+        removed: rows.length - result.length
+      };
+    }
+
+    /* =========================================================
+       HEADER ANALYSIS
+    ========================================================= */
+
+    function countBlankHeaders(headers) {
+      return headers.filter(header => isBlank(header)).length;
+    }
+
+    function countDuplicateHeaders(headers) {
+
+      const seen = new Set();
+      let duplicates = 0;
+
+      headers.forEach(header => {
+
+        const key = normalizeHeaderKey(header);
+
+        if (!key) return;
+
+        if (seen.has(key)) {
+          duplicates++;
+        } else {
+          seen.add(key);
+        }
+      });
+
+      return duplicates;
+    }
+
+    /* =========================================================
+       COLUMN TYPES
+    ========================================================= */
+
+    function detectColumnType(header, values) {
+
+      const key = normalizeHeaderKey(header);
+
+      const nonBlank = values.filter(value => !isBlank(value));
+
+      if (nonBlank.length === 0) {
+        return "Empty";
+      }
+
+      if (
+        key.includes("email") ||
+        nonBlank.filter(isValidEmail).length >=
+          Math.max(1, Math.floor(nonBlank.length * 0.5))
+      ) {
+        return "Email";
+      }
+
+      if (
+        key.includes("phone") ||
+        key.includes("mobile") ||
+        key.includes("contact") ||
+        key.includes("number")
+      ) {
+
+        const validPhones = nonBlank.filter(isValidPhone).length;
+
+        if (validPhones >= Math.max(1, Math.floor(nonBlank.length * 0.5))) {
+          return "Phone";
+        }
+      }
+
+      const dateCount = nonBlank.filter(value =>
+        parseDateValue(value) !== null
+      ).length;
+
+      if (
+        key.includes("date") ||
+        key.includes("dob") ||
+        dateCount >= Math.max(1, Math.floor(nonBlank.length * 0.7))
+      ) {
+        return "Date";
+      }
+
+      const numericCount = nonBlank.filter(value =>
+        !isNaN(Number(value))
+      ).length;
+
+      if (numericCount >= Math.max(1, Math.floor(nonBlank.length * 0.8))) {
+        return "Number";
+      }
+
+      return "Text";
+    }
+
+    function detectColumnTypes(headers, rows) {
+
+      const types = [];
+
+      for (let column = 0; column < headers.length; column++) {
+
+        const values = rows
+          .slice(1)
+          .map(row => row[column]);
+
+        types.push({
+          header: headers[column],
+          type: detectColumnType(headers[column], values)
+        });
+      }
+
+      return types;
+    }
+
+    /* =========================================================
+       ANALYZE WORKSHEET
+    ========================================================= */
+
+    function analyzeSpreadsheet(worksheet, rows) {
+
+      const headers = rows.length > 0 ? rows[0] : [];
+
+      const dataRows = rows.slice(1);
+
+      const blankRows = dataRows.filter(
+        isEntireRowBlank
+      ).length;
+
+      const duplicateRows = countDuplicateRows(rows);
+
+      let missingCells = 0;
+
+      dataRows.forEach(row => {
+
+        for (let i = 0; i < headers.length; i++) {
+
+          if (isBlank(row[i])) {
+            missingCells++;
+          }
+        }
+      });
+
+      let whitespaceValues = 0;
+
+      rows.forEach(row => {
+
+        row.forEach(value => {
+
+          if (
+            typeof value === "string" &&
+            value !== value.trim()
+          ) {
+            whitespaceValues++;
+          }
+
+        });
+
+      });
+
+      let emptyColumns = 0;
+
+      for (let column = 0; column < headers.length; column++) {
+
+        const values = dataRows.map(row => row[column]);
+
+        if (
+          isBlank(headers[column]) &&
+          values.every(isBlank)
+        ) {
+          emptyColumns++;
           continue;
         }
 
-        const label = normalizeErrorLabel(value);
-
-        const address = XLSX.utils.encode_cell({
-          r,
-          c
-        });
-
-        const alreadyFound = errors.some(
-          item => item.cell === address
-        );
-
-        if (!alreadyFound) {
-
-          errors.push({
-            cell: address,
-            row: r + 1,
-            column: c + 1,
-            error: label
-          });
-
-          errorTypeCounts[label] =
-            (errorTypeCounts[label] || 0) + 1;
-
-          rowsWithErrors.add(r + 1);
+        if (values.every(isBlank)) {
+          emptyColumns++;
         }
       }
-    }
 
+      const emailColumn = findColumnIndex(
+        headers,
+        ["email", "email address", "mail"]
+      );
 
-    return {
-      formulaCells,
-      errors,
-      errorCount: errors.length,
-      formulaCount: formulaCells.length,
-      rowsWithErrors: [...rowsWithErrors],
-      errorTypeCounts
-    };
-  }
+      const phoneColumn = findColumnIndex(
+        headers,
+        ["phone", "phone number", "mobile", "contact"]
+      );
 
+      const dateColumn = findColumnIndex(
+        headers,
+        ["date", "date of birth", "dob", "birth"]
+      );
 
-  /* =========================================================
-     MAIN ANALYSIS
-  ========================================================= */
+      let validEmails = 0;
+      let invalidEmails = 0;
 
-  function analyzeSpreadsheet(rows) {
+      if (emailColumn !== -1) {
 
-    const headers = rows[0] || [];
+        dataRows.forEach(row => {
 
-    const width = Math.max(
-      headers.length,
-      ...rows.map(row => row.length),
-      0
-    );
+          const value = row[emailColumn];
 
-    const dataRows = rows.slice(1);
-
-    const headerAnalysis =
-      analyzeHeaders(headers);
-
-    const emailIndex =
-      emailColumn(headers);
-
-    const phoneIndex =
-      phoneColumn(headers);
-
-    const dateIndex =
-      dateColumn(headers);
-
-    let emailTotal = 0;
-    let emailValid = 0;
-
-    let phoneTotal = 0;
-    let phoneValid = 0;
-
-    let dateTotal = 0;
-    let dateValid = 0;
-
-
-    dataRows.forEach(row => {
-
-      if (emailIndex >= 0) {
-
-        const value = row[emailIndex];
-
-        if (!isBlank(value)) {
-
-          emailTotal++;
+          if (isBlank(value)) return;
 
           if (isValidEmail(value)) {
-            emailValid++;
+            validEmails++;
+          } else {
+            invalidEmails++;
           }
-        }
+        });
       }
 
+      let validPhones = 0;
+      let invalidPhones = 0;
 
-      if (phoneIndex >= 0) {
+      if (phoneColumn !== -1) {
 
-        const value = row[phoneIndex];
+        dataRows.forEach(row => {
 
-        if (!isBlank(value)) {
+          const value = row[phoneColumn];
 
-          phoneTotal++;
+          if (isBlank(value)) return;
 
           if (isValidPhone(value)) {
-            phoneValid++;
+            validPhones++;
+          } else {
+            invalidPhones++;
           }
-        }
+        });
       }
 
+      let detectedDates = 0;
 
-      if (dateIndex >= 0) {
+      if (dateColumn !== -1) {
 
-        const value = row[dateIndex];
+        dataRows.forEach(row => {
 
-        if (!isBlank(value)) {
+          const value = row[dateColumn];
 
-          dateTotal++;
-
-          if (parseDateValue(value)) {
-            dateValid++;
+          if (!isBlank(value) && parseDateValue(value)) {
+            detectedDates++;
           }
-        }
+
+        });
       }
 
-    });
+      const formulaErrorData =
+        analyzeFormulaAndErrors(worksheet, rows);
 
+      const columnTypes =
+        detectColumnTypes(headers, rows);
 
-    const blankDataRows =
-      dataRows.filter(isEntireRowBlank).length;
+      return {
 
-    const duplicateRows =
-      countDuplicateRows(rows);
+        dataRows: dataRows.length,
 
-    const emptyColumns =
-      detectEmptyColumns(rows, width);
+        columns: headers.length,
 
-    const whitespaceValues =
-      countWhitespaceValues(rows);
+        duplicateRows,
 
-    const missingData =
-      analyzeMissingData(rows, width);
+        blankRows,
 
-    const columnTypes =
-      analyzeColumnTypes(rows, width);
+        emptyColumns,
 
+        missingCells,
 
-    return {
+        whitespaceValues,
 
-      rows: Math.max(0, rows.length - 1),
+        validEmails,
 
-      columns: width,
+        invalidEmails,
 
-      headerAnalysis,
+        validPhones,
 
-      emailIndex,
-      emailTotal,
-      emailValid,
+        invalidPhones,
 
-      phoneIndex,
-      phoneTotal,
-      phoneValid,
+        detectedDates,
 
-      dateIndex,
-      dateTotal,
-      dateValid,
+        duplicateHeaders: countDuplicateHeaders(headers),
 
-      blankDataRows,
+        blankHeaders: countBlankHeaders(headers),
 
-      duplicateRows,
+        formulaCells: formulaErrorData.formulaCells,
 
-      emptyColumns,
+        errorCells: formulaErrorData.errorCells,
 
-      whitespaceValues,
+        columnTypes
 
-      missingData,
-
-      columnTypes
-    };
-  }
-
-
-  /* =========================================================
-     UI HELPERS
-  ========================================================= */
-
-  function escapeHtml(value) {
-
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  function statCard(label, value) {
-
-    return `
-      <div class="stat">
-        <div class="stat-label">${escapeHtml(label)}</div>
-        <div class="stat-value">${escapeHtml(value)}</div>
-      </div>
-    `;
-  }
-
-
-  /* =========================================================
-     RENDER ORIGINAL ANALYSIS
-  ========================================================= */
-
-  function renderOriginalAnalysis() {
-
-    const a = originalAnalysis;
-
-    document.getElementById("overviewStats").innerHTML = `
-
-      ${statCard("Data Rows", a.rows)}
-      ${statCard("Columns", a.columns)}
-      ${statCard("Duplicate Rows", a.duplicateRows)}
-      ${statCard("Blank Rows", a.blankDataRows)}
-      ${statCard("Empty Columns", a.emptyColumns.length)}
-      ${statCard("Missing Cells", a.missingData.missing)}
-      ${statCard("Whitespace Values", a.whitespaceValues)}
-
-    `;
-
-
-    document.getElementById("qualityChecks").innerHTML = `
-
-      <div class="quality-item">
-        Email Validation
-        <strong class="${a.emailTotal === a.emailValid ? "good" : "warning"}">
-          ${a.emailValid} / ${a.emailTotal}
-        </strong>
-      </div>
-
-      <div class="quality-item">
-        Phone Validation
-        <strong class="${a.phoneTotal === a.phoneValid ? "good" : "warning"}">
-          ${a.phoneValid} / ${a.phoneTotal}
-        </strong>
-      </div>
-
-      <div class="quality-item">
-        Date Detection
-        <strong>
-          ${a.dateValid} / ${a.dateTotal}
-        </strong>
-      </div>
-
-      <div class="quality-item">
-        Duplicate Headers
-        <strong class="${a.headerAnalysis.duplicateHeaders ? "warning" : "good"}">
-          ${a.headerAnalysis.duplicateHeaders}
-        </strong>
-      </div>
-
-      <div class="quality-item">
-        Blank Headers
-        <strong class="${a.headerAnalysis.blankHeaders ? "warning" : "good"}">
-          ${a.headerAnalysis.blankHeaders}
-        </strong>
-      </div>
-
-      <div class="quality-item">
-        Missing Cells
-        <strong class="${a.missingData.missing ? "warning" : "good"}">
-          ${a.missingData.missing}
-        </strong>
-      </div>
-
-    `;
-
-
-    document.getElementById("validationDetails").innerHTML = `
-
-      <div class="stats">
-
-        ${statCard(
-          "Valid Emails",
-          a.emailValid
-        )}
-
-        ${statCard(
-          "Invalid Emails",
-          Math.max(0, a.emailTotal - a.emailValid)
-        )}
-
-        ${statCard(
-          "Valid Phones",
-          a.phoneValid
-        )}
-
-        ${statCard(
-          "Invalid Phones",
-          Math.max(0, a.phoneTotal - a.phoneValid)
-        )}
-
-        ${statCard(
-          "Detected Dates",
-          a.dateValid
-        )}
-
-      </div>
-
-    `;
-  }
-
-
-  /* =========================================================
-     RENDER ERROR DETAILS
-  ========================================================= */
-
-  function renderErrorDetails(formulaAnalysis) {
-
-    const container =
-      document.getElementById("formulaErrorDetails");
-
-    if (
-      formulaAnalysis.formulaCount === 0 &&
-      formulaAnalysis.errorCount === 0
-    ) {
-
-      container.innerHTML = `
-        <div class="quality-item good">
-          ✓ No formulas or spreadsheet errors detected.
-        </div>
-      `;
-
-      return;
+      };
     }
 
+    /* =========================================================
+       CLEAN WORKSHEET
+    ========================================================= */
 
-    let html = `
+    function cleanSpreadsheet(rows) {
 
-      <div class="stats">
+      if (!rows || rows.length === 0) {
+        return {
+          rows: [],
+          summary: {
+            blankRowsRemoved: 0,
+            duplicateRowsRemoved: 0,
+            emailsNormalized: 0,
+            phonesStandardized: 0,
+            datesStandardized: 0,
+            categoriesStandardized: 0,
+            emptyColumnsRemoved: 0
+          }
+        };
+      }
 
-        ${statCard(
-          "Formula Cells",
-          formulaAnalysis.formulaCount
-        )}
+      let workingRows = rows.map(row => [...row]);
 
-        ${statCard(
-          "Error Cells",
-          formulaAnalysis.errorCount
-        )}
+      /* HEADER CLEANUP */
 
-        ${statCard(
-          "Rows With Errors",
-          formulaAnalysis.rowsWithErrors.length
-        )}
+      let headers = workingRows[0].map(normalizeHeader);
 
-      </div>
-    `;
+      const usedHeaders = new Set();
 
+      headers = headers.map((header, index) => {
 
-    if (formulaAnalysis.errorCount > 0) {
+        let finalHeader = header || `Column ${index + 1}`;
 
-      html += `
-        <h3 style="margin-top:25px;">
-          Detected Errors
-        </h3>
+        let base = finalHeader;
+        let counter = 2;
 
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Cell</th>
-                <th>Row</th>
-                <th>Error</th>
-              </tr>
-            </thead>
-            <tbody>
-      `;
+        while (usedHeaders.has(finalHeader.toLowerCase())) {
+          finalHeader = `${base} ${counter}`;
+          counter++;
+        }
 
-      formulaAnalysis.errors
-        .slice(0, 100)
-        .forEach(error => {
+        usedHeaders.add(finalHeader.toLowerCase());
 
-          html += `
-            <tr>
-              <td class="code-cell">
-                ${escapeHtml(error.cell)}
-              </td>
-
-              <td>
-                ${escapeHtml(error.row)}
-              </td>
-
-              <td class="bad">
-                ${escapeHtml(error.error)}
-              </td>
-            </tr>
-          `;
-        });
-
-      html += `
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-
-    if (formulaAnalysis.formulaCount > 0) {
-
-      html += `
-        <h3 style="margin-top:25px;">
-          Formula Cells
-        </h3>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Cell</th>
-                <th>Row</th>
-                <th>Formula</th>
-              </tr>
-            </thead>
-            <tbody>
-      `;
-
-      formulaAnalysis.formulaCells
-        .slice(0, 100)
-        .forEach(formula => {
-
-          html += `
-            <tr>
-              <td class="code-cell">
-                ${escapeHtml(formula.cell)}
-              </td>
-
-              <td>
-                ${escapeHtml(formula.row)}
-              </td>
-
-              <td class="code-cell">
-                ${escapeHtml(formula.formula)}
-              </td>
-            </tr>
-          `;
-        });
-
-      html += `
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-
-    container.innerHTML = html;
-  }
-
-
-  /* =========================================================
-     RENDER TYPE MAP
-  ========================================================= */
-
-  function renderTypeMap() {
-
-    const container =
-      document.getElementById("typeMap");
-
-    const headers =
-      originalRows[0] || [];
-
-    const types =
-      originalAnalysis.columnTypes || [];
-
-
-    if (!headers.length) {
-
-      container.innerHTML =
-        `<div class="quality-item">No columns detected.</div>`;
-
-      return;
-    }
-
-
-    let html = `
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Column</th>
-              <th>Detected Type</th>
-            </tr>
-          </thead>
-
-          <tbody>
-    `;
-
-
-    headers.forEach((header, index) => {
-
-      html += `
-        <tr>
-          <td>
-            ${escapeHtml(header || `Column ${index + 1}`)}
-          </td>
-
-          <td>
-            ${escapeHtml(types[index] || "Empty")}
-          </td>
-        </tr>
-      `;
-    });
-
-
-    html += `
-          </tbody>
-        </table>
-      </div>
-    `;
-
-    container.innerHTML = html;
-  }
-
-
-  /* =========================================================
-     FORMULA MAP
-  ========================================================= */
-
-  function getFormulaMapForRow(
-    worksheet,
-    rowIndex,
-    width
-  ) {
-
-    const formulas = {};
-
-    if (!worksheet) {
-      return formulas;
-    }
-
-    for (let c = 0; c < width; c++) {
-
-      const address = XLSX.utils.encode_cell({
-        r: rowIndex,
-        c
+        return finalHeader;
       });
 
-      const cell = worksheet[address];
+      workingRows[0] = headers;
 
-      if (cell && cell.f) {
-        formulas[c] = cell.f;
-      }
-    }
+      /* REMOVE COMPLETELY BLANK ROWS */
 
-    return formulas;
-  }
+      const beforeBlankRemoval = workingRows.length;
 
+      workingRows = [
+        workingRows[0],
+        ...workingRows
+          .slice(1)
+          .filter(row => !isEntireRowBlank(row))
+      ];
 
-  function hasFormulaAt(
-    worksheet,
-    rowIndex,
-    columnIndex
-  ) {
+      const blankRowsRemoved =
+        beforeBlankRemoval - workingRows.length;
 
-    if (!worksheet) {
-      return false;
-    }
+      /* REMOVE DUPLICATES */
 
-    const address = XLSX.utils.encode_cell({
-      r: rowIndex,
-      c: columnIndex
-    });
+      const duplicateResult =
+        removeDuplicateRows(workingRows);
 
-    const cell = worksheet[address];
+      workingRows = duplicateResult.rows;
 
-    return !!(cell && cell.f);
-  }
+      /* DETECT COLUMNS */
 
-
-  /* =========================================================
-     CLEAN SPREADSHEET
-  ========================================================= */
-
-  function cleanSpreadsheet() {
-
-    if (!originalRows.length) {
-      return;
-    }
-
-
-    const headers =
-      originalRows[0] || [];
-
-    const width =
-      Math.max(
-        headers.length,
-        ...originalRows.map(row => row.length),
-        0
+      const emailColumn = findColumnIndex(
+        headers,
+        ["email", "email address", "mail"]
       );
 
+      const phoneColumn = findColumnIndex(
+        headers,
+        ["phone", "phone number", "mobile", "contact"]
+      );
 
-    const cleanHeaders =
-      buildCleanHeaders(headers);
+      const dateColumn = findColumnIndex(
+        headers,
+        ["date", "date of birth", "dob", "birth"]
+      );
 
+      /* STANDARDIZE */
 
-    const emailIndex =
-      emailColumn(headers);
+      let emailsNormalized = 0;
+      let phonesStandardized = 0;
+      let datesStandardized = 0;
+      let categoriesStandardized = 0;
 
-    const phoneIndex =
-      phoneColumn(headers);
+      for (let rowIndex = 1; rowIndex < workingRows.length; rowIndex++) {
 
-    const dateIndex =
-      dateColumn(headers);
+        const row = workingRows[rowIndex];
 
-    const genderIndex =
-      genderColumn(headers);
+        /* EMAIL */
 
-    const consentIndex =
-      consentColumn(headers);
+        if (emailColumn !== -1) {
 
-    const statusIndex =
-      statusColumn(headers);
+          const original = row[emailColumn];
 
+          if (!isBlank(original)) {
 
-    const resultRows = [cleanHeaders];
+            const normalized =
+              normalizeEmail(original);
 
-    const formulaRows = [];
+            if (String(original) !== normalized) {
+              emailsNormalized++;
+            }
 
+            row[emailColumn] = normalized;
+          }
+        }
 
-    const seen = new Set();
+        /* PHONE */
 
-    let removedBlankRows = 0;
-    let removedDuplicateRows = 0;
+        if (phoneColumn !== -1) {
 
-    let normalizedEmails = 0;
-    let standardizedPhones = 0;
-    let standardizedDates = 0;
-    let standardizedCategories = 0;
+          const original = row[phoneColumn];
 
+          if (!isBlank(original)) {
 
-    for (
-      let r = 1;
-      r < originalRows.length;
-      r++
-    ) {
+            const normalized =
+              normalizePhone(original);
 
-      const originalRow =
-        originalRows[r] || [];
+            if (String(original) !== normalized) {
+              phonesStandardized++;
+            }
 
-      const row = [];
+            row[phoneColumn] = normalized;
+          }
+        }
 
-      for (let c = 0; c < width; c++) {
+        /* DATE */
 
-        row[c] =
-          originalRow[c] === undefined
-            ? ""
-            : originalRow[c];
-      }
+        if (dateColumn !== -1) {
 
+          const original = row[dateColumn];
 
-      /* Remove fully blank rows */
+          if (!isBlank(original)) {
 
-      if (isEntireRowBlank(row)) {
+            const date =
+              parseDateValue(original);
 
-        removedBlankRows++;
+            if (date) {
 
-        continue;
-      }
+              const formatted =
+                formatDate(date);
 
+              if (String(original) !== formatted) {
+                datesStandardized++;
+              }
 
-      /* Duplicate detection */
+              row[dateColumn] = formatted;
+            }
+          }
+        }
 
-      const duplicateKey =
-        getComparableRow(row);
+        /* CATEGORY VALUES */
 
-      if (seen.has(duplicateKey)) {
+        for (let column = 0; column < row.length; column++) {
 
-        removedDuplicateRows++;
+          const original = row[column];
 
-        continue;
-      }
-
-      seen.add(duplicateKey);
-
-
-      /* Formula map */
-
-      const formulaMap =
-        getFormulaMapForRow(
-          originalWorksheet,
-          r,
-          width
-        );
-
-
-      /* Email */
-
-      if (
-        emailIndex >= 0 &&
-        !hasFormulaAt(
-          originalWorksheet,
-          r,
-          emailIndex
-        )
-      ) {
-
-        if (isValidEmail(row[emailIndex])) {
+          if (isBlank(original)) continue;
 
           const normalized =
-            normalizeEmail(row[emailIndex]);
+            standardizeCategory(original);
 
-          if (
-            normalized !==
-            String(row[emailIndex]).trim()
-          ) {
-
-            normalizedEmails++;
+          if (String(original) !== normalized) {
+            categoriesStandardized++;
+            row[column] = normalized;
           }
-
-          row[emailIndex] = normalized;
         }
       }
 
+      /* REMOVE EMPTY COLUMNS */
 
-      /* Phone */
+      const columnCount = headers.length;
+      const columnsToKeep = [];
 
-      if (
-        phoneIndex >= 0 &&
-        !hasFormulaAt(
-          originalWorksheet,
-          r,
-          phoneIndex
-        )
-      ) {
+      for (let column = 0; column < columnCount; column++) {
 
-        if (isValidPhone(row[phoneIndex])) {
+        const header = workingRows[0][column];
 
-          const standardized =
-            standardizePhone(row[phoneIndex]);
-
-          if (
-            standardized !==
-            row[phoneIndex]
-          ) {
-
-            standardizedPhones++;
-          }
-
-          row[phoneIndex] = standardized;
-        }
-      }
-
-
-      /* Date */
-
-      if (
-        dateIndex >= 0 &&
-        !hasFormulaAt(
-          originalWorksheet,
-          r,
-          dateIndex
-        )
-      ) {
-
-        const parsed =
-          parseDateValue(row[dateIndex]);
-
-        if (parsed) {
-
-          const formatted =
-            formatDate(parsed);
-
-          if (
-            formatted !==
-            String(row[dateIndex])
-          ) {
-
-            standardizedDates++;
-          }
-
-          row[dateIndex] = formatted;
-        }
-      }
-
-
-      /* Gender */
-
-      if (
-        genderIndex >= 0 &&
-        !hasFormulaAt(
-          originalWorksheet,
-          r,
-          genderIndex
-        )
-      ) {
-
-        const standardized =
-          standardizeCategory(
-            row[genderIndex],
-            "gender"
-          );
+        const values = workingRows
+          .slice(1)
+          .map(row => row[column]);
 
         if (
-          standardized !==
-          row[genderIndex]
+          !isBlank(header) ||
+          values.some(value => !isBlank(value))
         ) {
-
-          standardizedCategories++;
+          columnsToKeep.push(column);
         }
-
-        row[genderIndex] = standardized;
       }
 
+      const emptyColumnsRemoved =
+        columnCount - columnsToKeep.length;
 
-      /* Consent */
-
-      if (
-        consentIndex >= 0 &&
-        !hasFormulaAt(
-          originalWorksheet,
-          r,
-          consentIndex
-        )
-      ) {
-
-        const standardized =
-          standardizeCategory(
-            row[consentIndex],
-            "consent"
-          );
-
-        if (
-          standardized !==
-          row[consentIndex]
-        ) {
-
-          standardizedCategories++;
-        }
-
-        row[consentIndex] = standardized;
-      }
-
-
-      /* Status */
-
-      if (
-        statusIndex >= 0 &&
-        !hasFormulaAt(
-          originalWorksheet,
-          r,
-          statusIndex
-        )
-      ) {
-
-        const standardized =
-          standardizeCategory(
-            row[statusIndex],
-            "status"
-          );
-
-        if (
-          standardized !==
-          row[statusIndex]
-        ) {
-
-          standardizedCategories++;
-        }
-
-        row[statusIndex] = standardized;
-      }
-
-
-      resultRows.push(row);
-      formulaRows.push(formulaMap);
-    }
-
-
-    /* Remove completely empty columns */
-
-    const emptyColumns =
-      detectEmptyColumns(
-        resultRows,
-        width
+      workingRows = workingRows.map(row =>
+        columnsToKeep.map(column => row[column])
       );
 
+      return {
 
-    const emptyColumnSet =
-      new Set(emptyColumns);
+        rows: workingRows,
 
+        summary: {
 
-    const finalRows =
-      resultRows.map(row =>
-        row.filter(
-          (_, index) =>
-            !emptyColumnSet.has(index)
-        )
-      );
+          blankRowsRemoved,
 
+          duplicateRowsRemoved:
+            duplicateResult.removed,
 
-    const finalFormulaRows =
-      formulaRows.map(formulaMap => {
+          emailsNormalized,
 
-        const newMap = {};
+          phonesStandardized,
 
-        let newIndex = 0;
+          datesStandardized,
 
-        for (let c = 0; c < width; c++) {
+          categoriesStandardized,
 
-          if (emptyColumnSet.has(c)) {
-            continue;
-          }
+          emptyColumnsRemoved
 
-          if (
-            Object.prototype.hasOwnProperty.call(
-              formulaMap,
-              c
-            )
-          ) {
-
-            newMap[newIndex] =
-              formulaMap[c];
-          }
-
-          newIndex++;
         }
-
-        return newMap;
-      });
-
-
-    cleanedRows = finalRows;
-
-    cleanedFormulaRows = finalFormulaRows;
-
-
-    cleanedAnalysis =
-      analyzeSpreadsheet(cleanedRows);
-
-
-    /* Render summary */
-
-    document.getElementById(
-      "cleaningSummary"
-    ).innerHTML = `
-
-      <div class="quality-grid">
-
-        <div class="quality-item">
-          Blank Rows Removed
-          <strong>
-            ${removedBlankRows}
-          </strong>
-        </div>
-
-        <div class="quality-item">
-          Duplicate Rows Removed
-          <strong>
-            ${removedDuplicateRows}
-          </strong>
-        </div>
-
-        <div class="quality-item">
-          Emails Normalized
-          <strong>
-            ${normalizedEmails}
-          </strong>
-        </div>
-
-        <div class="quality-item">
-          Phones Standardized
-          <strong>
-            ${standardizedPhones}
-          </strong>
-        </div>
-
-        <div class="quality-item">
-          Dates Standardized
-          <strong>
-            ${standardizedDates}
-          </strong>
-        </div>
-
-        <div class="quality-item">
-          Categories Standardized
-          <strong>
-            ${standardizedCategories}
-          </strong>
-        </div>
-
-        <div class="quality-item">
-          Empty Columns Removed
-          <strong>
-            ${emptyColumns.length}
-          </strong>
-        </div>
-
-      </div>
-
-    `;
-
-
-    renderPreview();
-
-    document.getElementById(
-      "downloadXlsxBtn"
-    ).disabled = false;
-
-    document.getElementById(
-      "downloadCsvBtn"
-    ).disabled = false;
-  }
-
-
-  /* =========================================================
-     PREVIEW
-  ========================================================= */
-
-  function renderPreview() {
-
-    const container =
-      document.getElementById("preview");
-
-    if (!cleanedRows.length) {
-
-      container.innerHTML =
-        `<div class="quality-item">No cleaned data available.</div>`;
-
-      return;
+      };
     }
 
+    /* =========================================================
+       RENDER HELPERS
+    ========================================================= */
 
-    const previewRows =
-      cleanedRows.slice(0, 11);
+    function createStat(label, value) {
 
-    const headers =
-      previewRows[0] || [];
-
-    let html = `
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-    `;
-
-
-    headers.forEach(header => {
-
-      html += `
-        <th>
-          ${escapeHtml(header)}
-        </th>
+      return `
+        <div class="stat">
+          <div class="stat-value">${escapeHtml(value)}</div>
+          <div class="stat-label">${escapeHtml(label)}</div>
+        </div>
       `;
-    });
+    }
 
+    function createQualityItem(name, value, detail) {
 
-    html += `
+      return `
+        <div class="quality-item">
+          <div class="quality-name">${escapeHtml(name)}</div>
+          <div class="quality-value">${escapeHtml(value)}</div>
+          <div class="quality-detail">${escapeHtml(detail)}</div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(value) {
+
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /* =========================================================
+       RENDER OVERVIEW
+    ========================================================= */
+
+    function renderOverview(analysis) {
+
+      document.getElementById("overviewStats").innerHTML = [
+
+        createStat(
+          "Data Rows",
+          analysis.dataRows
+        ),
+
+        createStat(
+          "Columns",
+          analysis.columns
+        ),
+
+        createStat(
+          "Duplicate Rows",
+          analysis.duplicateRows
+        ),
+
+        createStat(
+          "Blank Rows",
+          analysis.blankRows
+        ),
+
+        createStat(
+          "Empty Columns",
+          analysis.emptyColumns
+        ),
+
+        createStat(
+          "Missing Cells",
+          analysis.missingCells
+        ),
+
+        createStat(
+          "Whitespace Values",
+          analysis.whitespaceValues
+        )
+
+      ].join("");
+    }
+
+    /* =========================================================
+       RENDER QUALITY
+    ========================================================= */
+
+    function renderQuality(analysis) {
+
+      document.getElementById("qualityGrid").innerHTML = [
+
+        createQualityItem(
+          "Email Validation",
+          analysis.validEmails,
+          `${analysis.validEmails} valid / ${analysis.invalidEmails} invalid`
+        ),
+
+        createQualityItem(
+          "Phone Validation",
+          analysis.validPhones,
+          `${analysis.validPhones} valid / ${analysis.invalidPhones} invalid`
+        ),
+
+        createQualityItem(
+          "Date Detection",
+          analysis.detectedDates,
+          "Detected date values"
+        ),
+
+        createQualityItem(
+          "Duplicate Headers",
+          analysis.duplicateHeaders,
+          "Duplicate header names"
+        ),
+
+        createQualityItem(
+          "Blank Headers",
+          analysis.blankHeaders,
+          "Missing header names"
+        ),
+
+        createQualityItem(
+          "Missing Cells",
+          analysis.missingCells,
+          "Blank cells in data rows"
+        )
+
+      ].join("");
+    }
+
+    /* =========================================================
+       RENDER VALIDATION
+    ========================================================= */
+
+    function renderValidation(analysis) {
+
+      document.getElementById("validationStats").innerHTML = [
+
+        createStat(
+          "Valid Emails",
+          analysis.validEmails
+        ),
+
+        createStat(
+          "Invalid Emails",
+          analysis.invalidEmails
+        ),
+
+        createStat(
+          "Valid Phones",
+          analysis.validPhones
+        ),
+
+        createStat(
+          "Invalid Phones",
+          analysis.invalidPhones
+        ),
+
+        createStat(
+          "Detected Dates",
+          analysis.detectedDates
+        )
+
+      ].join("");
+    }
+
+    /* =========================================================
+       RENDER FORMULAS / ERRORS
+    ========================================================= */
+
+    function renderFormulaErrors(analysis) {
+
+      document.getElementById("formulaStats").innerHTML = [
+
+        createStat(
+          "Formula Cells",
+          analysis.formulaCells.length
+        ),
+
+        createStat(
+          "Error Cells",
+          analysis.errorCells.length
+        ),
+
+        createStat(
+          "Rows With Errors",
+          new Set(
+            analysis.errorCells.map(item => item.row)
+          ).size
+        )
+
+      ].join("");
+
+      /* FORMULA TABLE */
+
+      const formulaContainer =
+        document.getElementById("formulaTableContainer");
+
+      if (analysis.formulaCells.length === 0) {
+
+        formulaContainer.innerHTML = `
+          <div class="empty-state">
+            No formula cells detected.
+          </div>
+        `;
+
+      } else {
+
+        let html = `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cell</th>
+                  <th>Row</th>
+                  <th>Column</th>
+                  <th>Formula</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        analysis.formulaCells.forEach(item => {
+
+          html += `
+            <tr>
+              <td>${escapeHtml(item.address)}</td>
+              <td>${escapeHtml(item.row)}</td>
+              <td>${escapeHtml(item.column)}</td>
+              <td>
+                <span class="formula-code">
+                  ${escapeHtml(item.formula)}
+                </span>
+              </td>
+              <td>${escapeHtml(item.result)}</td>
             </tr>
-          </thead>
-
-          <tbody>
-    `;
-
-
-    previewRows.slice(1).forEach(row => {
-
-      html += "<tr>";
-
-      headers.forEach((_, index) => {
+          `;
+        });
 
         html += `
-          <td>
-            ${escapeHtml(row[index] ?? "")}
-          </td>
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        formulaContainer.innerHTML = html;
+      }
+
+      /* ERROR TABLE */
+
+      const errorContainer =
+        document.getElementById("errorTableContainer");
+
+      if (analysis.errorCells.length === 0) {
+
+        errorContainer.innerHTML = `
+          <div class="empty-state">
+            No spreadsheet errors detected.
+          </div>
+        `;
+
+      } else {
+
+        let html = `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cell</th>
+                  <th>Row</th>
+                  <th>Column</th>
+                  <th>Error</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        analysis.errorCells.forEach(item => {
+
+          html += `
+            <tr>
+              <td>${escapeHtml(item.address)}</td>
+              <td>${escapeHtml(item.row)}</td>
+              <td>${escapeHtml(item.column)}</td>
+              <td class="error-text">
+                ${escapeHtml(item.error)}
+              </td>
+            </tr>
+          `;
+        });
+
+        html += `
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        errorContainer.innerHTML = html;
+      }
+    }
+
+    /* =========================================================
+       RENDER COLUMN TYPES
+    ========================================================= */
+
+    function renderColumnTypes(analysis) {
+
+      const container =
+        document.getElementById("columnTypesContainer");
+
+      if (!analysis.columnTypes.length) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No columns detected.
+          </div>
+        `;
+
+        return;
+      }
+
+      let html = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Detected Type</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      analysis.columnTypes.forEach(item => {
+
+        html += `
+          <tr>
+            <td>${escapeHtml(item.header)}</td>
+            <td>${escapeHtml(item.type)}</td>
+          </tr>
         `;
       });
 
-      html += "</tr>";
-    });
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
 
-
-    html += `
-          </tbody>
-        </table>
-      </div>
-
-      <p class="sheet-info" style="margin-top:10px;">
-        Showing first ${Math.min(
-          10,
-          Math.max(0, cleanedRows.length - 1)
-        )} data rows.
-      </p>
-    `;
-
-
-    container.innerHTML = html;
-  }
-
-
-  /* =========================================================
-     DOWNLOAD HELPERS
-  ========================================================= */
-
-  function downloadBlob(blob, filename) {
-
-    const url =
-      URL.createObjectURL(blob);
-
-    const link =
-      document.createElement("a");
-
-    link.href = url;
-    link.download = filename;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
-  }
-
-
-  function baseName(filename) {
-
-    return filename
-      .replace(/\.[^/.]+$/, "");
-  }
-
-
-  /* =========================================================
-     XLSX DOWNLOAD
-  ========================================================= */
-
-  function downloadXlsx() {
-
-    if (!cleanedRows.length) {
-      return;
+      container.innerHTML = html;
     }
 
+    /* =========================================================
+       RENDER CLEANING SUMMARY
+    ========================================================= */
 
-    const wb =
-      XLSX.utils.book_new();
+    function renderCleaningSummary(summary) {
 
-    const ws =
-      XLSX.utils.aoa_to_sheet(cleanedRows);
+      document.getElementById("cleaningStats").innerHTML = [
 
+        createStat(
+          "Blank Rows Removed",
+          summary.blankRowsRemoved
+        ),
 
-    /*
-      Restore formulas.
-      The formula maps correspond to the cleaned
-      columns after empty-column removal.
-    */
+        createStat(
+          "Duplicate Rows Removed",
+          summary.duplicateRowsRemoved
+        ),
 
-    for (
-      let r = 0;
-      r < cleanedFormulaRows.length;
-      r++
-    ) {
+        createStat(
+          "Emails Normalized",
+          summary.emailsNormalized
+        ),
 
-      const formulaMap =
-        cleanedFormulaRows[r];
+        createStat(
+          "Phones Standardized",
+          summary.phonesStandardized
+        ),
+
+        createStat(
+          "Dates Standardized",
+          summary.datesStandardized
+        ),
+
+        createStat(
+          "Categories Standardized",
+          summary.categoriesStandardized
+        ),
+
+        createStat(
+          "Empty Columns Removed",
+          summary.emptyColumnsRemoved
+        )
+
+      ].join("");
+    }
+
+    /* =========================================================
+       RENDER PREVIEW
+    ========================================================= */
+
+    function renderPreview(rows) {
+
+      const container =
+        document.getElementById("previewContainer");
+
+      if (!rows || rows.length === 0) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No cleaned data available.
+          </div>
+        `;
+
+        return;
+      }
+
+      const headers = rows[0];
+
+      const previewRows =
+        rows.slice(1, 21);
+
+      let html = `
+        <div class="preview-wrap">
+          <table>
+            <thead>
+              <tr>
+      `;
+
+      headers.forEach(header => {
+
+        html += `
+          <th>${escapeHtml(header)}</th>
+        `;
+      });
+
+      html += `
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      previewRows.forEach(row => {
+
+        html += "<tr>";
+
+        headers.forEach((_, index) => {
+
+          html += `
+            <td>${escapeHtml(
+              row[index] === undefined
+                ? ""
+                : row[index]
+            )}</td>
+          `;
+        });
+
+        html += "</tr>";
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    /* =========================================================
+       FORMULA MAP
+    ========================================================= */
+
+    function getFormulaMapForWorksheet(worksheet) {
+
+      const map = {};
+
+      if (!worksheet || !worksheet["!ref"]) {
+        return map;
+      }
+
+      const range =
+        XLSX.utils.decode_range(worksheet["!ref"]);
 
       for (
-        const [columnIndex, formula]
-        of Object.entries(formulaMap)
+        let row = range.s.r;
+        row <= range.e.r;
+        row++
       ) {
 
-        const rowIndex = r + 1;
-        const colIndex = Number(columnIndex);
+        for (
+          let column = range.s.c;
+          column <= range.e.c;
+          column++
+        ) {
 
-        const address =
-          XLSX.utils.encode_cell({
-            r: rowIndex,
-            c: colIndex
-          });
+          const address =
+            XLSX.utils.encode_cell({
+              r: row,
+              c: column
+            });
 
-        ws[address] = {
-          f: formula
-        };
+          const cell =
+            worksheet[address];
+
+          if (
+            cell &&
+            typeof cell.f === "string" &&
+            cell.f.trim() !== ""
+          ) {
+
+            map[`${row}|${column}`] = cell.f;
+          }
+        }
       }
+
+      return map;
     }
 
+    /* =========================================================
+       BUILD CLEANED WORKSHEET
+    ========================================================= */
 
-    XLSX.utils.book_append_sheet(
-      wb,
-      ws,
-      "Cleaned Data"
-    );
+    function buildCleanedWorksheet() {
 
+      const worksheet =
+        XLSX.utils.aoa_to_sheet(
+          currentCleanedRows
+        );
 
-    wb.Workbook = wb.Workbook || {};
+      return worksheet;
+    }
 
-    wb.Workbook.CalcPr = {
-      fullCalcOnLoad: true,
-      forceFullCalc: true
-    };
+    /* =========================================================
+       DOWNLOAD XLSX
+    ========================================================= */
 
+    function downloadXLSX() {
 
-    const output =
-      XLSX.write(
-        wb,
-        {
-          bookType: "xlsx",
-          type: "array"
-        }
+      if (
+        !currentCleanedRows ||
+        currentCleanedRows.length === 0
+      ) {
+        showMessage(
+          "There is no cleaned data to download.",
+          "error"
+        );
+        return;
+      }
+
+      const worksheet =
+        buildCleanedWorksheet();
+
+      const workbook =
+        XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Cleaned Data"
       );
 
-
-    const blob =
-      new Blob(
-        [output],
-        {
-          type:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        }
+      XLSX.writeFile(
+        workbook,
+        "cleaned-spreadsheet.xlsx"
       );
-
-
-    downloadBlob(
-      blob,
-      `${baseName(currentFileName)}-cleaned.xlsx`
-    );
-  }
-
-
-  /* =========================================================
-     CSV DOWNLOAD
-  ========================================================= */
-
-  function csvEscape(value) {
-
-    if (value === null || value === undefined) {
-      return "";
-    }
-
-    const text = String(value);
-
-    if (
-      text.includes(",") ||
-      text.includes('"') ||
-      text.includes("\n") ||
-      text.includes("\r")
-    ) {
-
-      return `"${text.replace(/"/g, '""')}"`;
-    }
-
-    return text;
-  }
-
-
-  function downloadCsv() {
-
-    if (!cleanedRows.length) {
-      return;
-    }
-
-
-    const csv =
-      cleanedRows
-        .map(row =>
-          row
-            .map(csvEscape)
-            .join(",")
-        )
-        .join("\r\n");
-
-
-    const blob =
-      new Blob(
-        ["\ufeff" + csv],
-        {
-          type: "text/csv;charset=utf-8;"
-        }
-      );
-
-
-    downloadBlob(
-      blob,
-      `${baseName(currentFileName)}-cleaned.csv`
-    );
-  }
-
-
-  /* =========================================================
-     STEP 37 — LOAD SELECTED SHEET
-  ========================================================= */
-
-  function loadSelectedSheet() {
-
-    if (!currentWorkbook) {
-      return;
-    }
-
-
-    const selector =
-      document.getElementById(
-        "sheetSelector"
-      );
-
-
-    const sheetName =
-      selector.value;
-
-
-    if (!sheetName) {
-      return;
-    }
-
-
-    currentSheetName =
-      sheetName;
-
-
-    originalWorksheet =
-      currentWorkbook.Sheets[
-        sheetName
-      ];
-
-
-    if (!originalWorksheet) {
 
       showMessage(
-        "Unable to load the selected worksheet.",
-        "error"
+        "Cleaned XLSX downloaded successfully.",
+        "success"
       );
-
-      return;
     }
 
-
-    originalRows =
-      XLSX.utils.sheet_to_json(
-        originalWorksheet,
-        {
-          header: 1,
-          defval: "",
-          raw: false,
-          blankrows: true
-        }
-      );
-
-
-    /*
-      Make sure there is at least one row.
-    */
-
-    if (!originalRows.length) {
-      originalRows = [[""]];
-    }
-
-
-    originalAnalysis =
-      analyzeSpreadsheet(
-        originalRows
-      );
-
-
-    const formulaAnalysis =
-      analyzeFormulaAndErrors(
-        originalWorksheet,
-        originalRows
-      );
-
-
-    renderOriginalAnalysis();
-
-    renderErrorDetails(
-      formulaAnalysis
-    );
-
-    renderTypeMap();
-
-
-    /*
-      Clean the currently selected sheet.
-    */
-
-    cleanSpreadsheet();
-
-
-    const sheetInfo =
-      document.getElementById(
-        "sheetInfo"
-      );
-
-
-    sheetInfo.textContent =
-      `${currentWorkbook.SheetNames.length} worksheet(s) • Currently viewing: ${currentSheetName}`;
-
-
-    showMessage(
-      `Worksheet "${currentSheetName}" loaded successfully.`,
-      "success"
-    );
-
-
-    document.getElementById(
-      "results"
-    ).classList.remove("hidden");
-  }
-
-
-  /* =========================================================
-     RESET
-  ========================================================= */
-
-  function resetAll() {
-
-    originalRows = [];
-    cleanedRows = [];
-    cleanedFormulaRows = [];
-
-    originalAnalysis = null;
-    cleanedAnalysis = null;
-
-    currentFileName = "";
-    originalWorksheet = null;
-
-    /*
-      STEP 37 — clear workbook state
-    */
-
-    currentWorkbook = null;
-    currentSheetName = "";
-    availableSheetNames = [];
-
-
-    document.getElementById(
-      "fileInput"
-    ).value = "";
-
-
-    document.getElementById(
-      "results"
-    ).classList.add("hidden");
-
-
-    document.getElementById(
-      "sheetSelectorCard"
-    ).style.display = "none";
-
-
-    document.getElementById(
-      "sheetSelector"
-    ).innerHTML = "";
-
-
-    document.getElementById(
-      "sheetInfo"
-    ).textContent = "";
-
-
-    document.getElementById(
-      "overviewStats"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "qualityChecks"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "validationDetails"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "formulaErrorDetails"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "typeMap"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "cleaningSummary"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "preview"
-    ).innerHTML = "";
-
-
-    document.getElementById(
-      "downloadXlsxBtn"
-    ).disabled = true;
-
-    document.getElementById(
-      "downloadCsvBtn"
-    ).disabled = true;
-
-
-    hideMessage();
-  }
-
-
-  /* =========================================================
-     STEP 37 — FILE HANDLER
-  ========================================================= */
-
-  async function handleFile(file) {
-
-    if (!file) {
-      return;
-    }
-
-
-    const validExtensions =
-      [".xlsx", ".xls", ".csv"];
-
-    const lowerName =
-      file.name.toLowerCase();
-
-    const valid =
-      validExtensions.some(
-        ext => lowerName.endsWith(ext)
-      );
-
-
-    if (!valid) {
-
-      showMessage(
-        "Please upload an XLSX, XLS or CSV file.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    try {
-
-      showMessage(
-        "Reading your spreadsheet...",
-        "info"
-      );
-
-
-      currentFileName =
-        file.name;
-
-
-      const buffer =
-        await file.arrayBuffer();
-
-
-      currentWorkbook =
-        XLSX.read(
-          buffer,
+    /* =========================================================
+       DOWNLOAD CSV
+    ========================================================= */
+
+    function downloadCSV() {
+
+      if (
+        !currentCleanedRows ||
+        currentCleanedRows.length === 0
+      ) {
+        showMessage(
+          "There is no cleaned data to download.",
+          "error"
+        );
+        return;
+      }
+
+      const worksheet =
+        XLSX.utils.aoa_to_sheet(
+          currentCleanedRows
+        );
+
+      const csv =
+        XLSX.utils.sheet_to_csv(
+          worksheet
+        );
+
+      const blob =
+        new Blob(
+          [csv],
           {
-            type: "array",
-            cellDates: true,
+            type: "text/csv;charset=utf-8;"
+          }
+        );
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+      link.download =
+        "cleaned-spreadsheet.csv";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+
+      showMessage(
+        "Cleaned CSV downloaded successfully.",
+        "success"
+      );
+    }
+
+    /* =========================================================
+       LOAD SELECTED SHEET
+    ========================================================= */
+
+    function loadSelectedSheet() {
+
+      if (!currentWorkbook) {
+        return;
+      }
+
+      currentSheetName =
+        sheetSelector.value;
+
+      if (!currentSheetName) {
+        return;
+      }
+
+      const worksheet =
+        currentWorkbook.Sheets[
+          currentSheetName
+        ];
+
+      if (!worksheet) {
+        showMessage(
+          "Unable to load the selected worksheet.",
+          "error"
+        );
+        return;
+      }
+
+      const rows =
+        XLSX.utils.sheet_to_json(
+          worksheet,
+          {
+            header: 1,
+            defval: "",
             raw: false,
             blankrows: true
           }
         );
 
+      currentOriginalRows =
+        rows.map(row => [...row]);
 
-      availableSheetNames =
-        currentWorkbook.SheetNames || [];
-
-
-      if (!availableSheetNames.length) {
-
-        throw new Error(
-          "No worksheets were found in this file."
-        );
-      }
-
-
-      /*
-        Populate worksheet selector.
-      */
-
-      const selector =
-        document.getElementById(
-          "sheetSelector"
+      currentAnalysis =
+        analyzeSpreadsheet(
+          worksheet,
+          currentOriginalRows
         );
 
+      const cleaned =
+        cleanSpreadsheet(
+          currentOriginalRows
+        );
 
-      selector.innerHTML = "";
+      currentCleanedRows =
+        cleaned.rows;
 
+      /* UPDATE SHEET INFO */
 
-      availableSheetNames.forEach(
-        sheetName => {
+      sheetInfoValue.textContent =
+        `${currentSheetName} • ${availableSheetNames.length} worksheet${availableSheetNames.length === 1 ? "" : "s"}`;
 
-          const option =
-            document.createElement("option");
+      /* RENDER */
 
-          option.value = sheetName;
-          option.textContent = sheetName;
-
-          selector.appendChild(option);
-        }
+      renderOverview(
+        currentAnalysis
       );
 
+      renderQuality(
+        currentAnalysis
+      );
 
-      /*
-        Show selector when workbook
-        contains one or more sheets.
-      */
+      renderValidation(
+        currentAnalysis
+      );
 
-      document.getElementById(
-        "sheetSelectorCard"
-      ).style.display = "block";
+      renderFormulaErrors(
+        currentAnalysis
+      );
 
+      renderColumnTypes(
+        currentAnalysis
+      );
 
-      /*
-        Automatically select first sheet.
-      */
+      renderCleaningSummary(
+        cleaned.summary
+      );
 
-      selector.value =
-        availableSheetNames[0];
+      renderPreview(
+        currentCleanedRows
+      );
 
-
-      currentSheetName =
-        availableSheetNames[0];
-
-
-      /*
-        Load selected worksheet.
-      */
-
-      loadSelectedSheet();
-
-    } catch (error) {
-
-      console.error(error);
+      results.style.display = "block";
 
       showMessage(
-        "Unable to read this spreadsheet. Please check that the file is valid.",
-        "error"
+        `Worksheet "${currentSheetName}" loaded successfully.`,
+        "success"
       );
     }
-  }
 
+    /* =========================================================
+       HANDLE FILE
+    ========================================================= */
 
-  /* =========================================================
-     EVENTS
-  ========================================================= */
+    async function handleFile(file) {
 
-  document
-    .getElementById("fileInput")
-    .addEventListener(
+      if (!file) {
+        return;
+      }
+
+      const allowedExtensions = [
+        ".xlsx",
+        ".xls",
+        ".csv"
+      ];
+
+      const lowerName =
+        file.name.toLowerCase();
+
+      const validExtension =
+        allowedExtensions.some(
+          extension =>
+            lowerName.endsWith(extension)
+        );
+
+      if (!validExtension) {
+
+        showMessage(
+          "Please upload an XLSX, XLS or CSV file.",
+          "error"
+        );
+
+        return;
+      }
+
+      try {
+
+        showMessage(
+          "Reading your spreadsheet...",
+          "info"
+        );
+
+        const buffer =
+          await file.arrayBuffer();
+
+        currentWorkbook =
+          XLSX.read(
+            buffer,
+            {
+              type: "array",
+              cellDates: true,
+              raw: false,
+              blankrows: true
+            }
+          );
+
+        availableSheetNames =
+          currentWorkbook.SheetNames || [];
+
+        if (availableSheetNames.length === 0) {
+
+          showMessage(
+            "No worksheets were found in this file.",
+            "error"
+          );
+
+          return;
+        }
+
+        /* FILE STATUS */
+
+        fileName.textContent =
+          file.name;
+
+        fileMeta.textContent =
+          `${availableSheetNames.length} worksheet${availableSheetNames.length === 1 ? "" : "s"} • ${formatFileSize(file.size)}`;
+
+        fileStatus.classList.add("show");
+
+        /* SHEET SELECTOR */
+
+        sheetSelector.innerHTML =
+          availableSheetNames
+            .map(
+              sheetName => `
+                <option value="${escapeHtml(sheetName)}">
+                  ${escapeHtml(sheetName)}
+                </option>
+              `
+            )
+            .join("");
+
+        sheetCard.classList.add("show");
+
+        currentSheetName =
+          availableSheetNames[0];
+
+        sheetSelector.value =
+          currentSheetName;
+
+        loadSelectedSheet();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Unable to read this spreadsheet. Please check that the file is valid.",
+          "error"
+        );
+
+      }
+    }
+
+    /* =========================================================
+       FILE SIZE
+    ========================================================= */
+
+    function formatFileSize(bytes) {
+
+      if (!bytes) {
+        return "0 KB";
+      }
+
+      const units = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+      ];
+
+      const index =
+        Math.floor(
+          Math.log(bytes) /
+          Math.log(1024)
+        );
+
+      const size =
+        bytes /
+        Math.pow(1024, index);
+
+      return `${size.toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
+    }
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    function resetApp() {
+
+      currentWorkbook = null;
+      currentSheetName = "";
+      availableSheetNames = [];
+
+      currentOriginalRows = [];
+      currentCleanedRows = [];
+      currentAnalysis = null;
+
+      fileInput.value = "";
+
+      fileName.textContent = "";
+      fileMeta.textContent = "";
+
+      sheetSelector.innerHTML = "";
+
+      sheetInfoValue.textContent = "—";
+
+      fileStatus.classList.remove("show");
+      sheetCard.classList.remove("show");
+
+      results.style.display = "none";
+
+      hideMessage();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    /* =========================================================
+       EVENT LISTENERS
+    ========================================================= */
+
+    chooseButton.addEventListener(
+      "click",
+      () => fileInput.click()
+    );
+
+    changeFileButton.addEventListener(
+      "click",
+      () => fileInput.click()
+    );
+
+    fileInput.addEventListener(
       "change",
       event => {
 
         const file =
           event.target.files[0];
 
-        handleFile(file);
+        if (file) {
+          handleFile(file);
+        }
+
       }
     );
 
-
-  /*
-    STEP 37 — SHEET SELECTOR EVENT
-  */
-
-  document
-    .getElementById("sheetSelector")
-    .addEventListener(
+    sheetSelector.addEventListener(
       "change",
       loadSelectedSheet
     );
 
-
-  document
-    .getElementById("downloadXlsxBtn")
-    .addEventListener(
-      "click",
-      downloadXlsx
-    );
-
-
-  document
-    .getElementById("downloadCsvBtn")
-    .addEventListener(
-      "click",
-      downloadCsv
-    );
-
-
-  document
-    .getElementById("resetBtn")
-    .addEventListener(
-      "click",
-      resetAll
-    );
-
-
-  /* =========================================================
-     DRAG & DROP
-  ========================================================= */
-
-  const uploadBox =
     document.getElementById(
-      "uploadBox"
+      "downloadXlsx"
+    ).addEventListener(
+      "click",
+      downloadXLSX
     );
 
+    document.getElementById(
+      "downloadCsv"
+    ).addEventListener(
+      "click",
+      downloadCSV
+    );
 
-  uploadBox.addEventListener(
-    "dragover",
-    event => {
+    document.getElementById(
+      "resetButton"
+    ).addEventListener(
+      "click",
+      resetApp
+    );
 
-      event.preventDefault();
+    /* =========================================================
+       DRAG & DROP
+    ========================================================= */
 
-      uploadBox.style.borderColor =
-        "#5574d8";
-    }
-  );
+    [
+      "dragenter",
+      "dragover"
+    ].forEach(eventName => {
 
+      uploadZone.addEventListener(
+        eventName,
+        event => {
 
-  uploadBox.addEventListener(
-    "dragleave",
-    () => {
+          event.preventDefault();
+          event.stopPropagation();
 
-      uploadBox.style.borderColor =
-        "";
-    }
-  );
+          uploadZone.classList.add(
+            "dragover"
+          );
 
+        }
+      );
 
-  uploadBox.addEventListener(
-    "drop",
-    event => {
+    });
 
-      event.preventDefault();
+    [
+      "dragleave",
+      "drop"
+    ].forEach(eventName => {
 
-      uploadBox.style.borderColor =
-        "";
+      uploadZone.addEventListener(
+        eventName,
+        event => {
 
-      const file =
-        event.dataTransfer.files[0];
+          event.preventDefault();
+          event.stopPropagation();
 
-      handleFile(file);
-    }
-  );
+          uploadZone.classList.remove(
+            "dragover"
+          );
 
-</script>
+        }
+      );
+
+    });
+
+    uploadZone.addEventListener(
+      "drop",
+      event => {
+
+        const file =
+          event.dataTransfer.files[0];
+
+        if (file) {
+          handleFile(file);
+        }
+
+      }
+    );
+
+  </script>
 
 </body>
 </html>
