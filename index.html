@@ -90,9 +90,35 @@
             border-radius: 12px;
         }
 
-        .options h3 {
-            margin-top: 0;
+        .options-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 15px;
+        }
+
+        .options-header h3 {
+            margin: 0;
+        }
+
+        .selection-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .selection-buttons button {
+            width: auto;
+            margin: 0;
+            padding: 8px 12px;
+            font-size: 13px;
+            background: #e9edf7;
+            color: #333;
+            border: 1px solid #d5dbea;
+        }
+
+        .selection-buttons button:hover {
+            background: #dce2f2;
         }
 
         .option {
@@ -218,6 +244,7 @@
         }
 
         @media (max-width: 600px) {
+
             .container {
                 margin: 20px auto;
                 padding: 12px;
@@ -229,6 +256,19 @@
 
             h1 {
                 font-size: 27px;
+            }
+
+            .options-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .selection-buttons {
+                width: 100%;
+            }
+
+            .selection-buttons button {
+                flex: 1;
             }
         }
     </style>
@@ -245,6 +285,9 @@
         <div class="subtitle">
             Clean and organize your Excel and CSV files directly in your browser.
         </div>
+
+
+        <!-- Upload Area -->
 
         <div class="upload-area" id="uploadArea">
 
@@ -273,50 +316,82 @@
 
         <div class="options">
 
-            <h3>Choose what you want to clean</h3>
+            <div class="options-header">
+
+                <h3>Choose what you want to clean</h3>
+
+                <div class="selection-buttons">
+
+                    <button id="selectAllButton" type="button">
+                        Select All
+                    </button>
+
+                    <button id="clearAllButton" type="button">
+                        Clear All
+                    </button>
+
+                </div>
+
+            </div>
+
 
             <div class="option">
+
                 <input
                     type="checkbox"
                     id="removeEmptyRows"
                     checked
                 >
+
                 <label for="removeEmptyRows">
                     Remove completely empty rows
                 </label>
+
             </div>
 
+
             <div class="option">
+
                 <input
                     type="checkbox"
                     id="removeDuplicates"
                     checked
                 >
+
                 <label for="removeDuplicates">
                     Remove duplicate rows
                 </label>
+
             </div>
 
+
             <div class="option">
+
                 <input
                     type="checkbox"
                     id="cleanSpaces"
                     checked
                 >
+
                 <label for="cleanSpaces">
                     Clean extra spaces
                 </label>
+
             </div>
 
+
             <div class="option">
+
                 <input
                     type="checkbox"
                     id="standardizeNames"
                     checked
                 >
+
                 <label for="standardizeNames">
                     Standardize customer names
                 </label>
+
             </div>
 
         </div>
@@ -326,9 +401,11 @@
             🧹 Clean Spreadsheet
         </button>
 
+
         <button id="resetButton">
             🔄 Choose Another File
         </button>
+
 
         <div class="status" id="status"></div>
 
@@ -379,7 +456,9 @@
             <h2>Spreadsheet Preview</h2>
 
             <div class="table-container">
+
                 <table id="previewTable"></table>
+
             </div>
 
         </div>
@@ -393,9 +472,13 @@
 
 
     <footer>
+
         Your files are processed in your browser and are not uploaded to a server.
+
         <br><br>
+
         © 2026 Clean My Spreadsheet
+
     </footer>
 
 </div>
@@ -403,29 +486,60 @@
 
 <script>
 
-    const fileInput = document.getElementById("fileInput");
-    const uploadArea = document.getElementById("uploadArea");
-    const fileName = document.getElementById("fileName");
+    const fileInput =
+        document.getElementById("fileInput");
 
-    const cleanButton = document.getElementById("cleanButton");
-    const resetButton = document.getElementById("resetButton");
+    const uploadArea =
+        document.getElementById("uploadArea");
 
-    const status = document.getElementById("status");
+    const fileName =
+        document.getElementById("fileName");
 
-    const report = document.getElementById("report");
-    const preview = document.getElementById("preview");
-    const previewTable = document.getElementById("previewTable");
+    const cleanButton =
+        document.getElementById("cleanButton");
 
-    const downloadButton = document.getElementById("downloadButton");
+    const resetButton =
+        document.getElementById("resetButton");
+
+    const status =
+        document.getElementById("status");
+
+    const report =
+        document.getElementById("report");
+
+    const preview =
+        document.getElementById("preview");
+
+    const previewTable =
+        document.getElementById("previewTable");
+
+    const downloadButton =
+        document.getElementById("downloadButton");
+
+    const selectAllButton =
+        document.getElementById("selectAllButton");
+
+    const clearAllButton =
+        document.getElementById("clearAllButton");
 
 
     let selectedFile = null;
 
 
+    const optionIds = [
+        "removeEmptyRows",
+        "removeDuplicates",
+        "cleanSpaces",
+        "standardizeNames"
+    ];
+
+
     // File picker
 
     uploadArea.addEventListener("click", function() {
+
         fileInput.click();
+
     });
 
 
@@ -433,7 +547,8 @@
 
         if (fileInput.files.length > 0) {
 
-            selectedFile = fileInput.files[0];
+            selectedFile =
+                fileInput.files[0];
 
             fileName.textContent =
                 "Selected: " + selectedFile.name;
@@ -469,13 +584,16 @@
 
         uploadArea.classList.remove("dragover");
 
-        const files = event.dataTransfer.files;
+        const files =
+            event.dataTransfer.files;
 
         if (files.length > 0) {
 
-            selectedFile = files[0];
+            selectedFile =
+                files[0];
 
-            fileInput.files = files;
+            fileInput.files =
+                files;
 
             fileName.textContent =
                 "Selected: " + selectedFile.name;
@@ -483,6 +601,32 @@
             status.textContent = "";
 
         }
+
+    });
+
+
+    // Select All
+
+    selectAllButton.addEventListener("click", function() {
+
+        optionIds.forEach(function(id) {
+
+            document.getElementById(id).checked = true;
+
+        });
+
+    });
+
+
+    // Clear All
+
+    clearAllButton.addEventListener("click", function() {
+
+        optionIds.forEach(function(id) {
+
+            document.getElementById(id).checked = false;
+
+        });
 
     });
 
@@ -501,7 +645,8 @@
         }
 
 
-        status.textContent = "Cleaning your spreadsheet...";
+        status.textContent =
+            "Cleaning your spreadsheet...";
 
 
         try {
@@ -509,16 +654,24 @@
             const options = {
 
                 removeEmptyRows:
-                    document.getElementById("removeEmptyRows").checked,
+                    document.getElementById(
+                        "removeEmptyRows"
+                    ).checked,
 
                 removeDuplicates:
-                    document.getElementById("removeDuplicates").checked,
+                    document.getElementById(
+                        "removeDuplicates"
+                    ).checked,
 
                 cleanSpaces:
-                    document.getElementById("cleanSpaces").checked,
+                    document.getElementById(
+                        "cleanSpaces"
+                    ).checked,
 
                 standardizeNames:
-                    document.getElementById("standardizeNames").checked
+                    document.getElementById(
+                        "standardizeNames"
+                    ).checked
 
             };
 
@@ -531,7 +684,6 @@
 
 
             let rows = [];
-            let isExcel = false;
 
 
             // Read Excel
@@ -541,15 +693,16 @@
                 extension === "xls"
             ) {
 
-                isExcel = true;
-
                 const arrayBuffer =
                     await selectedFile.arrayBuffer();
 
                 const workbook =
-                    XLSX.read(arrayBuffer, {
-                        type: "array"
-                    });
+                    XLSX.read(
+                        arrayBuffer,
+                        {
+                            type: "array"
+                        }
+                    );
 
                 const firstSheetName =
                     workbook.SheetNames[0];
@@ -652,9 +805,15 @@
                         const cleaned =
                             original
                                 .trim()
-                                .replace(/\s+/g, " ");
+                                .replace(
+                                    /\s+/g,
+                                    " "
+                                );
 
-                        if (original !== cleaned) {
+                        if (
+                            original !==
+                            cleaned
+                        ) {
 
                             spacesCleaned++;
 
@@ -671,7 +830,10 @@
 
             // Standardize names
 
-            if (options.standardizeNames && rows.length > 0) {
+            if (
+                options.standardizeNames &&
+                rows.length > 0
+            ) {
 
                 const headers =
                     rows[0].map(header =>
@@ -687,21 +849,37 @@
 
                 if (nameIndex !== -1) {
 
-                    for (let i = 1; i < rows.length; i++) {
+                    for (
+                        let i = 1;
+                        i < rows.length;
+                        i++
+                    ) {
 
                         const original =
-                            String(rows[i][nameIndex] || "");
+                            String(
+                                rows[i][nameIndex] || ""
+                            );
 
-                        if (original.trim() !== "") {
+
+                        if (
+                            original.trim() !== ""
+                        ) {
 
                             const standardized =
-                                standardizeName(original);
+                                standardizeName(
+                                    original
+                                );
 
-                            if (standardized !== original) {
+
+                            if (
+                                standardized !==
+                                original
+                            ) {
 
                                 namesStandardized++;
 
                             }
+
 
                             rows[i][nameIndex] =
                                 standardized;
@@ -723,10 +901,12 @@
 
                 const uniqueRows = [];
 
+
                 for (const row of rows) {
 
                     const key =
                         JSON.stringify(row);
+
 
                     if (seen.has(key)) {
 
@@ -742,6 +922,7 @@
 
                 }
 
+
                 rows = uniqueRows;
 
             }
@@ -753,26 +934,44 @@
 
             // Update report
 
-            document.getElementById("rowsBefore")
-                .textContent = rowsBefore;
-
-            document.getElementById("emptyRowsRemoved")
-                .textContent = emptyRowsRemoved;
-
-            document.getElementById("duplicatesRemoved")
-                .textContent = duplicatesRemoved;
-
-            document.getElementById("spacesCleaned")
-                .textContent = spacesCleaned;
-
-            document.getElementById("namesStandardized")
-                .textContent = namesStandardized;
-
-            document.getElementById("rowsAfter")
-                .textContent = rowsAfter;
+            document.getElementById(
+                "rowsBefore"
+            ).textContent =
+                rowsBefore;
 
 
-            report.style.display = "block";
+            document.getElementById(
+                "emptyRowsRemoved"
+            ).textContent =
+                emptyRowsRemoved;
+
+
+            document.getElementById(
+                "duplicatesRemoved"
+            ).textContent =
+                duplicatesRemoved;
+
+
+            document.getElementById(
+                "spacesCleaned"
+            ).textContent =
+                spacesCleaned;
+
+
+            document.getElementById(
+                "namesStandardized"
+            ).textContent =
+                namesStandardized;
+
+
+            document.getElementById(
+                "rowsAfter"
+            ).textContent =
+                rowsAfter;
+
+
+            report.style.display =
+                "block";
 
 
             // Preview
@@ -780,7 +979,7 @@
             showPreview(rows);
 
 
-            // Download
+            // Filename
 
             const nameWithoutExtension =
                 selectedFile.name.replace(
@@ -802,6 +1001,8 @@
                 extension;
 
 
+            // Create download file
+
             const blob =
                 createFileBlob(
                     rows,
@@ -813,23 +1014,28 @@
                 URL.createObjectURL(blob);
 
 
-            downloadButton.onclick = function() {
+            downloadButton.onclick =
+                function() {
 
-                const link =
-                    document.createElement("a");
+                    const link =
+                        document.createElement(
+                            "a"
+                        );
 
-                link.href = url;
+                    link.href = url;
 
-                link.download =
-                    cleanedFileName;
+                    link.download =
+                        cleanedFileName;
 
-                link.click();
+                    link.click();
 
-            };
+                };
 
 
             downloadButton.textContent =
-                "⬇️ Download " + cleanedFileName;
+                "⬇️ Download " +
+                cleanedFileName;
+
 
             downloadButton.style.display =
                 "block";
@@ -869,11 +1075,15 @@
             .map(word => {
 
                 if (word.length === 0) {
+
                     return word;
+
                 }
 
-                return word.charAt(0).toUpperCase()
-                    + word.slice(1);
+                return (
+                    word.charAt(0).toUpperCase() +
+                    word.slice(1)
+                );
 
             })
             .join(" ");
@@ -891,32 +1101,40 @@
             rows.slice(0, 10);
 
 
-        previewRows.forEach((row, rowIndex) => {
+        previewRows.forEach(
+            (row, rowIndex) => {
 
-            const tr =
-                document.createElement("tr");
-
-
-            row.forEach(cell => {
-
-                const cellElement =
+                const tr =
                     document.createElement(
-                        rowIndex === 0
-                            ? "th"
-                            : "td"
+                        "tr"
                     );
 
-                cellElement.textContent =
-                    cell;
 
-                tr.appendChild(cellElement);
+                row.forEach(cell => {
 
-            });
+                    const cellElement =
+                        document.createElement(
+                            rowIndex === 0
+                                ? "th"
+                                : "td"
+                        );
 
 
-            previewTable.appendChild(tr);
+                    cellElement.textContent =
+                        cell;
 
-        });
+
+                    tr.appendChild(
+                        cellElement
+                    );
+
+                });
+
+
+                previewTable.appendChild(tr);
+
+            }
+        );
 
 
         preview.style.display =
@@ -927,7 +1145,10 @@
 
     // Create downloadable file
 
-    function createFileBlob(rows, extension) {
+    function createFileBlob(
+        rows,
+        extension
+    ) {
 
         if (extension === "csv") {
 
@@ -968,9 +1189,11 @@
             XLSX.write(
                 workbook,
                 {
-                    bookType: extension === "xls"
-                        ? "xls"
-                        : "xlsx",
+                    bookType:
+                        extension === "xls"
+                            ? "xls"
+                            : "xlsx",
+
                     type: "array"
                 }
             );
@@ -1016,6 +1239,14 @@
         downloadButton.style.display = "none";
 
         resetButton.style.display = "none";
+
+        // Restore all options to checked
+
+        optionIds.forEach(function(id) {
+
+            document.getElementById(id).checked = true;
+
+        });
 
     }
 
