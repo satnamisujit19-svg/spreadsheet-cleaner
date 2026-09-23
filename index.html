@@ -275,6 +275,17 @@ small{
   color:#98a2b3;
 }
 
+.error-note{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  font-size:13px;
+  line-height:1.5;
+}
+
 @media(max-width:900px){
   .grid{
     grid-template-columns:repeat(2,1fr);
@@ -308,7 +319,7 @@ small{
   <div class="hero">
 
     <div class="badge">
-      Step 34 • Email Normalization
+      Step 35 • Formula & Errors
     </div>
 
     <h1>
@@ -330,6 +341,7 @@ small{
       <span class="feature">✓ Category Standardization</span>
       <span class="feature">✓ Missing Data Detection</span>
       <span class="feature">✓ Data Type Detection</span>
+      <span class="feature">✓ Formula & Error Detection</span>
       <span class="feature">✓ Duplicate Detection</span>
       <span class="feature">✓ Empty Column Detection</span>
       <span class="feature">✓ XLSX + CSV Export</span>
@@ -421,6 +433,27 @@ small{
 
       <div
         id="detailsTable"
+        class="table-wrap"
+      ></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+        Formula & Cell Error Detection
+      </div>
+
+      <p
+        class="muted"
+        style="margin-top:-4px"
+      >
+        Spreadsheet errors and formula cells are detected and reported. Errors are never guessed or automatically replaced.
+      </p>
+
+      <div
+        id="errorTable"
         class="table-wrap"
       ></div>
 
@@ -535,10 +568,13 @@ small{
 
 "use strict";
 
+
 let originalRows = [];
+
 let cleanedRows = [];
 
 let originalAnalysis = null;
+
 let cleanedAnalysis = null;
 
 let currentFileName = "spreadsheet";
@@ -551,9 +587,11 @@ const $ = (id) =>
 
 function showMessage(text,kind){
 
-  const el = $("message");
+  const el =
+    $("message");
 
-  el.textContent = text;
+  el.textContent =
+    text;
 
   el.className =
     "message " +
@@ -565,11 +603,14 @@ function showMessage(text,kind){
 
 function hideMessage(){
 
-  const el = $("message");
+  const el =
+    $("message");
 
-  el.textContent = "";
+  el.textContent =
+    "";
 
-  el.className = "message";
+  el.className =
+    "message";
 
 }
 
@@ -603,7 +644,10 @@ function normalizeHeader(value){
   return String(value ?? "")
     .trim()
     .toLowerCase()
-    .replace(/[\s_\-]+/g,"");
+    .replace(
+      /[\s_\-]+/g,
+      ""
+    );
 
 }
 
@@ -612,8 +656,14 @@ function normalizeHeader(value){
 function cleanHeaderText(value){
 
   return String(value ?? "")
-    .replace(/[\r\n\t]+/g," ")
-    .replace(/\s+/g," ")
+    .replace(
+      /[\r\n\t]+/g,
+      " "
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
     .trim();
 
 }
@@ -624,7 +674,10 @@ function normalizeCellForDuplicate(value){
 
   return String(value ?? "")
     .trim()
-    .replace(/\s+/g," ")
+    .replace(
+      /\s+/g,
+      " "
+    )
     .toLowerCase();
 
 }
@@ -635,7 +688,11 @@ function getComparableRow(row,width){
 
   const out = [];
 
-  for(let i=0;i<width;i++){
+  for(
+    let i=0;
+    i<width;
+    i++
+  ){
 
     out.push(
       normalizeCellForDuplicate(
@@ -676,7 +733,9 @@ function countDuplicateRows(rows){
     );
 
 
-  const seen = new Set();
+  const seen =
+    new Set();
+
 
   let duplicates = 0;
 
@@ -696,7 +755,9 @@ function countDuplicateRows(rows){
       );
 
 
-    if(seen.has(key)){
+    if(
+      seen.has(key)
+    ){
 
       duplicates++;
 
@@ -717,7 +778,9 @@ function countDuplicateRows(rows){
 
 function analyzeHeaders(headers){
 
-  const seen = new Map();
+  const seen =
+    new Map();
+
 
   let duplicateHeaders = 0;
 
@@ -743,11 +806,14 @@ function analyzeHeaders(headers){
 
     if(key){
 
-      if(seen.has(key)){
+      if(
+        seen.has(key)
+      ){
 
         duplicateHeaders++;
 
       }
+
 
       seen.set(
         key,
@@ -760,8 +826,11 @@ function analyzeHeaders(headers){
 
 
   return {
+
     duplicateHeaders,
+
     blankHeaders
+
   };
 
 }
@@ -770,57 +839,70 @@ function analyzeHeaders(headers){
 
 function buildCleanHeaders(headers){
 
-  const used = new Map();
+  const used =
+    new Map();
 
 
-  return headers.map((h,i)=>{
+  return headers.map(
+    (h,i)=>{
 
-    let base =
-      cleanHeaderText(h);
+      let base =
+        cleanHeaderText(h);
 
 
-    if(!base){
+      if(!base){
 
-      base =
-        "Column " +
-        (i+1);
+        base =
+          "Column " +
+          (i+1);
+
+      }
+
+
+      const key =
+        normalizeHeader(base);
+
+
+      const count =
+        (used.get(key) || 0) + 1;
+
+
+      used.set(
+        key,
+        count
+      );
+
+
+      return count === 1
+
+        ? base
+
+        : base +
+          " (" +
+          count +
+          ")";
 
     }
-
-
-    const key =
-      normalizeHeader(base);
-
-
-    const count =
-      (used.get(key) || 0) + 1;
-
-
-    used.set(
-      key,
-      count
-    );
-
-
-    return count === 1
-
-      ? base
-
-      : base + " (" + count + ")";
-
-  });
+  );
 
 }
 
 
 
-function findColumn(headers,patterns){
+function findColumn(
+  headers,
+  patterns
+){
 
   const normalized =
-    headers.map(normalizeHeader);
+    headers.map(
+      normalizeHeader
+    );
 
 
-  for(const p of patterns){
+  for(
+    const p of patterns
+  ){
 
     const idx =
       normalized.findIndex(
@@ -828,7 +910,9 @@ function findColumn(headers,patterns){
       );
 
 
-    if(idx !== -1){
+    if(
+      idx !== -1
+    ){
 
       return idx;
 
@@ -837,15 +921,20 @@ function findColumn(headers,patterns){
   }
 
 
-  for(const p of patterns){
+  for(
+    const p of patterns
+  ){
 
     const idx =
       normalized.findIndex(
-        h => h.includes(p)
+        h =>
+          h.includes(p)
       );
 
 
-    if(idx !== -1){
+    if(
+      idx !== -1
+    ){
 
       return idx;
 
@@ -966,7 +1055,8 @@ function statusColumn(headers){
 function isValidEmail(value){
 
   const s =
-    String(value ?? "").trim();
+    String(value ?? "")
+      .trim();
 
 
   return (
@@ -980,10 +1070,13 @@ function isValidEmail(value){
 function normalizeEmail(value){
 
   const s =
-    String(value ?? "").trim();
+    String(value ?? "")
+      .trim();
 
 
-  if(!isValidEmail(s)){
+  if(
+    !isValidEmail(s)
+  ){
 
     return value ?? "";
 
@@ -996,7 +1089,7 @@ function normalizeEmail(value){
 
 
 
-function isPhoneErrorValue(value){
+function isSpreadsheetErrorValue(value){
 
   const s =
     String(value ?? "")
@@ -1004,9 +1097,56 @@ function isPhoneErrorValue(value){
       .toUpperCase();
 
 
-  return (
-    /^#(?:ERROR|VALUE|DIV\/0|REF|N\/A|NAME|NUM|NULL)[!?]?$/
-      .test(s)
+  return [
+
+    "#ERROR!",
+    "#DIV/0!",
+    "#VALUE!",
+    "#REF!",
+    "#N/A",
+    "#NAME?",
+    "#NUM!",
+    "#NULL!",
+    "#SPILL!",
+    "#CALC!",
+    "#CONNECT!",
+    "#FIELD!",
+    "#BLOCKED!",
+    "#UNKNOWN!"
+
+  ].includes(s);
+
+}
+
+
+
+function normalizeErrorLabel(value){
+
+  const s =
+    String(value ?? "")
+      .trim()
+      .toUpperCase();
+
+
+  if(
+    isSpreadsheetErrorValue(s)
+  ){
+
+    return s;
+
+  }
+
+
+  return "#ERROR!";
+
+}
+
+
+
+function isPhoneErrorValue(value){
+
+  return isSpreadsheetErrorValue(
+    value
   );
 
 }
@@ -1016,7 +1156,10 @@ function isPhoneErrorValue(value){
 function extractPhoneDigits(value){
 
   return String(value ?? "")
-    .replace(/\D/g,"");
+    .replace(
+      /\D/g,
+      ""
+    );
 
 }
 
@@ -1025,7 +1168,8 @@ function extractPhoneDigits(value){
 function isValidPhone(value){
 
   const s =
-    String(value ?? "").trim();
+    String(value ?? "")
+      .trim();
 
 
   if(
@@ -1063,10 +1207,13 @@ function isValidPhone(value){
 function standardizePhone(value){
 
   const s =
-    String(value ?? "").trim();
+    String(value ?? "")
+      .trim();
 
 
-  if(!isValidPhone(s)){
+  if(
+    !isValidPhone(s)
+  ){
 
     return value ?? "";
 
@@ -1192,7 +1339,8 @@ function parseDateValue(value){
 
 
   const raw =
-    String(value ?? "").trim();
+    String(value ?? "")
+      .trim();
 
 
   if(!raw){
@@ -1402,7 +1550,10 @@ function parseDateValue(value){
 
 
 
-function standardizeCategory(value,type){
+function standardizeCategory(
+  value,
+  type
+){
 
   const s =
     String(value ?? "")
@@ -1417,7 +1568,9 @@ function standardizeCategory(value,type){
   }
 
 
-  if(type === "gender"){
+  if(
+    type === "gender"
+  ){
 
     if(
       ["m","male"].includes(s)
@@ -1448,7 +1601,9 @@ function standardizeCategory(value,type){
   }
 
 
-  if(type === "consent"){
+  if(
+    type === "consent"
+  ){
 
     if(
       ["y","yes"].includes(s)
@@ -1470,16 +1625,22 @@ function standardizeCategory(value,type){
   }
 
 
-  if(type === "status"){
+  if(
+    type === "status"
+  ){
 
-    if(s === "active"){
+    if(
+      s === "active"
+    ){
 
       return "Active";
 
     }
 
 
-    if(s === "inactive"){
+    if(
+      s === "inactive"
+    ){
 
       return "Inactive";
 
@@ -1494,7 +1655,10 @@ function standardizeCategory(value,type){
 
 
 
-function countCategoryChanges(rows,headers){
+function countCategoryChanges(
+  rows,
+  headers
+){
 
   const g =
     genderColumn(headers);
@@ -1636,7 +1800,10 @@ function countWhitespaceValues(rows){
 
 
 
-function detectEmptyColumns(rows,width){
+function detectEmptyColumns(
+  rows,
+  width
+){
 
   const empty = [];
 
@@ -1792,7 +1959,9 @@ function analyzeMissingData(
 
 function detectCellType(value){
 
-  if(isBlank(value)){
+  if(
+    isBlank(value)
+  ){
 
     return "Empty";
 
@@ -1803,7 +1972,9 @@ function detectCellType(value){
     String(value).trim();
 
 
-  if(isValidEmail(s)){
+  if(
+    isValidEmail(s)
+  ){
 
     return "Email";
 
@@ -1833,7 +2004,9 @@ function detectCellType(value){
   }
 
 
-  if(isValidPhone(s)){
+  if(
+    isValidPhone(s)
+  ){
 
     return "Phone";
 
@@ -1901,7 +2074,9 @@ function detectColumnType(
       (counts[type] || 0) + 1;
 
 
-    if(type !== "Empty"){
+    if(
+      type !== "Empty"
+    ){
 
       meaningful++;
 
@@ -1910,7 +2085,9 @@ function detectColumnType(
   }
 
 
-  if(meaningful === 0){
+  if(
+    meaningful === 0
+  ){
 
     return {
 
@@ -2049,6 +2226,271 @@ function analyzeColumnTypes(
 
 
 
+/*
+   STEP 35
+   FORMULA + ERROR ANALYSIS
+*/
+
+function analyzeFormulaAndErrors(
+  worksheet,
+  rows
+){
+
+  const errorMap =
+    new Map();
+
+
+  const formulaCells = [];
+
+
+  /*
+     Inspect real worksheet cells.
+
+     This catches:
+     - formulas
+     - native Excel error cells
+  */
+
+  if(
+    worksheet &&
+    worksheet["!ref"]
+  ){
+
+    const range =
+      XLSX.utils.decode_range(
+        worksheet["!ref"]
+      );
+
+
+    for(
+      let r=range.s.r;
+      r<=range.e.r;
+      r++
+    ){
+
+      for(
+        let c=range.s.c;
+        c<=range.e.c;
+        c++
+      ){
+
+        const address =
+          XLSX.utils.encode_cell({
+            r,
+            c
+          });
+
+
+        const cell =
+          worksheet[address];
+
+
+        if(!cell){
+          continue;
+        }
+
+
+        if(cell.f){
+
+          formulaCells.push({
+
+            cell:address,
+
+            formula:
+              "=" + String(cell.f),
+
+            value:
+              cell.w ??
+              cell.v ??
+              ""
+
+          });
+
+        }
+
+
+        if(
+          cell.t === "e"
+        ){
+
+          const label =
+            normalizeErrorLabel(
+              cell.w ??
+              cell.v
+            );
+
+
+          errorMap.set(
+            address,
+            {
+
+              cell:address,
+
+              error:label,
+
+              formula:
+                cell.f
+                  ? "=" +
+                    String(cell.f)
+                  : "",
+
+              value:
+                cell.w ??
+                cell.v ??
+                ""
+
+            }
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  /*
+     Also inspect visible imported
+     values. This catches text such as
+     #ERROR! in ordinary spreadsheet cells.
+  */
+
+  const safeRows =
+    Array.isArray(rows)
+      ? rows
+      : [];
+
+
+  for(
+    let r=0;
+    r<safeRows.length;
+    r++
+  ){
+
+    const row =
+      safeRows[r] || [];
+
+
+    for(
+      let c=0;
+      c<row.length;
+      c++
+    ){
+
+      const value =
+        row[c];
+
+
+      if(
+        isSpreadsheetErrorValue(value)
+      ){
+
+        const address =
+          XLSX.utils.encode_cell({
+
+            r,
+
+            c
+
+          });
+
+
+        if(
+          !errorMap.has(address)
+        ){
+
+          errorMap.set(
+            address,
+            {
+
+              cell:address,
+
+              error:
+                normalizeErrorLabel(
+                  value
+                ),
+
+              formula:"",
+
+              value:
+                String(value)
+
+            }
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  const errors =
+    Array.from(
+      errorMap.values()
+    );
+
+
+  const rowsWithErrors =
+    new Set();
+
+
+  const errorTypeCounts = {};
+
+
+  errors.forEach(item=>{
+
+    const match =
+      item.cell.match(
+        /^([A-Z]+)(\d+)$/
+      );
+
+
+    if(match){
+
+      rowsWithErrors.add(
+        Number(match[2])
+      );
+
+    }
+
+
+    errorTypeCounts[item.error] =
+      (
+        errorTypeCounts[item.error] ||
+        0
+      ) + 1;
+
+  });
+
+
+  return {
+
+    formulaCells,
+
+    errors,
+
+    errorCount:
+      errors.length,
+
+    formulaCount:
+      formulaCells.length,
+
+    rowsWithErrors:
+      rowsWithErrors.size,
+
+    errorTypeCounts
+
+  };
+
+}
+
+
+
 function analyzeSpreadsheet(rows){
 
   const safeRows =
@@ -2057,7 +2499,9 @@ function analyzeSpreadsheet(rows){
       : [];
 
 
-  if(!safeRows.length){
+  if(
+    !safeRows.length
+  ){
 
     throw new Error(
       "The spreadsheet is empty."
@@ -2068,7 +2512,7 @@ function analyzeSpreadsheet(rows){
 
   const width =
     safeRows.reduce(
-      (m,r) =>
+      (m,r)=>
         Math.max(
           m,
           Array.isArray(r)
@@ -2079,7 +2523,9 @@ function analyzeSpreadsheet(rows){
     );
 
 
-  if(width === 0){
+  if(
+    width === 0
+  ){
 
     throw new Error(
       "No columns were found in the spreadsheet."
@@ -2105,30 +2551,47 @@ function analyzeSpreadsheet(rows){
 
 
   const headerInfo =
-    analyzeHeaders(headers);
+    analyzeHeaders(
+      headers
+    );
 
 
   const eIdx =
-    emailColumn(headers);
+    emailColumn(
+      headers
+    );
 
   const pIdx =
-    phoneColumn(headers);
+    phoneColumn(
+      headers
+    );
 
   const dIdx =
-    dateColumn(headers);
+    dateColumn(
+      headers
+    );
 
 
   let validEmails = 0;
+
   let invalidEmails = 0;
+
   let emptyEmailCells = 0;
 
+
   let validPhones = 0;
+
   let invalidPhones = 0;
+
   let emptyPhoneCells = 0;
 
+
   let validDates = 0;
+
   let invalidDates = 0;
+
   let ambiguousDates = 0;
+
   let emptyDateCells = 0;
 
 
@@ -2142,23 +2605,31 @@ function analyzeSpreadsheet(rows){
       safeRows[r] || [];
 
 
-    if(eIdx >= 0){
+    if(
+      eIdx >= 0
+    ){
 
       const v =
         row[eIdx];
 
 
-      if(isBlank(v)){
+      if(
+        isBlank(v)
+      ){
 
         emptyEmailCells++;
 
-      }else if(
+      }
+
+      else if(
         isValidEmail(v)
       ){
 
         validEmails++;
 
-      }else{
+      }
+
+      else{
 
         invalidEmails++;
 
@@ -2167,23 +2638,31 @@ function analyzeSpreadsheet(rows){
     }
 
 
-    if(pIdx >= 0){
+    if(
+      pIdx >= 0
+    ){
 
       const v =
         row[pIdx];
 
 
-      if(isBlank(v)){
+      if(
+        isBlank(v)
+      ){
 
         emptyPhoneCells++;
 
-      }else if(
+      }
+
+      else if(
         isValidPhone(v)
       ){
 
         validPhones++;
 
-      }else{
+      }
+
+      else{
 
         invalidPhones++;
 
@@ -2192,7 +2671,9 @@ function analyzeSpreadsheet(rows){
     }
 
 
-    if(dIdx >= 0){
+    if(
+      dIdx >= 0
+    ){
 
       const v =
         row[dIdx];
@@ -2208,19 +2689,25 @@ function analyzeSpreadsheet(rows){
 
         emptyDateCells++;
 
-      }else if(
+      }
+
+      else if(
         info.status === "valid"
       ){
 
         validDates++;
 
-      }else if(
+      }
+
+      else if(
         info.status === "ambiguous"
       ){
 
         ambiguousDates++;
 
-      }else{
+      }
+
+      else{
 
         invalidDates++;
 
@@ -2255,7 +2742,9 @@ function analyzeSpreadsheet(rows){
   const emptyRows =
     safeRows
       .slice(1)
-      .filter(isEntireRowBlank)
+      .filter(
+        isEntireRowBlank
+      )
       .length;
 
 
@@ -2276,16 +2765,23 @@ function analyzeSpreadsheet(rows){
     columns:width,
 
     validEmails,
+
     invalidEmails,
+
     emptyEmailCells,
 
     validPhones,
+
     invalidPhones,
+
     emptyPhoneCells,
 
     validDates,
+
     invalidDates,
+
     ambiguousDates,
+
     emptyDateCells,
 
     duplicateHeaders:
@@ -2335,21 +2831,39 @@ function escapeHtml(value){
 
   return String(value ?? "")
 
-    .replace(/&/g,"&amp;")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-    .replace(/</g,"&lt;")
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-    .replace(/>/g,"&gt;")
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-    .replace(/"/g,"&quot;")
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-    .replace(/'/g,"&#039;");
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
 
-function statCard(label,value){
+function statCard(
+  label,
+  value
+){
 
   return `
 
@@ -2360,7 +2874,9 @@ function statCard(label,value){
       </div>
 
       <div class="value">
-        ${escapeHtml(String(value))}
+        ${escapeHtml(
+          String(value)
+        )}
       </div>
 
     </div>
@@ -2375,6 +2891,10 @@ function renderOriginalAnalysis(){
 
   const a =
     originalAnalysis;
+
+
+  const errorAnalysis =
+    a.formulaErrorAnalysis;
 
 
   $("stats").innerHTML = [
@@ -2437,6 +2957,21 @@ function renderOriginalAnalysis(){
     statCard(
       "Empty Cells",
       a.missing.emptyCells
+    ),
+
+    statCard(
+      "Spreadsheet Errors",
+      errorAnalysis.errorCount
+    ),
+
+    statCard(
+      "Formula Cells",
+      errorAnalysis.formulaCount
+    ),
+
+    statCard(
+      "Rows With Errors",
+      errorAnalysis.rowsWithErrors
     )
 
   ].join("");
@@ -2493,6 +3028,22 @@ function renderOriginalAnalysis(){
     ],
 
     [
+      "Spreadsheet Errors",
+      errorAnalysis.errorCount,
+      errorAnalysis.errorCount === 0
+        ? "good"
+        : "bad"
+    ],
+
+    [
+      "Formula Cells",
+      errorAnalysis.formulaCount,
+      errorAnalysis.formulaCount === 0
+        ? "good"
+        : "good"
+    ],
+
+    [
       "Duplicate Rows",
       a.duplicateRows,
       a.duplicateRows === 0
@@ -2530,31 +3081,43 @@ function renderOriginalAnalysis(){
       <tbody>
 
         ${
-          quality.map(x => `
+          quality.map(
+            x => `
 
-            <tr>
+              <tr>
 
-              <td>
-                ${escapeHtml(x[0])}
-              </td>
+                <td>
+                  ${escapeHtml(x[0])}
+                </td>
 
-              <td>
-                ${x[1]}
-              </td>
+                <td>
+                  ${x[1]}
+                </td>
 
-              <td class="${x[2]}">
+                <td class="${x[2]}">
 
-                ${
-                  x[1] === 0
-                    ? "OK"
-                    : "Review"
-                }
+                  ${
+                    x[0] === "Formula Cells"
 
-              </td>
+                      ? (
+                          x[1] > 0
+                            ? "Detected"
+                            : "None"
+                        )
 
-            </tr>
+                      : (
+                          x[1] === 0
+                            ? "OK"
+                            : "Review"
+                        )
+                  }
 
-          `).join("")
+                </td>
+
+              </tr>
+
+            `
+          ).join("")
         }
 
       </tbody>
@@ -2619,6 +3182,21 @@ function renderOriginalAnalysis(){
     [
       "Empty Columns",
       a.emptyColumns
+    ],
+
+    [
+      "Spreadsheet Errors",
+      errorAnalysis.errorCount
+    ],
+
+    [
+      "Rows With Errors",
+      errorAnalysis.rowsWithErrors
+    ],
+
+    [
+      "Formula Cells",
+      errorAnalysis.formulaCount
     ]
 
   ];
@@ -2633,6 +3211,7 @@ function renderOriginalAnalysis(){
         <tr>
 
           <th>Validation Detail</th>
+
           <th>Result</th>
 
         </tr>
@@ -2642,21 +3221,25 @@ function renderOriginalAnalysis(){
       <tbody>
 
         ${
-          details.map(x => `
+          details.map(
+            x => `
 
-            <tr>
+              <tr>
 
-              <td>
-                ${escapeHtml(x[0])}
-              </td>
+                <td>
+                  ${escapeHtml(x[0])}
+                </td>
 
-              <td>
-                ${escapeHtml(String(x[1]))}
-              </td>
+                <td>
+                  ${escapeHtml(
+                    String(x[1])
+                  )}
+                </td>
 
-            </tr>
+              </tr>
 
-          `).join("")
+            `
+          ).join("")
         }
 
       </tbody>
@@ -2666,7 +3249,240 @@ function renderOriginalAnalysis(){
   `;
 
 
+  renderErrorDetails();
+
   renderTypeMap();
+
+}
+
+
+
+function renderErrorDetails(){
+
+  const analysis =
+    originalAnalysis
+      ?.formulaErrorAnalysis;
+
+
+  if(!analysis){
+
+    $("errorTable").innerHTML =
+      "<div style='padding:15px'>No error analysis available.</div>";
+
+    return;
+
+  }
+
+
+  const errors =
+    analysis.errors || [];
+
+
+  const formulas =
+    analysis.formulaCells || [];
+
+
+  let html = "";
+
+
+  if(errors.length > 0){
+
+    html += `
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>Cell</th>
+            <th>Error</th>
+            <th>Formula</th>
+            <th>Value</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+    `;
+
+
+    errors.forEach(item=>{
+
+      html += `
+
+        <tr>
+
+          <td>
+            <strong>
+              ${escapeHtml(item.cell)}
+            </strong>
+          </td>
+
+          <td class="bad">
+            ${escapeHtml(item.error)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              item.formula || "—"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              String(
+                item.value ?? ""
+              )
+            )}
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+
+    html += `
+
+        </tbody>
+
+      </table>
+
+      <div class="error-note">
+
+        ${
+          errors.length
+        }
+        spreadsheet error value(s) detected.
+        These values are reported exactly as found and are not automatically replaced.
+
+      </div>
+
+    `;
+
+  }
+
+
+  if(
+    formulas.length > 0
+  ){
+
+    html += `
+
+      <div
+        style="margin-top:16px"
+        class="section-title"
+      >
+        Formula Cells
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Cell</th>
+              <th>Formula</th>
+              <th>Value</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${
+              formulas
+                .slice(0,50)
+                .map(
+                  item => `
+
+                    <tr>
+
+                      <td>
+                        <strong>
+                          ${escapeHtml(item.cell)}
+                        </strong>
+                      </td>
+
+                      <td>
+                        ${escapeHtml(
+                          item.formula
+                        )}
+                      </td>
+
+                      <td>
+                        ${escapeHtml(
+                          String(
+                            item.value ?? ""
+                          )
+                        )}
+                      </td>
+
+                    </tr>
+
+                  `
+                )
+                .join("")
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    `;
+
+
+    if(
+      formulas.length > 50
+    ){
+
+      html += `
+
+        <div class="muted" style="margin-top:10px">
+
+          Showing the first 50 formula cells.
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  if(
+    !errors.length &&
+    !formulas.length
+  ){
+
+    html = `
+
+      <div style="padding:16px">
+
+        <span class="good">
+          No spreadsheet errors or formula cells detected.
+        </span>
+
+      </div>
+
+    `;
+
+  }
+
+
+  $("errorTable").innerHTML =
+    html;
 
 }
 
@@ -2680,10 +3496,12 @@ function renderTypeMap(){
       ?.columns || [];
 
 
-  if(!cols.length){
+  if(
+    !cols.length
+  ){
 
     $("typeTable").innerHTML =
-      '<div style="padding:15px">No column data available.</div>';
+      "<div style='padding:15px'>No column data available.</div>";
 
     return;
 
@@ -2709,10 +3527,13 @@ function renderTypeMap(){
       <tbody>
 
         ${
-          cols.map(c => {
+          cols.map(
+            c => {
 
-            const summary =
-              Object.entries(c.counts)
+              const summary =
+                Object.entries(
+                  c.counts
+                )
 
                 .filter(
                   ([k,v]) =>
@@ -2722,38 +3543,45 @@ function renderTypeMap(){
 
                 .map(
                   ([k,v]) =>
-                    k + ": " + v
+                    k +
+                    ": " +
+                    v
                 )
 
                 .join(" • ");
 
 
-            return `
+              return `
 
-              <tr>
+                <tr>
 
-                <td>
-                  ${escapeHtml(c.header)}
-                </td>
+                  <td>
+                    ${escapeHtml(
+                      c.header
+                    )}
+                  </td>
 
-                <td>
-                  <strong>
-                    ${escapeHtml(c.type)}
-                  </strong>
-                </td>
+                  <td>
+                    <strong>
+                      ${escapeHtml(
+                        c.type
+                      )}
+                    </strong>
+                  </td>
 
-                <td>
-                  ${escapeHtml(
-                    summary ||
-                    "No values"
-                  )}
-                </td>
+                  <td>
+                    ${escapeHtml(
+                      summary ||
+                      "No values"
+                    )}
+                  </td>
 
-              </tr>
+                </tr>
 
-            `;
+              `;
 
-          }).join("")
+            }
+          ).join("")
         }
 
       </tbody>
@@ -2768,14 +3596,18 @@ function renderTypeMap(){
 
 function cleanSpreadsheet(){
 
-  if(!originalRows.length){
+  if(
+    !originalRows.length
+  ){
+
     return;
+
   }
 
 
   const width =
     originalRows.reduce(
-      (m,r) =>
+      (m,r)=>
         Math.max(
           m,
           Array.isArray(r)
@@ -2854,7 +3686,8 @@ function cleanSpreadsheet(){
   ];
 
 
-  const seen = new Set();
+  const seen =
+    new Set();
 
 
   for(
@@ -2890,7 +3723,9 @@ function cleanSpreadsheet(){
 
 
     if(
-      seen.has(comparableKey)
+      seen.has(
+        comparableKey
+      )
     ){
 
       duplicatesRemoved++;
@@ -2900,7 +3735,9 @@ function cleanSpreadsheet(){
     }
 
 
-    seen.add(comparableKey);
+    seen.add(
+      comparableKey
+    );
 
 
     const out =
@@ -2922,9 +3759,6 @@ function cleanSpreadsheet(){
     /*
        STEP 34
        EMAIL NORMALIZATION
-
-       Only valid emails are normalized.
-       Invalid email values remain unchanged.
     */
 
     if(
@@ -3021,7 +3855,6 @@ function cleanSpreadsheet(){
           parsed.value;
 
       }
-
 
       else if(
         parsed.status === "ambiguous"
@@ -3130,13 +3963,21 @@ function cleanSpreadsheet(){
     }
 
 
-    working.push(out);
+    /*
+       IMPORTANT:
+       Spreadsheet errors are NOT changed.
+    */
+
+
+    working.push(
+      out
+    );
 
   }
 
 
   /*
-     REMOVE COMPLETELY EMPTY COLUMNS
+     Remove completely empty columns
   */
 
   const keepIndexes = [];
@@ -3193,6 +4034,13 @@ function cleanSpreadsheet(){
       .numericColumns;
 
 
+  /*
+     The cleaned export contains
+     values only, so formula count
+     is intentionally not recreated.
+  */
+
+
   const originalDataRows =
     Math.max(
       0,
@@ -3214,6 +4062,18 @@ function cleanSpreadsheet(){
 
   const removedEmptyColumns =
     emptyCols.size;
+
+
+  const originalErrorCount =
+    originalAnalysis
+      ?.formulaErrorAnalysis
+      ?.errorCount || 0;
+
+
+  const originalFormulaCount =
+    originalAnalysis
+      ?.formulaErrorAnalysis
+      ?.formulaCount || 0;
 
 
   $("summary").innerHTML = `
@@ -3241,10 +4101,18 @@ function cleanSpreadsheet(){
     ${ambiguousLeft}
     ambiguous date value(s) left unchanged,
 
+    ${categoryChanges}
+    category value(s) standardized,
+
+    ${originalErrorCount}
+    spreadsheet error value(s) detected,
+
     and
 
-    ${categoryChanges}
-    category value(s) standardized.
+    ${originalFormulaCount}
+    formula cell(s) detected.
+
+    Spreadsheet errors are preserved rather than guessed or automatically repaired.
 
   `;
 
@@ -3270,9 +4138,12 @@ function cleanSpreadsheet(){
 
 function renderPreview(rows){
 
-  if(!rows.length){
+  if(
+    !rows.length
+  ){
 
-    $("preview").innerHTML = "";
+    $("preview").innerHTML =
+      "";
 
     return;
 
@@ -3295,14 +4166,12 @@ function renderPreview(rows){
 
 
   html +=
-    head
-      .map(
-        h =>
-          "<th>" +
-          escapeHtml(h) +
-          "</th>"
-      )
-      .join("");
+    head.map(
+      h =>
+        "<th>" +
+        escapeHtml(h) +
+        "</th>"
+    ).join("");
 
 
   html +=
@@ -3315,7 +4184,8 @@ function renderPreview(rows){
     r++
   ){
 
-    html += "<tr>";
+    html +=
+      "<tr>";
 
 
     for(
@@ -3334,7 +4204,8 @@ function renderPreview(rows){
     }
 
 
-    html += "</tr>";
+    html +=
+      "</tr>";
 
   }
 
@@ -3367,9 +4238,11 @@ function downloadBlob(
     );
 
 
-  a.href = url;
+  a.href =
+    url;
 
-  a.download = filename;
+  a.download =
+    filename;
 
 
   document.body.appendChild(a);
@@ -3404,8 +4277,12 @@ function baseName(){
 
 function downloadXlsx(){
 
-  if(!cleanedRows.length){
+  if(
+    !cleanedRows.length
+  ){
+
     return;
+
   }
 
 
@@ -3464,14 +4341,18 @@ function csvEscape(value){
 
   return /[",\r\n]/.test(s)
 
-    ? '"' +
+    ?
+
+      '"' +
       s.replace(
         /"/g,
         '""'
       ) +
       '"'
 
-    : s;
+    :
+
+      s;
 
 }
 
@@ -3479,8 +4360,12 @@ function csvEscape(value){
 
 function downloadCsv(){
 
-  if(!cleanedRows.length){
+  if(
+    !cleanedRows.length
+  ){
+
     return;
+
   }
 
 
@@ -3489,7 +4374,9 @@ function downloadCsv(){
       .map(
         row =>
           row
-            .map(csvEscape)
+            .map(
+              csvEscape
+            )
             .join(",")
       )
       .join("\r\n");
@@ -3532,9 +4419,11 @@ function resetAll(){
     "spreadsheet";
 
 
-  $("fileInput").value = "";
+  $("fileInput").value =
+    "";
 
-  $("fileName").textContent = "";
+  $("fileName").textContent =
+    "";
 
 
   $("results")
@@ -3542,22 +4431,37 @@ function resetAll(){
     .add("hidden");
 
 
-  $("stats").innerHTML = "";
+  $("stats").innerHTML =
+    "";
 
-  $("qualityTable").innerHTML = "";
+  $("qualityTable").innerHTML =
+    "";
 
-  $("detailsTable").innerHTML = "";
+  $("detailsTable").innerHTML =
+    "";
 
-  $("typeTable").innerHTML = "";
+  $("errorTable").innerHTML =
+    "";
 
-  $("preview").innerHTML = "";
+  $("typeTable").innerHTML =
+    "";
 
-  $("summary").innerHTML = "";
+  $("preview").innerHTML =
+    "";
+
+  $("summary").innerHTML =
+    "";
 
 
-  $("xlsxBtn").disabled = true;
+  $("xlsxBtn").disabled =
+    true;
 
-  $("csvBtn").disabled = true;
+  $("csvBtn").disabled =
+    true;
+
+
+  $("cleanBtn").disabled =
+    true;
 
 
   hideMessage();
@@ -3618,7 +4522,8 @@ async function handleFile(file){
 
 
   $("fileName").textContent =
-    "Selected: " + name;
+    "Selected: " +
+    name;
 
 
   showMessage(
@@ -3745,7 +4650,8 @@ async function handleFile(file){
       r => {
 
         const out =
-          new Array(width).fill("");
+          new Array(width)
+            .fill("");
 
 
         for(
@@ -3772,6 +4678,11 @@ async function handleFile(file){
     );
 
 
+  /*
+     STEP 33
+     DATA TYPE ANALYSIS
+  */
+
   originalAnalysis.typeAnalysis =
     analyzeColumnTypes(
       originalRows,
@@ -3791,6 +4702,18 @@ async function handleFile(file){
       .numericColumns;
 
 
+  /*
+     STEP 35
+     FORMULA + ERROR ANALYSIS
+  */
+
+  originalAnalysis.formulaErrorAnalysis =
+    analyzeFormulaAndErrors(
+      worksheet,
+      originalRows
+    );
+
+
   $("results")
     .classList
     .remove("hidden");
@@ -3804,18 +4727,43 @@ async function handleFile(file){
   );
 
 
-  $("cleanBtn").disabled = false;
+  $("cleanBtn").disabled =
+    false;
 
-  $("xlsxBtn").disabled = true;
 
-  $("csvBtn").disabled = true;
+  $("xlsxBtn").disabled =
+    true;
+
+
+  $("csvBtn").disabled =
+    true;
+
+
+  const errorCount =
+    originalAnalysis
+      .formulaErrorAnalysis
+      .errorCount;
+
+
+  const formulaCount =
+    originalAnalysis
+      .formulaErrorAnalysis
+      .formulaCount;
 
 
   $("summary").innerHTML =
 
-    "Your original spreadsheet has been analyzed. " +
+    "Your spreadsheet has been analyzed. " +
 
-    "Email Normalization will convert valid email addresses to lowercase while preserving invalid email values.";
+    errorCount +
+
+    " spreadsheet error value(s) and " +
+
+    formulaCount +
+
+    " formula cell(s) were detected. " +
+
+    "Errors are reported but not automatically repaired.";
 
 
   showMessage(
@@ -3838,13 +4786,17 @@ $("fileInput")
 
 
       if(!file){
+
         return;
+
       }
 
 
       try{
 
-        await handleFile(file);
+        await handleFile(
+          file
+        );
 
       }
 
