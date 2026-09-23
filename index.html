@@ -62,6 +62,30 @@
             font-weight: bold;
         }
 
+        #report {
+            display: none;
+            margin-top: 25px;
+            text-align: left;
+            background: #f1f3f5;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #report h3 {
+            margin-top: 0;
+        }
+
+        #report p {
+            margin: 8px 0;
+        }
+
+        .download-link {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
         footer {
             margin-top: 30px;
             color: #777;
@@ -104,6 +128,34 @@
 
             <div id="status"></div>
 
+            <div id="report">
+
+                <h3>Cleaning Report</h3>
+
+                <p>
+                    📊 Rows before cleaning:
+                    <strong id="before"></strong>
+                </p>
+
+                <p>
+                    🗑️ Empty rows removed:
+                    <strong id="empty"></strong>
+                </p>
+
+                <p>
+                    ♻️ Duplicate rows removed:
+                    <strong id="duplicates"></strong>
+                </p>
+
+                <p>
+                    ✅ Rows after cleaning:
+                    <strong id="after"></strong>
+                </p>
+
+            </div>
+
+            <div id="download"></div>
+
         </div>
 
         <footer>
@@ -121,6 +173,8 @@
 
             const fileInput = document.getElementById("fileInput");
             const status = document.getElementById("status");
+            const report = document.getElementById("report");
+            const download = document.getElementById("download");
 
             if (!fileInput.files.length) {
                 status.textContent = "Please choose a CSV file first.";
@@ -137,18 +191,33 @@
 
                 let rows = text.split(/\r?\n/);
 
-                // Remove completely empty rows
-                rows = rows.filter(row => row.trim() !== "");
+                // Remove the final empty line if present
+                if (rows.length > 0 && rows[rows.length - 1].trim() === "") {
+                    rows.pop();
+                }
 
-                if (rows.length === 0) {
+                const rowsBefore = rows.length;
+
+                // Remove completely empty rows
+                const nonEmptyRows = rows.filter(
+                    row => row.trim() !== ""
+                );
+
+                const emptyRowsRemoved =
+                    rows.length - nonEmptyRows.length;
+
+                // Remove duplicate rows
+                const uniqueRows = [...new Set(nonEmptyRows)];
+
+                const duplicatesRemoved =
+                    nonEmptyRows.length - uniqueRows.length;
+
+                const rowsAfter = uniqueRows.length;
+
+                if (rowsAfter === 0) {
                     status.textContent = "The CSV file is empty.";
                     return;
                 }
-
-                // Remove duplicate rows
-                const uniqueRows = [...new Set(rows)];
-
-                const removed = rows.length - uniqueRows.length;
 
                 const cleanedCSV = uniqueRows.join("\n");
 
@@ -160,23 +229,42 @@
 
                 const url = URL.createObjectURL(blob);
 
-                const downloadLink = document.createElement("a");
+                // Show status
+                status.textContent = "✅ Spreadsheet cleaned successfully!";
+
+                // Show report
+                document.getElementById("before").textContent =
+                    rowsBefore;
+
+                document.getElementById("empty").textContent =
+                    emptyRowsRemoved;
+
+                document.getElementById("duplicates").textContent =
+                    duplicatesRemoved;
+
+                document.getElementById("after").textContent =
+                    rowsAfter;
+
+                report.style.display = "block";
+
+                // Create download link
+                download.innerHTML = "";
+
+                const downloadLink =
+                    document.createElement("a");
 
                 downloadLink.href = url;
-                downloadLink.download = "cleaned-spreadsheet.csv";
+
+                downloadLink.download =
+                    "cleaned-spreadsheet.csv";
 
                 downloadLink.textContent =
                     "⬇️ Download Cleaned Spreadsheet";
 
-                downloadLink.style.display = "block";
-                downloadLink.style.marginTop = "20px";
-                downloadLink.style.fontWeight = "bold";
+                downloadLink.className =
+                    "download-link";
 
-                document.querySelector(".upload-box")
-                    .appendChild(downloadLink);
-
-                status.textContent =
-                    "Done! Removed " + removed + " duplicate row(s).";
+                download.appendChild(downloadLink);
             };
 
             reader.readAsText(file);
