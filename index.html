@@ -463,7 +463,7 @@
           <p>Clean, validate and standardize messy spreadsheet data in seconds.</p>
         </div>
 
-        <div class="step-badge">Step 29 • Date Tools</div>
+        <div class="step-badge">Step 30 • Column Tools</div>
       </div>
 
       <div class="chips">
@@ -471,6 +471,7 @@
         <div class="chip">✓ Phone Standardization</div>
         <div class="chip">✓ Date Detection</div>
         <div class="chip">✓ Date Standardization</div>
+        <div class="chip">✓ Header Cleanup</div>
         <div class="chip">✓ Duplicate Detection</div>
         <div class="chip">✓ Empty Column Detection</div>
         <div class="chip">✓ XLSX + CSV Export</div>
@@ -575,6 +576,16 @@
           </div>
 
           <div class="stat-card">
+            <div class="stat-label">Duplicate Headers</div>
+            <div id="duplicateHeaders" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Blank Headers</div>
+            <div id="blankHeaders" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
             <div class="stat-label">Empty Email Cells</div>
             <div id="emptyEmails" class="stat-value">0</div>
           </div>
@@ -621,6 +632,16 @@
           <div class="quality-item">
             <div class="label">Ambiguous Dates</div>
             <div id="qualityAmbiguousDates" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Duplicate Headers</div>
+            <div id="qualityDuplicateHeaders" class="value">0</div>
+          </div>
+
+          <div class="quality-item">
+            <div class="label">Blank Headers</div>
+            <div id="qualityBlankHeaders" class="value">0</div>
           </div>
 
           <div class="quality-item">
@@ -688,6 +709,13 @@
           </div>
 
           <div class="detail-row">
+            <div class="detail-label">Header Cleanup</div>
+            <div id="detailHeaderCleanup" class="detail-value">
+              Ready
+            </div>
+          </div>
+
+          <div class="detail-row">
             <div class="detail-label">Ambiguous Dates</div>
             <div id="detailAmbiguousDates" class="detail-value">
               Left unchanged
@@ -734,6 +762,11 @@
           </div>
 
           <div class="summary-item">
+            <div class="label">Headers Cleaned</div>
+            <div id="summaryHeaders" class="value">0</div>
+          </div>
+
+          <div class="summary-item">
             <div class="label">Rows After Cleaning</div>
             <div id="summaryRowsAfter" class="value">0</div>
           </div>
@@ -762,7 +795,7 @@
     </div>
 
     <div class="footer">
-      Clean My Spreadsheet • Step 29
+      Clean My Spreadsheet • Step 30
     </div>
   </div>
 
@@ -791,6 +824,89 @@
         .trim()
         .toLowerCase()
         .replace(/[^a-z0-9]/g, "");
+    }
+
+    function cleanHeaderText(value) {
+      return String(value ?? "")
+        .replace(/[\r\n\t]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function analyzeHeaders(headers) {
+      const seen = new Map();
+      let duplicateHeaders = 0;
+      let blankHeaders = 0;
+
+      for (const header of headers) {
+        const cleaned = cleanHeaderText(header);
+
+        if (!cleaned) {
+          blankHeaders++;
+          continue;
+        }
+
+        const key = cleaned.toLowerCase();
+
+        if (seen.has(key)) {
+          duplicateHeaders++;
+        } else {
+          seen.set(key, 1);
+        }
+      }
+
+      return {
+        duplicateHeaders,
+        blankHeaders
+      };
+    }
+
+    function buildCleanHeaders(headers) {
+      const usedNames = new Map();
+      const result = [];
+      let cleanedCount = 0;
+
+      headers.forEach((header, index) => {
+        const original = String(header ?? "");
+        let cleaned = cleanHeaderText(original);
+
+        if (!cleaned) {
+          cleaned = `Column ${index + 1}`;
+        }
+
+        const baseKey = cleaned.toLowerCase();
+
+        if (usedNames.has(baseKey)) {
+          const nextNumber = usedNames.get(baseKey) + 1;
+          usedNames.set(baseKey, nextNumber);
+
+          cleaned = `${cleaned} (${nextNumber})`;
+
+          let uniqueKey = cleaned.toLowerCase();
+          let suffix = 2;
+
+          while (usedNames.has(uniqueKey)) {
+            suffix++;
+            cleaned = `${cleaned.replace(/\s+\(\d+\)$/, "")} (${suffix})`;
+            uniqueKey = cleaned.toLowerCase();
+          }
+
+          usedNames.set(uniqueKey, 1);
+        } else {
+          usedNames.set(baseKey, 1);
+        }
+
+        if (cleaned !== original) {
+          cleanedCount++;
+        }
+
+        result.push(cleaned);
+      });
+
+      return {
+        headers: result,
+        cleanedCount
+      };
     }
 
     function findColumn(headers, type) {
@@ -952,16 +1068,6 @@
       return `${dd}-${mm}-${yyyy}`;
     }
 
-    /*
-      Date rules:
-      1. YYYY-MM-DD / YYYY/MM/DD -> valid and standardized.
-      2. DD/MM/YYYY or DD-MM-YYYY:
-         - if only DD/MM is possible -> standardize.
-         - if both DD/MM and MM/DD are possible -> ambiguous, leave unchanged.
-         - if only MM/DD is possible -> leave unchanged because the
-           spreadsheet does not tell us the intended locale.
-      3. Invalid/unrecognized date values remain unchanged.
-    */
     function parseDateValue(value) {
       const text = String(value ?? "").trim();
 
@@ -972,7 +1078,9 @@
         };
       }
 
-      let match = text.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
+      let match = text.match(
+        /^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/
+      );
 
       if (match) {
         const year = Number(match[1]);
@@ -992,7 +1100,9 @@
         };
       }
 
-      match = text.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+      match = text.match(
+        /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/
+      );
 
       if (!match) {
         return {
@@ -1005,8 +1115,17 @@
       const second = Number(match[2]);
       const year = Number(match[3]);
 
-      const ddmmValid = isValidDateParts(first, second, year);
-      const mmddValid = isValidDateParts(second, first, year);
+      const ddmmValid = isValidDateParts(
+        first,
+        second,
+        year
+      );
+
+      const mmddValid = isValidDateParts(
+        second,
+        first,
+        year
+      );
 
       if (ddmmValid && mmddValid) {
         if (first === second) {
@@ -1160,7 +1279,11 @@
         }
       }
 
-      const emptyRows = dataRows.filter(isEntireRowBlank).length;
+      const headerAnalysis = analyzeHeaders(headers);
+
+      const emptyRows = dataRows.filter(
+        isEntireRowBlank
+      ).length;
 
       const emptyColumnIndexes = detectEmptyColumns(
         rows,
@@ -1203,11 +1326,20 @@
         ambiguousDates,
         emptyDates,
 
+        duplicateHeaders:
+          headerAnalysis.duplicateHeaders,
+
+        blankHeaders:
+          headerAnalysis.blankHeaders,
+
         emptyRows,
         emptyColumnIndexes,
 
-        duplicateRows: countDuplicateRows(dataRows),
-        whitespaceValues: countWhitespaceValues(dataRows)
+        duplicateRows:
+          countDuplicateRows(dataRows),
+
+        whitespaceValues:
+          countWhitespaceValues(dataRows)
       };
     }
 
@@ -1231,29 +1363,113 @@
       setText("invalidDates", analysis.invalidDates);
       setText("ambiguousDates", analysis.ambiguousDates);
 
-      setText("qualityInvalidEmails", analysis.invalidEmails);
-      setText("qualityValidPhones", analysis.validPhones);
-      setText("qualityInvalidPhones", analysis.invalidPhones);
+      setText(
+        "duplicateHeaders",
+        analysis.duplicateHeaders
+      );
 
-      setText("qualityValidDates", analysis.validDates);
-      setText("qualityInvalidDates", analysis.invalidDates);
-      setText("qualityAmbiguousDates", analysis.ambiguousDates);
+      setText(
+        "blankHeaders",
+        analysis.blankHeaders
+      );
 
-      setText("qualityDuplicateRows", analysis.duplicateRows);
-      setText("qualityEmptyRows", analysis.emptyRows);
+      setText(
+        "qualityInvalidEmails",
+        analysis.invalidEmails
+      );
+
+      setText(
+        "qualityValidPhones",
+        analysis.validPhones
+      );
+
+      setText(
+        "qualityInvalidPhones",
+        analysis.invalidPhones
+      );
+
+      setText(
+        "qualityValidDates",
+        analysis.validDates
+      );
+
+      setText(
+        "qualityInvalidDates",
+        analysis.invalidDates
+      );
+
+      setText(
+        "qualityAmbiguousDates",
+        analysis.ambiguousDates
+      );
+
+      setText(
+        "qualityDuplicateHeaders",
+        analysis.duplicateHeaders
+      );
+
+      setText(
+        "qualityBlankHeaders",
+        analysis.blankHeaders
+      );
+
+      setText(
+        "qualityDuplicateRows",
+        analysis.duplicateRows
+      );
+
+      setText(
+        "qualityEmptyRows",
+        analysis.emptyRows
+      );
+
       setText(
         "qualityEmptyColumns",
         analysis.emptyColumnIndexes.length
       );
-      setText("qualityWhitespace", analysis.whitespaceValues);
 
-      setText("qualityEmailColumn", analysis.emailColumnName);
-      setText("qualityPhoneColumn", analysis.phoneColumnName);
-      setText("qualityDateColumn", analysis.dateColumnName);
+      setText(
+        "qualityWhitespace",
+        analysis.whitespaceValues
+      );
 
-      setText("detailEmailColumn", analysis.emailColumnName);
-      setText("detailPhoneColumn", analysis.phoneColumnName);
-      setText("detailDateColumn", analysis.dateColumnName);
+      setText(
+        "qualityEmailColumn",
+        analysis.emailColumnName
+      );
+
+      setText(
+        "qualityPhoneColumn",
+        analysis.phoneColumnName
+      );
+
+      setText(
+        "qualityDateColumn",
+        analysis.dateColumnName
+      );
+
+      setText(
+        "detailEmailColumn",
+        analysis.emailColumnName
+      );
+
+      setText(
+        "detailPhoneColumn",
+        analysis.phoneColumnName
+      );
+
+      setText(
+        "detailDateColumn",
+        analysis.dateColumnName
+      );
+
+      setText(
+        "detailHeaderCleanup",
+        analysis.duplicateHeaders > 0 ||
+        analysis.blankHeaders > 0
+          ? "Duplicate/blank headers detected"
+          : "Headers look clean"
+      );
 
       setText(
         "detailAmbiguousDates",
@@ -1268,19 +1484,33 @@
       setText("summaryPhones", 0);
       setText("summaryDates", 0);
       setText("summaryEmails", 0);
+      setText("summaryHeaders", 0);
       setText("summaryRowsAfter", 0);
 
-      const detectedDateMessage =
-        analysis.dateColumnIndex !== -1
-          ? `Date column detected: "${analysis.dateColumnName}". Clearly identified dates will be standardized to DD-MM-YYYY. Ambiguous dates will be left unchanged.`
-          : "No date column was detected. The rest of the cleaning tools are still available.";
+      let message =
+        "Column analysis complete.";
 
-      showNotice(detectedDateMessage, "info");
+      if (
+        analysis.duplicateHeaders > 0 ||
+        analysis.blankHeaders > 0
+      ) {
+        message +=
+          ` Found ${analysis.duplicateHeaders} duplicate header(s) and ` +
+          `${analysis.blankHeaders} blank header(s). They will be safely handled during cleaning.`;
+      } else {
+        message +=
+          " No duplicate or blank headers were detected.";
+      }
+
+      showNotice(message, "info");
 
       previewDescription.textContent =
         "Showing the original spreadsheet before cleaning.";
 
-      renderPreview(rowsToPreview(originalRows), "Original Preview");
+      renderPreview(
+        rowsToPreview(originalRows),
+        "Original Preview"
+      );
     }
 
     function rowsToPreview(rows) {
@@ -1291,7 +1521,8 @@
       if (!rows || rows.length === 0) {
         previewTable.classList.add("hidden");
         previewEmpty.classList.remove("hidden");
-        previewEmpty.textContent = "No spreadsheet data available.";
+        previewEmpty.textContent =
+          "No spreadsheet data available.";
         return;
       }
 
@@ -1344,13 +1575,13 @@
 
       let rows = originalRows.map((row) => [...row]);
 
-      const headers = rows[0] || [];
+      const originalHeaders = rows[0] || [];
 
       // 1. Remove completely blank rows.
       const rowsBeforeBlankRemoval = rows.length;
 
       rows = [
-        headers,
+        originalHeaders,
         ...rows
           .slice(1)
           .filter((row) => !isEntireRowBlank(row))
@@ -1364,16 +1595,29 @@
         originalAnalysis.emptyColumnIndexes
       );
 
-      const trimmedRows = rows.map((row) =>
-        row.filter((_, index) => !columnsToRemove.has(index))
+      rows = rows.map((row) =>
+        row.filter(
+          (_, index) =>
+            !columnsToRemove.has(index)
+        )
       );
 
-      rows = trimmedRows;
+      // 3. Clean and normalize headers.
+      const headerResult = buildCleanHeaders(
+        rows[0] || []
+      );
 
-      // 3. Trim all string values.
+      rows[0] = headerResult.headers;
+
+      const headersCleaned =
+        headerResult.cleanedCount;
+
+      // 4. Trim all string values.
       rows = rows.map((row) =>
         row.map((cell) =>
-          typeof cell === "string" ? cell.trim() : cell
+          typeof cell === "string"
+            ? cell.trim()
+            : cell
         )
       );
 
@@ -1381,7 +1625,7 @@
       let phoneStandardized = 0;
       let dateStandardized = 0;
 
-      // 4. Detect columns again after removing columns.
+      // 5. Detect columns again using cleaned headers.
       const cleanedHeaders = rows[0] || [];
 
       const emailColumnIndex = findColumn(
@@ -1399,28 +1643,39 @@
         "date"
       );
 
-      // 5. Normalize values.
-      for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+      // 6. Normalize cell values.
+      for (
+        let rowIndex = 1;
+        rowIndex < rows.length;
+        rowIndex++
+      ) {
         const row = rows[rowIndex];
 
+        // Email
         if (emailColumnIndex !== -1) {
           const originalValue = String(
             row[emailColumnIndex] ?? ""
           ).trim();
 
-          if (originalValue && isValidEmail(originalValue)) {
+          if (
+            originalValue &&
+            isValidEmail(originalValue)
+          ) {
             const normalizedEmail =
               originalValue.toLowerCase();
 
-            if (normalizedEmail !== originalValue) {
+            if (
+              normalizedEmail !== originalValue
+            ) {
               emailStandardized++;
-              row[emailColumnIndex] = normalizedEmail;
-            } else {
-              row[emailColumnIndex] = normalizedEmail;
             }
+
+            row[emailColumnIndex] =
+              normalizedEmail;
           }
         }
 
+        // Phone
         if (phoneColumnIndex !== -1) {
           const originalValue = String(
             row[phoneColumnIndex] ?? ""
@@ -1428,41 +1683,57 @@
 
           if (isValidPhone(originalValue)) {
             const standardized =
-              standardizePhone(originalValue);
+              standardizePhone(
+                originalValue
+              );
 
-            if (standardized !== originalValue) {
+            if (
+              standardized !== originalValue
+            ) {
               phoneStandardized++;
-              row[phoneColumnIndex] = standardized;
+              row[phoneColumnIndex] =
+                standardized;
             }
           }
         }
 
+        // Date
         if (dateColumnIndex !== -1) {
           const originalValue = String(
             row[dateColumnIndex] ?? ""
           ).trim();
 
-          const result = parseDateValue(originalValue);
+          const result =
+            parseDateValue(originalValue);
 
           if (result.status === "valid") {
-            if (result.value !== originalValue) {
+            if (
+              result.value !== originalValue
+            ) {
               dateStandardized++;
             }
 
-            row[dateColumnIndex] = result.value;
+            row[dateColumnIndex] =
+              result.value;
           } else {
-            // Invalid and ambiguous dates remain unchanged.
-            row[dateColumnIndex] = originalValue;
+            // Invalid and ambiguous values
+            // remain unchanged.
+            row[dateColumnIndex] =
+              originalValue;
           }
         }
       }
 
-      // 6. Remove exact duplicate rows after normalization.
+      // 7. Remove exact duplicate rows.
       const seen = new Set();
       const uniqueDataRows = [];
       let duplicateRowsRemoved = 0;
 
-      for (let i = 1; i < rows.length; i++) {
+      for (
+        let i = 1;
+        i < rows.length;
+        i++
+      ) {
         const key = JSON.stringify(rows[i]);
 
         if (seen.has(key)) {
@@ -1478,7 +1749,11 @@
         ...uniqueDataRows
       ];
 
-      setText("summaryBlankRows", blankRowsRemoved);
+      setText(
+        "summaryBlankRows",
+        blankRowsRemoved
+      );
+
       setText(
         "summaryEmptyColumns",
         columnsToRemove.size
@@ -1505,25 +1780,51 @@
       );
 
       setText(
+        "summaryHeaders",
+        headersCleaned
+      );
+
+      setText(
         "summaryRowsAfter",
         cleanedRows.length - 1
+      );
+
+      setText(
+        "detailHeaderCleanup",
+        headersCleaned > 0
+          ? `${headersCleaned} header(s) cleaned`
+          : "No header changes required"
       );
 
       downloadXlsxBtn.disabled = false;
       downloadCsvBtn.disabled = false;
 
-      const dateMessage =
-        dateStandardized > 0
-          ? `${dateStandardized} clear date value(s) were standardized to DD-MM-YYYY.`
-          : "No date values required standardization.";
+      let successMessage =
+        "Cleaning complete.";
 
-      const ambiguousMessage =
-        originalAnalysis.ambiguousDates > 0
-          ? ` ${originalAnalysis.ambiguousDates} ambiguous date value(s) were left unchanged rather than guessed.`
-          : "";
+      if (headersCleaned > 0) {
+        successMessage +=
+          ` ${headersCleaned} header(s) were cleaned.`;
+      }
+
+      if (phoneStandardized > 0) {
+        successMessage +=
+          ` ${phoneStandardized} phone value(s) standardized.`;
+      }
+
+      if (dateStandardized > 0) {
+        successMessage +=
+          ` ${dateStandardized} date value(s) standardized.`;
+      }
+
+      if (originalAnalysis.ambiguousDates > 0) {
+        successMessage +=
+          ` ${originalAnalysis.ambiguousDates} ambiguous date value(s) were left unchanged.`;
+      }
 
       showNotice(
-        `Cleaning complete. ${dateMessage}${ambiguousMessage} Invalid or ambiguous values were not guessed.`,
+        successMessage +
+        " Invalid or ambiguous values were not guessed.",
         "success"
       );
 
@@ -1542,9 +1843,12 @@
       }
 
       const worksheet =
-        XLSX.utils.aoa_to_sheet(cleanedRows);
+        XLSX.utils.aoa_to_sheet(
+          cleanedRows
+        );
 
-      const workbook = XLSX.utils.book_new();
+      const workbook =
+        XLSX.utils.book_new();
 
       XLSX.utils.book_append_sheet(
         workbook,
@@ -1555,7 +1859,10 @@
       const baseName =
         currentFileName
           .replace(/\.[^/.]+$/, "")
-          .replace(/[^a-zA-Z0-9_-]+/g, "_");
+          .replace(
+            /[^a-zA-Z0-9_-]+/g,
+            "_"
+          );
 
       if (type === "xlsx") {
         XLSX.writeFile(
@@ -1601,12 +1908,16 @@
         "validDates",
         "invalidDates",
         "ambiguousDates",
+        "duplicateHeaders",
+        "blankHeaders",
         "qualityInvalidEmails",
         "qualityValidPhones",
         "qualityInvalidPhones",
         "qualityValidDates",
         "qualityInvalidDates",
         "qualityAmbiguousDates",
+        "qualityDuplicateHeaders",
+        "qualityBlankHeaders",
         "qualityDuplicateRows",
         "qualityEmptyRows",
         "qualityEmptyColumns",
@@ -1617,22 +1928,58 @@
         "summaryPhones",
         "summaryDates",
         "summaryEmails",
+        "summaryHeaders",
         "summaryRowsAfter"
-      ].forEach((id) => setText(id, "0"));
+      ].forEach((id) => {
+        setText(id, "0");
+      });
 
-      setText("qualityEmailColumn", "Not detected");
-      setText("qualityPhoneColumn", "Not detected");
-      setText("qualityDateColumn", "Not detected");
+      setText(
+        "qualityEmailColumn",
+        "Not detected"
+      );
 
-      setText("detailEmailColumn", "Not detected");
-      setText("detailPhoneColumn", "Not detected");
-      setText("detailDateColumn", "Not detected");
-      setText("detailAmbiguousDates", "Left unchanged");
+      setText(
+        "qualityPhoneColumn",
+        "Not detected"
+      );
+
+      setText(
+        "qualityDateColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailEmailColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailPhoneColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailDateColumn",
+        "Not detected"
+      );
+
+      setText(
+        "detailHeaderCleanup",
+        "Ready"
+      );
+
+      setText(
+        "detailAmbiguousDates",
+        "Left unchanged"
+      );
 
       previewHead.innerHTML = "";
       previewBody.innerHTML = "";
+
       previewTable.classList.add("hidden");
       previewEmpty.classList.remove("hidden");
+
       previewEmpty.textContent =
         "Your spreadsheet preview will appear here.";
 
@@ -1640,79 +1987,108 @@
         "Upload a spreadsheet to preview your data.";
     }
 
-    fileInput.addEventListener("change", async function () {
-      const file = this.files[0];
+    fileInput.addEventListener(
+      "change",
+      async function () {
+        const file = this.files[0];
 
-      if (!file) {
-        return;
-      }
-
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-
-        const workbook = XLSX.read(arrayBuffer, {
-          type: "array",
-          cellDates: false
-        });
-
-        const firstSheetName = workbook.SheetNames[0];
-
-        if (!firstSheetName) {
-          throw new Error("No worksheet found.");
+        if (!file) {
+          return;
         }
 
-        const worksheet =
-          workbook.Sheets[firstSheetName];
+        try {
+          const arrayBuffer =
+            await file.arrayBuffer();
 
-        const rows = XLSX.utils.sheet_to_json(
-          worksheet,
-          {
-            header: 1,
-            defval: "",
-            raw: false,
-            blankrows: true
+          const workbook =
+            XLSX.read(
+              arrayBuffer,
+              {
+                type: "array",
+                cellDates: false
+              }
+            );
+
+          const firstSheetName =
+            workbook.SheetNames[0];
+
+          if (!firstSheetName) {
+            throw new Error(
+              "No worksheet found."
+            );
           }
-        );
 
-        if (!rows.length || !rows[0] || rows[0].length === 0) {
-          throw new Error(
-            "The spreadsheet appears to be empty."
+          const worksheet =
+            workbook.Sheets[
+              firstSheetName
+            ];
+
+          const rows =
+            XLSX.utils.sheet_to_json(
+              worksheet,
+              {
+                header: 1,
+                defval: "",
+                raw: false,
+                blankrows: true
+              }
+            );
+
+          if (
+            !rows.length ||
+            !rows[0] ||
+            rows[0].length === 0
+          ) {
+            throw new Error(
+              "The spreadsheet appears to be empty."
+            );
+          }
+
+          originalRows = rows;
+          cleanedRows = [];
+          currentFileName =
+            file.name;
+
+          originalAnalysis =
+            analyzeSpreadsheet(
+              originalRows
+            );
+
+          fileInfo.style.display =
+            "block";
+
+          fileInfo.innerHTML =
+            `<strong>${escapeHtml(
+              file.name
+            )}</strong> • ` +
+            `${formatFileSize(
+              file.size
+            )} • ` +
+            `${originalAnalysis.totalRows} data row(s) • ` +
+            `${originalAnalysis.totalColumns} column(s)`;
+
+          cleanBtn.disabled = false;
+          downloadXlsxBtn.disabled = true;
+          downloadCsvBtn.disabled = true;
+
+          displayOriginalAnalysis(
+            originalAnalysis
           );
+
+        } catch (error) {
+          console.error(error);
+
+          showNotice(
+            "Could not read this spreadsheet. Please check that the file is a valid XLSX, XLS or CSV file.",
+            "warning"
+          );
+
+          cleanBtn.disabled = true;
+          downloadXlsxBtn.disabled = true;
+          downloadCsvBtn.disabled = true;
         }
-
-        originalRows = rows;
-        cleanedRows = [];
-        currentFileName = file.name;
-
-        originalAnalysis =
-          analyzeSpreadsheet(originalRows);
-
-        fileInfo.style.display = "block";
-        fileInfo.innerHTML =
-          `<strong>${escapeHtml(file.name)}</strong> • ` +
-          `${formatFileSize(file.size)} • ` +
-          `${originalAnalysis.totalRows} data row(s) • ` +
-          `${originalAnalysis.totalColumns} column(s)`;
-
-        cleanBtn.disabled = false;
-        downloadXlsxBtn.disabled = true;
-        downloadCsvBtn.disabled = true;
-
-        displayOriginalAnalysis(originalAnalysis);
-
-      } catch (error) {
-        console.error(error);
-
-        showNotice(
-          "Could not read this spreadsheet. Please check that the file is a valid XLSX, XLS or CSV file.",
-          "warning"
-        );
-
-        cleanBtn.disabled = true;
-        downloadXlsxBtn.disabled = true;
-        downloadCsvBtn.disabled = true;
       }
-    });
+    );
 
     cleanBtn.addEventListener(
       "click",
@@ -1740,19 +2116,39 @@
       }
 
       if (bytes < 1024 * 1024) {
-        return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(
+          bytes / 1024
+        ).toFixed(1)} KB`;
       }
 
-      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+      return `${(
+        bytes /
+        (1024 * 1024)
+      ).toFixed(1)} MB`;
     }
 
     function escapeHtml(value) {
       return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
     }
   </script>
 </body>
