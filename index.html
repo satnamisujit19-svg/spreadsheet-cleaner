@@ -146,10 +146,10 @@
     <section class="hero">
       <div class="brand-row">
         <div class="brand">Clean My Spreadsheet</div>
-        <div class="step-badge">Step 43 • Cleaning Preview</div>
+        <div class="step-badge">Step 45 • Robust Header Detection</div>
       </div>
       <h1>Clean My Spreadsheet</h1>
-      <p class="hero-text">Clean, validate and standardize messy spreadsheet data in seconds — directly in your browser, without silently deleting questionable values.</p>
+      <p class="hero-text">Clean, validate and standardize messy spreadsheet data in seconds — with safer header detection and review-friendly cleaning.</p>
       <div class="chips">
         <span class="chip">Email Validation</span>
         <span class="chip">Email Normalization</span>
@@ -262,6 +262,7 @@
         <div class="detail-row"><span class="detail-label">Current Sheet</span><span id="detailSheet" class="pill">—</span></div>
         <div class="detail-row"><span class="detail-label">Detected Email Column</span><span id="detailEmailColumn" class="pill">Not found</span></div>
         <div class="detail-row"><span class="detail-label">Detected Phone Column</span><span id="detailPhoneColumn" class="pill">Not found</span></div>
+        <div class="detail-row"><span class="detail-label">Header Detection</span><span id="detailHeaderStatus" class="pill">Waiting</span></div>
         <div class="detail-row"><span class="detail-label">Validation Status</span><span id="detailValidation" class="pill">Waiting</span></div>
       </div>
     </section>
@@ -330,7 +331,17 @@
       }
     };
     const STRONG_HEADERS = new Set([
-      "name","email","phone","mobile","date","gender","response","status","city","amount","payment","id","error","address","country","state","pincode","zip","dob","dateofbirth"
+      "name","customername","fullname",
+      "email","emailaddress","emailid",
+      "phone","phonenumber","mobilenumber","mobilephone","contactnumber","telephone",
+      "date","joindate","dob","dateofbirth",
+      "gender","sex",
+      "response","consent",
+      "status","accountstatus","orderstatus","paymentstatus",
+      "city","state","country","address","pincode","zipcode","zip",
+      "amount","orderamount","payment",
+      "id","customerid","orderid","duplicatekey","code",
+      "error","errortest","formulatest","formulatestvalue"
     ]);
 
     const fileInput = document.getElementById("fileInput");
@@ -441,36 +452,94 @@
     }
 
     function headerScore(row) {
-      if (!Array.isArray(row)) return -Infinity;
+      if (!Array.isArray(row)) {
+        return { score: -Infinity, strongHeaderCount: 0, nonEmpty: 0, dataLikeCount: 0 };
+      }
+
       let score = 0;
+      let strongHeaderCount = 0;
       let nonEmpty = 0;
+      let dataLikeCount = 0;
+
       row.forEach(cell => {
         const raw = String(cell ?? "").trim();
         if (!raw) return;
+
         nonEmpty++;
         const h = normalizeHeader(raw);
-        if (STRONG_HEADERS.has(h)) score += 4;
-        if (["emailaddress","phonenumber","mobilenumber","contactnumber","dateofbirth"].includes(h)) score += 3;
-        if (headerLooksLikeData(raw)) score -= 2;
-        if (/^[a-zA-Z][a-zA-Z0-9_ -]{1,30}$/.test(raw) && raw.split(/\s+/).length <= 3) score += 1;
+
+        if (STRONG_HEADERS.has(h)) {
+          score += 6;
+          strongHeaderCount++;
+        }
+
+        if (headerLooksLikeData(raw)) {
+          score -= 3;
+          dataLikeCount++;
+        }
+
+        if (/^[a-zA-Z][a-zA-Z0-9_ -]{1,35}$/.test(raw) && raw.split(/\s+/).length <= 4) {
+          score += 1;
+        }
       });
-      return score + Math.min(nonEmpty, 14) * 0.15;
+
+      score += Math.min(nonEmpty, 20) * 0.2;
+
+      return {
+        score,
+        strongHeaderCount,
+        nonEmpty,
+        dataLikeCount
+      };
     }
 
     function chooseHeaderRow(rows) {
-      if (!rows.length) return { headerIndex: 0, headers: [] };
-      const maxCheck = Math.min(rows.length, 5);
-      let bestIndex = 0;
-      let bestScore = headerScore(rows[0]);
-      for (let i = 1; i < maxCheck; i++) {
-        const score = headerScore(rows[i]);
-        if (score > bestScore + 0.6) {
-          bestScore = score;
+      if (!rows.length) {
+        return {
+          headerIndex: -1,
+          headers: []
+        };
+      }
+
+      const maxCheck = Math.min(rows.length, 20);
+      let bestIndex = -1;
+      let bestResult = null;
+
+      for (let i = 0; i < maxCheck; i++) {
+        const result = headerScore(rows[i]);
+
+        const credible =
+          result.nonEmpty >= 3 &&
+          (result.strongHeaderCount >= 2 ||
+            (result.strongHeaderCount >= 1 && result.dataLikeCount === 0 && result.score >= 5));
+
+        if (!credible) continue;
+
+        if (!bestResult || result.score > bestResult.score) {
+          bestResult = result;
           bestIndex = i;
         }
       }
-      const headers = rows[bestIndex] || [];
-      return { headerIndex: bestIndex, headers: makeUniqueHeaders(headers) };
+
+      if (bestIndex === -1) {
+        const columnCount = getColumnCount(rows);
+        const genericHeaders = Array.from(
+          { length: columnCount },
+          (_, index) => `Column ${index + 1}`
+        );
+
+        return {
+          headerIndex: -1,
+          headers: genericHeaders,
+          detected: false
+        };
+      }
+
+      return {
+        headerIndex: bestIndex,
+        headers: makeUniqueHeaders(rows[bestIndex] || []),
+        detected: true
+      };
     }
 
     function makeUniqueHeaders(headers) {
@@ -584,21 +653,64 @@
       return /^[-+]?\d+(?:\.\d+)?$/.test(s);
     }
 
-    function findColumn(headers, type) {
+    function findColumn(headers, type, dataRows = []) {
       const normalizedHeaders = headers.map(normalizeHeader);
       const exact = type === "email"
         ? ["email","emailaddress","emailid"]
         : type === "phone"
         ? ["phone","phonenumber","mobilenumber","mobilephone","contactnumber","telephone","tel"]
         : [];
+
       for (let i = 0; i < normalizedHeaders.length; i++) {
         if (exact.includes(normalizedHeaders[i])) return i;
       }
-      const words = type === "email" ? ["email"] : ["phone","mobile","telephone","contact"];
+
+      const words = type === "email"
+        ? ["email"]
+        : ["phone","mobile","telephone","contact"];
+
       for (let i = 0; i < normalizedHeaders.length; i++) {
         if (words.some(word => normalizedHeaders[i].includes(word))) return i;
       }
-      return -1;
+
+      if (!dataRows.length) return -1;
+
+      let bestIndex = -1;
+      let bestScore = 0;
+
+      for (let c = 0; c < headers.length; c++) {
+        const values = dataRows
+          .map(row => String(row?.[c] ?? "").trim())
+          .filter(Boolean);
+
+        if (!values.length) continue;
+
+        if (type === "email") {
+          const emailLike = values.filter(value =>
+            /@/.test(value) && /[A-Za-z]/.test(value)
+          ).length;
+
+          const score = emailLike / values.length;
+
+          if (emailLike >= 2 && score > bestScore) {
+            bestScore = score;
+            bestIndex = c;
+          }
+        } else if (type === "phone") {
+          const phoneLike = values.filter(value =>
+            isValidPhone(value)
+          ).length;
+
+          const score = phoneLike / values.length;
+
+          if (phoneLike >= 2 && score >= 0.5 && score > bestScore) {
+            bestScore = score;
+            bestIndex = c;
+          }
+        }
+      }
+
+      return bestIndex;
     }
 
     function detectHeaderType(header) {
@@ -631,6 +743,18 @@
         if (nonEmpty.filter(isValidPhone).length >= Math.max(2, Math.ceil(nonEmpty.length * 0.7))) return "Phone";
         if (nonEmpty.filter(isDateLike).length >= Math.max(2, Math.ceil(nonEmpty.length * 0.6))) return "Date";
         if (nonEmpty.filter(isLikelyNumber).length >= Math.ceil(nonEmpty.length * 0.8)) return "Number";
+        const idLike = nonEmpty.filter(value =>
+          /^[A-Za-z]{1,6}\d{2,}$/.test(
+            String(value).trim()
+          )
+        ).length;
+
+        if (
+          idLike >= Math.max(2, Math.ceil(nonEmpty.length * 0.7))
+        ) {
+          return "ID";
+        }
+
         const unique = new Set(nonEmpty.map(normalizeCell)).size;
         if (unique <= Math.max(8, Math.ceil(nonEmpty.length * 0.35)) && nonEmpty.length >= 4) return "Categorical";
       }
@@ -684,9 +808,43 @@
 
     function buildIdentityDuplicateInfo(headers, dataRows) {
       const identityIndexes = [];
+
       headers.forEach((header, index) => {
         const h = normalizeHeader(header);
-        if (h.includes("email") || h === "id" || h.endsWith("id")) identityIndexes.push(index);
+
+        if (h.includes("email") || h === "id" || h.endsWith("id")) {
+          identityIndexes.push(index);
+          return;
+        }
+
+        const values = dataRows
+          .map(row => String(row?.[index] ?? "").trim())
+          .filter(Boolean);
+
+        if (!values.length) return;
+
+        const emailLike = values.filter(value =>
+          /@/.test(value) && /[A-Za-z]/.test(value)
+        ).length;
+
+        const idLike = values.filter(value =>
+          /^[A-Za-z]{1,6}\d{2,}$/.test(value)
+        ).length;
+
+        if (
+          emailLike >= 2 &&
+          emailLike / values.length >= 0.4
+        ) {
+          identityIndexes.push(index);
+          return;
+        }
+
+        if (
+          idLike >= 2 &&
+          idLike / values.length >= 0.7
+        ) {
+          identityIndexes.push(index);
+        }
       });
       const groups = [];
       const rowSets = new Map();
@@ -719,12 +877,14 @@
       }
       const headerInfo = chooseHeaderRow(rawRows);
       const headerRowIndex = headerInfo.headerIndex;
-      const headers = headerInfo.headers;
-      const dataRows = rawRows.slice(headerRowIndex + 1);
+      const headers = [...headerInfo.headers];
+      const dataRows = headerRowIndex >= 0
+        ? rawRows.slice(headerRowIndex + 1)
+        : rawRows;
       const columnCount = Math.max(getColumnCount(rawRows), headers.length);
       while (headers.length < columnCount) headers.push(`Column ${headers.length + 1}`);
-      const emailIndex = findColumn(headers, "email");
-      const phoneIndex = findColumn(headers, "phone");
+      const emailIndex = findColumn(headers, "email", dataRows);
+      const phoneIndex = findColumn(headers, "phone", dataRows);
       let invalidEmails = 0;
       let invalidPhones = 0;
       let detectedDates = 0;
@@ -763,9 +923,10 @@
           for (let c = range.s.c; c <= range.e.c; c++) {
             const address = XLSX.utils.encode_cell({r,c});
             const cell = worksheet[address];
-            const sheetRow = r - headerRowIndex;
-            if (sheetRow < 1) continue;
-            const displayRow = sheetRow;
+            if (headerRowIndex >= 0 && r <= headerRowIndex) continue;
+            const displayRow = headerRowIndex >= 0
+              ? r - headerRowIndex
+              : r + 1;
             const field = headers[c] || `Column ${c + 1}`;
             if (cell && cell.f) formulas.push({ row:displayRow, field, value: cell.w ?? cell.v ?? "", formula:cell.f });
           }
@@ -795,7 +956,8 @@
         formulas, errors,
         emptyColumns:emptyColumnIndexes.length, emptyColumnIndexes,
         columnTypes, emailIndex, phoneIndex, headerRowIndex,
-        missingList, emailIssues, phoneIssues, whitespaceCells:countWhitespaceCells(rawRows)
+        missingList, emailIssues, phoneIssues, whitespaceCells:countWhitespaceCells(rawRows),
+        headerDetected: headerInfo.detected !== false
       };
     }
 
@@ -945,6 +1107,12 @@
       setText("detailSheet", currentSheetName || "—");
       setText("detailEmailColumn", emailColumn);
       setText("detailPhoneColumn", phoneColumn);
+      setText(
+        "detailHeaderStatus",
+        analysis.headerDetected
+          ? `Detected — row ${analysis.headerRowIndex + 1}`
+          : "Not detected — generic columns used"
+      );
       const validation = analysis.emailIndex === -1 && analysis.phoneIndex === -1
         ? "No contact columns"
         : (analysis.invalidEmails > 0 || analysis.invalidPhones > 0 ? "Issues detected" : "No email/phone issues");
@@ -965,15 +1133,25 @@
       emptyState.classList.add("hidden");
       previewMetrics.classList.add("hidden");
       previewTitle.textContent = "Cleaned Preview";
-      previewDescription.textContent = "Clean the selected worksheet to compare the size before and after cleaning.";
+      previewDescription.textContent = analysis.headerDetected
+        ? "Clean the selected worksheet to compare the size before and after cleaning."
+        : "No reliable header row was detected. Generic column names are being used so the first data row is preserved.";
       renderPreview(rawRowsForPreview(), false);
     }
 
     function rawRowsForPreview() {
       if (!currentAnalysis) return currentRows;
-      const start = currentAnalysis.headerRowIndex;
-      const raw = currentRows.slice(start);
+
       const header = currentAnalysis.headers;
+
+      if (currentAnalysis.headerRowIndex < 0) {
+        return [header, ...currentRows];
+      }
+
+      const raw = currentRows.slice(
+        currentAnalysis.headerRowIndex
+      );
+
       return [header, ...raw.slice(1)];
     }
 
@@ -1018,6 +1196,7 @@
         "",
         `File: ${currentFile?.name || "Unknown"}`,
         `Worksheet: ${currentSheetName || "Unknown"}`,
+        `Header: ${currentAnalysis?.headerDetected ? `Detected (row ${currentAnalysis.headerRowIndex + 1})` : "Not detected — generic columns used"}`,
         "",
         "CLEANING SUMMARY",
         `Rows Before: ${result.rowsBefore}`,
@@ -1087,6 +1266,18 @@
       summarySection.classList.remove("hidden");
     }
 
+    function analysisMessage(analysis) {
+      if (!analysis) {
+        return "The worksheet was loaded.";
+      }
+
+      if (!analysis.headerDetected) {
+        return "Worksheet loaded. No reliable header row was detected, so generic column names were used and no data row was removed as a header.";
+      }
+
+      return `Loaded “${currentSheetName}” and completed the initial checks.`;
+    }
+
     function loadSelectedSheet() {
       if (!workbook || !currentSheetName) return;
       currentWorksheet = workbook.Sheets[currentSheetName];
@@ -1110,7 +1301,9 @@
       worksheetSection.classList.remove("hidden");
       actionBar.classList.remove("hidden");
       cleanBtn.disabled = false;
-      showSuccess(`Loaded “${currentSheetName}” and completed the initial checks.`);
+      showSuccess(
+        analysisMessage(currentAnalysis)
+      );
     }
 
     async function handleFileUpload(event) {
