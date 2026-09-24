@@ -1,2783 +1,2328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clean My Spreadsheet</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clean My Spreadsheet</title>
 
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f7fb;
-    color: #1f2937;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 30px 20px 60px;
-}
-
-.hero {
-    text-align: center;
-    margin-bottom: 28px;
-}
-
-.hero h1 {
-    margin: 0;
-    font-size: 34px;
-    color: #111827;
-}
-
-.hero p {
-    margin: 10px 0 20px;
-    color: #6b7280;
-    font-size: 16px;
-}
-
-.features {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.feature {
-    background: white;
-    border: 1px solid #e5e7eb;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-}
-
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 22px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-}
-
-.upload-box {
-    border: 2px dashed #cbd5e1;
-    border-radius: 14px;
-    padding: 45px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.upload-box:hover,
-.upload-box.dragover {
-    border-color: #2563eb;
-    background: #eff6ff;
-}
-
-.upload-box h2 {
-    margin: 0 0 8px;
-    font-size: 21px;
-}
-
-.upload-box p {
-    color: #6b7280;
-    margin: 0 0 18px;
-}
-
-.file-btn {
-    display: inline-block;
-    background: #2563eb;
-    color: white;
-    padding: 11px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-.selected-file {
-    margin-top: 16px;
-    font-size: 14px;
-    color: #374151;
-}
-
-select {
-    width: 100%;
-    padding: 11px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    background: white;
-    font-size: 14px;
-}
-
-.section-title {
-    margin: 0 0 16px;
-    font-size: 21px;
-}
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-}
-
-.stat {
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-.stat-label {
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 6px;
-}
-
-.stat-value {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-button {
-    border: 0;
-    padding: 11px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.primary {
-    background: #2563eb;
-    color: white;
-}
-
-.secondary {
-    background: #111827;
-    color: white;
-}
-
-.success {
-    background: #059669;
-    color: white;
-}
-
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.table-wrap {
-    overflow-x: auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 700px;
-}
-
-th,
-td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #e5e7eb;
-    text-align: left;
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-th {
-    background: #f8fafc;
-    font-weight: 700;
-    position: sticky;
-    top: 0;
-}
-
-tr:last-child td {
-    border-bottom: none;
-}
-
-.badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    background: #eef2ff;
-}
-
-.detail-box {
-    margin-top: 15px;
-}
-
-.detail-box h3 {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.detail-list {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.detail-list li {
-    margin-bottom: 5px;
-    font-size: 13px;
-}
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-}
-
-.summary-item {
-    border: 1px solid #e5e7eb;
-    padding: 14px;
-    border-radius: 10px;
-}
-
-.summary-item strong {
-    display: block;
-    font-size: 20px;
-    margin-bottom: 4px;
-}
-
-.muted {
-    color: #6b7280;
-    font-size: 13px;
-}
-
-.hidden {
-    display: none;
-}
-
-.status {
-    padding: 12px 15px;
-    border-radius: 8px;
-    background: #eff6ff;
-    color: #1d4ed8;
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-.warning {
-    background: #fff7ed;
-    color: #c2410c;
-}
-
-.error {
-    background: #fef2f2;
-    color: #b91c1c;
-}
-
-.empty {
-    text-align: center;
-    padding: 25px;
-    color: #6b7280;
-}
-
-footer {
-    text-align: center;
-    color: #9ca3af;
-    font-size: 13px;
-    margin-top: 30px;
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 20px 12px 40px;
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    .hero h1 {
-        font-size: 28px;
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    .container {
+      width: min(1180px, 94%);
+      margin: 35px auto 60px;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 34px;
+    }
+
+    .subtitle {
+      color: #667085;
+      margin-bottom: 28px;
+      font-size: 16px;
     }
 
     .card {
-        padding: 17px;
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e8ecf2;
     }
 
     .upload-box {
-        padding: 30px 15px;
+      border: 2px dashed #b8c1d1;
+      border-radius: 14px;
+      padding: 34px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #fafbfc;
+      transition: 0.2s;
     }
-}
-</style>
+
+    .upload-box:hover,
+    .upload-box.dragover {
+      border-color: #4f46e5;
+      background: #f5f5ff;
+    }
+
+    .upload-box input {
+      display: none;
+    }
+
+    .upload-button {
+      display: inline-block;
+      background: #111827;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 9px;
+      margin-top: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .filename {
+      margin-top: 14px;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .success {
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: #ecfdf3;
+      color: #027a48;
+      margin-top: 18px;
+      font-weight: 600;
+    }
+
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 21px;
+    }
+
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      border: 1px solid #e4e7ec;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fcfcfd;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #667085;
+      margin-bottom: 7px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .check-section {
+      margin-bottom: 25px;
+    }
+
+    .check-section h3 {
+      margin-bottom: 10px;
+      font-size: 17px;
+    }
+
+    .check-section ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .check-section li {
+      margin-bottom: 6px;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .muted {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #e4e7ec;
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #eaecf0;
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f9fafb;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 9px;
+      padding: 11px 17px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .primary {
+      background: #111827;
+      color: white;
+    }
+
+    .secondary {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+
+    .summary-item {
+      border: 1px solid #e4e7ec;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .summary-number {
+      font-size: 23px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .summary-label {
+      font-size: 13px;
+      color: #667085;
+    }
+
+    .loading {
+      display: inline-block;
+      margin-top: 12px;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .note {
+      background: #fffaeb;
+      color: #93370d;
+      border: 1px solid #fedf89;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 27px;
+      }
+
+      .container {
+        width: 92%;
+      }
+
+      .card {
+        padding: 17px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="hero">
-        <h1>Clean My Spreadsheet</h1>
-        <p>Clean, validate and standardize messy spreadsheet data in seconds.</p>
+  <h1>Clean My Spreadsheet</h1>
 
-        <div class="features">
-            <span class="feature">✓ Email Validation</span>
-            <span class="feature">✓ Email Normalization</span>
-            <span class="feature">✓ Phone Standardization</span>
-            <span class="feature">✓ Date Detection</span>
-            <span class="feature">✓ Date Standardization</span>
-            <span class="feature">✓ Header Cleanup</span>
-            <span class="feature">✓ Category Standardization</span>
-            <span class="feature">✓ Missing Data Detection</span>
-            <span class="feature">✓ Data Type Detection</span>
-            <span class="feature">✓ Formula & Error Detection</span>
-            <span class="feature">✓ Duplicate Detection</span>
-            <span class="feature">✓ Empty Column Detection</span>
-            <span class="feature">✓ XLSX + CSV Export</span>
-        </div>
+  <div class="subtitle">
+    Clean, validate and standardize messy spreadsheet data in seconds.
+  </div>
+
+  <div class="card">
+    <div class="muted" style="line-height:1.8;">
+      ✓ Email Validation &nbsp;
+      ✓ Email Normalization &nbsp;
+      ✓ Phone Standardization &nbsp;
+      ✓ Date Detection &nbsp;
+      ✓ Date Standardization &nbsp;
+      ✓ Header Cleanup &nbsp;
+      ✓ Category Standardization &nbsp;
+      ✓ Missing Data Detection &nbsp;
+      ✓ Data Type Detection &nbsp;
+      ✓ Formula & Error Detection &nbsp;
+      ✓ Duplicate Detection &nbsp;
+      ✓ Empty Column Detection &nbsp;
+      ✓ XLSX + CSV Export
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Upload your spreadsheet</h2>
+
+    <div class="upload-box" id="dropZone">
+      <div style="font-size:18px;font-weight:700;">
+        Choose your spreadsheet
+      </div>
+
+      <div class="muted" style="margin-top:7px;">
+        Supported formats: XLSX, XLS and CSV
+      </div>
+
+      <label class="upload-button">
+        Choose Spreadsheet
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+      </label>
+
+      <div class="filename" id="fileName">
+        No file selected
+      </div>
+
+      <div class="loading hidden" id="loading">
+        Processing spreadsheet...
+      </div>
+    </div>
+
+    <div id="successMessage" class="success hidden">
+      Cleaning completed successfully.
+    </div>
+  </div>
+
+  <div id="results" class="hidden">
+
+    <div class="card">
+      <h2 class="section-title">Worksheet</h2>
+      <select id="sheetSelector"></select>
     </div>
 
     <div class="card">
-        <div
-            class="upload-box"
-            id="uploadBox"
-        >
-            <h2>Upload your spreadsheet</h2>
-            <p>Supported formats: XLSX, XLS and CSV</p>
+      <h2 class="section-title">Overview</h2>
 
-            <label class="file-btn">
-                Choose Spreadsheet
-                <input
-                    type="file"
-                    id="fileInput"
-                    accept=".xlsx,.xls,.csv"
-                >
-            </label>
+      <div class="stats">
 
-            <div class="selected-file" id="selectedFile">
-                No file selected
-            </div>
+        <div class="stat">
+          <div class="stat-label">Rows</div>
+          <div class="stat-value" id="statRows">0</div>
         </div>
 
-        <div id="statusMessage" class="status hidden"></div>
-    </div>
-
-    <div class="card hidden" id="sheetCard">
-        <h2 class="section-title">Worksheet</h2>
-        <select id="sheetSelect"></select>
-    </div>
-
-    <div class="card hidden" id="overviewCard">
-        <h2 class="section-title">Overview</h2>
-
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-label">Rows</div>
-                <div class="stat-value" id="rowsStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Columns</div>
-                <div class="stat-value" id="columnsStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Duplicate Rows</div>
-                <div class="stat-value" id="duplicateStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Potential Duplicates</div>
-                <div class="stat-value" id="potentialDuplicateStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Missing Values</div>
-                <div class="stat-value" id="missingStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Invalid Emails</div>
-                <div class="stat-value" id="emailStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Invalid Phones</div>
-                <div class="stat-value" id="phoneStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Detected Dates</div>
-                <div class="stat-value" id="dateStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Formulas</div>
-                <div class="stat-value" id="formulaStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Errors</div>
-                <div class="stat-value" id="errorStat">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Empty Columns</div>
-                <div class="stat-value" id="emptyColumnStat">0</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card hidden" id="detailsCard">
-
-        <h2 class="section-title">Data Checks</h2>
-
-        <div id="emailDetails" class="detail-box"></div>
-        <div id="phoneDetails" class="detail-box"></div>
-        <div id="dateDetails" class="detail-box"></div>
-        <div id="formulaDetails" class="detail-box"></div>
-        <div id="errorDetails" class="detail-box"></div>
-        <div id="duplicateDetails" class="detail-box"></div>
-        <div id="missingDetails" class="detail-box"></div>
-        <div id="emptyColumnDetails" class="detail-box"></div>
-
-    </div>
-
-    <div class="card hidden" id="typesCard">
-
-        <h2 class="section-title">Column Types</h2>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Column</th>
-                        <th>Type</th>
-                        <th>Filled</th>
-                        <th>Missing</th>
-                        <th>Unique</th>
-                    </tr>
-                </thead>
-
-                <tbody id="typesBody"></tbody>
-            </table>
+        <div class="stat">
+          <div class="stat-label">Columns</div>
+          <div class="stat-value" id="statColumns">0</div>
         </div>
 
-    </div>
-
-    <div class="card hidden" id="actionsCard">
-
-        <h2 class="section-title">Clean Spreadsheet</h2>
-
-        <div class="actions">
-            <button class="primary" id="cleanBtn">
-                Clean Spreadsheet
-            </button>
-
-            <button class="success" id="xlsxBtn" disabled>
-                Export XLSX
-            </button>
-
-            <button class="secondary" id="csvBtn" disabled>
-                Export CSV
-            </button>
+        <div class="stat">
+          <div class="stat-label">Duplicate Rows</div>
+          <div class="stat-value" id="statDuplicates">0</div>
         </div>
 
-    </div>
-
-    <div class="card hidden" id="summaryCard">
-
-        <h2 class="section-title">Cleaning Summary</h2>
-
-        <div class="summary-grid">
-
-            <div class="summary-item">
-                <strong id="blankRowsRemoved">0</strong>
-                Blank Rows Removed
-            </div>
-
-            <div class="summary-item">
-                <strong id="duplicatesRemoved">0</strong>
-                Duplicate Rows Removed
-            </div>
-
-            <div class="summary-item">
-                <strong id="emailsNormalized">0</strong>
-                Emails Normalized
-            </div>
-
-            <div class="summary-item">
-                <strong id="phonesStandardized">0</strong>
-                Phones Standardized
-            </div>
-
-            <div class="summary-item">
-                <strong id="datesStandardized">0</strong>
-                Dates Standardized
-            </div>
-
-            <div class="summary-item">
-                <strong id="categoriesStandardized">0</strong>
-                Categories Standardized
-            </div>
-
-            <div class="summary-item">
-                <strong id="emptyColumnsRemoved">0</strong>
-                Empty Columns Removed
-            </div>
-
+        <div class="stat">
+          <div class="stat-label">Potential Duplicates</div>
+          <div class="stat-value" id="statPotential">0</div>
         </div>
 
-    </div>
-
-    <div class="card hidden" id="previewCard">
-
-        <h2 class="section-title">Cleaned Preview</h2>
-
-        <div class="table-wrap">
-            <table>
-                <thead id="previewHead"></thead>
-                <tbody id="previewBody"></tbody>
-            </table>
+        <div class="stat">
+          <div class="stat-label">Missing Values</div>
+          <div class="stat-value" id="statMissing">0</div>
         </div>
 
+        <div class="stat">
+          <div class="stat-label">Invalid Emails</div>
+          <div class="stat-value" id="statEmails">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Invalid Phones</div>
+          <div class="stat-value" id="statPhones">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Detected Dates</div>
+          <div class="stat-value" id="statDates">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Formulas</div>
+          <div class="stat-value" id="statFormulas">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Errors</div>
+          <div class="stat-value" id="statErrors">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Empty Columns</div>
+          <div class="stat-value" id="statEmptyColumns">0</div>
+        </div>
+
+      </div>
     </div>
 
-    <footer>
-        Clean My Spreadsheet
-    </footer>
+    <div class="card">
+      <h2 class="section-title">Data Checks</h2>
+      <div id="checks"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Column Types</h2>
+      <div class="table-wrap">
+        <table id="typesTable"></table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Clean Spreadsheet</h2>
+
+      <div class="buttons">
+        <button class="primary" id="cleanButton">
+          Clean Spreadsheet
+        </button>
+
+        <button class="secondary" id="exportXlsxButton" disabled>
+          Export XLSX
+        </button>
+
+        <button class="secondary" id="exportCsvButton" disabled>
+          Export CSV
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Cleaning Summary</h2>
+      <div class="summary-grid" id="summary"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Cleaned Preview</h2>
+      <div class="table-wrap">
+        <table id="previewTable"></table>
+      </div>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
 
-let workbook = null;
-let currentSheetName = null;
-let currentAnalysis = null;
-let cleanedSheets = {};
-let originalSheets = {};
-
-const fileInput = document.getElementById("fileInput");
-const uploadBox = document.getElementById("uploadBox");
-const selectedFile = document.getElementById("selectedFile");
-const statusMessage = document.getElementById("statusMessage");
-
-const sheetCard = document.getElementById("sheetCard");
-const sheetSelect = document.getElementById("sheetSelect");
-
-const overviewCard = document.getElementById("overviewCard");
-const detailsCard = document.getElementById("detailsCard");
-const typesCard = document.getElementById("typesCard");
-const actionsCard = document.getElementById("actionsCard");
-const summaryCard = document.getElementById("summaryCard");
-const previewCard = document.getElementById("previewCard");
-
-const cleanBtn = document.getElementById("cleanBtn");
-const xlsxBtn = document.getElementById("xlsxBtn");
-const csvBtn = document.getElementById("csvBtn");
-
 const ERROR_VALUES = new Set([
-    "#ERROR!",
-    "#NAME?",
-    "#DIV/0!",
-    "#VALUE!",
-    "#REF!",
-    "#N/A",
-    "#NUM!",
-    "#NULL!"
+  "#NULL!",
+  "#DIV/0!",
+  "#VALUE!",
+  "#REF!",
+  "#NAME?",
+  "#NUM!",
+  "#N/A",
+  "#ERROR!",
+  "#SPILL!",
+  "#CALC!",
+  "#FIELD!",
+  "#BLOCKED!"
 ]);
 
 const CATEGORY_MAP = {
+  gender: {
     "m": "Male",
     "male": "Male",
+    "man": "Male",
+    "men": "Male",
     "f": "Female",
     "female": "Female",
+    "woman": "Female",
+    "women": "Female",
+    "other": "Other"
+  },
 
-    "y": "Yes",
+  response: {
     "yes": "Yes",
+    "y": "Yes",
     "true": "Yes",
     "1": "Yes",
-
-    "n": "No",
     "no": "No",
+    "n": "No",
     "false": "No",
-    "0": "No",
+    "0": "No"
+  },
 
+  status: {
     "active": "Active",
     "enabled": "Active",
-
+    "enable": "Active",
     "inactive": "Inactive",
     "disabled": "Inactive",
+    "disable": "Inactive"
+  },
 
+  payment: {
     "paid": "Paid",
-    "payment": "Paid",
-
+    "payment done": "Paid",
+    "completed": "Paid",
     "pending": "Pending",
-
+    "not paid": "Pending",
     "cancelled": "Cancelled",
     "canceled": "Cancelled"
+  }
 };
 
-function showStatus(message, type = "") {
-    statusMessage.textContent = message;
-    statusMessage.className = "status";
+let workbook = null;
+let workbookResults = {};
+let currentSheetName = null;
+let currentAnalysis = null;
+let currentCleaned = null;
+let originalFileName = "cleaned.xlsx";
 
-    if (type) {
-        statusMessage.classList.add(type);
-    }
+const fileInput = document.getElementById("fileInput");
+const dropZone = document.getElementById("dropZone");
 
-    statusMessage.classList.remove("hidden");
-}
+fileInput.addEventListener("change", e => {
+  if (e.target.files && e.target.files[0]) {
+    processFile(e.target.files[0]);
+  }
+});
 
-function hideStatus() {
-    statusMessage.classList.add("hidden");
-}
+dropZone.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+});
+
+dropZone.addEventListener("dragleave", () => {
+  dropZone.classList.remove("dragover");
+});
+
+dropZone.addEventListener("drop", e => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+
+  const file = e.dataTransfer.files[0];
+
+  if (file) {
+    processFile(file);
+  }
+});
 
 function isBlank(value) {
-    return value === null ||
-           value === undefined ||
-           String(value).trim() === "";
+  return value === null ||
+         value === undefined ||
+         value === "" ||
+         (typeof value === "string" && value.trim() === "");
 }
 
 function isSpreadsheetError(value) {
-    if (value === null || value === undefined) {
-        return false;
-    }
+  if (value === null || value === undefined) return false;
 
-    return ERROR_VALUES.has(String(value).trim().toUpperCase());
+  const text = String(value).trim().toUpperCase();
+
+  return ERROR_VALUES.has(text);
 }
 
 function cleanString(value) {
-    if (value === null || value === undefined) {
-        return "";
-    }
-
-    return String(value).trim();
+  if (value === null || value === undefined) return "";
+  return String(value).trim();
 }
 
+/* ---------------- EMAIL ---------------- */
+
 function normalizeEmail(value) {
-    return cleanString(value).toLowerCase();
+  if (isBlank(value)) return "";
+  return cleanString(value).toLowerCase();
 }
 
 function isValidEmail(value) {
-    const email = normalizeEmail(value);
+  if (isBlank(value)) return false;
 
-    if (!email) return false;
-    if (isSpreadsheetError(email)) return false;
+  const text = cleanString(value);
 
-    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  if (isSpreadsheetError(text)) return false;
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(text);
 }
 
 function looksEmailLike(value) {
-    const s = cleanString(value);
+  if (isBlank(value)) return false;
 
-    if (!s) return false;
+  const text = cleanString(value);
 
-    return s.includes("@") ||
-           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+  return text.includes("@") ||
+         /^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(text);
 }
 
+/* ---------------- PHONE ---------------- */
+
 function phoneDigits(value) {
-    const s = cleanString(value);
+  if (isBlank(value)) return "";
 
-    if (!s) return "";
-
-    if (/e[+-]?\d+/i.test(s)) {
-        return "";
-    }
-
-    if (/[a-z]/i.test(s)) {
-        return "";
-    }
-
-    return s.replace(/\D/g, "");
+  return String(value)
+    .replace(/[^\d]/g, "");
 }
 
 function isValidPhone(value) {
-    const s = cleanString(value);
+  if (isBlank(value)) return false;
 
-    if (!s || isSpreadsheetError(s)) {
-        return false;
-    }
+  if (isSpreadsheetError(value)) return false;
 
-    if (/e[+-]?\d+/i.test(s)) {
-        return false;
-    }
+  const text = cleanString(value);
 
-    if (/[a-z]/i.test(s)) {
-        return false;
-    }
+  /*
+   * Excel sometimes turns a phone number into scientific
+   * notation. Treat scientific notation separately so that
+   * an error cell never becomes an "invalid phone".
+   */
+  if (/^[+-]?\d+(\.\d+)?e[+-]?\d+$/i.test(text)) {
+    return false;
+  }
 
-    const digits = phoneDigits(s);
+  const digits = phoneDigits(text);
 
-    return digits.length >= 10 && digits.length <= 15;
+  if (digits.length === 10) return true;
+
+  if (digits.length === 12 && digits.startsWith("91")) {
+    return true;
+  }
+
+  return false;
 }
 
 function looksPhoneLike(value) {
-    const s = cleanString(value);
+  if (isBlank(value)) return false;
 
-    if (!s || isSpreadsheetError(s)) {
-        return false;
-    }
+  if (isSpreadsheetError(value)) return false;
 
-    if (/e[+-]?\d+/i.test(s)) {
-        return false;
-    }
+  const text = cleanString(value);
 
-    if (/[a-z]/i.test(s)) {
-        return false;
-    }
+  if (/[+\-\s()]/.test(text)) return true;
 
-    const digits = phoneDigits(s);
+  if (/^\d{5,15}$/.test(text)) return true;
 
-    return digits.length >= 8 && digits.length <= 15 &&
-           /[\s()+-]/.test(s);
+  if (/^\d+(\.\d+)?e[+-]?\d+$/i.test(text)) return true;
+
+  return false;
 }
 
 function standardizePhone(value) {
-    const s = cleanString(value);
+  if (isBlank(value)) return "";
 
-    if (!isValidPhone(s)) {
-        return s;
-    }
+  if (isSpreadsheetError(value)) {
+    return value;
+  }
 
-    const digits = phoneDigits(s);
+  const digits = phoneDigits(value);
 
-    if (digits.length === 10) {
-        return digits;
-    }
+  if (digits.length === 10) {
+    return "+91" + digits;
+  }
 
-    if (digits.length === 12 && digits.startsWith("91")) {
-        return "+" + digits;
-    }
+  if (digits.length === 12 && digits.startsWith("91")) {
+    return "+" + digits;
+  }
 
-    if (s.startsWith("+")) {
-        return "+" + digits;
-    }
-
-    return digits;
+  return cleanString(value);
 }
 
-function validDateParts(day, month, year) {
-    if (
-        !Number.isInteger(day) ||
-        !Number.isInteger(month) ||
-        !Number.isInteger(year)
-    ) {
-        return false;
-    }
+/* ---------------- DATE ---------------- */
 
-    if (year < 1900 || year > 2100) {
-        return false;
-    }
+function validDateParts(year, month, day) {
 
-    if (month < 1 || month > 12) {
-        return false;
-    }
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
+    return false;
+  }
 
-    if (day < 1 || day > 31) {
-        return false;
-    }
+  /*
+   * Prevent numeric spreadsheet values such as 25000 from
+   * being treated as dates.
+   */
+  if (year < 1900 || year > 2100) {
+    return false;
+  }
 
-    const d = new Date(year, month - 1, day);
+  if (month < 1 || month > 12) {
+    return false;
+  }
 
-    return d.getFullYear() === year &&
-           d.getMonth() === month - 1 &&
-           d.getDate() === day;
+  if (day < 1 || day > 31) {
+    return false;
+  }
+
+  const d = new Date(Date.UTC(year, month - 1, day));
+
+  return d.getUTCFullYear() === year &&
+         d.getUTCMonth() === month - 1 &&
+         d.getUTCDate() === day;
 }
 
 function parseDateValue(value) {
 
-    if (value instanceof Date && !isNaN(value.getTime())) {
-        return value;
+  if (isBlank(value)) return null;
+
+  if (value instanceof Date && !isNaN(value.getTime())) {
+
+    const year = value.getFullYear();
+    const month = value.getMonth() + 1;
+    const day = value.getDate();
+
+    if (!validDateParts(year, month, day)) {
+      return null;
     }
 
-    const s = cleanString(value);
+    return {
+      year,
+      month,
+      day
+    };
+  }
 
-    if (!s || isSpreadsheetError(s)) {
-        return null;
-    }
+  if (typeof value === "number") {
+    return null;
+  }
 
-    /*
-      ISO: YYYY-MM-DD
-    */
-    let match = s.match(
-        /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/
-    );
+  const text = cleanString(value);
 
-    if (match) {
-        const year = Number(match[1]);
-        const month = Number(match[2]);
-        const day = Number(match[3]);
+  if (isSpreadsheetError(text)) return null;
 
-        if (validDateParts(day, month, year)) {
-            return new Date(year, month - 1, day);
-        }
+  let match;
 
-        return null;
-    }
+  /* YYYY-MM-DD */
+  match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
 
-    /*
-      DD/MM/YYYY, DD-MM-YYYY
-      India-friendly default.
-      If second part > 12, automatically use MM/DD/YYYY.
-    */
-    match = s.match(
-        /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/
-    );
+  if (match) {
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
 
-    if (match) {
-
-        let first = Number(match[1]);
-        let second = Number(match[2]);
-        const year = Number(match[3]);
-
-        let day;
-        let month;
-
-        if (second > 12) {
-            month = first;
-            day = second;
-        } else {
-            day = first;
-            month = second;
-        }
-
-        if (validDateParts(day, month, year)) {
-            return new Date(year, month - 1, day);
-        }
-
-        return null;
+    if (validDateParts(year, month, day)) {
+      return { year, month, day };
     }
 
     return null;
-}
+  }
 
-function formatISODate(date) {
-    if (!(date instanceof Date) || isNaN(date.getTime())) {
-        return "";
+  /* YYYY/MM/DD */
+  match = text.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+
+  if (match) {
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+
+    if (validDateParts(year, month, day)) {
+      return { year, month, day };
     }
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    return null;
+  }
 
-    return `${year}-${month}-${day}`;
+  /* DD/MM/YYYY or DD-MM-YYYY */
+  match = text.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+
+  if (match) {
+
+    const first = Number(match[1]);
+    const second = Number(match[2]);
+    const year = Number(match[3]);
+
+    /*
+     * For spreadsheet cleaning we treat the common Indian
+     * format DD/MM/YYYY as the default.
+     *
+     * If the first part is greater than 12, it must be DD.
+     */
+    let day = first;
+    let month = second;
+
+    if (first <= 12 && second > 12) {
+      day = second;
+      month = first;
+    }
+
+    if (validDateParts(year, month, day)) {
+      return { year, month, day };
+    }
+
+    return null;
+  }
+
+  return null;
+}
+
+function formatISODate(value) {
+
+  const parts = parseDateValue(value);
+
+  if (!parts) return value;
+
+  return [
+    String(parts.year).padStart(4, "0"),
+    String(parts.month).padStart(2, "0"),
+    String(parts.day).padStart(2, "0")
+  ].join("-");
 }
 
 function isDateLike(value) {
-    return parseDateValue(value) !== null;
+  return parseDateValue(value) !== null;
 }
 
-function getCategoryStandard(value) {
-    const key = cleanString(value).toLowerCase();
+/* ---------------- EXCEL SERIAL DEFENSE ---------------- */
 
-    if (CATEGORY_MAP[key]) {
-        return CATEGORY_MAP[key];
+function excelSerialFromDate(date) {
+
+  if (!(date instanceof Date) || isNaN(date.getTime())) {
+    return date;
+  }
+
+  const utc = Date.UTC(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const excelEpoch = Date.UTC(1899, 11, 30);
+
+  return Math.round((utc - excelEpoch) / 86400000);
+}
+
+/*
+ * Important:
+ * A non-date column can occasionally arrive from SheetJS
+ * as a JavaScript Date object when the source spreadsheet
+ * contains a numeric Excel serial.
+ *
+ * If the column is NOT actually a Date column, convert that
+ * Date object back to its Excel numeric serial.
+ */
+function normalizeValueForType(value, type) {
+
+  if (value instanceof Date) {
+
+    if (type === "Date") {
+      return formatISODate(value);
     }
 
-    return cleanString(value);
+    return excelSerialFromDate(value);
+  }
+
+  return value;
+}
+
+/* ---------------- CATEGORY ---------------- */
+
+function getCategoryStandard(value, domain) {
+
+  if (isBlank(value)) return value;
+
+  const key = cleanString(value).toLowerCase();
+
+  if (CATEGORY_MAP[domain] &&
+      Object.prototype.hasOwnProperty.call(CATEGORY_MAP[domain], key)) {
+    return CATEGORY_MAP[domain][key];
+  }
+
+  return cleanString(value);
 }
 
 function categoryDomainScore(values, domain) {
 
-    let score = 0;
-    let nonBlank = 0;
+  let score = 0;
 
-    for (const value of values) {
+  for (const value of values) {
 
-        if (isBlank(value) || isSpreadsheetError(value)) {
-            continue;
-        }
+    if (isBlank(value) || isSpreadsheetError(value)) continue;
 
-        nonBlank++;
+    const key = cleanString(value).toLowerCase();
 
-        const key = cleanString(value).toLowerCase();
-
-        if (domain.includes(key)) {
-            score++;
-        }
+    if (
+      CATEGORY_MAP[domain] &&
+      Object.prototype.hasOwnProperty.call(CATEGORY_MAP[domain], key)
+    ) {
+      score++;
     }
+  }
 
-    if (!nonBlank) return 0;
-
-    return score / nonBlank;
+  return score;
 }
 
-function detectSemanticCategory(values) {
+function detectSemanticCategory(header, values) {
 
-    const genderScore = categoryDomainScore(
-        values,
-        ["male", "female", "m", "f", "other"]
-    );
+  const h = cleanString(header).toLowerCase();
 
-    const responseScore = categoryDomainScore(
-        values,
-        ["yes", "no", "y", "n", "true", "false", "0", "1"]
-    );
+  if (
+    h.includes("gender") ||
+    h === "sex"
+  ) {
+    return "gender";
+  }
 
-    const statusScore = categoryDomainScore(
-        values,
-        ["active", "inactive", "enabled", "disabled"]
-    );
+  if (
+    h.includes("response") ||
+    h.includes("answer") ||
+    h.includes("yes/no")
+  ) {
+    return "response";
+  }
 
-    const paymentScore = categoryDomainScore(
-        values,
-        ["paid", "pending", "cancelled", "canceled"]
-    );
+  if (
+    h.includes("status") &&
+    h.includes("payment")
+  ) {
+    return "payment";
+  }
 
-    const scores = [
-        { name: "Gender", score: genderScore },
-        { name: "Response", score: responseScore },
-        { name: "Status", score: statusScore },
-        { name: "Payment Status", score: paymentScore }
-    ];
+  if (h.includes("payment")) {
+    return "payment";
+  }
 
-    scores.sort((a, b) => b.score - a.score);
+  if (h === "status") {
+    return "status";
+  }
 
-    if (scores[0].score >= 0.5) {
-        return scores[0].name;
+  const domains = ["gender", "response", "status", "payment"];
+
+  let best = null;
+  let bestScore = 0;
+
+  for (const domain of domains) {
+
+    const score = categoryDomainScore(values, domain);
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = domain;
     }
+  }
 
-    return null;
+  return best;
+}
+
+/* ---------------- COLUMN SCORING ---------------- */
+
+function nonBlankValues(values) {
+  return values.filter(v => !isBlank(v) && !isSpreadsheetError(v));
 }
 
 function columnDateScore(values) {
 
-    let valid = 0;
-    let candidates = 0;
+  const valid = nonBlankValues(values);
 
-    for (const value of values) {
+  if (!valid.length) return 0;
 
-        if (isBlank(value) || isSpreadsheetError(value)) {
-            continue;
-        }
-
-        candidates++;
-
-        if (isDateLike(value)) {
-            valid++;
-        }
-    }
-
-    if (!candidates) {
-        return 0;
-    }
-
-    return valid / candidates;
+  return valid.filter(isDateLike).length / valid.length;
 }
 
 function columnEmailScore(values) {
 
-    let valid = 0;
-    let emailCandidates = 0;
+  const valid = nonBlankValues(values);
 
-    for (const value of values) {
+  if (!valid.length) return 0;
 
-        if (isBlank(value) || isSpreadsheetError(value)) {
-            continue;
-        }
-
-        if (looksEmailLike(value)) {
-            emailCandidates++;
-
-            if (isValidEmail(value)) {
-                valid++;
-            }
-        }
-    }
-
-    if (!values.some(v => looksEmailLike(v))) {
-        return 0;
-    }
-
-    return Math.max(
-        valid / Math.max(emailCandidates, 1),
-        emailCandidates / Math.max(
-            values.filter(v => !isBlank(v) && !isSpreadsheetError(v)).length,
-            1
-        ) * 0.7
-    );
+  return valid.filter(looksEmailLike).length / valid.length;
 }
 
 function columnPhoneScore(values) {
 
-    let strong = 0;
-    let candidates = 0;
+  const valid = nonBlankValues(values);
 
-    for (const value of values) {
+  if (!valid.length) return 0;
 
-        if (isBlank(value) || isSpreadsheetError(value)) {
-            continue;
-        }
-
-        const s = cleanString(value);
-
-        if (
-            looksPhoneLike(value) ||
-            /^\+?\d{10,15}$/.test(s)
-        ) {
-            candidates++;
-
-            if (isValidPhone(value)) {
-                strong++;
-            }
-        }
-    }
-
-    if (!candidates) {
-        return 0;
-    }
-
-    return Math.min(
-        1,
-        (strong / candidates) * 0.7 +
-        (candidates / Math.max(
-            values.filter(v =>
-                !isBlank(v) &&
-                !isSpreadsheetError(v)
-            ).length,
-            1
-        )) * 0.3
-    );
+  return valid.filter(looksPhoneLike).length / valid.length;
 }
 
 function columnNumberScore(values) {
 
-    let numeric = 0;
-    let nonBlank = 0;
+  const valid = nonBlankValues(values);
 
-    for (const value of values) {
+  if (!valid.length) return 0;
 
-        if (isBlank(value) || isSpreadsheetError(value)) {
-            continue;
-        }
+  let score = 0;
 
-        nonBlank++;
+  for (const value of valid) {
 
-        if (
-            typeof value === "number" &&
-            Number.isFinite(value)
-        ) {
-            numeric++;
-            continue;
-        }
-
-        const s = cleanString(value);
-
-        if (
-            /^-?\d+(\.\d+)?$/.test(s)
-        ) {
-            numeric++;
-        }
+    if (typeof value === "number" && Number.isFinite(value)) {
+      score++;
+      continue;
     }
 
-    if (!nonBlank) return 0;
+    if (
+      typeof value === "string" &&
+      /^[-+]?\d+(\.\d+)?$/.test(value.trim())
+    ) {
+      score++;
+    }
+  }
 
-    return numeric / nonBlank;
+  return score / valid.length;
 }
 
-function columnIDScore(values) {
+function columnIDScore(header, values) {
 
-    let ids = 0;
-    let nonBlank = 0;
+  const h = cleanString(header).toLowerCase();
 
-    for (const value of values) {
+  if (
+    h === "id" ||
+    h.includes(" id") ||
+    h.endsWith("id")
+  ) {
+    return 1;
+  }
 
-        if (isBlank(value) || isSpreadsheetError(value)) {
-            continue;
-        }
+  const valid = nonBlankValues(values);
 
-        nonBlank++;
+  if (!valid.length) return 0;
 
-        if (/^[A-Za-z]{1,6}\d{2,}$/.test(cleanString(value))) {
-            ids++;
-        }
-    }
+  const score = valid.filter(v =>
+    /^[A-Za-z]{1,5}\d{1,10}$/.test(cleanString(v))
+  ).length;
 
-    if (!nonBlank) return 0;
-
-    return ids / nonBlank;
+  return score / valid.length;
 }
 
 function columnErrorScore(values) {
 
-    let errors = 0;
+  const valid = values.filter(v => !isBlank(v));
 
-    for (const value of values) {
-        if (isSpreadsheetError(value)) {
-            errors++;
-        }
-    }
+  if (!valid.length) return 0;
 
-    return errors / Math.max(values.length, 1);
+  return valid.filter(isSpreadsheetError).length / valid.length;
 }
 
-function detectColumnType(values, header = "") {
+function detectColumnType(header, values) {
 
-    const h = cleanString(header).toLowerCase();
+  const h = cleanString(header).toLowerCase();
 
-    const nonBlank = values.filter(
-        v => !isBlank(v) && !isSpreadsheetError(v)
-    );
+  const dateScore = columnDateScore(values);
+  const emailScore = columnEmailScore(values);
+  const phoneScore = columnPhoneScore(values);
+  const numberScore = columnNumberScore(values);
+  const idScore = columnIDScore(header, values);
+  const errorScore = columnErrorScore(values);
 
-    if (values.some(v => isSpreadsheetError(v)) && nonBlank.length === 0) {
-        return "Error";
+  const category = detectSemanticCategory(header, values);
+
+  if (errorScore >= 0.5) {
+    return "Error";
+  }
+
+  if (
+    h.includes("email") ||
+    emailScore >= 0.7
+  ) {
+    return "Email";
+  }
+
+  if (
+    h.includes("phone") ||
+    h.includes("mobile") ||
+    h.includes("contact") ||
+    phoneScore >= 0.65
+  ) {
+    return "Phone";
+  }
+
+  /*
+   * Date gets priority over generic text/number detection.
+   */
+  if (
+    h.includes("date") ||
+    dateScore >= 0.55
+  ) {
+    return "Date";
+  }
+
+  if (idScore >= 0.8) {
+    return "ID";
+  }
+
+  if (category) {
+    const categoryScore = categoryDomainScore(values, category);
+
+    if (categoryScore >= Math.max(2, values.length * 0.45)) {
+      return "Categorical";
     }
+  }
 
-    const semanticCategory = detectSemanticCategory(values);
+  if (
+    h.includes("amount") ||
+    h.includes("price") ||
+    h.includes("cost") ||
+    h.includes("salary") ||
+    h.includes("value") ||
+    numberScore >= 0.75
+  ) {
+    return "Number";
+  }
 
-    const emailScore = columnEmailScore(values);
-    const phoneScore = columnPhoneScore(values);
-    const dateScore = columnDateScore(values);
-    const numberScore = columnNumberScore(values);
-    const idScore = columnIDScore(values);
-    const errorScore = columnErrorScore(values);
-
-    if (
-        h.includes("email") ||
-        h.includes("e-mail")
-    ) {
-        return "Email";
-    }
-
-    if (
-        h.includes("phone") ||
-        h.includes("mobile") ||
-        h.includes("contact")
-    ) {
-        return "Phone";
-    }
-
-    if (
-        h.includes("date") ||
-        h.includes("dob") ||
-        h.includes("birth")
-    ) {
-        if (dateScore > 0 || nonBlank.length === 0) {
-            return "Date";
-        }
-    }
-
-    if (
-        h.includes("amount") ||
-        h.includes("price") ||
-        h.includes("salary") ||
-        h.includes("cost") ||
-        h.includes("value")
-    ) {
-        if (numberScore >= 0.5) {
-            return "Number";
-        }
-    }
-
-    if (semanticCategory) {
-        return "Categorical";
-    }
-
-    if (errorScore >= 0.05 && nonBlank.length === 0) {
-        return "Error";
-    }
-
-    if (emailScore >= 0.5) {
-        return "Email";
-    }
-
-    if (
-        phoneScore >= 0.35 &&
-        numberScore < 0.85
-    ) {
-        return "Phone";
-    }
-
-    /*
-      Critical fix:
-      Date detection is based on actual date-like strings.
-      Numeric-only columns are NOT automatically dates.
-    */
-    if (
-        dateScore >= 0.6 &&
-        nonBlank.length >= 2
-    ) {
-        return "Date";
-    }
-
-    if (idScore >= 0.7) {
-        return "ID";
-    }
-
-    if (numberScore >= 0.7) {
-        return "Number";
-    }
-
-    /*
-      A column containing errors plus a small amount
-      of other text/numeric data is treated as Mixed.
-    */
-    if (errorScore >= 0.05) {
-        return "Mixed / Error";
-    }
-
-    /*
-      Low-cardinality columns are categorical.
-    */
-    if (nonBlank.length >= 3) {
-
-        const unique = new Set(
-            nonBlank.map(v => cleanString(v).toLowerCase())
-        ).size;
-
-        if (
-            unique <= Math.max(6, Math.ceil(nonBlank.length * 0.4))
-        ) {
-            return "Categorical";
-        }
-    }
-
+  if (
+    h.includes("name") ||
+    h.includes("person")
+  ) {
     return "Text";
+  }
+
+  return "Text";
 }
 
-function looksLikeNameColumn(values) {
+/* ---------------- HEADER DETECTION ---------------- */
 
-    const usable = values.filter(
-        v => !isBlank(v) &&
-             !isSpreadsheetError(v)
-    );
+function uniqueHeaderName(header, used) {
 
-    if (!usable.length) return false;
+  let base = cleanString(header);
 
-    let score = 0;
+  if (!base) {
+    base = "Column";
+  }
 
-    for (const value of usable) {
+  let result = base;
+  let count = 2;
 
-        const s = cleanString(value);
+  while (used.has(result.toLowerCase())) {
+    result = `${base} ${count}`;
+    count++;
+  }
 
-        if (
-            /^[A-Za-z]+(?:\s+[A-Za-z]+){1,3}$/.test(s)
-        ) {
-            score++;
-        }
-    }
+  used.add(result.toLowerCase());
 
-    return score / usable.length >= 0.45;
+  return result;
 }
 
-function looksLikeCityColumn(values) {
+function looksLikeHeaderRow(row) {
 
-    const knownCities = [
-        "Bangalore",
-        "Bengaluru",
-        "Mumbai",
-        "Delhi",
-        "Chennai",
-        "Hyderabad",
-        "Kolkata",
-        "Pune",
-        "Jaipur",
-        "Kochi",
-        "Nagpur",
-        "Raipur",
-        "Patna"
-    ];
+  if (!row || !row.length) return false;
 
-    const usable = values.filter(
-        v => !isBlank(v) &&
-             !isSpreadsheetError(v)
-    );
+  const values = row.map(v => cleanString(v)).filter(Boolean);
 
-    if (!usable.length) return false;
+  if (!values.length) return false;
 
-    let matches = 0;
+  const headerWords = [
+    "name",
+    "email",
+    "phone",
+    "mobile",
+    "date",
+    "gender",
+    "response",
+    "status",
+    "city",
+    "amount",
+    "payment",
+    "id",
+    "category",
+    "error"
+  ];
 
-    for (const value of usable) {
-        if (
-            knownCities.includes(
-                cleanString(value)
-            )
-        ) {
-            matches++;
-        }
+  let score = 0;
+
+  for (const value of values) {
+
+    const key = value.toLowerCase();
+
+    if (
+      headerWords.some(word =>
+        key === word ||
+        key.includes(word)
+      )
+    ) {
+      score++;
     }
+  }
 
-    return matches / usable.length >= 0.4;
+  return score >= 2;
 }
 
-function uniqueHeaderName(name, used) {
+function inferHeaderFromColumn(values, index) {
 
-    let finalName = name;
-    let counter = 2;
+  const cleanValues = values.filter(v => !isBlank(v));
 
-    while (used.has(finalName.toLowerCase())) {
-        finalName = `${name} ${counter}`;
-        counter++;
-    }
+  if (!cleanValues.length) {
+    return `Column ${index + 1}`;
+  }
 
-    used.add(finalName.toLowerCase());
+  const type = detectColumnType("", cleanValues);
 
-    return finalName;
+  switch (type) {
+    case "Email":
+      return "Email";
+
+    case "Phone":
+      return "Phone";
+
+    case "Date":
+      return "Date";
+
+    case "Number":
+      return "Amount";
+
+    case "ID":
+      return "ID";
+
+    case "Error":
+      return "Error";
+
+    default:
+      break;
+  }
+
+  if (
+    cleanValues.length &&
+    cleanValues.every(v =>
+      /^(male|female|m|f|other)$/i.test(cleanString(v))
+    )
+  ) {
+    return "Gender";
+  }
+
+  return `Column ${index + 1}`;
 }
 
 function generateSmartHeaders(rows) {
 
-    const maxColumns = Math.max(
-        ...rows.map(row => row.length),
-        0
+  if (!rows.length) {
+    return {
+      headers: [],
+      dataRows: []
+    };
+  }
+
+  let firstRow = rows[0];
+
+  /*
+   * Use the actual first row when it clearly contains headers.
+   */
+  if (looksLikeHeaderRow(firstRow)) {
+
+    const used = new Set();
+
+    const headers = firstRow.map((value, index) =>
+      uniqueHeaderName(
+        cleanString(value) || `Column ${index + 1}`,
+        used
+      )
     );
 
-    const headers = [];
-    const used = new Set();
-    let numberCount = 0;
-    let categoryCount = 0;
-    let textCount = 0;
+    return {
+      headers,
+      dataRows: rows.slice(1)
+    };
+  }
 
-    for (let c = 0; c < maxColumns; c++) {
+  /*
+   * Otherwise infer headers from the actual data.
+   *
+   * This prevents arbitrary "Column 2/3/5" headers from being
+   * created when the first row is itself a data row.
+   */
+  const maxColumns = Math.max(
+    ...rows.map(row => row.length)
+  );
 
-        const values = rows.map(
-            row => row[c] ?? ""
-        );
+  const columns = [];
 
-        const type = detectColumnType(values, "");
+  for (let c = 0; c < maxColumns; c++) {
+    columns.push(
+      rows.map(row => row[c] ?? "")
+    );
+  }
 
-        let name;
+  const used = new Set();
 
-        if (type === "Email") {
-            name = "Email";
-        }
-        else if (type === "Phone") {
-            name = "Phone";
-        }
-        else if (type === "Date") {
-            name = "Date";
-        }
-        else if (type === "ID") {
-            name = "ID";
-        }
-        else if (type === "Error") {
-            name = "Error";
-        }
-        else if (type === "Mixed / Error") {
-            name = "Data / Error";
-        }
-        else if (type === "Number") {
+  const headers = columns.map((values, index) =>
+    uniqueHeaderName(
+      inferHeaderFromColumn(values, index),
+      used
+    )
+  );
 
-            numberCount++;
-
-            if (numberCount === 1) {
-                name = "Amount";
-            } else {
-                name = `Amount ${numberCount}`;
-            }
-        }
-        else if (type === "Categorical") {
-
-            const semantic = detectSemanticCategory(values);
-
-            if (semantic) {
-                name = semantic;
-            } else {
-                categoryCount++;
-                name = `Category ${categoryCount}`;
-            }
-        }
-        else {
-
-            textCount++;
-
-            if (
-                c === 0 &&
-                looksLikeNameColumn(values)
-            ) {
-                name = "Name";
-            }
-            else if (looksLikeCityColumn(values)) {
-                name = "City";
-            }
-            else {
-                name = `Column ${textCount}`;
-            }
-        }
-
-        headers.push(
-            uniqueHeaderName(name, used)
-        );
-    }
-
-    return headers;
-}
-
-function looksLikeHeaderRow(row, nextRows) {
-
-    if (!row || !row.length) {
-        return false;
-    }
-
-    const values = row.map(cleanString);
-
-    if (
-        values.some(v =>
-            isSpreadsheetError(v) ||
-            looksEmailLike(v) ||
-            isDateLike(v)
-        )
-    ) {
-        return false;
-    }
-
-    let textCount = 0;
-
-    for (const value of values) {
-
-        if (!value) continue;
-
-        if (
-            /^[A-Za-z][A-Za-z0-9 _-]*$/.test(value) &&
-            !/^\d+$/.test(value)
-        ) {
-            textCount++;
-        }
-    }
-
-    const textRatio =
-        textCount / Math.max(values.filter(Boolean).length, 1);
-
-    /*
-      Compare first row with following rows.
-      If the first row looks like labels while the
-      following rows contain actual data, accept it.
-    */
-    if (textRatio >= 0.65) {
-        return true;
-    }
-
-    return false;
+  return {
+    headers,
+    dataRows: rows
+  };
 }
 
 function makeUniqueHeaders(headers) {
 
-    const used = new Set();
+  const used = new Set();
 
-    return headers.map((header, index) => {
-
-        let h = cleanString(header);
-
-        if (!h) {
-            h = `Column ${index + 1}`;
-        }
-
-        h = h
-            .replace(/\s+/g, " ")
-            .replace(/[^\w\s-]/g, "")
-            .trim();
-
-        if (!h) {
-            h = `Column ${index + 1}`;
-        }
-
-        return uniqueHeaderName(h, used);
-    });
+  return headers.map((header, index) =>
+    uniqueHeaderName(
+      header || `Column ${index + 1}`,
+      used
+    )
+  );
 }
+
+/* ---------------- SHEET PREPARATION ---------------- */
 
 function prepareSheetData(sheet) {
 
-    const rawRows = XLSX.utils.sheet_to_json(
-        sheet,
-        {
-            header: 1,
-            defval: "",
-            raw: true
-        }
-    );
+  const rows = XLSX.utils.sheet_to_json(sheet, {
+    header: 1,
+    defval: "",
+    raw: true
+  });
 
-    if (!rawRows.length) {
-        return {
-            headers: [],
-            rows: [],
-            hadHeader: false
-        };
-    }
+  const filteredRows = rows.filter(row =>
+    row.some(value => !isBlank(value))
+  );
 
-    const firstRow = rawRows[0] || "";
-
-    const hadHeader = looksLikeHeaderRow(
-        firstRow,
-        rawRows.slice(1, 5)
-    );
-
-    let headers;
-    let dataRows;
-
-    if (hadHeader) {
-
-        headers = makeUniqueHeaders(firstRow);
-        dataRows = rawRows.slice(1);
-
-    } else {
-
-        dataRows = rawRows;
-        headers = generateSmartHeaders(rawRows);
-    }
-
-    const maxColumns = Math.max(
-        headers.length,
-        ...dataRows.map(row => row.length),
-        0
-    );
-
-    while (headers.length < maxColumns) {
-        headers.push(`Column ${headers.length + 1}`);
-    }
-
-    headers = makeUniqueHeaders(headers);
-
-    const normalizedRows = dataRows.map(row => {
-
-        const newRow = [];
-
-        for (let i = 0; i < headers.length; i++) {
-            newRow.push(
-                row[i] === undefined || row[i] === null
-                    ? ""
-                    : row[i]
-            );
-        }
-
-        return newRow;
-    });
-
+  if (!filteredRows.length) {
     return {
-        headers,
-        rows: normalizedRows,
-        hadHeader
+      headers: [],
+      rows: []
     };
+  }
+
+  const prepared = generateSmartHeaders(filteredRows);
+
+  return {
+    headers: makeUniqueHeaders(prepared.headers),
+    rows: prepared.dataRows
+  };
 }
 
-function analyzeSheet(sheet, sheetName) {
+/* ---------------- ANALYSIS ---------------- */
 
-    const prepared = prepareSheetData(sheet);
+function analyzeSheet(sheetName) {
 
-    const headers = prepared.headers;
-    const rows = prepared.rows;
+  const sheet = workbook.Sheets[sheetName];
 
-    const columnTypes = [];
+  const prepared = prepareSheetData(sheet);
 
-    for (let c = 0; c < headers.length; c++) {
+  const headers = prepared.headers;
+  const rows = prepared.rows;
 
-        const values = rows.map(
-            row => row[c] ?? ""
-        );
+  const columnCount = headers.length;
 
-        columnTypes.push(
-            detectColumnType(
-                values,
-                headers[c]
-            )
-        );
+  const paddedRows = rows.map(row => {
+
+    const newRow = [];
+
+    for (let c = 0; c < columnCount; c++) {
+      newRow.push(row[c] ?? "");
     }
 
-    const result = {
-        sheetName,
-        headers,
-        rows,
-        hadHeader: prepared.hadHeader,
-        columnTypes,
+    return newRow;
+  });
 
-        rowCount: rows.length,
-        columnCount: headers.length,
+  const columnTypes = headers.map((header, c) => {
 
-        missingCount: 0,
-        missingDetails: [],
+    const values = paddedRows.map(row => row[c]);
 
-        invalidEmails: [],
-        invalidPhones: [],
-        detectedDates: [],
-        errors: [],
-        formulas: [],
+    return detectColumnType(header, values);
+  });
 
-        duplicateRows: [],
-        potentialDuplicates: [],
+  /*
+   * Normalize accidental Date objects in non-date columns
+   * before all analysis/cleaning takes place.
+   */
+  const normalizedRows = paddedRows.map(row =>
+    row.map((value, c) =>
+      normalizeValueForType(value, columnTypes[c])
+    )
+  );
 
-        emptyColumns: [],
+  const result = {
+    sheetName,
+    headers,
+    rows: normalizedRows,
+    columnTypes,
 
-        typeDetails: []
-    };
+    invalidEmails: [],
+    invalidPhones: [],
+    formulas: [],
+    errors: [],
+    duplicates: [],
+    potentialDuplicates: [],
+    missing: [],
+    dates: [],
+    emptyColumns: [],
+    columnStats: []
+  };
 
-    /*
-      Missing values
-    */
-    for (let r = 0; r < rows.length; r++) {
+  /* -------- CELL ANALYSIS -------- */
 
-        for (let c = 0; c < headers.length; c++) {
+  normalizedRows.forEach((row, r) => {
 
-            const value = rows[r][c];
+    row.forEach((value, c) => {
 
-            if (isBlank(value)) {
+      const rowNumber = r + 1;
+      const header = headers[c] || `Column ${c + 1}`;
+      const type = columnTypes[c];
 
-                result.missingCount++;
+      if (isBlank(value)) {
 
-                result.missingDetails.push({
-                    row: r + 1,
-                    column: c + 1,
-                    header: headers[c]
-                });
-            }
-        }
-    }
-
-    /*
-      Column checks
-    */
-    for (let c = 0; c < headers.length; c++) {
-
-        const values = rows.map(
-            row => row[c] ?? ""
-        );
-
-        const type = columnTypes[c];
-
-        let filled = 0;
-        let missing = 0;
-
-        const uniqueSet = new Set();
-
-        for (const value of values) {
-
-            if (isBlank(value)) {
-                missing++;
-            } else {
-                filled++;
-
-                if (!isSpreadsheetError(value)) {
-                    uniqueSet.add(
-                        cleanString(value).toLowerCase()
-                    );
-                }
-            }
-        }
-
-        result.typeDetails.push({
-            column: headers[c],
-            type,
-            filled,
-            missing,
-            unique: uniqueSet.size
+        result.missing.push({
+          row: rowNumber,
+          column: header
         });
 
-        if (filled === 0) {
-            result.emptyColumns.push({
-                column: c + 1,
-                header: headers[c]
-            });
-        }
-    }
-
-    /*
-      Cell-level checks
-    */
-    for (let r = 0; r < rows.length; r++) {
-
-        for (let c = 0; c < headers.length; c++) {
-
-            const value = rows[r][c];
-            const type = columnTypes[c];
-
-            if (isSpreadsheetError(value)) {
-
-                result.errors.push({
-                    row: r + 1,
-                    column: c + 1,
-                    header: headers[c],
-                    value: cleanString(value)
-                });
-
-                continue;
-            }
-
-            if (type === "Email") {
-
-                if (
-                    !isBlank(value) &&
-                    !isValidEmail(value)
-                ) {
-                    result.invalidEmails.push({
-                        row: r + 1,
-                        column: c + 1,
-                        header: headers[c],
-                        value: cleanString(value)
-                    });
-                }
-            }
-
-            if (type === "Phone") {
-
-                if (
-                    !isBlank(value) &&
-                    !isValidPhone(value)
-                ) {
-                    result.invalidPhones.push({
-                        row: r + 1,
-                        column: c + 1,
-                        header: headers[c],
-                        value: cleanString(value)
-                    });
-                }
-            }
-
-            if (type === "Date") {
-
-                if (!isBlank(value)) {
-
-                    const parsed = parseDateValue(value);
-
-                    if (parsed) {
-
-                        result.detectedDates.push({
-                            row: r + 1,
-                            column: c + 1,
-                            header: headers[c],
-                            value: cleanString(value),
-                            parsed
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    /*
-      Exact duplicate rows
-    */
-    const rowMap = new Map();
-
-    rows.forEach((row, index) => {
-
-        const key = row
-            .map(v => cleanString(v).toLowerCase())
-            .join("||");
-
-        if (!key.replace(/\|\|/g, "")) {
-            return;
-        }
-
-        if (!rowMap.has(key)) {
-            rowMap.set(key, []);
-        }
-
-        rowMap.get(key).push(index + 1);
-    });
-
-    for (const [key, indexes] of rowMap.entries()) {
-
-        if (indexes.length > 1) {
-            result.duplicateRows.push({
-                rows: indexes,
-                key
-            });
-        }
-    }
-
-    /*
-      Potential duplicates based on strong identifiers.
-      These are NOT automatically removed.
-    */
-    const identifierColumns = [];
-
-    for (let c = 0; c < headers.length; c++) {
-
-        const type = columnTypes[c];
-        const h = headers[c].toLowerCase();
-
-        if (
-            type === "Email" ||
-            type === "ID" ||
-            h === "email" ||
-            h === "id"
-        ) {
-            identifierColumns.push(c);
-        }
-    }
-
-    const identifierMap = new Map();
-
-    for (let r = 0; r < rows.length; r++) {
-
-        for (const c of identifierColumns) {
-
-            const value = cleanString(rows[r][c])
-                .toLowerCase();
-
-            if (!value || isSpreadsheetError(value)) {
-                continue;
-            }
-
-            const key = `${c}:${value}`;
-
-            if (!identifierMap.has(key)) {
-                identifierMap.set(key, []);
-            }
-
-            identifierMap.get(key).push(r + 1);
-        }
-    }
-
-    const potentialSet = new Set();
-
-    for (const [key, indexes] of identifierMap.entries()) {
-
-        if (indexes.length > 1) {
-
-            const usefulIndexes = [
-                ...new Set(indexes)
-            ];
-
-            if (usefulIndexes.length > 1) {
-
-                const identifier = key.split(":")[0];
-
-                for (const rowNumber of usefulIndexes) {
-                    potentialSet.add(rowNumber);
-                }
-
-                result.potentialDuplicates.push({
-                    rows: usefulIndexes,
-                    identifierColumn:
-                        headers[Number(identifier)]
-                });
-            }
-        }
-    }
-
-    /*
-      Formula detection directly from worksheet cells.
-    */
-    const ref = sheet["!ref"];
-
-    if (ref) {
-
-        const range = XLSX.utils.decode_range(ref);
-
-        for (
-            let r = range.s.r;
-            r <= range.e.r;
-            r++
-        ) {
-
-            for (
-                let c = range.s.c;
-                c <= range.e.c;
-                c++
-            ) {
-
-                const address =
-                    XLSX.utils.encode_cell({ r, c });
-
-                const cell = sheet[address];
-
-                if (cell && cell.f) {
-
-                    result.formulas.push({
-                        row: r,
-                        column: c,
-                        header:
-                            headers[c] ||
-                            `Column ${c + 1}`,
-                        formula: cell.f
-                    });
-                }
-            }
-        }
-    }
-
-    return result;
-}
-
-function setText(id, value) {
-    document.getElementById(id).textContent = value;
-}
-
-function renderOverview(result) {
-
-    setText("rowsStat", result.rowCount);
-    setText("columnsStat", result.columnCount);
-    setText(
-        "duplicateStat",
-        result.duplicateRows.reduce(
-            (sum, item) => sum + item.rows.length - 1,
-            0
-        )
-    );
-
-    setText(
-        "potentialDuplicateStat",
-        result.potentialDuplicates.length
-    );
-
-    setText("missingStat", result.missingCount);
-    setText(
-        "emailStat",
-        result.invalidEmails.length
-    );
-
-    setText(
-        "phoneStat",
-        result.invalidPhones.length
-    );
-
-    setText(
-        "dateStat",
-        result.detectedDates.length
-    );
-
-    setText(
-        "formulaStat",
-        result.formulas.length
-    );
-
-    setText(
-        "errorStat",
-        result.errors.length
-    );
-
-    setText(
-        "emptyColumnStat",
-        result.emptyColumns.length
-    );
-}
-
-function renderList(containerId, title, items, formatter) {
-
-    const container =
-        document.getElementById(containerId);
-
-    if (!items.length) {
-        container.innerHTML = "";
         return;
-    }
+      }
 
-    let html = `
-        <h3>${title}</h3>
-        <ul class="detail-list">
-    `;
+      if (isSpreadsheetError(value)) {
 
-    for (const item of items) {
-        html += `<li>${formatter(item)}</li>`;
-    }
+        result.errors.push({
+          row: rowNumber,
+          column: header,
+          value: cleanString(value)
+        });
 
-    html += "</ul>";
+        return;
+      }
 
-    container.innerHTML = html;
-}
+      /*
+       * Formula detection uses the original worksheet cell,
+       * not the displayed value.
+       */
+      const cellAddress = XLSX.utils.encode_cell({
+        r: r + 1,
+        c
+      });
 
-function renderDetails(result) {
+      const cell = sheet[cellAddress];
 
-    renderList(
-        "emailDetails",
-        "Invalid Emails",
-        result.invalidEmails,
-        item =>
-            `Row ${item.row} — ${item.header}: ${escapeHTML(item.value)}`
-    );
+      if (
+        cell &&
+        typeof cell.f === "string" &&
+        cell.f.trim() !== ""
+      ) {
+        result.formulas.push({
+          row: rowNumber,
+          column: header,
+          value: value,
+          formula: cell.f
+        });
+      }
 
-    renderList(
-        "phoneDetails",
-        "Invalid Phones",
-        result.invalidPhones,
-        item =>
-            `Row ${item.row} — ${item.header}: ${escapeHTML(item.value)}`
-    );
+      if (type === "Email") {
 
-    renderList(
-        "dateDetails",
-        "Detected Dates",
-        result.detectedDates,
-        item =>
-            `Row ${item.row} — ${item.header}: ${escapeHTML(item.value)} → ${formatISODate(item.parsed)}`
-    );
+        if (!isValidEmail(value)) {
 
-    renderList(
-        "formulaDetails",
-        "Formulas",
-        result.formulas,
-        item =>
-            `Row ${item.row + 1} — ${item.header}: ${escapeHTML(item.formula)}`
-    );
-
-    renderList(
-        "errorDetails",
-        "Spreadsheet Errors",
-        result.errors,
-        item =>
-            `Row ${item.row} — ${item.header}: ${escapeHTML(item.value)}`
-    );
-
-    renderList(
-        "duplicateDetails",
-        "Duplicate / Potential Duplicate Information",
-        [
-            ...result.duplicateRows.map(item => ({
-                kind: "Exact",
-                rows: item.rows
-            })),
-            ...result.potentialDuplicates.map(item => ({
-                kind: "Potential",
-                rows: item.rows,
-                identifier: item.identifierColumn
-            }))
-        ],
-        item => {
-
-            if (item.kind === "Exact") {
-                return `Exact duplicate rows: ${item.rows.join(", ")}`;
-            }
-
-            return `Potential duplicate rows: ${item.rows.join(", ")} — matching ${escapeHTML(item.identifier)}`;
+          result.invalidEmails.push({
+            row: rowNumber,
+            column: header,
+            value: cleanString(value)
+          });
         }
-    );
+      }
 
-    renderList(
-        "missingDetails",
-        "Missing Values",
-        result.missingDetails.slice(0, 100),
-        item =>
-            `Row ${item.row} — ${item.header}`
-    );
+      if (type === "Phone") {
 
-    if (result.missingDetails.length > 100) {
+        if (!isValidPhone(value)) {
 
-        document.getElementById(
-            "missingDetails"
-        ).innerHTML += `
-            <p class="muted">
-                Showing first 100 missing values.
-            </p>
-        `;
-    }
-
-    renderList(
-        "emptyColumnDetails",
-        "Empty Columns",
-        result.emptyColumns,
-        item =>
-            `Column ${item.column}: ${escapeHTML(item.header)}`
-    );
-}
-
-function renderTypes(result) {
-
-    const body =
-        document.getElementById("typesBody");
-
-    body.innerHTML = "";
-
-    for (const item of result.typeDetails) {
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>${escapeHTML(item.column)}</td>
-            <td><span class="badge">${escapeHTML(item.type)}</span></td>
-            <td>${item.filled}</td>
-            <td>${item.missing}</td>
-            <td>${item.unique}</td>
-        `;
-
-        body.appendChild(row);
-    }
-}
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-function cleanValue(
-    value,
-    type,
-    summary
-) {
-
-    if (isBlank(value)) {
-        return "";
-    }
-
-    if (isSpreadsheetError(value)) {
-        return cleanString(value);
-    }
-
-    if (type === "Email") {
-
-        const original = cleanString(value);
-        const normalized = normalizeEmail(value);
-
-        if (
-            isValidEmail(value) &&
-            original !== normalized
-        ) {
-            summary.emailsNormalized++;
+          result.invalidPhones.push({
+            row: rowNumber,
+            column: header,
+            value: cleanString(value)
+          });
         }
+      }
 
-        return normalized;
-    }
-
-    if (type === "Phone") {
-
-        const original = cleanString(value);
-        const standardized =
-            standardizePhone(value);
-
-        if (
-            isValidPhone(value) &&
-            original !== standardized
-        ) {
-            summary.phonesStandardized++;
-        }
-
-        return standardized;
-    }
-
-    if (type === "Date") {
+      if (type === "Date") {
 
         const parsed = parseDateValue(value);
 
         if (parsed) {
 
-            const standardized =
-                formatISODate(parsed);
-
-            const original =
-                cleanString(value);
-
-            if (original !== standardized) {
-                summary.datesStandardized++;
-            }
-
-            return standardized;
+          result.dates.push({
+            row: rowNumber,
+            column: header,
+            original: value,
+            standardized: formatISODate(value)
+          });
         }
+      }
+    });
+  });
 
-        return cleanString(value);
+  /* -------- DUPLICATES -------- */
+
+  const rowMap = new Map();
+
+  normalizedRows.forEach((row, index) => {
+
+    const key = JSON.stringify(
+      row.map(value =>
+        isBlank(value)
+          ? ""
+          : cleanString(value).toLowerCase()
+      )
+    );
+
+    if (!rowMap.has(key)) {
+      rowMap.set(key, []);
     }
 
-    if (type === "Categorical") {
+    rowMap.get(key).push(index + 1);
+  });
 
-        const original = cleanString(value);
-        const standardized =
-            getCategoryStandard(value);
+  for (const rowsForKey of rowMap.values()) {
 
-        if (
-            original.toLowerCase() !==
-            standardized.toLowerCase()
-        ) {
-            summary.categoriesStandardized++;
-        }
+    if (rowsForKey.length > 1) {
 
-        return standardized;
+      result.duplicates.push(rowsForKey);
     }
+  }
+
+  /* -------- POTENTIAL DUPLICATES -------- */
+
+  const identityColumns = [];
+
+  headers.forEach((header, c) => {
+
+    const type = columnTypes[c];
+    const lower = cleanString(header).toLowerCase();
 
     if (
-        type === "Number" &&
-        typeof value === "string"
+      type === "Email" ||
+      type === "ID" ||
+      lower === "email" ||
+      lower === "id"
     ) {
-
-        const trimmed = value.trim();
-
-        if (
-            /^-?\d+(\.\d+)?$/.test(trimmed)
-        ) {
-            return Number(trimmed);
-        }
+      identityColumns.push(c);
     }
+  });
 
-    return value;
-}
+  for (const c of identityColumns) {
 
-function cleanSheet(result) {
+    const valueMap = new Map();
 
-    const summary = {
-        blankRowsRemoved: 0,
-        duplicatesRemoved: 0,
-        emailsNormalized: 0,
-        phonesStandardized: 0,
-        datesStandardized: 0,
-        categoriesStandardized: 0,
-        emptyColumnsRemoved: 0
-    };
+    normalizedRows.forEach((row, r) => {
 
-    /*
-      Remove completely blank rows.
-    */
-    let rows = [];
+      const value = row[c];
 
-    for (const row of result.rows) {
+      if (isBlank(value) || isSpreadsheetError(value)) {
+        return;
+      }
 
-        const allBlank = row.every(
-            value => isBlank(value)
-        );
+      const key = cleanString(value).toLowerCase();
 
-        if (allBlank) {
-            summary.blankRowsRemoved++;
-        } else {
-            rows.push([...row]);
-        }
-    }
+      if (!valueMap.has(key)) {
+        valueMap.set(key, []);
+      }
 
-    /*
-      Remove exact duplicate rows only.
-      Potential duplicates are intentionally preserved.
-    */
-    const seen = new Set();
-    const uniqueRows = [];
-
-    for (const row of rows) {
-
-        const key = row
-            .map(v => cleanString(v).toLowerCase())
-            .join("||");
-
-        if (seen.has(key)) {
-            summary.duplicatesRemoved++;
-        } else {
-            seen.add(key);
-            uniqueRows.push(row);
-        }
-    }
-
-    rows = uniqueRows;
-
-    /*
-      Clean values.
-    */
-    const cleanedRows = rows.map(row => {
-
-        return row.map((value, c) => {
-
-            const type =
-                result.columnTypes[c];
-
-            return cleanValue(
-                value,
-                type,
-                summary
-            );
-        });
+      valueMap.get(key).push(r + 1);
     });
 
-    /*
-      Remove truly empty columns.
-    */
-    const keepColumns = [];
+    for (const [value, rowNumbers] of valueMap.entries()) {
 
-    for (let c = 0; c < result.headers.length; c++) {
+      if (rowNumbers.length > 1) {
 
-        const hasValue = cleanedRows.some(
-            row => !isBlank(row[c])
-        );
+        result.potentialDuplicates.push({
+          rows: rowNumbers,
+          column: headers[c],
+          value
+        });
+      }
+    }
+  }
 
-        if (hasValue) {
-            keepColumns.push(c);
-        } else {
-            summary.emptyColumnsRemoved++;
-        }
+  /* -------- EMPTY COLUMNS -------- */
+
+  for (let c = 0; c < columnCount; c++) {
+
+    const allBlank = normalizedRows.every(row =>
+      isBlank(row[c])
+    );
+
+    if (allBlank) {
+
+      result.emptyColumns.push({
+        index: c,
+        header: headers[c]
+      });
+    }
+  }
+
+  /* -------- COLUMN STATS -------- */
+
+  for (let c = 0; c < columnCount; c++) {
+
+    const values = normalizedRows.map(row => row[c]);
+
+    const filled = values.filter(
+      value => !isBlank(value)
+    ).length;
+
+    const missing = values.length - filled;
+
+    const unique = new Set(
+      values
+        .filter(value => !isBlank(value))
+        .map(value => cleanString(value).toLowerCase())
+    ).size;
+
+    result.columnStats.push({
+      header: headers[c],
+      type: columnTypes[c],
+      filled,
+      missing,
+      unique
+    });
+  }
+
+  return result;
+}
+
+/* ---------------- CLEANING ---------------- */
+
+function cleanValue(value, type, header) {
+
+  if (isBlank(value)) {
+    return "";
+  }
+
+  /*
+   * Never allow a non-date column to turn into a Date.
+   */
+  if (value instanceof Date) {
+
+    if (type === "Date") {
+      return formatISODate(value);
     }
 
-    const cleanedHeaders =
-        keepColumns.map(
-            c => result.headers[c]
-        );
+    return excelSerialFromDate(value);
+  }
 
-    const finalRows =
-        cleanedRows.map(row =>
-            keepColumns.map(c => row[c])
-        );
+  if (isSpreadsheetError(value)) {
+    return value;
+  }
 
-    return {
-        headers: cleanedHeaders,
-        rows: finalRows,
-        summary
-    };
+  switch (type) {
+
+    case "Email":
+      return normalizeEmail(value);
+
+    case "Phone":
+      return standardizePhone(value);
+
+    case "Date": {
+
+      const parsed = parseDateValue(value);
+
+      if (parsed) {
+        return formatISODate(value);
+      }
+
+      return value;
+    }
+
+    case "Categorical": {
+
+      const domain = detectSemanticCategory(
+        header,
+        [value]
+      );
+
+      if (domain) {
+        return getCategoryStandard(value, domain);
+      }
+
+      return cleanString(value);
+    }
+
+    case "Number": {
+
+      if (typeof value === "number") {
+        return value;
+      }
+
+      const text = cleanString(value);
+
+      if (/^[-+]?\d+(\.\d+)?$/.test(text)) {
+        return Number(text);
+      }
+
+      return value;
+    }
+
+    default:
+      return typeof value === "string"
+        ? value.trim()
+        : value;
+  }
+}
+
+function cleanSheet(analysis) {
+
+  const {
+    headers,
+    rows,
+    columnTypes
+  } = analysis;
+
+  const cleanedRows = [];
+
+  let blankRowsRemoved = 0;
+  let duplicateRowsRemoved = analysis.duplicates.length;
+  let emailsNormalized = 0;
+  let phonesStandardized = 0;
+  let datesStandardized = 0;
+  let categoriesStandardized = 0;
+  let emptyColumnsRemoved = analysis.emptyColumns.length;
+
+  const duplicateIndexes = new Set();
+
+  for (const group of analysis.duplicates) {
+
+    for (let i = 1; i < group.length; i++) {
+      duplicateIndexes.add(group[i]);
+    }
+  }
+
+  rows.forEach((row, index) => {
+
+    const originalRowNumber = index + 1;
+
+    const isBlankRow = row.every(value =>
+      isBlank(value)
+    );
+
+    if (isBlankRow) {
+
+      blankRowsRemoved++;
+      return;
+    }
+
+    if (duplicateIndexes.has(originalRowNumber)) {
+      return;
+    }
+
+    const cleanedRow = [];
+
+    for (let c = 0; c < headers.length; c++) {
+
+      const originalValue = row[c] ?? "";
+      const type = columnTypes[c];
+
+      const cleanedValue = cleanValue(
+        originalValue,
+        type,
+        headers[c]
+      );
+
+      if (
+        type === "Email" &&
+        !isBlank(originalValue) &&
+        !isBlank(cleanedValue) &&
+        cleanString(originalValue) !== cleanString(cleanedValue)
+      ) {
+        emailsNormalized++;
+      }
+
+      if (
+        type === "Phone" &&
+        !isBlank(originalValue) &&
+        !isBlank(cleanedValue) &&
+        cleanString(originalValue) !== cleanString(cleanedValue)
+      ) {
+        phonesStandardized++;
+      }
+
+      if (
+        type === "Date" &&
+        !isBlank(originalValue) &&
+        !isBlank(cleanedValue) &&
+        cleanString(originalValue) !== cleanString(cleanedValue)
+      ) {
+        datesStandardized++;
+      }
+
+      if (
+        type === "Categorical" &&
+        !isBlank(originalValue) &&
+        !isBlank(cleanedValue) &&
+        cleanString(originalValue) !== cleanString(cleanedValue)
+      ) {
+        categoriesStandardized++;
+      }
+
+      cleanedRow.push(cleanedValue);
+    }
+
+    cleanedRows.push(cleanedRow);
+  });
+
+  /*
+   * Remove genuinely empty columns only.
+   */
+  const emptyColumnIndexes = new Set(
+    analysis.emptyColumns.map(item => item.index)
+  );
+
+  const finalHeaders = headers.filter(
+    (_, index) => !emptyColumnIndexes.has(index)
+  );
+
+  const finalRows = cleanedRows.map(row =>
+    row.filter(
+      (_, index) => !emptyColumnIndexes.has(index)
+    )
+  );
+
+  return {
+    headers: finalHeaders,
+    rows: finalRows,
+
+    summary: {
+      blankRowsRemoved,
+      duplicateRowsRemoved,
+      emailsNormalized,
+      phonesStandardized,
+      datesStandardized,
+      categoriesStandardized,
+      emptyColumnsRemoved
+    }
+  };
+}
+
+/* ---------------- RENDER ---------------- */
+
+function setText(id, value) {
+  document.getElementById(id).textContent = value;
+}
+
+function renderOverview(result) {
+
+  setText("statRows", result.rows.length);
+  setText("statColumns", result.headers.length);
+
+  const duplicateRowCount = result.duplicates.reduce(
+    (total, group) => total + Math.max(0, group.length - 1),
+    0
+  );
+
+  setText("statDuplicates", duplicateRowCount);
+  setText("statPotential", result.potentialDuplicates.length);
+  setText("statMissing", result.missing.length);
+  setText("statEmails", result.invalidEmails.length);
+  setText("statPhones", result.invalidPhones.length);
+  setText("statDates", result.dates.length);
+  setText("statFormulas", result.formulas.length);
+  setText("statErrors", result.errors.length);
+  setText("statEmptyColumns", result.emptyColumns.length);
+}
+
+function renderListSection(title, items) {
+
+  const section = document.createElement("div");
+  section.className = "check-section";
+
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+
+  section.appendChild(heading);
+
+  if (!items.length) {
+
+    const p = document.createElement("div");
+    p.className = "muted";
+    p.textContent = "None detected.";
+    section.appendChild(p);
+
+    return section;
+  }
+
+  const ul = document.createElement("ul");
+
+  items.forEach(item => {
+
+    const li = document.createElement("li");
+
+    if (typeof item === "string") {
+
+      li.textContent = item;
+
+    } else if (item.row !== undefined) {
+
+      const value = item.value === undefined
+        ? ""
+        : `: ${item.value}`;
+
+      li.textContent =
+        `Row ${item.row} — ${item.column}${value}`;
+
+    } else {
+
+      li.textContent = String(item);
+    }
+
+    ul.appendChild(li);
+  });
+
+  section.appendChild(ul);
+
+  return section;
+}
+
+function renderChecks(result) {
+
+  const container = document.getElementById("checks");
+
+  container.innerHTML = "";
+
+  container.appendChild(
+    renderListSection(
+      "Invalid Emails",
+      result.invalidEmails
+    )
+  );
+
+  container.appendChild(
+    renderListSection(
+      "Invalid Phones",
+      result.invalidPhones
+    )
+  );
+
+  const formulaItems = result.formulas.map(item => ({
+    row: item.row,
+    column: item.column,
+    value: item.value
+  }));
+
+  container.appendChild(
+    renderListSection(
+      "Formulas",
+      formulaItems
+    )
+  );
+
+  container.appendChild(
+    renderListSection(
+      "Spreadsheet Errors",
+      result.errors
+    )
+  );
+
+  const duplicateItems = [];
+
+  result.duplicates.forEach(group => {
+
+    duplicateItems.push(
+      `Exact duplicate rows: ${group.join(", ")}`
+    );
+  });
+
+  result.potentialDuplicates.forEach(item => {
+
+    duplicateItems.push(
+      `Potential duplicate rows: ${item.rows.join(", ")} — matching ${item.column}`
+    );
+  });
+
+  container.appendChild(
+    renderListSection(
+      "Duplicate / Potential Duplicate Information",
+      duplicateItems
+    )
+  );
+
+  container.appendChild(
+    renderListSection(
+      "Missing Values",
+      result.missing.slice(0, 100).map(item => ({
+        row: item.row,
+        column: item.column
+      }))
+    )
+  );
+
+  if (result.missing.length > 100) {
+
+    const note = document.createElement("div");
+    note.className = "muted";
+    note.textContent = "Showing first 100 missing values.";
+    container.appendChild(note);
+  }
+
+  const emptyItems = result.emptyColumns.map(item =>
+    `Column ${item.index + 1}: ${item.header}`
+  );
+
+  container.appendChild(
+    renderListSection(
+      "Empty Columns",
+      emptyItems
+    )
+  );
+}
+
+function renderTypes(result) {
+
+  const table = document.getElementById("typesTable");
+
+  table.innerHTML = "";
+
+  const headerRow = document.createElement("tr");
+
+  [
+    "Column",
+    "Type",
+    "Filled",
+    "Missing",
+    "Unique"
+  ].forEach(text => {
+
+    const th = document.createElement("th");
+    th.textContent = text;
+    headerRow.appendChild(th);
+  });
+
+  table.appendChild(headerRow);
+
+  result.columnStats.forEach(item => {
+
+    const tr = document.createElement("tr");
+
+    [
+      item.header,
+      item.type,
+      item.filled,
+      item.missing,
+      item.unique
+    ].forEach(value => {
+
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    table.appendChild(tr);
+  });
 }
 
 function renderSummary(summary) {
 
-    setText(
-        "blankRowsRemoved",
-        summary.blankRowsRemoved
-    );
+  const container = document.getElementById("summary");
 
-    setText(
-        "duplicatesRemoved",
-        summary.duplicatesRemoved
-    );
+  container.innerHTML = "";
 
-    setText(
-        "emailsNormalized",
-        summary.emailsNormalized
-    );
+  const items = [
+    ["Blank Rows Removed", summary.blankRowsRemoved],
+    ["Duplicate Rows Removed", summary.duplicateRowsRemoved],
+    ["Emails Normalized", summary.emailsNormalized],
+    ["Phones Standardized", summary.phonesStandardized],
+    ["Dates Standardized", summary.datesStandardized],
+    ["Categories Standardized", summary.categoriesStandardized],
+    ["Empty Columns Removed", summary.emptyColumnsRemoved]
+  ];
 
-    setText(
-        "phonesStandardized",
-        summary.phonesStandardized
-    );
+  items.forEach(([label, number]) => {
 
-    setText(
-        "datesStandardized",
-        summary.datesStandardized
-    );
+    const item = document.createElement("div");
+    item.className = "summary-item";
 
-    setText(
-        "categoriesStandardized",
-        summary.categoriesStandardized
-    );
+    const value = document.createElement("div");
+    value.className = "summary-number";
+    value.textContent = number;
 
-    setText(
-        "emptyColumnsRemoved",
-        summary.emptyColumnsRemoved
-    );
+    const text = document.createElement("div");
+    text.className = "summary-label";
+    text.textContent = label;
+
+    item.appendChild(value);
+    item.appendChild(text);
+
+    container.appendChild(item);
+  });
 }
 
-function renderPreview(data) {
+function displayValue(value, type) {
 
-    const head =
-        document.getElementById("previewHead");
+  /*
+   * This is the second defense against numeric values being
+   * visually displayed as dates.
+   */
+  if (value instanceof Date) {
 
-    const body =
-        document.getElementById("previewBody");
-
-    head.innerHTML = "";
-    body.innerHTML = "";
-
-    const headerRow =
-        document.createElement("tr");
-
-    for (const header of data.headers) {
-
-        const th =
-            document.createElement("th");
-
-        th.textContent = header;
-
-        headerRow.appendChild(th);
+    if (type === "Date") {
+      return formatISODate(value);
     }
 
-    head.appendChild(headerRow);
+    return String(excelSerialFromDate(value));
+  }
 
-    const maxPreviewRows =
-        Math.min(data.rows.length, 100);
+  return value === null || value === undefined
+    ? ""
+    : String(value);
+}
 
-    for (
-        let r = 0;
-        r < maxPreviewRows;
-        r++
-    ) {
+function renderPreview(cleaned, analysis) {
 
-        const tr =
-            document.createElement("tr");
+  const table = document.getElementById("previewTable");
 
-        for (
-            let c = 0;
-            c < data.headers.length;
-            c++
-        ) {
+  table.innerHTML = "";
 
-            const td =
-                document.createElement("td");
+  const headerRow = document.createElement("tr");
 
-            const value =
-                data.rows[r][c];
+  cleaned.headers.forEach(header => {
 
-            td.textContent =
-                value instanceof Date
-                    ? formatISODate(value)
-                    : value ?? "";
+    const th = document.createElement("th");
+    th.textContent = header;
+    headerRow.appendChild(th);
+  });
 
-            tr.appendChild(td);
-        }
+  table.appendChild(headerRow);
 
-        body.appendChild(tr);
-    }
+  const typeMap = {};
+
+  analysis.headers.forEach((header, index) => {
+    typeMap[header] = analysis.columnTypes[index];
+  });
+
+  cleaned.rows.slice(0, 100).forEach(row => {
+
+    const tr = document.createElement("tr");
+
+    row.forEach((value, c) => {
+
+      const td = document.createElement("td");
+
+      const header = cleaned.headers[c];
+      const type = typeMap[header] || "Text";
+
+      td.textContent = displayValue(value, type);
+
+      tr.appendChild(td);
+    });
+
+    table.appendChild(tr);
+  });
+}
+
+/* ---------------- FILE PROCESSING ---------------- */
+
+async function processFile(file) {
+
+  try {
+
+    document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("successMessage").classList.add("hidden");
+
+    document.getElementById("fileName").textContent =
+      `Selected: ${file.name}`;
+
+    originalFileName = file.name;
+
+    const buffer = await file.arrayBuffer();
+
+    workbook = XLSX.read(buffer, {
+      type: "array",
+      cellDates: false,
+      cellFormula: true
+    });
+
+    workbookResults = {};
+    currentCleaned = null;
+
+    const selector = document.getElementById("sheetSelector");
+
+    selector.innerHTML = "";
+
+    workbook.SheetNames.forEach(sheetName => {
+
+      const option = document.createElement("option");
+
+      option.value = sheetName;
+      option.textContent = sheetName;
+
+      selector.appendChild(option);
+    });
+
+    currentSheetName = workbook.SheetNames[0];
+
+    selector.value = currentSheetName;
+
+    analyzeCurrentSheet();
+
+    document.getElementById("results").classList.remove("hidden");
+
+    document.getElementById("successMessage").classList.remove("hidden");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Unable to process this spreadsheet. Please check that the file is a valid XLSX, XLS or CSV file."
+    );
+
+  } finally {
+
+    document.getElementById("loading").classList.add("hidden");
+  }
 }
 
 function analyzeCurrentSheet() {
 
-    if (!workbook || !currentSheetName) {
-        return;
-    }
+  currentAnalysis = analyzeSheet(currentSheetName);
 
-    const sheet =
-        workbook.Sheets[currentSheetName];
+  workbookResults[currentSheetName] = currentAnalysis;
 
-    currentAnalysis =
-        analyzeSheet(
-            sheet,
-            currentSheetName
-        );
+  renderOverview(currentAnalysis);
+  renderChecks(currentAnalysis);
+  renderTypes(currentAnalysis);
 
-    renderOverview(currentAnalysis);
-    renderDetails(currentAnalysis);
-    renderTypes(currentAnalysis);
+  document.getElementById("summary").innerHTML = "";
+  document.getElementById("previewTable").innerHTML = "";
 
-    overviewCard.classList.remove("hidden");
-    detailsCard.classList.remove("hidden");
-    typesCard.classList.remove("hidden");
-    actionsCard.classList.remove("hidden");
+  currentCleaned = null;
 
-    summaryCard.classList.add("hidden");
-    previewCard.classList.add("hidden");
-
-    xlsxBtn.disabled = true;
-    csvBtn.disabled = true;
+  document.getElementById("exportXlsxButton").disabled = true;
+  document.getElementById("exportCsvButton").disabled = true;
 }
 
-function loadWorkbook(arrayBuffer) {
+document.getElementById("sheetSelector")
+  .addEventListener("change", function() {
 
-    workbook = XLSX.read(
-        arrayBuffer,
-        {
-            type: "array",
-            cellDates: false,
-            cellFormula: true
-        }
-    );
-
-    originalSheets = {};
-    cleanedSheets = {};
-
-    sheetSelect.innerHTML = "";
-
-    workbook.SheetNames.forEach(
-        sheetName => {
-
-            const option =
-                document.createElement("option");
-
-            option.value = sheetName;
-            option.textContent = sheetName;
-
-            sheetSelect.appendChild(option);
-        }
-    );
-
-    currentSheetName =
-        workbook.SheetNames[0];
-
-    sheetSelect.value =
-        currentSheetName;
-
-    sheetCard.classList.remove("hidden");
+    currentSheetName = this.value;
 
     analyzeCurrentSheet();
-}
+  });
 
-fileInput.addEventListener(
-    "change",
-    async event => {
+document.getElementById("cleanButton")
+  .addEventListener("click", function() {
 
-        const file =
-            event.target.files[0];
+    if (!currentAnalysis) return;
 
-        if (!file) return;
+    currentCleaned = cleanSheet(currentAnalysis);
 
-        await processFile(file);
-    }
-);
+    renderSummary(currentCleaned.summary);
+    renderPreview(currentCleaned, currentAnalysis);
 
-async function processFile(file) {
+    document.getElementById("exportXlsxButton").disabled = false;
+    document.getElementById("exportCsvButton").disabled = false;
+  });
 
-    try {
+/* ---------------- EXPORT XLSX ---------------- */
 
-        selectedFile.textContent =
-            `Selected: ${file.name}`;
+document.getElementById("exportXlsxButton")
+  .addEventListener("click", function() {
 
-        showStatus(
-            "Reading spreadsheet..."
-        );
+    if (!currentCleaned) return;
 
-        const arrayBuffer =
-            await file.arrayBuffer();
-
-        loadWorkbook(arrayBuffer);
-
-        showStatus(
-            "Spreadsheet loaded successfully."
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        showStatus(
-            "Could not read this spreadsheet. Please check the file and try again.",
-            "error"
-        );
-    }
-}
-
-uploadBox.addEventListener(
-    "dragover",
-    event => {
-        event.preventDefault();
-        uploadBox.classList.add("dragover");
-    }
-);
-
-uploadBox.addEventListener(
-    "dragleave",
-    () => {
-        uploadBox.classList.remove("dragover");
-    }
-);
-
-uploadBox.addEventListener(
-    "drop",
-    async event => {
-
-        event.preventDefault();
-
-        uploadBox.classList.remove("dragover");
-
-        const file =
-            event.dataTransfer.files[0];
-
-        if (!file) return;
-
-        const validExtension =
-            /\.(xlsx|xls|csv)$/i.test(
-                file.name
-            );
-
-        if (!validExtension) {
-
-            showStatus(
-                "Please upload XLSX, XLS or CSV.",
-                "error"
-            );
-
-            return;
-        }
-
-        await processFile(file);
-    }
-);
-
-sheetSelect.addEventListener(
-    "change",
-    () => {
-
-        currentSheetName =
-            sheetSelect.value;
-
-        analyzeCurrentSheet();
-    }
-);
-
-cleanBtn.addEventListener(
-    "click",
-    () => {
-
-        if (!currentAnalysis) {
-            return;
-        }
-
-        showStatus(
-            "Cleaning spreadsheet..."
-        );
-
-        const result =
-            cleanSheet(currentAnalysis);
-
-        cleanedSheets[currentSheetName] =
-            result;
-
-        renderSummary(result.summary);
-        renderPreview(result);
-
-        summaryCard.classList.remove("hidden");
-        previewCard.classList.remove("hidden");
-
-        xlsxBtn.disabled = false;
-        csvBtn.disabled = false;
-
-        showStatus(
-            "Cleaning completed successfully."
-        );
-    }
-);
-
-function buildWorkbookFromCleanedSheets() {
-
-    const outputWorkbook =
-        XLSX.utils.book_new();
+    const outputWorkbook = XLSX.utils.book_new();
 
     /*
-      Ensure every sheet gets cleaned data.
-      If user has only cleaned the current sheet,
-      other sheets are cleaned automatically.
-    */
-    workbook.SheetNames.forEach(
-        sheetName => {
+     * Export every worksheet after cleaning.
+     */
+    workbook.SheetNames.forEach(sheetName => {
 
-            let data =
-                cleanedSheets[sheetName];
+      const analysis =
+        workbookResults[sheetName] ||
+        analyzeSheet(sheetName);
 
-            if (!data) {
+      const cleaned = cleanSheet(analysis);
 
-                const analysis =
-                    analyzeSheet(
-                        workbook.Sheets[sheetName],
-                        sheetName
-                    );
+      const aoa = [
+        cleaned.headers,
+        ...cleaned.rows
+      ];
 
-                data =
-                    cleanSheet(analysis);
+      const worksheet = XLSX.utils.aoa_to_sheet(aoa);
 
-                cleanedSheets[sheetName] =
-                    data;
-            }
+      XLSX.utils.book_append_sheet(
+        outputWorkbook,
+        worksheet,
+        sheetName.substring(0, 31)
+      );
+    });
 
-            const aoa = [
-                data.headers,
-                ...data.rows
-            ];
+    const baseName = originalFileName
+      .replace(/\.[^/.]+$/, "");
 
-            const worksheet =
-                XLSX.utils.aoa_to_sheet(aoa);
+    XLSX.writeFile(
+      outputWorkbook,
+      `${baseName}-cleaned.xlsx`
+    );
+  });
 
-            XLSX.utils.book_append_sheet(
-                outputWorkbook,
-                worksheet,
-                sheetName
-            );
-        }
+/* ---------------- EXPORT CSV ---------------- */
+
+document.getElementById("exportCsvButton")
+  .addEventListener("click", function() {
+
+    if (!currentCleaned) return;
+
+    const aoa = [
+      currentCleaned.headers,
+      ...currentCleaned.rows
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+
+    const csv = XLSX.utils.sheet_to_csv(worksheet);
+
+    const blob = new Blob(
+      [csv],
+      { type: "text/csv;charset=utf-8;" }
     );
 
-    return outputWorkbook;
-}
+    const url = URL.createObjectURL(blob);
 
-function downloadBlob(
-    blob,
-    filename
-) {
-
-    const url =
-        URL.createObjectURL(blob);
-
-    const link =
-        document.createElement("a");
+    const link = document.createElement("a");
 
     link.href = url;
-    link.download = filename;
+
+    const baseName = originalFileName
+      .replace(/\.[^/.]+$/, "");
+
+    link.download = `${baseName}-${currentSheetName}-cleaned.csv`;
 
     document.body.appendChild(link);
 
     link.click();
 
-    link.remove();
+    document.body.removeChild(link);
 
     URL.revokeObjectURL(url);
-}
-
-xlsxBtn.addEventListener(
-    "click",
-    () => {
-
-        try {
-
-            const outputWorkbook =
-                buildWorkbookFromCleanedSheets();
-
-            XLSX.writeFile(
-                outputWorkbook,
-                "cleaned-spreadsheet.xlsx"
-            );
-
-            showStatus(
-                "Cleaned XLSX downloaded successfully."
-            );
-
-        } catch (error) {
-
-            console.error(error);
-
-            showStatus(
-                "Could not export XLSX.",
-                "error"
-            );
-        }
-    }
-);
-
-csvBtn.addEventListener(
-    "click",
-    () => {
-
-        try {
-
-            let data =
-                cleanedSheets[currentSheetName];
-
-            if (!data) {
-
-                data =
-                    cleanSheet(
-                        currentAnalysis
-                    );
-
-                cleanedSheets[currentSheetName] =
-                    data;
-            }
-
-            const worksheet =
-                XLSX.utils.aoa_to_sheet([
-                    data.headers,
-                    ...data.rows
-                ]);
-
-            const csv =
-                XLSX.utils.sheet_to_csv(
-                    worksheet
-                );
-
-            const blob =
-                new Blob(
-                    [csv],
-                    {
-                        type:
-                            "text/csv;charset=utf-8;"
-                    }
-                );
-
-            downloadBlob(
-                blob,
-                "cleaned-spreadsheet.csv"
-            );
-
-            showStatus(
-                "Cleaned CSV downloaded successfully."
-            );
-
-        } catch (error) {
-
-            console.error(error);
-
-            showStatus(
-                "Could not export CSV.",
-                "error"
-            );
-        }
-    }
-);
+  });
 
 </script>
 
