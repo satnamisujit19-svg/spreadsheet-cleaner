@@ -333,7 +333,7 @@
     </div>
 
     <div id="successMessage" class="success hidden">
-      Cleaning completed successfully.
+      Spreadsheet loaded successfully. Review the results below, then click Clean Spreadsheet.
     </div>
 
   </div>
@@ -792,13 +792,6 @@ function isValidPhone(value) {
 
 }
 
-/*
- * A name such as "Rahul Sharma" contains spaces,
- * but it is not a phone number.
- *
- * Therefore we only treat a value as phone-like when
- * it contains enough actual digits.
- */
 function looksPhoneLike(value) {
 
   if (isBlank(value)) {
@@ -825,11 +818,6 @@ function looksPhoneLike(value) {
   const digits =
     phoneDigits(text);
 
-  /*
-   * Require at least 7 digits for phone-like detection.
-   * This prevents small numbers such as 25000 from becoming
-   * phone columns automatically.
-   */
   if (
     digits.length >= 7 &&
     digits.length <= 15
@@ -927,13 +915,6 @@ function validDateParts(
 
 }
 
-/*
- * Excel serial dates are approximately in the
- * 1900-2100 range when the serial is between these values.
- *
- * This is only used when the column itself looks like a date
- * column, so ordinary numbers are not blindly converted.
- */
 function excelSerialToParts(value) {
 
   if (
@@ -1069,9 +1050,6 @@ function parseDateValue(
 
   let match;
 
-  /*
-   * YYYY-MM-DD
-   */
   match =
     text.match(
       /^(\d{4})-(\d{1,2})-(\d{1,2})$/
@@ -1106,9 +1084,6 @@ function parseDateValue(
 
   }
 
-  /*
-   * YYYY/MM/DD
-   */
   match =
     text.match(
       /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/
@@ -1143,9 +1118,6 @@ function parseDateValue(
 
   }
 
-  /*
-   * DD/MM/YYYY or DD-MM-YYYY
-   */
   match =
     text.match(
       /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/
@@ -1168,9 +1140,6 @@ function parseDateValue(
     let month =
       second;
 
-    /*
-     * Default to Indian DD/MM/YYYY when ambiguous.
-     */
     if (
       first <= 12 &&
       second > 12
@@ -1588,12 +1557,6 @@ function columnNumberScore(
 
 }
 
-/*
- * Fixed ID detection.
- *
- * "paid" must NOT become an ID simply because
- * the word ends in "id".
- */
 function columnIDScore(
   header,
   values
@@ -1739,9 +1702,6 @@ function detectColumnType(
     return "Phone";
   }
 
-  /*
-   * Date gets priority over generic numbers.
-   */
   if (
     h.includes("date") ||
     h.includes("dob") ||
@@ -1814,13 +1774,6 @@ function detectColumnType(
    HEADER DETECTION
 ========================================================= */
 
-/*
- * Strong header matching.
- *
- * We normalize punctuation first so values such as:
- * "Customer_ID", "customer-id", "Customer ID"
- * are treated similarly.
- */
 function isStrongHeaderText(
   value
 ) {
@@ -1845,6 +1798,7 @@ function isStrongHeaderText(
   return STRONG_HEADER_WORDS
     .some(
       word => {
+
         const normalizedWord =
           word
             .toLowerCase()
@@ -1867,20 +1821,12 @@ function isStrongHeaderText(
             )
           )
         );
+
       }
     );
 
 }
 
-/*
- * We compare two signals:
- *
- * 1. Header-like words
- * 2. Data-like values
- *
- * This prevents a real data record from accidentally
- * becoming the header row.
- */
 function looksLikeHeaderRow(
   row
 ) {
@@ -1951,11 +1897,6 @@ function looksLikeHeaderRow(
 
   }
 
-  /*
-   * A row with strong data signals should be treated
-   * as data even when one or two values accidentally
-   * resemble header words.
-   */
   if (
     dataScore >= 3 &&
     dataScore >= headerScore
@@ -1963,9 +1904,6 @@ function looksLikeHeaderRow(
     return false;
   }
 
-  /*
-   * Require at least two strong header signals.
-   */
   return (
     headerScore >= 2 &&
     dataScore < headerScore
@@ -1990,10 +1928,6 @@ function inferHeaderFromColumn(
     return `Column ${index + 1}`;
   }
 
-  /*
-   * Use the column's actual data to infer a useful
-   * name when the spreadsheet has no proper header.
-   */
   const type =
     detectColumnType(
       "",
@@ -2089,9 +2023,6 @@ function inferHeaderFromColumn(
     return "Status";
   }
 
-  /*
-   * Detect common person-name columns.
-   */
   const nameLikeScore =
     cleanValues.filter(
       value =>
@@ -2109,9 +2040,6 @@ function inferHeaderFromColumn(
     return "Name";
   }
 
-  /*
-   * Detect city-like values.
-   */
   const commonCities = new Set([
     "bangalore",
     "bengaluru",
@@ -2172,10 +2100,6 @@ function generateSmartHeaders(
   const firstRow =
     rows[0];
 
-  /*
-   * Use the first row only when it clearly behaves
-   * like a real header row.
-   */
   if (
     looksLikeHeaderRow(
       firstRow
@@ -2187,7 +2111,10 @@ function generateSmartHeaders(
 
     const headers =
       firstRow.map(
-        (value, index) =>
+        (
+          value,
+          index
+        ) =>
           uniqueHeaderName(
             cleanString(value) ||
             `Column ${index + 1}`,
@@ -2203,10 +2130,6 @@ function generateSmartHeaders(
 
   }
 
-  /*
-   * Otherwise infer headers from the columns
-   * without dropping the first row of actual data.
-   */
   const maxColumns =
     Math.max(
       ...rows.map(
@@ -2473,10 +2396,6 @@ function analyzeSheet(
 
   };
 
-  /* =======================================================
-     CELL ANALYSIS
-  ======================================================= */
-
   normalizedRows.forEach(
     (
       row,
@@ -2499,11 +2418,6 @@ function analyzeSheet(
           const type =
             columnTypes[c];
 
-          /*
-           * Formula detection happens BEFORE error handling.
-           * This means a formula that returns #ERROR! is still
-           * counted as a formula.
-           */
           const cellAddress =
             XLSX.utils.encode_cell({
               r: r + 1,
@@ -2640,10 +2554,6 @@ function analyzeSheet(
     }
   );
 
-  /* =======================================================
-     DUPLICATES
-  ======================================================= */
-
   const rowMap =
     new Map();
 
@@ -2699,10 +2609,6 @@ function analyzeSheet(
     }
 
   }
-
-  /* =======================================================
-     POTENTIAL DUPLICATES
-  ======================================================= */
 
   const identityColumns =
     [];
@@ -2812,10 +2718,6 @@ function analyzeSheet(
 
   }
 
-  /* =======================================================
-     EMPTY COLUMNS
-  ======================================================= */
-
   for (
     let c = 0;
     c < columnCount;
@@ -2843,10 +2745,6 @@ function analyzeSheet(
     }
 
   }
-
-  /* =======================================================
-     COLUMN STATS
-  ======================================================= */
 
   for (
     let c = 0;
@@ -2928,11 +2826,9 @@ function cleanValue(
     if (
       type === "Date"
     ) {
-
       return formatISODate(
         value
       );
-
     }
 
     return excelSerialFromDate(
@@ -2954,13 +2850,11 @@ function cleanValue(
   ) {
 
     case "Email":
-
       return normalizeEmail(
         value
       );
 
     case "Phone":
-
       return standardizePhone(
         value
       );
@@ -3038,7 +2932,6 @@ function cleanValue(
     }
 
     default:
-
       return (
         typeof value === "string"
           ? value.trim()
@@ -3067,9 +2960,6 @@ function cleanSheet(
   let duplicateRowsRemoved =
     0;
 
-  /*
-   * Count actual duplicate rows that will be removed.
-   */
   for (
     const group
     of analysis.duplicates
@@ -3267,9 +3157,6 @@ function cleanSheet(
     }
   );
 
-  /*
-   * Remove genuinely empty columns only.
-   */
   const emptyColumnIndexes =
     new Set(
       analysis.emptyColumns.map(
@@ -3974,10 +3861,6 @@ function renderPreview(
     headerRow
   );
 
-  /*
-   * Build a mapping by original header.
-   * This is safe as long as headers are unique.
-   */
   const typeMap =
     {};
 
@@ -4136,6 +4019,14 @@ async function processFile(
       "hidden"
     );
 
+    /*
+     * Upload is complete, but cleaning has not happened yet.
+     */
+    document.getElementById(
+      "successMessage"
+    ).textContent =
+      "Spreadsheet loaded successfully. Review the results below, then click Clean Spreadsheet.";
+
     document.getElementById(
       "successMessage"
     ).classList.remove(
@@ -4223,6 +4114,11 @@ document.getElementById(
 
     analyzeCurrentSheet();
 
+    document.getElementById(
+      "successMessage"
+    ).textContent =
+      "Worksheet loaded successfully. Review the results below, then click Clean Spreadsheet.";
+
   }
 );
 
@@ -4257,6 +4153,17 @@ document.getElementById(
     );
 
     document.getElementById(
+      "successMessage"
+    ).textContent =
+      "Cleaning completed successfully.";
+
+    document.getElementById(
+      "successMessage"
+    ).classList.remove(
+      "hidden"
+    );
+
+    document.getElementById(
       "exportXlsxButton"
     ).disabled = false;
 
@@ -4286,9 +4193,6 @@ document.getElementById(
     const outputWorkbook =
       XLSX.utils.book_new();
 
-    /*
-     * Export every worksheet after cleaning.
-     */
     workbook.SheetNames.forEach(
       sheetName => {
 
