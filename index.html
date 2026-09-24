@@ -90,6 +90,23 @@
       font-weight: 600;
     }
 
+    .privacy-note {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border-radius: 10px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .privacy-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
     .section-title {
       margin-top: 0;
       margin-bottom: 16px;
@@ -330,6 +347,16 @@
         Processing spreadsheet...
       </div>
 
+      <div class="privacy-note">
+        <div class="privacy-title">
+          🔒 Privacy first
+        </div>
+        <div>
+          Your spreadsheet is processed directly in your browser.
+          This page does not upload your spreadsheet to a server.
+        </div>
+      </div>
+
     </div>
 
     <div id="successMessage" class="success hidden">
@@ -342,6 +369,7 @@
 
     <div class="card">
       <h2 class="section-title">Worksheet</h2>
+
       <select id="sheetSelector"></select>
     </div>
 
@@ -576,60 +604,77 @@ let currentAnalysis = null;
 let currentCleaned = null;
 let originalFileName = "cleaned.xlsx";
 
-const fileInput = document.getElementById("fileInput");
-const dropZone = document.getElementById("dropZone");
+const fileInput =
+  document.getElementById("fileInput");
+
+const dropZone =
+  document.getElementById("dropZone");
 
 /* =========================================================
    FILE INPUT
 ========================================================= */
 
-fileInput.addEventListener("change", e => {
+fileInput.addEventListener(
+  "change",
+  e => {
 
-  if (
-    e.target.files &&
-    e.target.files[0]
-  ) {
-    processFile(
+    if (
+      e.target.files &&
       e.target.files[0]
+    ) {
+
+      processFile(
+        e.target.files[0]
+      );
+
+    }
+
+  }
+);
+
+dropZone.addEventListener(
+  "dragover",
+  e => {
+
+    e.preventDefault();
+
+    dropZone.classList.add(
+      "dragover"
     );
+
   }
+);
 
-});
+dropZone.addEventListener(
+  "dragleave",
+  () => {
 
-dropZone.addEventListener("dragover", e => {
+    dropZone.classList.remove(
+      "dragover"
+    );
 
-  e.preventDefault();
-
-  dropZone.classList.add(
-    "dragover"
-  );
-
-});
-
-dropZone.addEventListener("dragleave", () => {
-
-  dropZone.classList.remove(
-    "dragover"
-  );
-
-});
-
-dropZone.addEventListener("drop", e => {
-
-  e.preventDefault();
-
-  dropZone.classList.remove(
-    "dragover"
-  );
-
-  const file =
-    e.dataTransfer.files[0];
-
-  if (file) {
-    processFile(file);
   }
+);
 
-});
+dropZone.addEventListener(
+  "drop",
+  e => {
+
+    e.preventDefault();
+
+    dropZone.classList.remove(
+      "dragover"
+    );
+
+    const file =
+      e.dataTransfer.files[0];
+
+    if (file) {
+      processFile(file);
+    }
+
+  }
+);
 
 /* =========================================================
    BASIC HELPERS
@@ -729,9 +774,8 @@ function looksEmailLike(value) {
 
   return (
     text.includes("@") ||
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(
-      text
-    )
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
+      .test(text)
   );
 
 }
@@ -747,7 +791,10 @@ function phoneDigits(value) {
   }
 
   return String(value)
-    .replace(/[^\d]/g, "");
+    .replace(
+      /[^\d]/g,
+      ""
+    );
 
 }
 
@@ -767,9 +814,8 @@ function isValidPhone(value) {
     cleanString(value);
 
   if (
-    /^[+-]?\d+(\.\d+)?e[+-]?\d+$/i.test(
-      text
-    )
+    /^[+-]?\d+(\.\d+)?e[+-]?\d+$/i
+      .test(text)
   ) {
     return false;
   }
@@ -777,7 +823,9 @@ function isValidPhone(value) {
   const digits =
     phoneDigits(text);
 
-  if (digits.length === 10) {
+  if (
+    digits.length === 10
+  ) {
     return true;
   }
 
@@ -808,9 +856,8 @@ function looksPhoneLike(value) {
     cleanString(value);
 
   if (
-    /^[+-]?\d+(\.\d+)?e[+-]?\d+$/i.test(
-      text
-    )
+    /^[+-]?\d+(\.\d+)?e[+-]?\d+$/i
+      .test(text)
   ) {
     return true;
   }
@@ -844,7 +891,9 @@ function standardizePhone(value) {
   const digits =
     phoneDigits(value);
 
-  if (digits.length === 10) {
+  if (
+    digits.length === 10
+  ) {
     return "+91" + digits;
   }
 
@@ -915,7 +964,9 @@ function validDateParts(
 
 }
 
-function excelSerialToParts(value) {
+function excelSerialToParts(
+  value
+) {
 
   if (
     typeof value !== "number" ||
@@ -1144,11 +1195,13 @@ function parseDateValue(
       first <= 12 &&
       second > 12
     ) {
+
       day =
         second;
 
       month =
         first;
+
     }
 
     if (
@@ -1158,11 +1211,13 @@ function parseDateValue(
         day
       )
     ) {
+
       return {
         year,
         month,
         day
       };
+
     }
 
     return null;
@@ -1197,6 +1252,7 @@ function formatISODate(
 
     String(parts.day)
       .padStart(2, "0")
+
   ].join("-");
 
 }
@@ -1219,7 +1275,9 @@ function isDateLike(
    EXCEL SERIAL DEFENSE
 ========================================================= */
 
-function excelSerialFromDate(date) {
+function excelSerialFromDate(
+  date
+) {
 
   if (
     !(date instanceof Date) ||
@@ -1287,7 +1345,9 @@ function getCategoryStandard(
   domain
 ) {
 
-  if (isBlank(value)) {
+  if (
+    isBlank(value)
+  ) {
     return value;
   }
 
@@ -1305,7 +1365,9 @@ function getCategoryStandard(
     return CATEGORY_MAP[domain][key];
   }
 
-  return cleanString(value);
+  return cleanString(
+    value
+  );
 
 }
 
@@ -1415,11 +1477,13 @@ function detectSemanticCategory(
     if (
       score > bestScore
     ) {
+
       bestScore =
         score;
 
       best =
         domain;
+
     }
 
   }
@@ -1465,7 +1529,8 @@ function columnDateScore(
         value,
         true
       )
-  ).length / valid.length;
+  ).length /
+    valid.length;
 
 }
 
@@ -1486,7 +1551,8 @@ function columnEmailScore(
 
   return valid.filter(
     looksEmailLike
-  ).length / valid.length;
+  ).length /
+    valid.length;
 
 }
 
@@ -1507,7 +1573,8 @@ function columnPhoneScore(
 
   return valid.filter(
     looksPhoneLike
-  ).length / valid.length;
+  ).length /
+    valid.length;
 
 }
 
@@ -1553,7 +1620,8 @@ function columnNumberScore(
 
   }
 
-  return score / valid.length;
+  return score /
+    valid.length;
 
 }
 
@@ -1567,13 +1635,16 @@ function columnIDScore(
       .toLowerCase();
 
   const normalizedHeader =
-    h.replace(
-      /[_-]+/g,
-      " "
-    ).replace(
-      /\s+/g,
-      " "
-    ).trim();
+    h
+      .replace(
+        /[_-]+/g,
+        " "
+      )
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .trim();
 
   if (
     normalizedHeader === "id" ||
@@ -1603,7 +1674,8 @@ function columnIDScore(
           )
     ).length;
 
-  return score / valid.length;
+  return score /
+    valid.length;
 
 }
 
@@ -1625,7 +1697,8 @@ function columnErrorScore(
 
   return valid.filter(
     isSpreadsheetError
-  ).length / valid.length;
+  ).length /
+    valid.length;
 
 }
 
@@ -1778,7 +1851,9 @@ function isStrongHeaderText(
   value
 ) {
 
-  if (isBlank(value)) {
+  if (
+    isBlank(value)
+  ) {
     return false;
   }
 
@@ -1795,35 +1870,34 @@ function isStrongHeaderText(
       )
       .trim();
 
-  return STRONG_HEADER_WORDS
-    .some(
-      word => {
+  return STRONG_HEADER_WORDS.some(
+    word => {
 
-        const normalizedWord =
-          word
-            .toLowerCase()
-            .replace(
-              /[_-]+/g,
-              " "
-            )
-            .replace(
-              /\s+/g,
-              " "
-            )
-            .trim();
-
-        return (
-          text === normalizedWord ||
-          (
-            text.length < 30 &&
-            text.includes(
-              normalizedWord
-            )
+      const normalizedWord =
+        word
+          .toLowerCase()
+          .replace(
+            /[_-]+/g,
+            " "
           )
-        );
+          .replace(
+            /\s+/g,
+            " "
+          )
+          .trim();
 
-      }
-    );
+      return (
+        text === normalizedWord ||
+        (
+          text.length < 30 &&
+          text.includes(
+            normalizedWord
+          )
+        )
+      );
+
+    }
+  );
 
 }
 
@@ -1875,12 +1949,10 @@ function looksLikeHeaderRow(
         value,
         true
       ) ||
-      /^[-+]?\d+(\.\d+)?$/.test(
-        value
-      ) ||
-      /^[A-Za-z]{1,5}\d{1,10}$/.test(
-        value
-      ) ||
+      /^[-+]?\d+(\.\d+)?$/
+        .test(value) ||
+      /^[A-Za-z]{1,5}\d{1,10}$/
+        .test(value) ||
       Object.values(
         CATEGORY_MAP
       ).some(
@@ -1934,7 +2006,9 @@ function inferHeaderFromColumn(
       cleanValues
     );
 
-  switch (type) {
+  switch (
+    type
+  ) {
 
     case "Email":
       return "Email";
@@ -2040,35 +2114,35 @@ function inferHeaderFromColumn(
     return "Name";
   }
 
-  const commonCities = new Set([
-    "bangalore",
-    "bengaluru",
-    "mumbai",
-    "delhi",
-    "pune",
-    "chennai",
-    "hyderabad",
-    "ahmedabad",
-    "kolkata",
-    "jaipur",
-    "lucknow",
-    "kochi",
-    "mysore",
-    "mysuru",
-    "bhubaneswar",
-    "surat",
-    "gurgaon",
-    "gurugram",
-    "noida"
-  ]);
+  const commonCities =
+    new Set([
+      "bangalore",
+      "bengaluru",
+      "mumbai",
+      "delhi",
+      "pune",
+      "chennai",
+      "hyderabad",
+      "ahmedabad",
+      "kolkata",
+      "jaipur",
+      "lucknow",
+      "kochi",
+      "mysore",
+      "mysuru",
+      "bhubaneswar",
+      "surat",
+      "gurgaon",
+      "gurugram",
+      "noida"
+    ]);
 
   const cityScore =
     cleanValues.filter(
       value =>
         commonCities.has(
-          cleanString(
-            value
-          ).toLowerCase()
+          cleanString(value)
+            .toLowerCase()
         )
     ).length;
 
@@ -2081,6 +2155,44 @@ function inferHeaderFromColumn(
   }
 
   return `Column ${index + 1}`;
+
+}
+
+function uniqueHeaderName(
+  header,
+  used
+) {
+
+  let base =
+    cleanString(header);
+
+  if (!base) {
+    base = "Column";
+  }
+
+  let result =
+    base;
+
+  let count = 2;
+
+  while (
+    used.has(
+      result.toLowerCase()
+    )
+  ) {
+
+    result =
+      `${base} ${count}`;
+
+    count++;
+
+  }
+
+  used.add(
+    result.toLowerCase()
+  );
+
+  return result;
 
 }
 
@@ -2177,44 +2289,6 @@ function generateSmartHeaders(
     headers,
     dataRows: rows
   };
-
-}
-
-function uniqueHeaderName(
-  header,
-  used
-) {
-
-  let base =
-    cleanString(header);
-
-  if (!base) {
-    base = "Column";
-  }
-
-  let result =
-    base;
-
-  let count = 2;
-
-  while (
-    used.has(
-      result.toLowerCase()
-    )
-  ) {
-
-    result =
-      `${base} ${count}`;
-
-    count++;
-
-  }
-
-  used.add(
-    result.toLowerCase()
-  );
-
-  return result;
 
 }
 
@@ -2329,9 +2403,11 @@ function analyzeSheet(
           c < columnCount;
           c++
         ) {
+
           newRow.push(
             row[c] ?? ""
           );
+
         }
 
         return newRow;
@@ -2378,9 +2454,12 @@ function analyzeSheet(
   const result = {
 
     sheetName,
+
     headers,
+
     rows:
       normalizedRows,
+
     columnTypes,
 
     invalidEmails: [],
@@ -2395,6 +2474,10 @@ function analyzeSheet(
     columnStats: []
 
   };
+
+  /* =======================================================
+     CELL ANALYSIS
+  ======================================================= */
 
   normalizedRows.forEach(
     (
@@ -2427,6 +2510,9 @@ function analyzeSheet(
           const cell =
             sheet[cellAddress];
 
+          /*
+           * Formula detection happens before error detection.
+           */
           if (
             cell &&
             typeof cell.f === "string" &&
@@ -2554,6 +2640,10 @@ function analyzeSheet(
     }
   );
 
+  /* =======================================================
+     DUPLICATES
+  ======================================================= */
+
   const rowMap =
     new Map();
 
@@ -2578,10 +2668,12 @@ function analyzeSheet(
       if (
         !rowMap.has(key)
       ) {
+
         rowMap.set(
           key,
           []
         );
+
       }
 
       rowMap.get(
@@ -2610,6 +2702,10 @@ function analyzeSheet(
 
   }
 
+  /* =======================================================
+     POTENTIAL DUPLICATES
+  ======================================================= */
+
   const identityColumns =
     [];
 
@@ -2633,9 +2729,11 @@ function analyzeSheet(
         lower === "email" ||
         lower === "id"
       ) {
+
         identityColumns.push(
           c
         );
+
       }
 
     }
@@ -2673,14 +2771,14 @@ function analyzeSheet(
           ).toLowerCase();
 
         if (
-          !valueMap.has(
-            key
-          )
+          !valueMap.has(key)
         ) {
+
           valueMap.set(
             key,
             []
           );
+
         }
 
         valueMap.get(
@@ -2707,9 +2805,12 @@ function analyzeSheet(
         result.potentialDuplicates.push({
           rows:
             rowNumbers,
+
           column:
             headers[c],
+
           value
+
         });
 
       }
@@ -2717,6 +2818,10 @@ function analyzeSheet(
     }
 
   }
+
+  /* =======================================================
+     EMPTY COLUMNS
+  ======================================================= */
 
   for (
     let c = 0;
@@ -2745,6 +2850,10 @@ function analyzeSheet(
     }
 
   }
+
+  /* =======================================================
+     COLUMN STATS
+  ======================================================= */
 
   for (
     let c = 0;
@@ -2790,11 +2899,14 @@ function analyzeSheet(
     result.columnStats.push({
       header:
         headers[c],
+
       type:
         columnTypes[c],
+
       filled,
       missing,
       unique
+
     });
 
   }
@@ -2826,9 +2938,11 @@ function cleanValue(
     if (
       type === "Date"
     ) {
+
       return formatISODate(
         value
       );
+
     }
 
     return excelSerialFromDate(
@@ -2850,11 +2964,13 @@ function cleanValue(
   ) {
 
     case "Email":
+
       return normalizeEmail(
         value
       );
 
     case "Phone":
+
       return standardizePhone(
         value
       );
@@ -2867,7 +2983,9 @@ function cleanValue(
           true
         );
 
-      if (parsed) {
+      if (
+        parsed
+      ) {
 
         return formatISODate(
           value,
@@ -2888,7 +3006,9 @@ function cleanValue(
           [value]
         );
 
-      if (domain) {
+      if (
+        domain
+      ) {
 
         return getCategoryStandard(
           value,
@@ -2908,7 +3028,9 @@ function cleanValue(
       if (
         typeof value === "number"
       ) {
+
         return value;
+
       }
 
       const text =
@@ -2922,9 +3044,11 @@ function cleanValue(
             text
           )
       ) {
+
         return Number(
           text
         );
+
       }
 
       return value;
@@ -2932,6 +3056,7 @@ function cleanValue(
     }
 
     default:
+
       return (
         typeof value === "string"
           ? value.trim()
@@ -3030,6 +3155,7 @@ function cleanSheet(
       ) {
 
         blankRowsRemoved++;
+
         return;
 
       }
@@ -3039,7 +3165,9 @@ function cleanSheet(
           originalRowNumber
         )
       ) {
+
         return;
+
       }
 
       const cleanedRow =
@@ -3467,9 +3595,15 @@ function renderChecks(
   const formulaItems =
     result.formulas.map(
       item => ({
-        row: item.row,
-        column: item.column,
-        value: item.value
+        row:
+          item.row,
+
+        column:
+          item.column,
+
+        value:
+          item.value
+
       })
     );
 
@@ -3529,16 +3663,17 @@ function renderChecks(
           item => ({
             row:
               item.row,
+
             column:
               item.column
+
           })
         )
     )
   );
 
   if (
-    result.missing.length >
-    100
+    result.missing.length > 100
   ) {
 
     const note =
@@ -4019,9 +4154,6 @@ async function processFile(
       "hidden"
     );
 
-    /*
-     * Upload is complete, but cleaning has not happened yet.
-     */
     document.getElementById(
       "successMessage"
     ).textContent =
@@ -4033,7 +4165,9 @@ async function processFile(
       "hidden"
     );
 
-  } catch (error) {
+  } catch (
+    error
+  ) {
 
     console.error(
       error
