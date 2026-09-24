@@ -79,6 +79,7 @@
       margin-top: 14px;
       color: #475467;
       font-size: 14px;
+      word-break: break-word;
     }
 
     .success {
@@ -88,6 +89,18 @@
       color: #027a48;
       margin-top: 18px;
       font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .error-message {
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: #fef3f2;
+      color: #b42318;
+      border: 1px solid #fecdca;
+      margin-top: 18px;
+      font-weight: 600;
+      line-height: 1.5;
     }
 
     .privacy-note {
@@ -105,6 +118,47 @@
     .privacy-title {
       font-weight: 700;
       margin-bottom: 4px;
+    }
+
+    .file-info {
+      margin-top: 14px;
+      padding: 14px 15px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    .file-info-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #344054;
+    }
+
+    .file-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .file-info-item {
+      padding: 10px;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid #eaecf0;
+    }
+
+    .file-info-label {
+      font-size: 12px;
+      color: #667085;
+      margin-bottom: 4px;
+    }
+
+    .file-info-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+      word-break: break-word;
     }
 
     .section-title {
@@ -328,7 +382,10 @@
   </div>
 
   <div class="card">
-    <h2 class="section-title">Upload your spreadsheet</h2>
+
+    <h2 class="section-title">
+      Upload your spreadsheet
+    </h2>
 
     <div class="upload-box" id="dropZone">
 
@@ -342,6 +399,7 @@
 
       <label class="upload-button">
         Choose Spreadsheet
+
         <input
           type="file"
           id="fileInput"
@@ -358,6 +416,7 @@
       </div>
 
       <div class="privacy-note">
+
         <div class="privacy-title">
           🔒 Privacy first
         </div>
@@ -366,12 +425,82 @@
           Your spreadsheet is processed directly in your browser.
           This page does not upload your spreadsheet to a server.
         </div>
+
       </div>
 
     </div>
 
-    <div id="successMessage" class="success hidden">
-      Spreadsheet loaded successfully. Review the results below, then click Clean Spreadsheet.
+    <div
+      id="successMessage"
+      class="success hidden"
+    >
+      Spreadsheet loaded successfully.
+      Review the results below, then click Clean Spreadsheet.
+    </div>
+
+    <div
+      id="errorMessage"
+      class="error-message hidden"
+    ></div>
+
+    <div
+      id="fileInfo"
+      class="file-info hidden"
+    >
+
+      <div class="file-info-title">
+        File Details
+      </div>
+
+      <div class="file-info-grid">
+
+        <div class="file-info-item">
+
+          <div class="file-info-label">
+            File Name
+          </div>
+
+          <div
+            class="file-info-value"
+            id="infoFileName"
+          >
+            -
+          </div>
+
+        </div>
+
+        <div class="file-info-item">
+
+          <div class="file-info-label">
+            File Size
+          </div>
+
+          <div
+            class="file-info-value"
+            id="infoFileSize"
+          >
+            -
+          </div>
+
+        </div>
+
+        <div class="file-info-item">
+
+          <div class="file-info-label">
+            Worksheets
+          </div>
+
+          <div
+            class="file-info-value"
+            id="infoSheets"
+          >
+            -
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
   </div>
@@ -379,89 +508,188 @@
   <div id="results" class="hidden">
 
     <div class="card">
-      <h2 class="section-title">Worksheet</h2>
+
+      <h2 class="section-title">
+        Worksheet
+      </h2>
 
       <select id="sheetSelector"></select>
+
     </div>
 
     <div class="card">
-      <h2 class="section-title">Overview</h2>
+
+      <h2 class="section-title">
+        Overview
+      </h2>
 
       <div class="stats">
 
         <div class="stat">
-          <div class="stat-label">Rows</div>
-          <div class="stat-value" id="statRows">0</div>
+          <div class="stat-label">
+            Rows
+          </div>
+          <div
+            class="stat-value"
+            id="statRows"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Columns</div>
-          <div class="stat-value" id="statColumns">0</div>
+          <div class="stat-label">
+            Columns
+          </div>
+          <div
+            class="stat-value"
+            id="statColumns"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Duplicate Rows</div>
-          <div class="stat-value" id="statDuplicates">0</div>
+          <div class="stat-label">
+            Duplicate Rows
+          </div>
+          <div
+            class="stat-value"
+            id="statDuplicates"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Potential Duplicates</div>
-          <div class="stat-value" id="statPotential">0</div>
+          <div class="stat-label">
+            Potential Duplicates
+          </div>
+          <div
+            class="stat-value"
+            id="statPotential"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Missing Values</div>
-          <div class="stat-value" id="statMissing">0</div>
+          <div class="stat-label">
+            Missing Values
+          </div>
+          <div
+            class="stat-value"
+            id="statMissing"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Invalid Emails</div>
-          <div class="stat-value" id="statEmails">0</div>
+          <div class="stat-label">
+            Invalid Emails
+          </div>
+          <div
+            class="stat-value"
+            id="statEmails"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Invalid Phones</div>
-          <div class="stat-value" id="statPhones">0</div>
+          <div class="stat-label">
+            Invalid Phones
+          </div>
+          <div
+            class="stat-value"
+            id="statPhones"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Detected Dates</div>
-          <div class="stat-value" id="statDates">0</div>
+          <div class="stat-label">
+            Detected Dates
+          </div>
+          <div
+            class="stat-value"
+            id="statDates"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Formulas</div>
-          <div class="stat-value" id="statFormulas">0</div>
+          <div class="stat-label">
+            Formulas
+          </div>
+          <div
+            class="stat-value"
+            id="statFormulas"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Errors</div>
-          <div class="stat-value" id="statErrors">0</div>
+          <div class="stat-label">
+            Errors
+          </div>
+          <div
+            class="stat-value"
+            id="statErrors"
+          >
+            0
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-label">Empty Columns</div>
-          <div class="stat-value" id="statEmptyColumns">0</div>
+          <div class="stat-label">
+            Empty Columns
+          </div>
+          <div
+            class="stat-value"
+            id="statEmptyColumns"
+          >
+            0
+          </div>
         </div>
 
       </div>
+
     </div>
 
     <div class="card">
-      <h2 class="section-title">Data Checks</h2>
+
+      <h2 class="section-title">
+        Data Checks
+      </h2>
+
       <div id="checks"></div>
+
     </div>
 
     <div class="card">
-      <h2 class="section-title">Column Types</h2>
+
+      <h2 class="section-title">
+        Column Types
+      </h2>
 
       <div class="table-wrap">
+
         <table id="typesTable"></table>
+
       </div>
+
     </div>
 
     <div class="card">
-      <h2 class="section-title">Clean Spreadsheet</h2>
+
+      <h2 class="section-title">
+        Clean Spreadsheet
+      </h2>
 
       <div class="buttons">
 
@@ -496,9 +724,11 @@
         </button>
 
       </div>
+
     </div>
 
     <div class="card">
+
       <h2 class="section-title">
         Cleaning Summary
       </h2>
@@ -508,21 +738,29 @@
         id="summary"
       ></div>
 
-      <div class="note" id="summaryNote">
+      <div
+        class="note"
+        id="summaryNote"
+      >
         The summary shows the changes made to the selected worksheet.
         Duplicate rows and blank rows are removed, while invalid values
         are preserved for review rather than silently deleted.
       </div>
+
     </div>
 
     <div class="card">
+
       <h2 class="section-title">
         Cleaned Preview
       </h2>
 
       <div class="table-wrap">
+
         <table id="previewTable"></table>
+
       </div>
+
     </div>
 
   </div>
@@ -632,12 +870,19 @@ const STRONG_HEADER_WORDS = [
   "error"
 ];
 
+const SUPPORTED_EXTENSIONS =
+  [".xlsx", ".xls", ".csv"];
+
 let workbook = null;
 let workbookResults = {};
 let currentSheetName = null;
 let currentAnalysis = null;
 let currentCleaned = null;
 let originalFileName = "cleaned.xlsx";
+
+/* =========================================================
+   DOM REFERENCES
+========================================================= */
 
 const fileInput =
   document.getElementById(
@@ -659,6 +904,11 @@ const successMessage =
     "successMessage"
   );
 
+const errorMessage =
+  document.getElementById(
+    "errorMessage"
+  );
+
 const loadingMessage =
   document.getElementById(
     "loading"
@@ -667,6 +917,26 @@ const loadingMessage =
 const fileNameDisplay =
   document.getElementById(
     "fileName"
+  );
+
+const fileInfo =
+  document.getElementById(
+    "fileInfo"
+  );
+
+const infoFileName =
+  document.getElementById(
+    "infoFileName"
+  );
+
+const infoFileSize =
+  document.getElementById(
+    "infoFileSize"
+  );
+
+const infoSheets =
+  document.getElementById(
+    "infoSheets"
   );
 
 const sheetSelector =
@@ -785,7 +1055,7 @@ dropZone.addEventListener(
 );
 
 /* =========================================================
-   BASIC HELPERS
+   GENERAL HELPERS
 ========================================================= */
 
 function isBlank(value) {
@@ -819,7 +1089,9 @@ function cleanString(value) {
 
 }
 
-function isSpreadsheetError(value) {
+function isSpreadsheetError(
+  value
+) {
 
   if (
     value === null ||
@@ -841,11 +1113,160 @@ function isSpreadsheetError(value) {
 
 }
 
+function getFileExtension(
+  fileName
+) {
+
+  const lower =
+    String(fileName)
+      .toLowerCase();
+
+  const lastDot =
+    lower.lastIndexOf(".");
+
+  if (
+    lastDot === -1
+  ) {
+
+    return "";
+
+  }
+
+  return lower.slice(
+    lastDot
+  );
+
+}
+
+function isSupportedFile(
+  file
+) {
+
+  return SUPPORTED_EXTENSIONS
+    .includes(
+      getFileExtension(
+        file.name
+      )
+    );
+
+}
+
+function formatFileSize(
+  bytes
+) {
+
+  if (
+    !Number.isFinite(bytes) ||
+    bytes < 0
+  ) {
+
+    return "Unknown";
+
+  }
+
+  if (
+    bytes === 0
+  ) {
+
+    return "0 bytes";
+
+  }
+
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+  const exponent =
+    Math.min(
+      Math.floor(
+        Math.log(bytes) /
+        Math.log(1024)
+      ),
+      units.length - 1
+    );
+
+  const value =
+    bytes /
+    Math.pow(
+      1024,
+      exponent
+    );
+
+  return (
+    exponent === 0
+      ? `${value} ${units[exponent]}`
+      : `${value.toFixed(2)} ${units[exponent]}`
+  );
+
+}
+
+function showError(
+  message
+) {
+
+  errorMessage.textContent =
+    message;
+
+  errorMessage.classList.remove(
+    "hidden"
+  );
+
+}
+
+function clearMessages() {
+
+  errorMessage.textContent =
+    "";
+
+  errorMessage.classList.add(
+    "hidden"
+  );
+
+  successMessage.textContent =
+    "";
+
+  successMessage.classList.add(
+    "hidden"
+  );
+
+}
+
+function showFileInfo(
+  file
+) {
+
+  infoFileName.textContent =
+    file.name;
+
+  infoFileSize.textContent =
+    formatFileSize(
+      file.size
+    );
+
+  infoSheets.textContent =
+    workbook &&
+    workbook.SheetNames
+      ? String(
+          workbook.SheetNames.length
+        )
+      : "0";
+
+  fileInfo.classList.remove(
+    "hidden"
+  );
+
+}
+
 /* =========================================================
    EMAIL
 ========================================================= */
 
-function normalizeEmail(value) {
+function normalizeEmail(
+  value
+) {
 
   if (
     isBlank(value)
@@ -861,7 +1282,9 @@ function normalizeEmail(value) {
 
 }
 
-function isValidEmail(value) {
+function isValidEmail(
+  value
+) {
 
   if (
     isBlank(value)
@@ -889,7 +1312,9 @@ function isValidEmail(value) {
 
 }
 
-function looksEmailLike(value) {
+function looksEmailLike(
+  value
+) {
 
   if (
     isBlank(value)
@@ -914,7 +1339,9 @@ function looksEmailLike(value) {
    PHONE
 ========================================================= */
 
-function phoneDigits(value) {
+function phoneDigits(
+  value
+) {
 
   if (
     isBlank(value)
@@ -932,7 +1359,9 @@ function phoneDigits(value) {
 
 }
 
-function isValidPhone(value) {
+function isValidPhone(
+  value
+) {
 
   if (
     isBlank(value)
@@ -988,7 +1417,9 @@ function isValidPhone(value) {
 
 }
 
-function looksPhoneLike(value) {
+function looksPhoneLike(
+  value
+) {
 
   if (
     isBlank(value)
@@ -1023,20 +1454,16 @@ function looksPhoneLike(value) {
   const digits =
     phoneDigits(text);
 
-  if (
+  return (
     digits.length >= 7 &&
     digits.length <= 15
-  ) {
-
-    return true;
-
-  }
-
-  return false;
+  );
 
 }
 
-function standardizePhone(value) {
+function standardizePhone(
+  value
+) {
 
   if (
     isBlank(value)
@@ -2837,6 +3264,7 @@ function analyzeSheet(
 
               formula:
                 cell.f
+
             });
 
           }
@@ -2851,6 +3279,7 @@ function analyzeSheet(
 
               column:
                 header
+
             });
 
             return;
@@ -2874,6 +3303,7 @@ function analyzeSheet(
                 cleanString(
                   value
                 )
+
             });
 
             return;
@@ -2901,6 +3331,7 @@ function analyzeSheet(
                   cleanString(
                     value
                   )
+
               });
 
             }
@@ -2928,6 +3359,7 @@ function analyzeSheet(
                   cleanString(
                     value
                   )
+
               });
 
             }
@@ -2963,6 +3395,7 @@ function analyzeSheet(
                     value,
                     true
                   )
+
               });
 
             }
@@ -3233,6 +3666,7 @@ function analyzeSheet(
       filled,
       missing,
       unique
+
     });
 
   }
@@ -4401,13 +4835,80 @@ async function processFile(
   file
 ) {
 
+  clearMessages();
+
+  fileInfo.classList.add(
+    "hidden"
+  );
+
+  resultsSection.classList.add(
+    "hidden"
+  );
+
+  summaryContainer.innerHTML =
+    "";
+
+  previewTable.innerHTML =
+    "";
+
+  typesTable.innerHTML =
+    "";
+
+  checksContainer.innerHTML =
+    "";
+
+  currentCleaned =
+    null;
+
+  exportXlsxButton.disabled =
+    true;
+
+  exportCsvButton.disabled =
+    true;
+
+  /*
+   * Validate file extension first.
+   */
+  if (
+    !isSupportedFile(
+      file
+    )
+  ) {
+
+    showError(
+      "Unsupported file type. Please choose an XLSX, XLS or CSV spreadsheet."
+    );
+
+    fileNameDisplay.textContent =
+      "No valid file selected";
+
+    return;
+
+  }
+
+  /*
+   * Reject an empty file before SheetJS attempts
+   * to process it.
+   */
+  if (
+    !file.size ||
+    file.size <= 0
+  ) {
+
+    showError(
+      "This file is empty. Please choose a spreadsheet that contains data."
+    );
+
+    fileNameDisplay.textContent =
+      `Selected: ${file.name}`;
+
+    return;
+
+  }
+
   try {
 
     loadingMessage.classList.remove(
-      "hidden"
-    );
-
-    successMessage.classList.add(
       "hidden"
     );
 
@@ -4420,6 +4921,17 @@ async function processFile(
     const buffer =
       await file.arrayBuffer();
 
+    if (
+      !buffer ||
+      buffer.byteLength === 0
+    ) {
+
+      throw new Error(
+        "The spreadsheet contains no readable data."
+      );
+
+    }
+
     workbook =
       XLSX.read(
         buffer,
@@ -4429,6 +4941,18 @@ async function processFile(
           cellFormula: true
         }
       );
+
+    if (
+      !workbook ||
+      !workbook.SheetNames ||
+      !workbook.SheetNames.length
+    ) {
+
+      throw new Error(
+        "No worksheets were found in this spreadsheet."
+      );
+
+    }
 
     workbookResults = {};
     currentCleaned = null;
@@ -4462,6 +4986,10 @@ async function processFile(
     sheetSelector.value =
       currentSheetName;
 
+    showFileInfo(
+      file
+    );
+
     analyzeCurrentSheet();
 
     resultsSection.classList.remove(
@@ -4483,8 +5011,35 @@ async function processFile(
       error
     );
 
-    alert(
-      "Unable to process this spreadsheet. Please check that the file is a valid XLSX, XLS or CSV file."
+    workbook = null;
+
+    workbookResults = {};
+
+    currentSheetName = null;
+
+    currentAnalysis = null;
+
+    currentCleaned = null;
+
+    resultsSection.classList.add(
+      "hidden"
+    );
+
+    fileInfo.classList.add(
+      "hidden"
+    );
+
+    exportXlsxButton.disabled =
+      true;
+
+    exportCsvButton.disabled =
+      true;
+
+    showError(
+      error &&
+      error.message
+        ? `Unable to process this spreadsheet: ${error.message}`
+        : "Unable to process this spreadsheet. Please check that the file is valid."
     );
 
   } finally {
@@ -4498,6 +5053,15 @@ async function processFile(
 }
 
 function analyzeCurrentSheet() {
+
+  if (
+    !workbook ||
+    !currentSheetName
+  ) {
+
+    return;
+
+  }
 
   currentAnalysis =
     analyzeSheet(
@@ -4553,6 +5117,10 @@ sheetSelector.addEventListener(
     successMessage.textContent =
       "Worksheet loaded successfully. Review the results below, then click Clean Spreadsheet.";
 
+    successMessage.classList.remove(
+      "hidden"
+    );
+
   }
 );
 
@@ -4593,6 +5161,10 @@ cleanButton.addEventListener(
       "hidden"
     );
 
+    errorMessage.classList.add(
+      "hidden"
+    );
+
     exportXlsxButton.disabled =
       false;
 
@@ -4611,13 +5183,20 @@ resetButton.addEventListener(
   function() {
 
     workbook = null;
-    workbookResults = {};
-    currentSheetName = null;
-    currentAnalysis = null;
-    currentCleaned = null;
-    originalFileName = "cleaned.xlsx";
 
-    fileInput.value = "";
+    workbookResults = {};
+
+    currentSheetName = null;
+
+    currentAnalysis = null;
+
+    currentCleaned = null;
+
+    originalFileName =
+      "cleaned.xlsx";
+
+    fileInput.value =
+      "";
 
     fileNameDisplay.textContent =
       "No file selected";
@@ -4626,7 +5205,9 @@ resetButton.addEventListener(
       "hidden"
     );
 
-    successMessage.classList.add(
+    clearMessages();
+
+    fileInfo.classList.add(
       "hidden"
     );
 
@@ -4672,7 +5253,8 @@ exportXlsxButton.addEventListener(
   function() {
 
     if (
-      !currentCleaned
+      !currentCleaned ||
+      !workbook
     ) {
 
       return;
