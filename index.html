@@ -399,48 +399,6 @@
       background: #fff;
     }
 
-    .check-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .check-name {
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .check-value {
-      margin-top: 9px;
-      font-size: 23px;
-      font-weight: 800;
-      line-height: 1.1;
-    }
-
-    .check-desc {
-      margin-top: 6px;
-      color: #7a8594;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .status-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #bec6d1;
-      flex: 0 0 auto;
-    }
-
-    .status-dot.good {
-      background: #3c9d64;
-    }
-
-    .status-dot.issue {
-      background: #d65145;
-    }
-
     .details-box {
       border: 1px solid #e6ebf1;
       border-radius: 13px;
@@ -739,10 +697,6 @@
       display: none !important;
     }
 
-    .danger-text {
-      color: var(--red);
-    }
-
     .muted {
       color: #7b8594;
     }
@@ -892,7 +846,6 @@
       </div>
 
       <div id="actionBar" class="action-bar hidden">
-
         <button id="cleanBtn" class="btn-dark">
           ✨ Clean Spreadsheet
         </button>
@@ -908,20 +861,16 @@
         <button id="startOverBtn" class="btn-soft">
           ↻ Start Over
         </button>
-
       </div>
 
       <div id="successMessage" class="notice success hidden"></div>
-
       <div id="errorMessage" class="notice error hidden"></div>
     </section>
 
     <section id="fileInfo" class="section hidden">
-
       <div class="section-header">
         <div>
           <h2 class="section-title">File Details</h2>
-
           <p class="section-description">
             Basic information about the spreadsheet you selected.
           </p>
@@ -929,7 +878,6 @@
       </div>
 
       <div class="file-info-grid">
-
         <div class="file-info-item">
           <span class="file-info-label">File Name</span>
           <span id="infoFileName" class="file-info-value">—</span>
@@ -944,16 +892,13 @@
           <span class="file-info-label">Worksheets</span>
           <span id="infoSheets" class="file-info-value">—</span>
         </div>
-
       </div>
     </section>
 
     <section id="worksheetSection" class="section hidden">
-
       <div class="section-header">
         <div>
           <h2 class="section-title">Worksheet</h2>
-
           <p class="section-description">
             Choose which sheet to inspect and clean.
           </p>
@@ -962,17 +907,14 @@
 
       <div class="worksheet-bar">
         <label for="sheetSelect">Current sheet</label>
-
         <select id="sheetSelect"></select>
       </div>
     </section>
 
     <section id="overviewSection" class="section hidden">
-
       <div class="section-header">
         <div>
           <h2 class="section-title">Overview</h2>
-
           <p class="section-description">
             Detected data-quality signals in the selected worksheet.
           </p>
@@ -980,7 +922,6 @@
       </div>
 
       <div class="stats-grid">
-
         <div class="stat-card">
           <div class="stat-label">Rows</div>
           <div id="statRows" class="stat-value">0</div>
@@ -1046,16 +987,13 @@
           <div id="statEmptyColumns" class="stat-value">0</div>
           <div class="stat-sub">Columns with no data</div>
         </div>
-
       </div>
     </section>
 
     <section id="checksSection" class="section hidden">
-
       <div class="section-header">
         <div>
           <h2 class="section-title">Data Checks</h2>
-
           <p class="section-description">
             Detailed findings from the selected worksheet.
           </p>
@@ -1103,11 +1041,9 @@
     </section>
 
     <section id="typesSection" class="section hidden">
-
       <div class="section-header">
         <div>
           <h2 class="section-title">Column Types</h2>
-
           <p class="section-description">
             Best-effort detection of the data type in each worksheet column.
           </p>
@@ -1132,11 +1068,9 @@
     </section>
 
     <section id="detailsSection" class="section hidden">
-
       <div class="section-header">
         <div>
           <h2 class="section-title">Validation Details</h2>
-
           <p class="section-description">
             File and automatically detected contact columns.
           </p>
@@ -1183,7 +1117,6 @@
       <div class="section-header">
         <div>
           <h2 class="section-title">Cleaning Summary</h2>
-
           <p class="section-description">
             A simple before-and-after view of what changed in your spreadsheet.
           </p>
@@ -1275,6 +1208,7 @@
         Invalid emails, phone numbers, dates and spreadsheet errors are
         preserved for review rather than silently deleted. Duplicate and
         completely blank rows/columns may be removed during cleaning.
+        Formula cells are preserved in XLSX exports.
       </div>
 
       <div class="summary-actions">
@@ -1359,6 +1293,7 @@
     </section>
 
     <div id="emptyState" class="empty-state">
+
       <div class="big">📁</div>
 
       <strong>Upload a spreadsheet to begin</strong>
@@ -1366,6 +1301,7 @@
       <div style="margin-top:6px;">
         Your file is analyzed directly in your browser.
       </div>
+
     </div>
 
   </main>
@@ -1717,19 +1653,6 @@
         );
     }
 
-    /*
-      FIXED HEADER DETECTION
-
-      We no longer treat every multi-word value as "data".
-      This allows real headers such as:
-
-      - Date of Birth
-      - Account Status
-      - Customer Name
-      - Completely Empty Column
-
-      to be correctly recognized as headers.
-    */
     function headerLooksLikeData(value) {
       const v =
         String(value ?? "").trim();
@@ -2014,7 +1937,9 @@
       }
 
       const digits =
-        extractPhoneDigits(phone);
+        extractPhoneDigits(
+          phone
+        );
 
       return (
         digits.length >= 7 &&
@@ -2196,9 +2121,7 @@
     }
 
     function isDateLike(value) {
-      return !!parseDateValue(
-        value
-      );
+      return !!parseDateValue(value);
     }
 
     function isLikelyNumber(value) {
@@ -2322,7 +2245,9 @@
           continue;
         }
 
-        if (type === "email") {
+        if (
+          type === "email"
+        ) {
           const emailLike =
             values.filter(
               value =>
@@ -2342,19 +2267,13 @@
             bestIndex = c;
           }
         } else {
+
           const phoneLike =
             values.filter(
-              value => {
-                if (
-                  isDateLike(value)
-                ) {
-                  return false;
-                }
-
-                return isValidPhone(
+              value =>
+                isValidPhone(
                   value
-                );
-              }
+                )
             ).length;
 
           const score =
@@ -2586,9 +2505,7 @@
       return "Text";
     }
 
-    function getFormulaMap(
-      worksheet
-    ) {
+    function getFormulaMap(worksheet) {
       const map =
         new Map();
 
@@ -2636,6 +2553,43 @@
       }
 
       return map;
+    }
+
+    function getFormulaAt(
+      worksheet,
+      rowIndex,
+      columnIndex
+    ) {
+      if (
+        !worksheet
+      ) {
+        return null;
+      }
+
+      const address =
+        XLSX.utils.encode_cell({
+          r: rowIndex,
+          c: columnIndex
+        });
+
+      const cell =
+        worksheet[address];
+
+      if (
+        cell &&
+        cell.f
+      ) {
+        return {
+          formula:
+            String(cell.f),
+          value:
+            cell.v,
+          type:
+            cell.t
+        };
+      }
+
+      return null;
     }
 
     function countMissingValues(
@@ -2818,7 +2772,9 @@
 
               rows.forEach(
                 r =>
-                  participatingRows.add(r)
+                  participatingRows.add(
+                    r
+                  )
               );
             }
           }
@@ -2856,7 +2812,13 @@
           emailIndex: -1,
           phoneIndex: -1,
           headerRowIndex: 0,
-          missingList: []
+          missingList: [],
+          missingByColumn: [],
+          emailIssues: [],
+          phoneIssues: [],
+          potentialGroups: [],
+          whitespaceCells: 0,
+          headerDetected: false
         };
       }
 
@@ -2882,7 +2844,9 @@
 
       const columnCount =
         Math.max(
-          getColumnCount(rawRows),
+          getColumnCount(
+            rawRows
+          ),
           headers.length
         );
 
@@ -2929,9 +2893,23 @@
               ).trim()
             : "";
 
+        const emailFormula =
+          emailIndex >= 0
+            ? getFormulaAt(
+                worksheet,
+                (
+                  headerRowIndex >= 0
+                    ? headerRowIndex + 1 + r
+                    : r
+                ),
+                emailIndex
+              )
+            : null;
+
         if (
           emailIndex >= 0 &&
           emailValue &&
+          !emailFormula &&
           !isValidEmail(
             emailValue
           )
@@ -2955,9 +2933,23 @@
               ).trim()
             : "";
 
+        const phoneFormula =
+          phoneIndex >= 0
+            ? getFormulaAt(
+                worksheet,
+                (
+                  headerRowIndex >= 0
+                    ? headerRowIndex + 1 + r
+                    : r
+                ),
+                phoneIndex
+              )
+            : null;
+
         if (
           phoneIndex >= 0 &&
           phoneValue &&
+          !phoneFormula &&
           !isValidPhone(
             phoneValue
           )
@@ -2978,6 +2970,24 @@
           c < columnCount;
           c++
         ) {
+          const rawRowIndex =
+            headerRowIndex >= 0
+              ? headerRowIndex + 1 + r
+              : r;
+
+          const formulaInfo =
+            getFormulaAt(
+              worksheet,
+              rawRowIndex,
+              c
+            );
+
+          if (
+            formulaInfo
+          ) {
+            continue;
+          }
+
           if (
             !isEmptyCell(
               dataRows[r][c]
@@ -3080,11 +3090,6 @@
         }
       }
 
-      const formulaMap =
-        getFormulaMap(
-          worksheet
-        );
-
       const formulas = [];
       const errors = [];
 
@@ -3146,7 +3151,9 @@
                   cell.v ??
                   "",
                 formula:
-                  cell.f
+                  String(
+                    cell.f
+                  )
               });
             }
           }
@@ -3164,6 +3171,24 @@
               String(
                 row[c] ?? ""
               ).trim();
+
+            const rawRowIndex =
+              headerRowIndex >= 0
+                ? headerRowIndex + 1 + r
+                : r;
+
+            const formulaInfo =
+              getFormulaAt(
+                worksheet,
+                rawRowIndex,
+                c
+              );
+
+            if (
+              formulaInfo
+            ) {
+              continue;
+            }
 
             if (
               isErrorValue(value)
@@ -3347,19 +3372,46 @@
         ...before.headers
       ];
 
-      const rawDataRows =
-        before.dataRows.filter(
-          row =>
-            !isEmptyRow(row)
+      const dataStartRawIndex =
+        before.headerRowIndex >= 0
+          ? before.headerRowIndex + 1
+          : 0;
+
+      const sourceDataRows =
+        rawRows
+          .slice(
+            dataStartRawIndex
+          )
+          .map(
+            (row, relativeIndex) => ({
+              row,
+              sourceRowIndex:
+                dataStartRawIndex +
+                relativeIndex
+            })
+          );
+
+      const nonBlankSourceRows =
+        sourceDataRows.filter(
+          item =>
+            !isEmptyRow(
+              item.row
+            )
         );
 
       const blankRowsRemoved =
-        before.dataRows.length -
-        rawDataRows.length;
+        sourceDataRows.length -
+        nonBlankSourceRows.length;
+
+      const nonBlankRows =
+        nonBlankSourceRows.map(
+          item =>
+            item.row
+        );
 
       const emptyColumnIndexes =
         getEmptyColumnIndexes(
-          rawDataRows,
+          nonBlankRows,
           originalColumnCount
         );
 
@@ -3370,6 +3422,11 @@
 
       const cleanedHeaders = [];
 
+      const originalToCleanedColumn =
+        Array(
+          originalColumnCount
+        ).fill(-1);
+
       for (
         let c = 0;
         c < originalColumnCount;
@@ -3378,6 +3435,9 @@
         if (
           !emptySet.has(c)
         ) {
+          originalToCleanedColumn[c] =
+            cleanedHeaders.length;
+
           cleanedHeaders.push(
             headers[c] ||
             `Column ${c + 1}`
@@ -3386,6 +3446,8 @@
       }
 
       const cleanedDataRows = [];
+      const sourceRows = [];
+
       const seen =
         new Set();
 
@@ -3396,8 +3458,14 @@
       let categoriesStandardized = 0;
 
       for (
-        const row of rawDataRows
+        const sourceItem of nonBlankSourceRows
       ) {
+        const row =
+          sourceItem.row;
+
+        const sourceRowIndex =
+          sourceItem.sourceRowIndex;
+
         const newRow = [];
 
         for (
@@ -3418,13 +3486,39 @@
           let value =
             row[c] ?? "";
 
+          /*
+            FORMULA PROTECTION
+
+            Formula cells are never passed through
+            email, phone, date or category cleaning.
+            The original formula is restored during
+            XLSX export.
+          */
+          const formulaInfo =
+            getFormulaAt(
+              worksheet,
+              sourceRowIndex,
+              c
+            );
+
+          if (
+            formulaInfo
+          ) {
+            newRow.push(
+              value
+            );
+
+            continue;
+          }
+
           const originalValue =
             String(
               value ?? ""
             ).trim();
 
           if (
-            typeof value === "string"
+            typeof value ===
+            "string"
           ) {
             value =
               value.trim();
@@ -3529,7 +3623,9 @@
           value =
             categorical;
 
-          newRow.push(value);
+          newRow.push(
+            value
+          );
         }
 
         const key =
@@ -3548,6 +3644,10 @@
 
         cleanedDataRows.push(
           newRow
+        );
+
+        sourceRows.push(
+          sourceRowIndex
         );
       }
 
@@ -3579,21 +3679,33 @@
 
       return {
         rows: cleaned,
+
         rowsBefore,
         rowsAfter,
+
         columnsBefore,
         columnsAfter,
+
         blankRowsRemoved,
+
         duplicateRowsRemoved,
+
         emailsNormalized,
         phonesStandardized,
         datesStandardized,
         categoriesStandardized,
+
         emptyColumnsRemoved:
           emptyColumnIndexes.length,
+
         totalChanges,
+
         analysisBefore:
-          before
+          before,
+
+        sourceRows,
+
+        originalToCleanedColumn
       };
     }
 
@@ -3629,7 +3741,9 @@
           div.innerHTML =
             formatter(item);
 
-          el.appendChild(div);
+          el.appendChild(
+            div
+          );
         }
       );
     }
@@ -3766,7 +3880,9 @@
               "report-row";
 
             const percent =
-              item.percent.toFixed(1);
+              item.percent.toFixed(
+                1
+              );
 
             const level =
               item.percent >= 50
@@ -4361,6 +4477,12 @@
           result.totalChanges
         }`,
         "",
+        "FORMULAS",
+        `Formula Cells Detected: ${
+          currentAnalysis?.formulas?.length || 0
+        }`,
+        "Formula cells are preserved in XLSX exports.",
+        "",
         "REVIEW NOTE",
         "Invalid emails, phone numbers, dates and spreadsheet errors",
         "are preserved for review rather than silently deleted.",
@@ -4530,9 +4652,12 @@
         );
 
       if (explanation) {
+
         const parts = [];
 
-        if (rowsRemoved > 0) {
+        if (
+          rowsRemoved > 0
+        ) {
           parts.push(
             `${rowsRemoved} row${
               rowsRemoved === 1
@@ -4542,7 +4667,9 @@
           );
         }
 
-        if (columnsRemoved > 0) {
+        if (
+          columnsRemoved > 0
+        ) {
           parts.push(
             `${columnsRemoved} column${
               columnsRemoved === 1
@@ -4980,7 +5107,9 @@
         );
 
         showSuccess(
-          `Cleaning completed successfully. ${cleanedResult.totalChanges} change(s) were recorded in the selected worksheet.`
+          `Cleaning completed successfully. ${cleanedResult.totalChanges} change(s) were recorded in the selected worksheet. Formula cells detected: ${
+            currentAnalysis?.formulas?.length || 0
+          }.`
         );
 
       } catch (error) {
@@ -4990,6 +5119,128 @@
         showError(
           `Cleaning could not be completed: ${error.message}`
         );
+      }
+    }
+
+    /*
+      Restore original formulas into a cleaned XLSX sheet.
+
+      This uses the mapping returned by cleanRows():
+      - sourceRows
+      - originalToCleanedColumn
+
+      The formula itself comes directly from the original worksheet,
+      so cleaning does not alter the formula expression.
+    */
+    function restoreFormulasInCleanedSheet(
+      cleanedSheet,
+      sourceWorkbookSheet,
+      result
+    ) {
+      if (
+        !cleanedSheet ||
+        !sourceWorkbookSheet ||
+        !result
+      ) {
+        return;
+      }
+
+      const sourceRows =
+        result.sourceRows || [];
+
+      const columnMap =
+        result.originalToCleanedColumn || [];
+
+      for (
+        let outputDataIndex = 0;
+        outputDataIndex < sourceRows.length;
+        outputDataIndex++
+      ) {
+        const sourceRowIndex =
+          sourceRows[
+            outputDataIndex
+          ];
+
+        const outputRowIndex =
+          outputDataIndex + 1;
+
+        for (
+          let originalCol = 0;
+          originalCol < columnMap.length;
+          originalCol++
+        ) {
+          const cleanedCol =
+            columnMap[originalCol];
+
+          if (
+            cleanedCol < 0
+          ) {
+            continue;
+          }
+
+          const sourceCellAddress =
+            XLSX.utils.encode_cell({
+              r: sourceRowIndex,
+              c: originalCol
+            });
+
+          const sourceCell =
+            sourceWorkbookSheet[
+              sourceCellAddress
+            ];
+
+          if (
+            !sourceCell ||
+            !sourceCell.f
+          ) {
+            continue;
+          }
+
+          const outputCellAddress =
+            XLSX.utils.encode_cell({
+              r: outputRowIndex,
+              c: cleanedCol
+            });
+
+          const outputCell =
+            cleanedSheet[
+              outputCellAddress
+            ] || {};
+
+          /*
+            Preserve the original formula.
+            Keep the original cached value/type where available.
+          */
+          outputCell.f =
+            String(
+              sourceCell.f
+            );
+
+          if (
+            sourceCell.v !== undefined
+          ) {
+            outputCell.v =
+              sourceCell.v;
+          }
+
+          if (
+            sourceCell.t !== undefined
+          ) {
+            outputCell.t =
+              sourceCell.t;
+          }
+
+          /*
+            Let the formula be the source of truth.
+            Avoid keeping a stale formatted text value.
+          */
+          delete outputCell.w;
+
+          cleanedSheet[
+            outputCellAddress
+          ] =
+            outputCell;
+        }
       }
     }
 
@@ -5004,6 +5255,11 @@
       }
 
       try {
+
+        /*
+          CSV cannot store formulas.
+          It receives the cleaned/calculated values.
+        */
         if (
           type === "csv"
         ) {
@@ -5068,14 +5324,26 @@
             url
           );
 
+          showSuccess(
+            "CSV exported. Formula cells are exported as their calculated values because CSV does not support Excel formulas."
+          );
+
           return;
         }
 
+        /*
+          XLSX export.
+
+          Every worksheet is cleaned independently.
+          Formula cells are then restored from the original
+          worksheet so their formulas remain formulas.
+        */
         const out =
           XLSX.utils.book_new();
 
         workbook.SheetNames.forEach(
           sheetName => {
+
             const ws =
               workbook.Sheets[
                 sheetName
@@ -5092,22 +5360,42 @@
                 }
               );
 
+            if (!rows.length) {
+              const emptySheet =
+                XLSX.utils.aoa_to_sheet(
+                  [
+                    ["No data"]
+                  ]
+                );
+
+              XLSX.utils.book_append_sheet(
+                out,
+                emptySheet,
+                safeSheetName(
+                  sheetName,
+                  out.SheetNames
+                )
+              );
+
+              return;
+            }
+
             const result =
-              rows.length
-                ? cleanRows(
-                    rows,
-                    ws
-                  )
-                : {
-                    rows: [
-                      ["No data"]
-                    ]
-                  };
+              cleanRows(
+                rows,
+                ws
+              );
 
             const cleanSheet =
               XLSX.utils.aoa_to_sheet(
                 result.rows
               );
+
+            restoreFormulasInCleanedSheet(
+              cleanSheet,
+              ws,
+              result
+            );
 
             XLSX.utils.book_append_sheet(
               out,
@@ -5128,6 +5416,10 @@
           {
             bookType: "xlsx"
           }
+        );
+
+        showSuccess(
+          "Cleaned XLSX exported successfully. Original formula cells were preserved."
         );
 
       } catch (error) {
