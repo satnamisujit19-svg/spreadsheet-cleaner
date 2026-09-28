@@ -35,7 +35,9 @@
       color: var(--text);
     }
 
-    button, input, select {
+    button,
+    input,
+    select {
       font: inherit;
     }
 
@@ -50,14 +52,14 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(20,30,50,.06);
+      box-shadow: 0 8px 30px rgba(20, 30, 50, .06);
     }
 
     .hero {
       position: relative;
       overflow: hidden;
       padding: 32px;
-      background: linear-gradient(135deg,#fff 0%,#f8fbff 100%);
+      background: linear-gradient(135deg, #fff 0%, #f8fbff 100%);
     }
 
     .hero:after {
@@ -68,7 +70,7 @@
       right: -110px;
       top: -110px;
       border-radius: 50%;
-      background: rgba(36,86,166,.06);
+      background: rgba(36, 86, 166, .06);
     }
 
     .brand-row {
@@ -102,7 +104,7 @@
       position: relative;
       z-index: 1;
       margin: 14px 0 8px;
-      font-size: clamp(30px,5vw,42px);
+      font-size: clamp(30px, 5vw, 42px);
       line-height: 1.08;
     }
 
@@ -142,7 +144,7 @@
       min-height: 175px;
       border: 2px dashed #cad3df;
       border-radius: 18px;
-      background: rgba(255,255,255,.86);
+      background: rgba(255, 255, 255, .86);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -198,7 +200,7 @@
 
     .file-info-grid {
       display: grid;
-      grid-template-columns: repeat(3,minmax(0,1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -354,7 +356,7 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(5,minmax(0,1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -386,7 +388,7 @@
 
     .checks-grid {
       display: grid;
-      grid-template-columns: repeat(3,minmax(0,1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -475,10 +477,9 @@
       font-weight: 800;
     }
 
-    /* Cleaning Summary */
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(5,minmax(0,1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -524,7 +525,7 @@
 
     .preview-metrics {
       display: grid;
-      grid-template-columns: repeat(4,minmax(0,1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 14px;
     }
@@ -568,7 +569,8 @@
       min-width: 850px;
     }
 
-    th, td {
+    th,
+    td {
       padding: 10px 12px;
       border-bottom: 1px solid #edf1f5;
       text-align: left;
@@ -599,7 +601,7 @@
 
     .report-grid {
       display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -655,13 +657,6 @@
       position: sticky;
       top: 0;
       background: #f8fafc;
-    }
-
-    .report-group-title {
-      margin: 0 0 7px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #465264;
     }
 
     .report-badge {
@@ -764,32 +759,32 @@
       margin-bottom: 8px;
     }
 
-    @media (max-width:1100px) {
+    @media (max-width: 1100px) {
       .stats-grid {
-        grid-template-columns: repeat(3,minmax(0,1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .summary-grid {
-        grid-template-columns: repeat(3,minmax(0,1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .preview-metrics {
-        grid-template-columns: repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width:850px) {
+    @media (max-width: 850px) {
       .checks-grid,
       .report-grid {
         grid-template-columns: 1fr;
       }
 
       .stats-grid {
-        grid-template-columns: repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .summary-grid {
-        grid-template-columns: repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .file-info-grid {
@@ -797,9 +792,9 @@
       }
     }
 
-    @media (max-width:620px) {
+    @media (max-width: 620px) {
       .container {
-        width: min(100% - 16px,1220px);
+        width: min(100% - 16px, 1220px);
         margin: 12px auto 30px;
       }
 
@@ -839,10 +834,10 @@
 <body>
   <main class="container">
 
-    <!-- HERO -->
     <section class="hero">
       <div class="brand-row">
         <div class="brand">Clean My Spreadsheet</div>
+
         <div class="step-badge">
           Step 48 • Better Cleaning Summary
         </div>
@@ -871,8 +866,11 @@
       <label class="upload-box" for="fileInput">
         <div>
           <div class="upload-icon">📊</div>
+
           <strong>Choose Spreadsheet</strong>
+
           <span>Upload XLSX, XLS or CSV</span>
+
           <span class="supported">
             Your spreadsheet stays in this browser while it is processed.
           </span>
@@ -894,6 +892,7 @@
       </div>
 
       <div id="actionBar" class="action-bar hidden">
+
         <button id="cleanBtn" class="btn-dark">
           ✨ Clean Spreadsheet
         </button>
@@ -909,17 +908,20 @@
         <button id="startOverBtn" class="btn-soft">
           ↻ Start Over
         </button>
+
       </div>
 
       <div id="successMessage" class="notice success hidden"></div>
+
       <div id="errorMessage" class="notice error hidden"></div>
     </section>
 
-    <!-- FILE DETAILS -->
     <section id="fileInfo" class="section hidden">
+
       <div class="section-header">
         <div>
           <h2 class="section-title">File Details</h2>
+
           <p class="section-description">
             Basic information about the spreadsheet you selected.
           </p>
@@ -927,6 +929,7 @@
       </div>
 
       <div class="file-info-grid">
+
         <div class="file-info-item">
           <span class="file-info-label">File Name</span>
           <span id="infoFileName" class="file-info-value">—</span>
@@ -941,14 +944,16 @@
           <span class="file-info-label">Worksheets</span>
           <span id="infoSheets" class="file-info-value">—</span>
         </div>
+
       </div>
     </section>
 
-    <!-- WORKSHEET -->
     <section id="worksheetSection" class="section hidden">
+
       <div class="section-header">
         <div>
           <h2 class="section-title">Worksheet</h2>
+
           <p class="section-description">
             Choose which sheet to inspect and clean.
           </p>
@@ -957,15 +962,17 @@
 
       <div class="worksheet-bar">
         <label for="sheetSelect">Current sheet</label>
+
         <select id="sheetSelect"></select>
       </div>
     </section>
 
-    <!-- OVERVIEW -->
     <section id="overviewSection" class="section hidden">
+
       <div class="section-header">
         <div>
           <h2 class="section-title">Overview</h2>
+
           <p class="section-description">
             Detected data-quality signals in the selected worksheet.
           </p>
@@ -1043,11 +1050,12 @@
       </div>
     </section>
 
-    <!-- DATA CHECKS -->
     <section id="checksSection" class="section hidden">
+
       <div class="section-header">
         <div>
           <h2 class="section-title">Data Checks</h2>
+
           <p class="section-description">
             Detailed findings from the selected worksheet.
           </p>
@@ -1094,13 +1102,14 @@
       </div>
     </section>
 
-    <!-- COLUMN TYPES -->
     <section id="typesSection" class="section hidden">
+
       <div class="section-header">
         <div>
           <h2 class="section-title">Column Types</h2>
+
           <p class="section-description">
-            Best-effort detection of the data type in each cleaned worksheet column.
+            Best-effort detection of the data type in each worksheet column.
           </p>
         </div>
       </div>
@@ -1116,16 +1125,18 @@
               <th>Unique</th>
             </tr>
           </thead>
+
           <tbody id="typesBody"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- VALIDATION DETAILS -->
     <section id="detailsSection" class="section hidden">
+
       <div class="section-header">
         <div>
           <h2 class="section-title">Validation Details</h2>
+
           <p class="section-description">
             File and automatically detected contact columns.
           </p>
@@ -1167,12 +1178,12 @@
       </div>
     </section>
 
-    <!-- CLEANING SUMMARY -->
     <section id="summarySection" class="section hidden">
 
       <div class="section-header">
         <div>
           <h2 class="section-title">Cleaning Summary</h2>
+
           <p class="section-description">
             A simple before-and-after view of what changed in your spreadsheet.
           </p>
@@ -1274,7 +1285,6 @@
 
     </section>
 
-    <!-- PREVIEW -->
     <section id="previewSection" class="section hidden">
 
       <div class="section-header">
@@ -1293,28 +1303,44 @@
 
         <div class="preview-metric">
           <div class="preview-metric-label">Rows</div>
-          <div id="previewRowsMetric" class="preview-metric-value">
+
+          <div
+            id="previewRowsMetric"
+            class="preview-metric-value"
+          >
             —
           </div>
         </div>
 
         <div class="preview-metric">
           <div class="preview-metric-label">Columns</div>
-          <div id="previewColumnsMetric" class="preview-metric-value">
+
+          <div
+            id="previewColumnsMetric"
+            class="preview-metric-value"
+          >
             —
           </div>
         </div>
 
         <div class="preview-metric">
           <div class="preview-metric-label">Rows Removed</div>
-          <div id="previewRowsRemovedMetric" class="preview-metric-value">
+
+          <div
+            id="previewRowsRemovedMetric"
+            class="preview-metric-value"
+          >
             —
           </div>
         </div>
 
         <div class="preview-metric">
           <div class="preview-metric-label">Columns Removed</div>
-          <div id="previewColumnsRemovedMetric" class="preview-metric-value">
+
+          <div
+            id="previewColumnsRemovedMetric"
+            class="preview-metric-value"
+          >
             —
           </div>
         </div>
@@ -1332,10 +1358,11 @@
 
     </section>
 
-    <!-- EMPTY STATE -->
     <div id="emptyState" class="empty-state">
       <div class="big">📁</div>
+
       <strong>Upload a spreadsheet to begin</strong>
+
       <div style="margin-top:6px;">
         Your file is analyzed directly in your browser.
       </div>
@@ -1551,7 +1578,9 @@
     sheetSelect.addEventListener(
       "change",
       function () {
-        currentSheetName = sheetSelect.value;
+        currentSheetName =
+          sheetSelect.value;
+
         loadSelectedSheet();
       }
     );
@@ -1661,13 +1690,14 @@
         "GB"
       ];
 
-      const index = Math.min(
-        Math.floor(
-          Math.log(bytes) /
-          Math.log(1024)
-        ),
-        units.length - 1
-      );
+      const index =
+        Math.min(
+          Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+          ),
+          units.length - 1
+        );
 
       return `${(
         bytes /
@@ -1687,11 +1717,26 @@
         );
     }
 
+    /*
+      FIXED HEADER DETECTION
+
+      We no longer treat every multi-word value as "data".
+      This allows real headers such as:
+
+      - Date of Birth
+      - Account Status
+      - Customer Name
+      - Completely Empty Column
+
+      to be correctly recognized as headers.
+    */
     function headerLooksLikeData(value) {
       const v =
         String(value ?? "").trim();
 
-      if (!v) return false;
+      if (!v) {
+        return false;
+      }
 
       if (isValidEmail(v)) {
         return true;
@@ -1715,10 +1760,7 @@
         return true;
       }
 
-      return (
-        v.includes(" ") &&
-        v.split(/\s+/).length >= 2
-      );
+      return false;
     }
 
     function headerScore(row) {
@@ -1740,7 +1782,9 @@
         const raw =
           String(cell ?? "").trim();
 
-        if (!raw) return;
+        if (!raw) {
+          return;
+        }
 
         nonEmpty++;
 
@@ -1763,16 +1807,17 @@
 
         if (
           /^[a-zA-Z][a-zA-Z0-9_ -]{1,35}$/
-            .test(raw) &&
-          raw.split(/\s+/).length <= 4
+            .test(raw)
         ) {
           score += 1;
         }
       });
 
       score +=
-        Math.min(nonEmpty, 20) *
-        0.2;
+        Math.min(
+          nonEmpty,
+          20
+        ) * 0.2;
 
       return {
         score,
@@ -1786,12 +1831,16 @@
       if (!rows.length) {
         return {
           headerIndex: -1,
-          headers: []
+          headers: [],
+          detected: false
         };
       }
 
       const maxCheck =
-        Math.min(rows.length, 20);
+        Math.min(
+          rows.length,
+          20
+        );
 
       let bestIndex = -1;
       let bestResult = null;
@@ -1809,7 +1858,9 @@
           result.strongHeaderCount >= 2 &&
           result.dataLikeCount <= 1;
 
-        if (!credible) continue;
+        if (!credible) {
+          continue;
+        }
 
         if (
           !bestResult ||
@@ -1855,7 +1906,9 @@
       return headers.map(
         (value, index) => {
           let base =
-            String(value ?? "").trim();
+            String(
+              value ?? ""
+            ).trim();
 
           if (!base) {
             base =
@@ -1928,8 +1981,9 @@
 
       return (
         !!email &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          .test(email)
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+          email
+        )
       );
     }
 
@@ -1942,7 +1996,10 @@
       const phone =
         String(value ?? "").trim();
 
-      if (!phone || isErrorValue(phone)) {
+      if (
+        !phone ||
+        isErrorValue(phone)
+      ) {
         return false;
       }
 
@@ -1977,7 +2034,9 @@
       }
 
       const digits =
-        extractPhoneDigits(original);
+        extractPhoneDigits(
+          original
+        );
 
       return original.startsWith("+")
         ? `+${digits}`
@@ -1985,7 +2044,8 @@
     }
 
     function excelSerialToDate(value) {
-      const n = Number(value);
+      const n =
+        Number(value);
 
       if (
         !Number.isFinite(n) ||
@@ -2023,12 +2083,18 @@
       const m =
         String(
           date.getUTCMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+          2,
+          "0"
+        );
 
       const d =
         String(
           date.getUTCDate()
-        ).padStart(2, "0");
+        ).padStart(
+          2,
+          "0"
+        );
 
       return `${y}-${m}-${d}`;
     }
@@ -2045,7 +2111,9 @@
       if (
         typeof value === "number"
       ) {
-        return excelSerialToDate(value);
+        return excelSerialToDate(
+          value
+        );
       }
 
       const raw =
@@ -2128,7 +2196,9 @@
     }
 
     function isDateLike(value) {
-      return !!parseDateValue(value);
+      return !!parseDateValue(
+        value
+      );
     }
 
     function isLikelyNumber(value) {
@@ -2140,17 +2210,23 @@
         return false;
       }
 
-      if (isErrorValue(value)) {
+      if (
+        isErrorValue(value)
+      ) {
         return false;
       }
 
       const s =
         String(value)
           .trim()
-          .replace(/,/g, "");
+          .replace(
+            /,/g,
+            ""
+          );
 
-      return /^[-+]?\d+(?:\.\d+)?$/
-        .test(s);
+      return /^[-+]?\d+(?:\.\d+)?$/.test(
+        s
+      );
     }
 
     function findColumn(
@@ -2170,8 +2246,7 @@
               "emailaddress",
               "emailid"
             ]
-          : type === "phone"
-          ? [
+          : [
               "phone",
               "phonenumber",
               "mobilenumber",
@@ -2179,8 +2254,7 @@
               "contactnumber",
               "telephone",
               "tel"
-            ]
-          : [];
+            ];
 
       for (
         let i = 0;
@@ -2212,9 +2286,10 @@
         i++
       ) {
         if (
-          words.some(word =>
-            normalizedHeaders[i]
-              .includes(word)
+          words.some(
+            word =>
+              normalizedHeaders[i]
+                .includes(word)
           )
         ) {
           return i;
@@ -2266,9 +2341,7 @@
             bestScore = score;
             bestIndex = c;
           }
-
-        } else if (type === "phone") {
-
+        } else {
           const phoneLike =
             values.filter(
               value => {
@@ -2278,20 +2351,8 @@
                   return false;
                 }
 
-                const digits =
-                  extractPhoneDigits(
-                    value
-                  );
-
-                const hasPhoneFormatting =
-                  /^\+?[0-9\s().-]+$/
-                    .test(value);
-
-                return (
-                  isValidPhone(value) &&
-                  digits.length >= 7 &&
-                  digits.length <= 15 &&
-                  hasPhoneFormatting
+                return isValidPhone(
+                  value
                 );
               }
             ).length;
@@ -2316,9 +2377,13 @@
 
     function detectHeaderType(header) {
       const h =
-        normalizeHeader(header);
+        normalizeHeader(
+          header
+        );
 
-      if (h.includes("email")) {
+      if (
+        h.includes("email")
+      ) {
         return "Email";
       }
 
@@ -2348,19 +2413,13 @@
         return "ID";
       }
 
-      if (h.includes("gender")) {
-        return "Categorical";
-      }
-
-      if (h.includes("status")) {
-        return "Categorical";
-      }
-
-      if (h.includes("response")) {
-        return "Categorical";
-      }
-
-      if (h.includes("payment")) {
+      if (
+        h.includes("gender") ||
+        h.includes("status") ||
+        h.includes("response") ||
+        h.includes("consent") ||
+        h.includes("payment")
+      ) {
         return "Categorical";
       }
 
@@ -2372,15 +2431,20 @@
       values
     ) {
       const forced =
-        detectHeaderType(header);
+        detectHeaderType(
+          header
+        );
 
       const nonEmpty =
         values.filter(
-          v => !isEmptyCell(v)
+          v =>
+            !isEmptyCell(v)
         );
 
       if (
-        nonEmpty.some(isErrorValue)
+        nonEmpty.some(
+          isErrorValue
+        )
       ) {
         const errorShare =
           nonEmpty.filter(
@@ -2399,19 +2463,27 @@
         }
       }
 
-      if (forced === "Email") {
+      if (
+        forced === "Email"
+      ) {
         return "Email";
       }
 
-      if (forced === "Phone") {
+      if (
+        forced === "Phone"
+      ) {
         return "Phone";
       }
 
-      if (forced === "Date") {
+      if (
+        forced === "Date"
+      ) {
         return "Date";
       }
 
-      if (forced === "ID") {
+      if (
+        forced === "ID"
+      ) {
         return "ID";
       }
 
@@ -2473,10 +2545,9 @@
         const idLike =
           nonEmpty.filter(
             value =>
-              /^[A-Za-z]{1,6}\d{2,}$/
-                .test(
-                  String(value).trim()
-                )
+              /^[A-Za-z]{1,6}\d{2,}$/.test(
+                String(value).trim()
+              )
           ).length;
 
         if (
@@ -2515,8 +2586,11 @@
       return "Text";
     }
 
-    function getFormulaMap(worksheet) {
-      const map = new Map();
+    function getFormulaMap(
+      worksheet
+    ) {
+      const map =
+        new Map();
 
       if (
         !worksheet ||
@@ -2585,7 +2659,9 @@
           c++
         ) {
           if (
-            isEmptyCell(row[c])
+            isEmptyCell(
+              row[c]
+            )
           ) {
             list.push({
               row: r + 1,
@@ -2601,7 +2677,9 @@
       return list;
     }
 
-    function countWhitespaceCells(rows) {
+    function countWhitespaceCells(
+      rows
+    ) {
       let count = 0;
 
       for (
@@ -2639,7 +2717,9 @@
           const row of dataRows
         ) {
           if (
-            !isEmptyCell(row[c])
+            !isEmptyCell(
+              row[c]
+            )
           ) {
             hasData = true;
             break;
@@ -2662,7 +2742,6 @@
 
       headers.forEach(
         (header, index) => {
-
           const h =
             normalizeHeader(
               header
@@ -2676,64 +2755,16 @@
             identityIndexes.push(
               index
             );
-            return;
-          }
-
-          const values =
-            dataRows
-              .map(
-                row =>
-                  String(
-                    row?.[index] ?? ""
-                  ).trim()
-              )
-              .filter(Boolean);
-
-          if (!values.length) {
-            return;
-          }
-
-          const emailLike =
-            values.filter(
-              value =>
-                /@/.test(value) &&
-                /[A-Za-z]/.test(value)
-            ).length;
-
-          const idLike =
-            values.filter(
-              value =>
-                /^[A-Za-z]{1,6}\d{2,}$/
-                  .test(value)
-            ).length;
-
-          if (
-            emailLike >= 2 &&
-            emailLike / values.length >= 0.4
-          ) {
-            identityIndexes.push(
-              index
-            );
-            return;
-          }
-
-          if (
-            idLike >= 2 &&
-            idLike / values.length >= 0.7
-          ) {
-            identityIndexes.push(
-              index
-            );
           }
         }
       );
 
       const groups = [];
-      const rowSets = new Map();
+      const participatingRows =
+        new Set();
 
       identityIndexes.forEach(
         index => {
-
           const byValue =
             new Map();
 
@@ -2786,35 +2817,12 @@
               });
 
               rows.forEach(
-                r => {
-                  if (
-                    !rowSets.has(r)
-                  ) {
-                    rowSets.set(
-                      r,
-                      new Set()
-                    );
-                  }
-
-                  rowSets
-                    .get(r)
-                    .add(index);
-                }
+                r =>
+                  participatingRows.add(r)
               );
             }
           }
         }
-      );
-
-      const participatingRows =
-        new Set();
-
-      groups.forEach(
-        group =>
-          group.rows.forEach(
-            r =>
-              participatingRows.add(r)
-          )
       );
 
       return {
@@ -2860,9 +2868,10 @@
       const headerRowIndex =
         headerInfo.headerIndex;
 
-      const headers = [
-        ...headerInfo.headers
-      ];
+      const headers =
+        [
+          ...headerInfo.headers
+        ];
 
       const dataRows =
         headerRowIndex >= 0
@@ -2923,7 +2932,9 @@
         if (
           emailIndex >= 0 &&
           emailValue &&
-          !isValidEmail(emailValue)
+          !isValidEmail(
+            emailValue
+          )
         ) {
           invalidEmails++;
 
@@ -2947,7 +2958,9 @@
         if (
           phoneIndex >= 0 &&
           phoneValue &&
-          !isValidPhone(phoneValue)
+          !isValidPhone(
+            phoneValue
+          )
         ) {
           invalidPhones++;
 
@@ -2978,21 +2991,26 @@
         }
       }
 
-      const seen = new Set();
+      const seen =
+        new Set();
 
       let duplicateRows = 0;
 
       for (
         const row of dataRows
       ) {
-        if (isEmptyRow(row)) {
+        if (
+          isEmptyRow(row)
+        ) {
           continue;
         }
 
         const key =
           makeRowKey(row);
 
-        if (seen.has(key)) {
+        if (
+          seen.has(key)
+        ) {
           duplicateRows++;
         } else {
           seen.add(key);
@@ -3189,7 +3207,8 @@
 
         const filled =
           values.filter(
-            v => !isEmptyCell(v)
+            v =>
+              !isEmptyCell(v)
           ).length;
 
         const missing =
@@ -3266,7 +3285,9 @@
         );
 
       const text =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
       if (!text) {
         return text;
@@ -3280,7 +3301,8 @@
         map =
           CATEGORY_MAPS.gender;
       } else if (
-        key.includes("response")
+        key.includes("response") ||
+        key.includes("consent")
       ) {
         map =
           CATEGORY_MAPS.response;
@@ -3364,7 +3386,8 @@
       }
 
       const cleanedDataRows = [];
-      const seen = new Set();
+      const seen =
+        new Set();
 
       let duplicateRowsRemoved = 0;
       let emailsNormalized = 0;
@@ -3401,8 +3424,7 @@
             ).trim();
 
           if (
-            typeof value ===
-            "string"
+            typeof value === "string"
           ) {
             value =
               value.trim();
@@ -3744,9 +3766,7 @@
               "report-row";
 
             const percent =
-              item.percent.toFixed(
-                1
-              );
+              item.percent.toFixed(1);
 
             const level =
               item.percent >= 50
@@ -3771,7 +3791,9 @@
 
             div.innerHTML =
               `<div>` +
-              `<strong>${escapeHtml(item.label)}</strong> ` +
+              `<strong>${escapeHtml(
+                item.label
+              )}</strong> ` +
               badge +
               `</div>` +
               `<div class="missing-meta">` +
@@ -3841,7 +3863,8 @@
       }
 
       const duplicateItems = [];
-      const seenPotential = new Set();
+      const seenPotential =
+        new Set();
 
       const normalizedRows =
         analysis.dataRows.map(
@@ -3854,12 +3877,10 @@
       normalizedRows.forEach(
         (key, i) => {
           if (
-            !key
-              .replace(
-                /\u001f/g,
-                ""
-              )
-              .trim()
+            !key.replace(
+              /\u001f/g,
+              ""
+            ).trim()
           ) {
             return;
           }
@@ -3900,9 +3921,7 @@
             `${group.field}::${group.value}`;
 
           if (
-            !seenPotential.has(
-              sig
-            )
+            !seenPotential.has(sig)
           ) {
             seenPotential.add(sig);
 
@@ -4149,7 +4168,9 @@
       }
 
       const columnCount =
-        getColumnCount(rows);
+        getColumnCount(
+          rows
+        );
 
       const thead =
         document.createElement(
@@ -4509,12 +4530,9 @@
         );
 
       if (explanation) {
-
         const parts = [];
 
-        if (
-          rowsRemoved > 0
-        ) {
+        if (rowsRemoved > 0) {
           parts.push(
             `${rowsRemoved} row${
               rowsRemoved === 1
@@ -4524,9 +4542,7 @@
           );
         }
 
-        if (
-          columnsRemoved > 0
-        ) {
+        if (columnsRemoved > 0) {
           parts.push(
             `${columnsRemoved} column${
               columnsRemoved === 1
@@ -4585,14 +4601,11 @@
         }
 
         if (!parts.length) {
-
           explanation.innerHTML =
             "<strong>No major changes were required.</strong><br>" +
             "The spreadsheet was checked and the existing data already matched " +
             "the cleaning rules.";
-
         } else {
-
           explanation.innerHTML =
             "<strong>What happened?</strong><br>" +
             escapeHtml(
@@ -4670,7 +4683,7 @@
       }
 
       return (
-        `Loaded “${currentSheetName}” and completed the initial checks.`
+        `Loaded “${currentSheetName}” and detected a header row successfully.`
       );
     }
 
@@ -4868,8 +4881,7 @@
           );
 
         infoSheets.textContent =
-          workbook
-            .SheetNames.length;
+          workbook.SheetNames.length;
 
         fileInfoSection.classList.remove(
           "hidden"
@@ -4917,7 +4929,6 @@
         loadSelectedSheet();
 
       } catch (error) {
-
         resetResultsOnly();
 
         showError(
@@ -4940,7 +4951,6 @@
         true;
 
       try {
-
         cleanedResult =
           cleanRows(
             currentRows,
@@ -4974,7 +4984,6 @@
         );
 
       } catch (error) {
-
         cleanBtn.disabled =
           false;
 
@@ -4995,11 +5004,9 @@
       }
 
       try {
-
         if (
           type === "csv"
         ) {
-
           if (
             !cleanedResult
           ) {
@@ -5069,7 +5076,6 @@
 
         workbook.SheetNames.forEach(
           sheetName => {
-
             const ws =
               workbook.Sheets[
                 sheetName
@@ -5125,14 +5131,15 @@
         );
 
       } catch (error) {
-
         showError(
           `The cleaned file could not be exported: ${error.message}`
         );
       }
     }
 
-    function safeBaseName(name) {
+    function safeBaseName(
+      name
+    ) {
       return String(
         name ||
         "spreadsheet"
@@ -5192,20 +5199,11 @@
 
     function resetResultsOnly() {
       workbook = null;
-
-      currentWorksheet =
-        null;
-
+      currentWorksheet = null;
       currentRows = [];
-
-      currentSheetName =
-        "";
-
-      currentAnalysis =
-        null;
-
-      cleanedResult =
-        null;
+      currentSheetName = "";
+      currentAnalysis = null;
+      cleanedResult = null;
 
       actionBar.classList.add(
         "hidden"
