@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Clean My Spreadsheet</title>
 
@@ -28,7 +28,6 @@
       --purple: #6842a5;
       --purple-bg: #f4efff;
       --shadow: 0 10px 30px rgba(23, 32, 51, 0.06);
-      --radius: 16px;
     }
 
     * {
@@ -55,7 +54,7 @@
 
     .container {
       width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
+      margin: auto;
     }
 
     .hidden {
@@ -63,7 +62,7 @@
     }
 
     header.hero {
-      background: linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%);
+      background: linear-gradient(180deg, #fff 0%, #f6f9fc 100%);
       border-bottom: 1px solid var(--border);
       padding: 42px 0 34px;
     }
@@ -71,12 +70,12 @@
     .badge {
       display: inline-flex;
       padding: 7px 11px;
+      background: #fff;
       border: 1px solid var(--border);
-      background: #ffffff;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
       color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
       margin-bottom: 14px;
     }
 
@@ -89,7 +88,7 @@
 
     .hero p {
       margin: 0;
-      max-width: 780px;
+      max-width: 800px;
       color: var(--muted);
       font-size: 16px;
     }
@@ -103,12 +102,12 @@
 
     .chip {
       padding: 7px 10px;
-      border: 1px solid var(--border);
       background: #fff;
+      border: 1px solid var(--border);
       border-radius: 999px;
-      font-size: 12px;
       color: var(--muted);
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     main {
@@ -118,7 +117,7 @@
     .section {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 16px;
       box-shadow: var(--shadow);
       padding: 22px;
       margin-bottom: 18px;
@@ -127,7 +126,6 @@
     .section h2 {
       margin: 0 0 5px;
       font-size: 21px;
-      letter-spacing: -0.3px;
     }
 
     .section-subtitle {
@@ -139,13 +137,12 @@
     .privacy-note {
       display: flex;
       gap: 12px;
-      align-items: flex-start;
       padding: 13px 14px;
+      margin-bottom: 18px;
       border: 1px solid #d7eadf;
       background: var(--green-bg);
       border-radius: 12px;
       color: #245f43;
-      margin-bottom: 18px;
       font-size: 13px;
     }
 
@@ -184,7 +181,6 @@
       font-size: 13px;
     }
 
-    /* REAL FILE PICKER */
     .file-picker {
       position: relative;
       display: inline-block;
@@ -195,16 +191,15 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: var(--dark);
-      color: #ffffff;
-      padding: 11px 16px;
-      border-radius: 11px;
-      font-weight: 700;
       min-width: 190px;
-      border: 0;
+      padding: 11px 16px;
+      background: var(--dark);
+      color: white;
+      border-radius: 11px;
+      font-weight: 800;
     }
 
-    .file-picker input[type="file"] {
+    .file-picker input {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -213,63 +208,40 @@
       cursor: pointer;
     }
 
-    .primary-btn,
-    .secondary-btn,
-    .danger-btn {
-      border-radius: 11px;
-      padding: 11px 16px;
-      font-weight: 700;
-      transition: 0.2s ease;
-    }
-
-    .primary-btn {
-      background: var(--dark);
-      color: white;
-      border: 0;
-    }
-
-    .secondary-btn {
-      background: #ffffff;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .danger-btn {
-      background: var(--red-bg);
-      color: var(--red);
-      border: 1px solid #f2c8c3;
-    }
-
-    button:hover:not(:disabled),
-    .file-picker-button:hover {
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
-    }
-
     .selected-file {
+      display: inline-block;
+      max-width: 100%;
       margin-top: 14px;
       padding: 9px 12px;
-      background: #ffffff;
+      background: white;
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--muted);
       font-size: 13px;
-      display: inline-block;
-      max-width: 100%;
       word-break: break-word;
     }
 
+    .loading-box {
+      display: none;
+      margin-top: 14px;
+      padding: 13px 14px;
+      background: var(--blue-bg);
+      border: 1px solid #d4e0f5;
+      border-radius: 11px;
+      color: #24508f;
+      font-size: 13px;
+    }
+
+    .loading-box.show {
+      display: block;
+    }
+
     .message {
+      display: none;
       margin-top: 14px;
       padding: 12px 14px;
       border-radius: 10px;
       font-size: 13px;
-      display: none;
     }
 
     .message.show {
@@ -300,21 +272,6 @@
       color: #244d90;
     }
 
-    .loading-box {
-      margin-top: 14px;
-      padding: 13px 14px;
-      background: var(--blue-bg);
-      border: 1px solid #d4e0f5;
-      color: #24508f;
-      border-radius: 11px;
-      font-size: 13px;
-      display: none;
-    }
-
-    .loading-box.show {
-      display: block;
-    }
-
     .file-grid,
     .stats-grid,
     .check-grid,
@@ -325,19 +282,19 @@
     }
 
     .file-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(4, 1fr);
     }
 
     .stats-grid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(5, 1fr);
     }
 
     .check-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(4, 1fr);
     }
 
     .review-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(4, 1fr);
     }
 
     .export-grid {
@@ -348,19 +305,19 @@
     .stat-card,
     .check-card,
     .review-card {
+      padding: 14px;
+      background: var(--soft);
       border: 1px solid var(--border);
       border-radius: 12px;
-      background: var(--soft);
-      padding: 14px;
     }
 
     .info-label,
     .stat-label,
     .check-label,
     .review-label {
-      font-size: 12px;
-      color: var(--muted);
       margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
     }
 
     .info-value {
@@ -369,31 +326,8 @@
       word-break: break-word;
     }
 
-    .select-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .select-row label {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    select {
-      min-width: 250px;
-      max-width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: #fff;
-      color: var(--text);
-    }
-
     .stat-card {
-      min-height: 102px;
+      min-height: 100px;
     }
 
     .stat-value {
@@ -402,16 +336,68 @@
     }
 
     .stat-note {
-      margin-top: 2px;
       color: var(--muted);
       font-size: 12px;
     }
 
-    .check-card strong,
-    .review-card strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 17px;
+    .select-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .select-row label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    select {
+      min-width: 250px;
+      max-width: 100%;
+      padding: 10px 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .danger-btn {
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-weight: 800;
+      transition: 0.2s ease;
+    }
+
+    .primary-btn {
+      background: var(--dark);
+      color: white;
+      border: 0;
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .danger-btn {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid #f2c8c3;
+    }
+
+    button:hover:not(:disabled),
+    .file-picker-button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
     .green {
@@ -426,25 +412,20 @@
       color: var(--orange);
     }
 
-    .blue {
-      color: var(--blue);
-    }
-
     .purple {
       color: var(--purple);
     }
 
     .summary-box {
+      padding: 16px;
+      background: white;
       border: 1px solid var(--border);
       border-radius: 13px;
-      padding: 16px;
-      background: #fff;
     }
 
     .summary-line {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 16px;
       padding: 9px 0;
       border-bottom: 1px dashed var(--border);
@@ -466,25 +447,25 @@
     }
 
     .list-box {
+      overflow: hidden;
       border: 1px solid var(--border);
       border-radius: 13px;
-      overflow: hidden;
     }
 
     .list-box-header {
       padding: 12px 14px;
-      font-weight: 800;
-      font-size: 14px;
-      border-bottom: 1px solid var(--border);
       background: var(--soft);
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 800;
     }
 
     .list-box ul {
-      margin: 0;
-      padding: 10px 15px 12px 32px;
       min-height: 70px;
       max-height: 260px;
       overflow: auto;
+      margin: 0;
+      padding: 10px 15px 12px 32px;
     }
 
     .list-box li {
@@ -498,8 +479,8 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 18px;
       flex-wrap: wrap;
+      gap: 18px;
       margin-bottom: 16px;
     }
 
@@ -525,10 +506,10 @@
     }
 
     .export-card {
+      padding: 18px;
+      background: white;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 18px;
-      background: #fff;
     }
 
     .export-card h3 {
@@ -537,9 +518,9 @@
     }
 
     .export-card p {
+      margin: 0 0 14px;
       color: var(--muted);
       font-size: 13px;
-      margin: 0 0 14px;
     }
 
     .export-meta {
@@ -557,18 +538,17 @@
 
     .export-meta strong {
       display: block;
-      color: var(--text);
       margin-top: 2px;
+      color: var(--text);
       word-break: break-word;
     }
 
     .export-button {
       width: 100%;
       padding: 13px 16px;
+      border: 0;
       border-radius: 11px;
       font-weight: 800;
-      border: 0;
-      margin-top: 5px;
     }
 
     .xlsx-button {
@@ -584,32 +564,32 @@
     .tip {
       margin-top: 14px;
       padding: 11px 12px;
-      border-radius: 10px;
       background: var(--soft);
       border: 1px solid var(--border);
+      border-radius: 10px;
       color: var(--muted);
       font-size: 12px;
     }
 
     .preview-wrap {
+      max-height: 500px;
       overflow: auto;
       border: 1px solid var(--border);
       border-radius: 12px;
-      max-height: 500px;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
       min-width: 780px;
       background: white;
+      border-collapse: collapse;
     }
 
     th,
     td {
       padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
       border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       text-align: left;
       vertical-align: top;
       font-size: 12px;
@@ -617,21 +597,15 @@
     }
 
     th {
-      background: var(--soft);
       position: sticky;
       top: 0;
       z-index: 1;
+      background: var(--soft);
       font-weight: 800;
     }
 
     td {
       color: #374151;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 30px 15px;
-      color: var(--muted);
     }
 
     .action-row {
@@ -642,16 +616,10 @@
     }
 
     .footer-note {
+      padding-top: 8px;
       text-align: center;
       color: var(--muted);
       font-size: 12px;
-      padding-top: 8px;
-    }
-
-    .error-detail {
-      margin-top: 7px;
-      font-size: 12px;
-      opacity: 0.9;
     }
 
     @media (max-width: 980px) {
@@ -659,7 +627,7 @@
       .stats-grid,
       .check-grid,
       .review-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
@@ -670,7 +638,6 @@
 
       .section {
         padding: 16px;
-        border-radius: 13px;
       }
 
       .file-grid,
@@ -682,13 +649,9 @@
         grid-template-columns: 1fr;
       }
 
-      .hero h1 {
-        font-size: 33px;
-      }
-
       .select-row {
-        align-items: stretch;
         flex-direction: column;
+        align-items: stretch;
       }
 
       select {
@@ -703,14 +666,17 @@
 
 <header class="hero">
   <div class="container">
-    <div class="badge">Step 51 • Safer File Processing</div>
+
+    <div class="badge">
+      Step 52 • XLSX / XLS / CSV Compatibility
+    </div>
 
     <h1>Clean My Spreadsheet</h1>
 
     <p>
       Clean, validate and standardize messy spreadsheet data in seconds —
-      with safer file processing, clearer error handling, review-friendly cleaning
-      and reliable exports.
+      with safer file processing, broader spreadsheet compatibility,
+      formula protection and reliable exports.
     </p>
 
     <div class="chips">
@@ -722,640 +688,896 @@
       <span class="chip">Category Standardization</span>
       <span class="chip">Duplicate Detection</span>
       <span class="chip">Formula & Error Detection</span>
-      <span class="chip">XLSX + CSV Export</span>
+      <span class="chip">XLSX + XLS + CSV</span>
     </div>
+
   </div>
 </header>
+
 
 <main>
 <div class="container">
 
-  <!-- UPLOAD -->
-  <section class="section">
-    <h2>📊 Upload your spreadsheet</h2>
 
-    <p class="section-subtitle">
-      Supported formats: XLSX, XLS and CSV
+<!-- UPLOAD -->
+<section class="section">
+
+  <h2>📊 Upload your spreadsheet</h2>
+
+  <p class="section-subtitle">
+    Supported formats: XLSX, XLS and CSV
+  </p>
+
+  <div class="privacy-note">
+    <div>🔒</div>
+
+    <div>
+      <strong>Privacy-first browser processing</strong>
+
+      Your spreadsheet is processed directly in this browser.
+      The file is not uploaded to a server by this tool.
+    </div>
+  </div>
+
+  <div
+    class="upload-zone"
+    id="uploadZone"
+    ondragover="handleDragOver(event)"
+    ondragleave="handleDragLeave(event)"
+    ondrop="handleDrop(event)"
+  >
+
+    <div class="upload-icon">📁</div>
+
+    <h3>Choose your spreadsheet</h3>
+
+    <p>
+      Drop your file here or select it from your device.
+      Maximum recommended file size: 25 MB.
     </p>
 
-    <div class="privacy-note">
-      <div>🔒</div>
-      <div>
-        <strong>Privacy-first browser processing</strong>
-        Your spreadsheet is processed directly in this browser.
-        The file is not uploaded to a server by this tool.
+    <label class="file-picker">
+
+      <span class="file-picker-button">
+        Choose Spreadsheet
+      </span>
+
+      <input
+        id="fileInput"
+        type="file"
+        accept=".xlsx,.xls,.csv"
+      >
+
+    </label>
+
+    <div
+      id="selectedFileText"
+      class="selected-file"
+    >
+      No file selected
+    </div>
+
+  </div>
+
+  <div
+    id="loadingBox"
+    class="loading-box"
+  >
+    Processing your spreadsheet safely...
+  </div>
+
+  <div
+    id="successMessage"
+    class="message success"
+  ></div>
+
+  <div
+    id="errorMessage"
+    class="message error"
+  ></div>
+
+  <div
+    id="warningMessage"
+    class="message warning"
+  ></div>
+
+  <div
+    id="infoMessage"
+    class="message info"
+  ></div>
+
+</section>
+
+
+<!-- FILE DETAILS -->
+<section
+  class="section hidden"
+  id="fileSection"
+>
+
+  <h2>📄 File Details</h2>
+
+  <p class="section-subtitle">
+    Basic information detected from your uploaded file.
+  </p>
+
+  <div class="file-grid">
+
+    <div class="info-card">
+      <div class="info-label">File Name</div>
+      <div
+        class="info-value"
+        id="fileName"
+      >
+        —
       </div>
     </div>
 
-    <div
-      class="upload-zone"
-      id="uploadZone"
-      ondragover="handleDragOver(event)"
-      ondragleave="handleDragLeave(event)"
-      ondrop="handleDrop(event)"
+    <div class="info-card">
+      <div class="info-label">File Type</div>
+      <div
+        class="info-value"
+        id="fileType"
+      >
+        —
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-label">File Size</div>
+      <div
+        class="info-value"
+        id="fileSize"
+      >
+        —
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-label">Worksheets</div>
+      <div
+        class="info-value"
+        id="sheetCount"
+      >
+        —
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- WORKSHEET -->
+<section
+  class="section hidden"
+  id="worksheetSection"
+>
+
+  <h2>📑 Choose Worksheet</h2>
+
+  <p class="section-subtitle">
+    Select the worksheet you want to review and clean.
+  </p>
+
+  <div class="select-row">
+
+    <label for="sheetSelect">
+      Worksheet
+    </label>
+
+    <select id="sheetSelect"></select>
+
+  </div>
+
+  <div
+    id="worksheetMessage"
+    class="message info"
+  ></div>
+
+  <div class="action-row">
+
+    <button
+      class="primary-btn"
+      id="cleanButton"
+      onclick="cleanSpreadsheet()"
     >
-      <div class="upload-icon">📁</div>
+      🧹 Clean Spreadsheet
+    </button>
 
-      <h3>Choose your spreadsheet</h3>
+  </div>
 
-      <p>
-        Drop your file here or select it from your device.
-        Maximum recommended file size: 25 MB.
+</section>
+
+
+<!-- OVERVIEW -->
+<section
+  class="section hidden"
+  id="overviewSection"
+>
+
+  <h2>📈 Overview</h2>
+
+  <p class="section-subtitle">
+    What was detected in the selected worksheet before cleaning.
+  </p>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-label">Rows</div>
+      <div
+        class="stat-value"
+        id="statRows"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Data rows detected
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Columns</div>
+      <div
+        class="stat-value"
+        id="statColumns"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Columns detected
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Duplicates</div>
+      <div
+        class="stat-value orange"
+        id="statDuplicates"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Exact duplicate rows
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Potential Duplicates</div>
+      <div
+        class="stat-value orange"
+        id="statPotentialDuplicates"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Identity-based matches
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Missing Values</div>
+      <div
+        class="stat-value orange"
+        id="statMissing"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Empty cells
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Invalid Emails</div>
+      <div
+        class="stat-value red"
+        id="statInvalidEmails"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Need review
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Invalid Phones</div>
+      <div
+        class="stat-value red"
+        id="statInvalidPhones"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Need review
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Invalid Dates</div>
+      <div
+        class="stat-value red"
+        id="statInvalidDates"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Need review
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Formulas</div>
+      <div
+        class="stat-value purple"
+        id="statFormulas"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Detected formula cells
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Spreadsheet Errors</div>
+      <div
+        class="stat-value red"
+        id="statErrors"
+      >
+        0
+      </div>
+      <div class="stat-note">
+        Error values detected
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CHECKS -->
+<section
+  class="section hidden"
+  id="checksSection"
+>
+
+  <h2>🔎 Data Checks</h2>
+
+  <p class="section-subtitle">
+    Important quality checks detected in your spreadsheet.
+  </p>
+
+  <div class="check-grid">
+
+    <div class="check-card">
+      <div class="check-label">
+        Header Detection
+      </div>
+
+      <strong id="headerDetection">
+        —
+      </strong>
+    </div>
+
+    <div class="check-card">
+      <div class="check-label">
+        Email Column
+      </div>
+
+      <strong id="emailColumn">
+        —
+      </strong>
+    </div>
+
+    <div class="check-card">
+      <div class="check-label">
+        Phone Column
+      </div>
+
+      <strong id="phoneColumn">
+        —
+      </strong>
+    </div>
+
+    <div class="check-card">
+      <div class="check-label">
+        Empty Columns
+      </div>
+
+      <strong id="emptyColumns">
+        0
+      </strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- TYPES -->
+<section
+  class="section hidden"
+  id="typesSection"
+>
+
+  <h2>🧠 Detected Column Types</h2>
+
+  <p class="section-subtitle">
+    The cleaner uses detected patterns to standardize data safely.
+  </p>
+
+  <div id="typesList"></div>
+
+</section>
+
+
+<!-- VALIDATION -->
+<section
+  class="section hidden"
+  id="validationSection"
+>
+
+  <h2>⚠️ Validation Details</h2>
+
+  <p class="section-subtitle">
+    These items are preserved so you can review them before export.
+  </p>
+
+  <div class="list-grid">
+
+    <div class="list-box">
+      <div class="list-box-header">
+        Invalid Emails
+      </div>
+
+      <ul id="invalidEmailsList">
+        <li>None</li>
+      </ul>
+    </div>
+
+    <div class="list-box">
+      <div class="list-box-header">
+        Invalid Phones
+      </div>
+
+      <ul id="invalidPhonesList">
+        <li>None</li>
+      </ul>
+    </div>
+
+    <div class="list-box">
+      <div class="list-box-header">
+        Invalid Dates
+      </div>
+
+      <ul id="invalidDatesList">
+        <li>None</li>
+      </ul>
+    </div>
+
+    <div class="list-box">
+      <div class="list-box-header">
+        Spreadsheet Errors
+      </div>
+
+      <ul id="errorsList">
+        <li>None</li>
+      </ul>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SUMMARY -->
+<section
+  class="section hidden"
+  id="summarySection"
+>
+
+  <h2>🧹 Cleaning Summary</h2>
+
+  <p class="section-subtitle">
+    A before-and-after summary of the automatic changes.
+  </p>
+
+  <div
+    class="summary-box"
+    id="summaryBox"
+  ></div>
+
+  <div class="action-row">
+
+    <button
+      class="secondary-btn"
+      onclick="copyCleaningReport()"
+    >
+      📋 Copy Cleaning Report
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- REVIEW -->
+<section
+  class="section hidden"
+  id="reviewSection"
+>
+
+  <div class="review-header">
+
+    <div>
+
+      <h2>✅ Review Before Export</h2>
+
+      <p
+        class="section-subtitle"
+        style="margin-bottom:0;"
+      >
+        Automatic cleaning is separated from items that may need your decision.
       </p>
 
-      <label class="file-picker">
-        <span class="file-picker-button">
-          Choose Spreadsheet
-        </span>
-
-        <input
-          id="fileInput"
-          type="file"
-          accept=".xlsx,.xls,.csv"
-        />
-      </label>
-
-      <div
-        id="selectedFileText"
-        class="selected-file"
-      >
-        No file selected
-      </div>
     </div>
 
-    <div id="loadingBox" class="loading-box">
-      Processing your spreadsheet safely...
-    </div>
+    <div class="review-status">
 
-    <div id="successMessage" class="message success"></div>
-    <div id="errorMessage" class="message error"></div>
-    <div id="warningMessage" class="message warning"></div>
-    <div id="infoMessage" class="message info"></div>
-  </section>
+      <span>🔍</span>
 
-
-  <!-- FILE DETAILS -->
-  <section class="section hidden" id="fileSection">
-    <h2>📄 File Details</h2>
-
-    <p class="section-subtitle">
-      Basic information detected from your uploaded file.
-    </p>
-
-    <div class="file-grid">
-
-      <div class="info-card">
-        <div class="info-label">File Name</div>
-        <div class="info-value" id="fileName">—</div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-label">File Type</div>
-        <div class="info-value" id="fileType">—</div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-label">File Size</div>
-        <div class="info-value" id="fileSize">—</div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-label">Worksheets</div>
-        <div class="info-value" id="sheetCount">—</div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- WORKSHEET -->
-  <section class="section hidden" id="worksheetSection">
-
-    <h2>📑 Choose Worksheet</h2>
-
-    <p class="section-subtitle">
-      Select the worksheet you want to review and clean.
-    </p>
-
-    <div class="select-row">
-
-      <label for="sheetSelect">
-        Worksheet
-      </label>
-
-      <select id="sheetSelect"></select>
+      <span id="reviewStatusText">
+        Review Ready
+      </span>
 
     </div>
 
-    <div id="worksheetMessage" class="message info"></div>
-
-    <div class="action-row">
-
-      <button
-        class="primary-btn"
-        id="cleanButton"
-        onclick="cleanSpreadsheet()"
-      >
-        🧹 Clean Spreadsheet
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- OVERVIEW -->
-  <section class="section hidden" id="overviewSection">
-
-    <h2>📈 Overview</h2>
-
-    <p class="section-subtitle">
-      What was detected in the selected worksheet before cleaning.
-    </p>
-
-    <div class="stats-grid">
-
-      <div class="stat-card">
-        <div class="stat-label">Rows</div>
-        <div class="stat-value" id="statRows">0</div>
-        <div class="stat-note">Data rows detected</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Columns</div>
-        <div class="stat-value" id="statColumns">0</div>
-        <div class="stat-note">Columns detected</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Duplicates</div>
-        <div class="stat-value orange" id="statDuplicates">0</div>
-        <div class="stat-note">Exact duplicate rows</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Potential Duplicates</div>
-        <div class="stat-value orange" id="statPotentialDuplicates">0</div>
-        <div class="stat-note">Identity-based matches</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Missing Values</div>
-        <div class="stat-value orange" id="statMissing">0</div>
-        <div class="stat-note">Empty cells</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Invalid Emails</div>
-        <div class="stat-value red" id="statInvalidEmails">0</div>
-        <div class="stat-note">Need review</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Invalid Phones</div>
-        <div class="stat-value red" id="statInvalidPhones">0</div>
-        <div class="stat-note">Need review</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Invalid Dates</div>
-        <div class="stat-value red" id="statInvalidDates">0</div>
-        <div class="stat-note">Need review</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Formulas</div>
-        <div class="stat-value purple" id="statFormulas">0</div>
-        <div class="stat-note">Detected formula cells</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">Spreadsheet Errors</div>
-        <div class="stat-value red" id="statErrors">0</div>
-        <div class="stat-note">Error values detected</div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- CHECKS -->
-  <section class="section hidden" id="checksSection">
-
-    <h2>🔎 Data Checks</h2>
-
-    <p class="section-subtitle">
-      Important quality checks detected in your spreadsheet.
-    </p>
-
-    <div class="check-grid">
-
-      <div class="check-card">
-        <div class="check-label">Header Detection</div>
-        <strong id="headerDetection">—</strong>
-      </div>
-
-      <div class="check-card">
-        <div class="check-label">Email Column</div>
-        <strong id="emailColumn">—</strong>
-      </div>
-
-      <div class="check-card">
-        <div class="check-label">Phone Column</div>
-        <strong id="phoneColumn">—</strong>
-      </div>
-
-      <div class="check-card">
-        <div class="check-label">Empty Columns</div>
-        <strong id="emptyColumns">0</strong>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- TYPES -->
-  <section class="section hidden" id="typesSection">
-
-    <h2>🧠 Detected Column Types</h2>
-
-    <p class="section-subtitle">
-      The cleaner uses detected patterns to standardize data safely.
-    </p>
-
-    <div id="typesList"></div>
-
-  </section>
-
-
-  <!-- VALIDATION -->
-  <section class="section hidden" id="validationSection">
-
-    <h2>⚠️ Validation Details</h2>
-
-    <p class="section-subtitle">
-      These items are intentionally preserved so you can review them before export.
-    </p>
-
-    <div class="list-grid">
-
-      <div class="list-box">
-        <div class="list-box-header">
-          Invalid Emails
-        </div>
-        <ul id="invalidEmailsList">
-          <li>None</li>
-        </ul>
-      </div>
-
-      <div class="list-box">
-        <div class="list-box-header">
-          Invalid Phones
-        </div>
-        <ul id="invalidPhonesList">
-          <li>None</li>
-        </ul>
-      </div>
-
-      <div class="list-box">
-        <div class="list-box-header">
-          Invalid Dates
-        </div>
-        <ul id="invalidDatesList">
-          <li>None</li>
-        </ul>
-      </div>
-
-      <div class="list-box">
-        <div class="list-box-header">
-          Spreadsheet Errors
-        </div>
-        <ul id="errorsList">
-          <li>None</li>
-        </ul>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- SUMMARY -->
-  <section class="section hidden" id="summarySection">
-
-    <h2>🧹 Cleaning Summary</h2>
-
-    <p class="section-subtitle">
-      A before-and-after summary of the automatic changes.
-    </p>
-
-    <div class="summary-box" id="summaryBox"></div>
-
-    <div class="action-row">
-
-      <button
-        class="secondary-btn"
-        onclick="copyCleaningReport()"
-      >
-        📋 Copy Cleaning Report
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- REVIEW -->
-  <section class="section hidden" id="reviewSection">
-
-    <div class="review-header">
-
-      <div>
-        <h2>✅ Review Before Export</h2>
-
-        <p
-          class="section-subtitle"
-          style="margin-bottom:0;"
-        >
-          Automatic cleaning is separated from items that may need your decision.
-        </p>
-      </div>
-
-      <div class="review-status">
-        <span>🔍</span>
-        <span id="reviewStatusText">
-          Review Ready
-        </span>
-      </div>
-
-    </div>
-
-    <div class="review-grid">
-
-      <div class="review-card">
-        <div class="review-label">
-          Automatic Changes
-        </div>
-        <strong class="green" id="automaticCount">0</strong>
-      </div>
-
-      <div class="review-card">
-        <div class="review-label">
-          Needs Review
-        </div>
-        <strong class="orange" id="reviewCount">0</strong>
-      </div>
-
-      <div class="review-card">
-        <div class="review-label">
-          Formula Cells
-        </div>
-        <strong class="purple" id="reviewFormulaCount">0</strong>
-      </div>
-
-      <div class="review-card">
-        <div class="review-label">
-          Potential Duplicates
-        </div>
-        <strong class="orange" id="reviewDuplicateCount">
-          0
-        </strong>
-      </div>
-
-    </div>
-
-    <div class="list-grid" style="margin-top:14px;">
-
-      <div class="list-box">
-
-        <div class="list-box-header">
-          ✅ Automatically Applied
-        </div>
-
-        <ul id="automaticChangesList">
-          <li>Nothing yet</li>
-        </ul>
-
-      </div>
-
-      <div class="list-box">
-
-        <div class="list-box-header">
-          ⚠️ Needs Your Review
-        </div>
-
-        <ul id="needsReviewList">
-          <li>Nothing yet</li>
-        </ul>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- EXPORT -->
-  <section class="section hidden" id="exportSection">
-
-    <div class="export-header">
-
-      <div>
-        <h2>📦 Export Center</h2>
-
-        <p
-          class="section-subtitle"
-          style="margin-bottom:0;"
-        >
-          Your cleaned spreadsheet is ready to export.
-        </p>
-      </div>
-
-      <div class="export-status-pill">
-        <span>✓</span>
-        <span>READY TO EXPORT</span>
-      </div>
-
-    </div>
-
-    <div class="export-grid">
-
-      <div class="export-card">
-
-        <h3>📗 XLSX — Recommended</h3>
-
-        <p>
-          Best for Excel users. Preserves workbook structure
-          and formulas where available.
-        </p>
-
-        <div class="export-meta">
-
-          <div>
-            File
-            <strong id="xlsxFilename">
-              cleaned-spreadsheet.xlsx
-            </strong>
-          </div>
-
-          <div>
-            Rows
-            <strong id="xlsxRows">0</strong>
-          </div>
-
-          <div>
-            Columns
-            <strong id="xlsxColumns">0</strong>
-          </div>
-
-          <div>
-            Format
-            <strong>Excel Workbook</strong>
-          </div>
-
-        </div>
-
-        <button
-          class="export-button xlsx-button"
-          id="exportXlsxBtn"
-          onclick="exportXlsx()"
-        >
-          ⬇ Download XLSX
-        </button>
-
-      </div>
-
-
-      <div class="export-card">
-
-        <h3>📄 CSV — Simple Data File</h3>
-
-        <p>
-          Best for simple tables and systems that accept CSV files.
-        </p>
-
-        <div class="export-meta">
-
-          <div>
-            File
-            <strong id="csvFilename">
-              cleaned-spreadsheet.csv
-            </strong>
-          </div>
-
-          <div>
-            Rows
-            <strong id="csvRows">0</strong>
-          </div>
-
-          <div>
-            Columns
-            <strong id="csvColumns">0</strong>
-          </div>
-
-          <div>
-            Format
-            <strong>Comma-separated data</strong>
-          </div>
-
-        </div>
-
-        <button
-          class="export-button csv-button"
-          id="exportCsvBtn"
-          onclick="exportCsv()"
-        >
-          ⬇ Download CSV
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="tip">
-      💡 <strong>Tip:</strong>
-      Use XLSX when you need Excel workbook functionality
-      or formula preservation. CSV is simpler, but formulas
-      are exported as values.
-    </div>
-
-    <div id="exportStatus" class="message info"></div>
-
-    <div class="action-row">
-
-      <button
-        class="secondary-btn"
-        onclick="exportWorkbook('xlsx')"
-      >
-        📗 Quick XLSX Export
-      </button>
-
-      <button
-        class="secondary-btn"
-        onclick="exportWorkbook('csv')"
-      >
-        📄 Quick CSV Export
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- PREVIEW -->
-  <section class="section hidden" id="previewSection">
-
-    <h2>👀 Cleaned Preview</h2>
-
-    <p class="section-subtitle">
-      Preview the cleaned data before downloading it.
-    </p>
-
-    <div
-      class="preview-wrap"
-      id="previewWrap"
-    ></div>
-
-  </section>
-
-
-  <!-- START AGAIN -->
-  <section class="section hidden" id="controlsSection">
-
-    <h2>🔄 Start Again</h2>
-
-    <p class="section-subtitle">
-      Start with another spreadsheet.
-    </p>
-
-    <div class="action-row">
-
-      <button
-        class="danger-btn"
-        onclick="resetApp()"
-      >
-        Start Over
-      </button>
-
-    </div>
-
-  </section>
-
-  <div class="footer-note">
-    Clean My Spreadsheet • Browser-based spreadsheet cleaning tool
   </div>
+
+  <div class="review-grid">
+
+    <div class="review-card">
+      <div class="review-label">
+        Automatic Changes
+      </div>
+
+      <strong
+        class="green"
+        id="automaticCount"
+      >
+        0
+      </strong>
+    </div>
+
+    <div class="review-card">
+      <div class="review-label">
+        Needs Review
+      </div>
+
+      <strong
+        class="orange"
+        id="reviewCount"
+      >
+        0
+      </strong>
+    </div>
+
+    <div class="review-card">
+      <div class="review-label">
+        Formula Cells
+      </div>
+
+      <strong
+        class="purple"
+        id="reviewFormulaCount"
+      >
+        0
+      </strong>
+    </div>
+
+    <div class="review-card">
+      <div class="review-label">
+        Potential Duplicates
+      </div>
+
+      <strong
+        class="orange"
+        id="reviewDuplicateCount"
+      >
+        0
+      </strong>
+    </div>
+
+  </div>
+
+  <div
+    class="list-grid"
+    style="margin-top:14px;"
+  >
+
+    <div class="list-box">
+
+      <div class="list-box-header">
+        ✅ Automatically Applied
+      </div>
+
+      <ul id="automaticChangesList">
+        <li>Nothing yet</li>
+      </ul>
+
+    </div>
+
+    <div class="list-box">
+
+      <div class="list-box-header">
+        ⚠️ Needs Your Review
+      </div>
+
+      <ul id="needsReviewList">
+        <li>Nothing yet</li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- EXPORT -->
+<section
+  class="section hidden"
+  id="exportSection"
+>
+
+  <div class="export-header">
+
+    <div>
+
+      <h2>📦 Export Center</h2>
+
+      <p
+        class="section-subtitle"
+        style="margin-bottom:0;"
+      >
+        Your cleaned spreadsheet is ready to export.
+      </p>
+
+    </div>
+
+    <div class="export-status-pill">
+
+      <span>✓</span>
+
+      <span>
+        READY TO EXPORT
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div class="export-grid">
+
+    <div class="export-card">
+
+      <h3>
+        📗 XLSX — Recommended
+      </h3>
+
+      <p>
+        Works for Excel-compatible workflows and preserves formulas where detected.
+      </p>
+
+      <div class="export-meta">
+
+        <div>
+          File
+
+          <strong id="xlsxFilename">
+            cleaned-spreadsheet.xlsx
+          </strong>
+        </div>
+
+        <div>
+          Rows
+
+          <strong id="xlsxRows">
+            0
+          </strong>
+        </div>
+
+        <div>
+          Columns
+
+          <strong id="xlsxColumns">
+            0
+          </strong>
+        </div>
+
+        <div>
+          Format
+
+          <strong>
+            Excel Workbook
+          </strong>
+        </div>
+
+      </div>
+
+      <button
+        class="export-button xlsx-button"
+        onclick="exportXlsx()"
+      >
+        ⬇ Download XLSX
+      </button>
+
+    </div>
+
+
+    <div class="export-card">
+
+      <h3>
+        📄 CSV — Simple Data File
+      </h3>
+
+      <p>
+        Useful for simple data imports and systems that accept CSV files.
+      </p>
+
+      <div class="export-meta">
+
+        <div>
+          File
+
+          <strong id="csvFilename">
+            cleaned-spreadsheet.csv
+          </strong>
+        </div>
+
+        <div>
+          Rows
+
+          <strong id="csvRows">
+            0
+          </strong>
+        </div>
+
+        <div>
+          Columns
+
+          <strong id="csvColumns">
+            0
+          </strong>
+        </div>
+
+        <div>
+          Format
+
+          <strong>
+            Comma-separated data
+          </strong>
+        </div>
+
+      </div>
+
+      <button
+        class="export-button csv-button"
+        onclick="exportCsv()"
+      >
+        ⬇ Download CSV
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="tip">
+    💡 <strong>Tip:</strong>
+    XLSX is recommended when working with formulas.
+    CSV is a simpler data format and does not preserve spreadsheet formulas.
+  </div>
+
+
+  <div
+    id="exportStatus"
+    class="message info"
+  ></div>
+
+
+  <div class="action-row">
+
+    <button
+      class="secondary-btn"
+      onclick="exportWorkbook('xlsx')"
+    >
+      📗 Quick XLSX Export
+    </button>
+
+    <button
+      class="secondary-btn"
+      onclick="exportWorkbook('csv')"
+    >
+      📄 Quick CSV Export
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PREVIEW -->
+<section
+  class="section hidden"
+  id="previewSection"
+>
+
+  <h2>👀 Cleaned Preview</h2>
+
+  <p class="section-subtitle">
+    Preview the cleaned data before downloading it.
+  </p>
+
+  <div
+    class="preview-wrap"
+    id="previewWrap"
+  ></div>
+
+</section>
+
+
+<!-- CONTROLS -->
+<section
+  class="section hidden"
+  id="controlsSection"
+>
+
+  <h2>🔄 Start Again</h2>
+
+  <p class="section-subtitle">
+    Start with another spreadsheet.
+  </p>
+
+  <div class="action-row">
+
+    <button
+      class="danger-btn"
+      onclick="resetApp()"
+    >
+      Start Over
+    </button>
+
+  </div>
+
+</section>
+
+
+<div class="footer-note">
+  Clean My Spreadsheet • Browser-based spreadsheet cleaning tool
+</div>
+
 
 </div>
 </main>
 
 
 <script>
-  const MAX_FILE_SIZE = 25 * 1024 * 1024;
+
+  const MAX_FILE_SIZE =
+    25 * 1024 * 1024;
 
   const SUPPORTED_EXTENSIONS = [
     ".xlsx",
     ".xls",
     ".csv"
   ];
+
 
   let workbook = null;
   let currentFile = null;
@@ -1372,18 +1594,21 @@
 
 
   function setText(id, value) {
-    const element = $(id);
 
-    if (element) {
-      element.textContent =
-        value === undefined || value === null
-          ? "—"
-          : value;
-    }
+    const el = $(id);
+
+    if (!el) return;
+
+    el.textContent =
+      value === undefined ||
+      value === null
+        ? "—"
+        : value;
   }
 
 
   function escapeHtml(value) {
+
     return String(value ?? "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -1393,31 +1618,39 @@
   }
 
 
-  function showMessage(id, message, type) {
-    const element = $(id);
+  function showMessage(
+    id,
+    message,
+    type
+  ) {
 
-    if (!element) return;
+    const el = $(id);
 
-    element.className =
-      "message " +
-      type +
-      " show";
+    if (!el) return;
 
-    element.innerHTML = message;
+    el.className =
+      `message ${type} show`;
+
+    el.innerHTML =
+      message;
   }
 
 
   function hideMessage(id) {
-    const element = $(id);
 
-    if (!element) return;
+    const el = $(id);
 
-    element.className = "message";
-    element.innerHTML = "";
+    if (!el) return;
+
+    el.className =
+      "message";
+
+    el.innerHTML = "";
   }
 
 
   function clearMessages() {
+
     hideMessage("successMessage");
     hideMessage("errorMessage");
     hideMessage("warningMessage");
@@ -1426,7 +1659,9 @@
 
 
   function showSuccess(message) {
+
     clearMessages();
+
     showMessage(
       "successMessage",
       message,
@@ -1436,7 +1671,9 @@
 
 
   function showError(message) {
+
     clearMessages();
+
     showMessage(
       "errorMessage",
       message,
@@ -1449,22 +1686,27 @@
     message,
     type = "info"
   ) {
-    const element = $("exportStatus");
 
-    if (!element) return;
+    const el =
+      $("exportStatus");
+
+    if (!el) return;
 
     if (!message) {
-      element.className = "message info";
-      element.innerHTML = "";
+
+      el.className =
+        "message info";
+
+      el.innerHTML = "";
+
       return;
     }
 
-    element.className =
-      "message " +
-      type +
-      " show";
+    el.className =
+      `message ${type} show`;
 
-    element.innerHTML = message;
+    el.innerHTML =
+      message;
   }
 
 
@@ -1473,13 +1715,16 @@
     message =
       "Processing your spreadsheet safely..."
   ) {
-    const element = $("loadingBox");
 
-    if (!element) return;
+    const el =
+      $("loadingBox");
 
-    element.textContent = message;
+    if (!el) return;
 
-    element.classList.toggle(
+    el.textContent =
+      message;
+
+    el.classList.toggle(
       "show",
       !!show
     );
@@ -1490,11 +1735,12 @@
     id,
     visible
   ) {
-    const element = $(id);
 
-    if (!element) return;
+    const el = $(id);
 
-    element.classList.toggle(
+    if (!el) return;
+
+    el.classList.toggle(
       "hidden",
       !visible
     );
@@ -1502,6 +1748,7 @@
 
 
   function formatBytes(bytes) {
+
     if (
       !Number.isFinite(bytes) ||
       bytes <= 0
@@ -1516,28 +1763,33 @@
       "GB"
     ];
 
-    let value = bytes;
-    let unitIndex = 0;
+    let size = bytes;
+    let index = 0;
 
     while (
-      value >= 1024 &&
-      unitIndex < units.length - 1
+      size >= 1024 &&
+      index <
+        units.length - 1
     ) {
-      value /= 1024;
-      unitIndex++;
+
+      size /= 1024;
+      index++;
     }
 
     return (
-      value.toFixed(
-        unitIndex === 0 ? 0 : 2
+      size.toFixed(
+        index === 0 ? 0 : 2
       ) +
       " " +
-      units[unitIndex]
+      units[index]
     );
   }
 
 
-  function getExtension(filename) {
+  function getExtension(
+    filename
+  ) {
+
     const name =
       String(filename || "")
         .toLowerCase();
@@ -1551,26 +1803,127 @@
   }
 
 
-  function isSupportedFile(file) {
-    if (
-      !file ||
-      !file.name
-    ) {
-      return false;
-    }
+  function isSupportedFile(
+    file
+  ) {
 
-    return SUPPORTED_EXTENSIONS.includes(
-      getExtension(file.name)
+    return !!(
+      file &&
+      file.name &&
+      SUPPORTED_EXTENSIONS.includes(
+        getExtension(file.name)
+      )
     );
   }
 
 
-  function normalizeHeader(value) {
+  function safeBaseName(
+    filename
+  ) {
+
+    const original =
+      String(
+        filename ||
+        "spreadsheet"
+      );
+
+    const dot =
+      original.lastIndexOf(".");
+
+    const withoutExtension =
+      dot > 0
+        ? original.slice(
+            0,
+            dot
+          )
+        : original;
+
+    const cleaned =
+      withoutExtension
+        .replace(
+          /[<>:"/\\|?*]+/g,
+          ""
+        )
+        .replace(
+          /\s+/g,
+          " "
+        )
+        .trim();
+
+    return (
+      cleaned ||
+      "spreadsheet"
+    );
+  }
+
+
+  function safeSheetName(
+    name,
+    usedNames = []
+  ) {
+
+    let result =
+      String(
+        name ||
+        "Sheet1"
+      )
+        .replace(
+          /[\\\/\?\*\[\]\:]/g,
+          ""
+        )
+        .trim();
+
+    if (!result) {
+      result = "Sheet1";
+    }
+
+    result =
+      result.slice(0, 31);
+
+    let candidate =
+      result;
+
+    let count = 2;
+
+    while (
+      usedNames.some(
+        name =>
+          name.toLowerCase() ===
+          candidate.toLowerCase()
+      )
+    ) {
+
+      const suffix =
+        ` ${count}`;
+
+      candidate =
+        result.slice(
+          0,
+          31 -
+            suffix.length
+        ) +
+        suffix;
+
+      count++;
+    }
+
+    usedNames.push(candidate);
+
+    return candidate;
+  }
+
+
+  function normalizeHeader(
+    value
+  ) {
+
     let text =
       String(value ?? "")
         .trim();
 
-    if (!text) return "";
+    if (!text) {
+      return "";
+    }
 
     text =
       text.replace(
@@ -1596,7 +1949,8 @@
         ""
       );
 
-    text = text.trim().toLowerCase();
+    text =
+      text.trim().toLowerCase();
 
     return text
       .split(/\s+/)
@@ -1610,16 +1964,30 @@
   }
 
 
-  function headerLooksLikeData(value) {
+  function headerLooksLikeData(
+    value
+  ) {
+
     const v =
       String(value ?? "").trim();
 
     if (!v) return false;
 
-    if (isValidEmail(v)) return true;
-    if (isValidPhone(v)) return true;
-    if (isErrorValue(v)) return true;
-    if (isDateLike(v)) return true;
+    if (isValidEmail(v)) {
+      return true;
+    }
+
+    if (isValidPhone(v)) {
+      return true;
+    }
+
+    if (isErrorValue(v)) {
+      return true;
+    }
+
+    if (isDateLike(v)) {
+      return true;
+    }
 
     if (
       /^\d+(?:\.\d+)?$/.test(v)
@@ -1632,6 +2000,7 @@
 
 
   function headerScore(row) {
+
     if (
       !Array.isArray(row) ||
       row.length === 0
@@ -1641,13 +2010,21 @@
 
     let score = 0;
 
-    for (const cell of row) {
+    for (
+      const cell of row
+    ) {
+
       const value =
         String(cell ?? "").trim();
 
-      if (!value) continue;
+      if (!value) {
+        continue;
+      }
 
-      if (headerLooksLikeData(value)) {
+      if (
+        headerLooksLikeData(value)
+      ) {
+
         score -= 2;
         continue;
       }
@@ -1673,7 +2050,10 @@
   }
 
 
-  function chooseHeaderRow(rows) {
+  function chooseHeaderRow(
+    rows
+  ) {
+
     if (
       !Array.isArray(rows) ||
       rows.length === 0
@@ -1682,7 +2062,10 @@
     }
 
     const limit =
-      Math.min(rows.length, 8);
+      Math.min(
+        rows.length,
+        8
+      );
 
     let bestIndex = 0;
     let bestScore = -Infinity;
@@ -1692,12 +2075,16 @@
       i < limit;
       i++
     ) {
+
       const score =
-        headerScore(rows[i]);
+        headerScore(
+          rows[i]
+        );
 
       if (
         score > bestScore
       ) {
+
         bestScore = score;
         bestIndex = i;
       }
@@ -1707,38 +2094,54 @@
   }
 
 
-  function makeUniqueHeaders(headers) {
-    const counts = {};
-    const output = [];
+  function makeUniqueHeaders(
+    headers
+  ) {
+
+    const seen = {};
+    const result = [];
 
     headers.forEach(
       (value, index) => {
+
         let header =
-          normalizeHeader(value);
+          normalizeHeader(
+            value
+          );
 
         if (!header) {
+
           header =
             `Column ${index + 1}`;
         }
 
-        if (!counts[header]) {
-          counts[header] = 1;
-          output.push(header);
+        if (!seen[header]) {
+
+          seen[header] = 1;
+          result.push(header);
+
         } else {
-          counts[header]++;
-          output.push(
-            `${header} ${counts[header]}`
+
+          seen[header]++;
+
+          result.push(
+            `${header} ${seen[header]}`
           );
         }
       }
     );
 
-    return output;
+    return result;
   }
 
 
-  function getColumnCount(rows) {
-    if (!Array.isArray(rows)) {
+  function getColumnCount(
+    rows
+  ) {
+
+    if (
+      !Array.isArray(rows)
+    ) {
       return 0;
     }
 
@@ -1755,16 +2158,20 @@
   }
 
 
-  function normalizeCell(value) {
+  function normalizeCell(
+    value
+  ) {
+
     if (
-      value === null ||
-      value === undefined
+      value === undefined ||
+      value === null
     ) {
       return "";
     }
 
     if (
-      typeof value === "string"
+      typeof value ===
+      "string"
     ) {
       return value.trim();
     }
@@ -1773,25 +2180,38 @@
   }
 
 
-  function isEmptyCell(value) {
+  function isEmptyCell(
+    value
+  ) {
+
     return (
-      String(value ?? "").trim() === ""
+      String(value ?? "")
+        .trim() === ""
     );
   }
 
 
-  function isEmptyRow(row) {
-    if (!Array.isArray(row)) {
+  function isEmptyRow(
+    row
+  ) {
+
+    if (
+      !Array.isArray(row)
+    ) {
       return true;
     }
 
     return row.every(
-      cell => isEmptyCell(cell)
+      cell =>
+        isEmptyCell(cell)
     );
   }
 
 
-  function makeRowKey(row) {
+  function makeRowKey(
+    row
+  ) {
+
     return row
       .map(
         cell =>
@@ -1805,9 +2225,14 @@
   }
 
 
-  function isErrorValue(value) {
+  function isErrorValue(
+    value
+  ) {
+
     const text =
-      String(value ?? "")
+      String(
+        value ?? ""
+      )
         .trim()
         .toUpperCase();
 
@@ -1824,11 +2249,18 @@
   }
 
 
-  function isValidEmail(value) {
-    const text =
-      String(value ?? "").trim();
+  function isValidEmail(
+    value
+  ) {
 
-    if (!text) return false;
+    const text =
+      String(
+        value ?? ""
+      ).trim();
+
+    if (!text) {
+      return false;
+    }
 
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
       text
@@ -1836,32 +2268,57 @@
   }
 
 
-  function extractPhoneDigits(value) {
+  function extractPhoneDigits(
+    value
+  ) {
+
     const text =
-      String(value ?? "").trim();
+      String(
+        value ?? ""
+      ).trim();
 
-    if (!text) return "";
+    if (!text) {
+      return "";
+    }
 
-    return text.replace(/\D/g, "");
+    return text.replace(
+      /\D/g,
+      ""
+    );
   }
 
 
-  function isValidPhone(value) {
+  function isValidPhone(
+    value
+  ) {
+
     const text =
-      String(value ?? "").trim();
+      String(
+        value ?? ""
+      ).trim();
 
-    if (!text) return false;
+    if (!text) {
+      return false;
+    }
 
-    if (isErrorValue(text)) {
+    if (
+      isErrorValue(text)
+    ) {
       return false;
     }
 
     const digits =
-      extractPhoneDigits(text);
+      extractPhoneDigits(
+        text
+      );
 
-    if (!digits) return false;
+    if (!digits) {
+      return false;
+    }
 
-    if (digits.length === 10) {
+    if (
+      digits.length === 10
+    ) {
       return true;
     }
 
@@ -1891,16 +2348,27 @@
   }
 
 
-  function standardizePhone(value) {
-    const text =
-      String(value ?? "").trim();
+  function standardizePhone(
+    value
+  ) {
 
-    if (!text) return "";
+    const text =
+      String(
+        value ?? ""
+      ).trim();
+
+    if (!text) {
+      return "";
+    }
 
     const digits =
-      extractPhoneDigits(text);
+      extractPhoneDigits(
+        text
+      );
 
-    if (digits.length === 10) {
+    if (
+      digits.length === 10
+    ) {
       return digits;
     }
 
@@ -1929,9 +2397,14 @@
   }
 
 
-  function excelSerialToDate(serial) {
+  function excelSerialToDate(
+    serial
+  ) {
+
     if (
-      !Number.isFinite(serial)
+      !Number.isFinite(
+        serial
+      )
     ) {
       return null;
     }
@@ -1946,19 +2419,18 @@
         serial * 86400000
       );
 
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
-      return null;
-    }
-
-    return date;
+    return Number.isNaN(
+      date.getTime()
+    )
+      ? null
+      : date;
   }
 
 
-  function formatDateYMD(date) {
+  function formatDateYMD(
+    date
+  ) {
+
     if (
       !(date instanceof Date) ||
       Number.isNaN(
@@ -1980,7 +2452,10 @@
   }
 
 
-  function parseDateValue(value) {
+  function parseDateValue(
+    value
+  ) {
+
     if (
       value instanceof Date &&
       !Number.isNaN(
@@ -1991,21 +2466,29 @@
     }
 
     if (
-      typeof value === "number" &&
+      typeof value ===
+        "number" &&
       Number.isFinite(value)
     ) {
+
       if (
         value > 20000 &&
         value < 60000
       ) {
-        return excelSerialToDate(value);
+        return excelSerialToDate(
+          value
+        );
       }
     }
 
     const text =
-      String(value ?? "").trim();
+      String(
+        value ?? ""
+      ).trim();
 
-    if (!text) return null;
+    if (!text) {
+      return null;
+    }
 
     let match =
       text.match(
@@ -2013,6 +2496,7 @@
       );
 
     if (match) {
+
       const a =
         Number(match[1]);
 
@@ -2026,6 +2510,7 @@
         a > 12 &&
         b <= 12
       ) {
+
         const date =
           new Date(
             Date.UTC(
@@ -2037,7 +2522,8 @@
 
         if (
           date.getUTCFullYear() === year &&
-          date.getUTCMonth() === b - 1 &&
+          date.getUTCMonth() ===
+            b - 1 &&
           date.getUTCDate() === a
         ) {
           return date;
@@ -2048,6 +2534,7 @@
         b > 12 &&
         a <= 12
       ) {
+
         const date =
           new Date(
             Date.UTC(
@@ -2059,14 +2546,15 @@
 
         if (
           date.getUTCFullYear() === year &&
-          date.getUTCMonth() === a - 1 &&
+          date.getUTCMonth() ===
+            a - 1 &&
           date.getUTCDate() === b
         ) {
           return date;
         }
       }
 
-      /* DD/MM/YYYY default */
+      /* Default: DD/MM/YYYY */
       const date =
         new Date(
           Date.UTC(
@@ -2078,7 +2566,8 @@
 
       if (
         date.getUTCFullYear() === year &&
-        date.getUTCMonth() === b - 1 &&
+        date.getUTCMonth() ===
+          b - 1 &&
         date.getUTCDate() === a
       ) {
         return date;
@@ -2091,6 +2580,7 @@
       );
 
     if (match) {
+
       const year =
         Number(match[1]);
 
@@ -2111,7 +2601,8 @@
 
       if (
         date.getUTCFullYear() === year &&
-        date.getUTCMonth() === month - 1 &&
+        date.getUTCMonth() ===
+          month - 1 &&
         date.getUTCDate() === day
       ) {
         return date;
@@ -2121,19 +2612,18 @@
     const parsed =
       new Date(text);
 
-    if (
-      !Number.isNaN(
-        parsed.getTime()
-      )
-    ) {
-      return parsed;
-    }
-
-    return null;
+    return Number.isNaN(
+      parsed.getTime()
+    )
+      ? null
+      : parsed;
   }
 
 
-  function isDateLike(value) {
+  function isDateLike(
+    value
+  ) {
+
     if (
       value instanceof Date
     ) {
@@ -2143,16 +2633,22 @@
     }
 
     const text =
-      String(value ?? "").trim();
+      String(
+        value ?? ""
+      ).trim();
 
-    if (!text) return false;
+    if (!text) {
+      return false;
+    }
 
     if (
       /^\d{4}[\/.-]\d{1,2}[\/.-]\d{1,2}$/.test(
         text
       )
     ) {
-      return !!parseDateValue(text);
+      return !!parseDateValue(
+        text
+      );
     }
 
     if (
@@ -2160,7 +2656,9 @@
         text
       )
     ) {
-      return !!parseDateValue(text);
+      return !!parseDateValue(
+        text
+      );
     }
 
     return false;
@@ -2172,6 +2670,7 @@
     rowIndex,
     colIndex
   ) {
+
     if (!worksheet) {
       return null;
     }
@@ -2205,7 +2704,10 @@
     headers,
     patterns
   ) {
-    if (!Array.isArray(headers)) {
+
+    if (
+      !Array.isArray(headers)
+    ) {
       return -1;
     }
 
@@ -2214,6 +2716,7 @@
       i < headers.length;
       i++
     ) {
+
       const text =
         String(
           headers[i] || ""
@@ -2233,10 +2736,14 @@
   }
 
 
-  function detectHeaderType(header) {
+  function detectHeaderType(
+    header
+  ) {
+
     const text =
-      String(header || "")
-        .toLowerCase();
+      String(
+        header || ""
+      ).toLowerCase();
 
     if (
       /email|e-mail/.test(text)
@@ -2283,7 +2790,9 @@
     }
 
     if (
-      /city|state|country/.test(text)
+      /city|state|country/.test(
+        text
+      )
     ) {
       return "location";
     }
@@ -2296,58 +2805,61 @@
     rows,
     columnIndex
   ) {
-    let numbers = 0;
-    let dates = 0;
+
+    let nonEmpty = 0;
     let emails = 0;
     let phones = 0;
-    let nonEmpty = 0;
+    let dates = 0;
+    let numbers = 0;
 
-    for (
-      const row of rows
-    ) {
-      if (!Array.isArray(row)) {
-        continue;
+    rows.forEach(
+      row => {
+
+        if (
+          !Array.isArray(row)
+        ) {
+          return;
+        }
+
+        const value =
+          row[columnIndex];
+
+        if (
+          isEmptyCell(value)
+        ) {
+          return;
+        }
+
+        nonEmpty++;
+
+        if (
+          isValidEmail(value)
+        ) {
+          emails++;
+        }
+
+        if (
+          isValidPhone(value)
+        ) {
+          phones++;
+        }
+
+        if (
+          isDateLike(value)
+        ) {
+          dates++;
+        }
+
+        if (
+          typeof value ===
+          "number"
+        ) {
+          numbers++;
+        }
       }
+    );
 
-      const value =
-        row[columnIndex];
-
-      if (
-        isEmptyCell(value)
-      ) {
-        continue;
-      }
-
-      nonEmpty++;
-
-      if (
-        isValidEmail(value)
-      ) {
-        emails++;
-      }
-
-      if (
-        isValidPhone(value)
-      ) {
-        phones++;
-      }
-
-      if (
-        isDateLike(value)
-      ) {
-        dates++;
-      }
-
-      if (
-        typeof value === "number"
-      ) {
-        numbers++;
-      }
-    }
-
-    if (
-      nonEmpty === 0
-    ) {
+    if (nonEmpty === 0) {
       return "empty";
     }
 
@@ -2403,26 +2915,33 @@
   }
 
 
-  function countMissingValues(rows) {
+  function countMissingValues(
+    rows
+  ) {
+
     let count = 0;
 
-    for (
-      const row of rows
-    ) {
-      if (!Array.isArray(row)) {
-        continue;
-      }
+    rows.forEach(
+      row => {
 
-      for (
-        const value of row
-      ) {
         if (
-          isEmptyCell(value)
+          !Array.isArray(row)
         ) {
-          count++;
+          return;
         }
+
+        row.forEach(
+          value => {
+
+            if (
+              isEmptyCell(value)
+            ) {
+              count++;
+            }
+          }
+        );
       }
-    }
+    );
 
     return count;
   }
@@ -2432,6 +2951,7 @@
     rows,
     columnCount
   ) {
+
     const indexes = [];
 
     for (
@@ -2439,16 +2959,15 @@
       col < columnCount;
       col++
     ) {
+
       let hasValue = false;
 
       for (
         const row of rows
       ) {
-        if (!Array.isArray(row)) {
-          continue;
-        }
 
         if (
+          Array.isArray(row) &&
           !isEmptyCell(
             row[col]
           )
@@ -2471,6 +2990,7 @@
     rows,
     headers
   ) {
+
     const identityColumns = [];
 
     const emailIndex =
@@ -2516,11 +3036,14 @@
       );
     }
 
-    const map = new Map();
+    const map =
+      new Map();
+
     const duplicates = [];
 
     rows.forEach(
       (row, index) => {
+
         const values =
           identityColumns
             .map(
@@ -2545,13 +3068,16 @@
         if (
           map.has(key)
         ) {
+
           duplicates.push({
             firstRow:
               map.get(key) + 2,
             secondRow:
               index + 2
           });
+
         } else {
+
           map.set(
             key,
             index
@@ -2566,8 +3092,11 @@
 
   function analyzeRows(
     rows,
-    headers
+    headers,
+    worksheet,
+    headerRowIndex
   ) {
+
     const emailIndex =
       findColumn(
         headers,
@@ -2593,11 +3122,11 @@
     const invalidPhonesList = [];
     const invalidDatesList = [];
     const errors = [];
-
     const types = [];
 
     headers.forEach(
       (header, colIndex) => {
+
         types.push({
           header,
           headerType:
@@ -2613,9 +3142,13 @@
       }
     );
 
+
     rows.forEach(
       (row, rowIndex) => {
-        if (!Array.isArray(row)) {
+
+        if (
+          !Array.isArray(row)
+        ) {
           return;
         }
 
@@ -2625,6 +3158,7 @@
             row[emailIndex]
           )
         ) {
+
           const value =
             String(
               row[emailIndex]
@@ -2633,13 +3167,15 @@
           if (
             !isValidEmail(value)
           ) {
+
             invalidEmails++;
 
             invalidEmailsList.push(
-              `Row ${rowIndex + 2}: ${value}`
+              `Row ${rowIndex + headerRowIndex + 2}: ${value}`
             );
           }
         }
+
 
         if (
           phoneIndex >= 0 &&
@@ -2647,6 +3183,7 @@
             row[phoneIndex]
           )
         ) {
+
           const value =
             String(
               row[phoneIndex]
@@ -2655,32 +3192,38 @@
           if (
             !isValidPhone(value)
           ) {
+
             invalidPhones++;
 
             invalidPhonesList.push(
-              `Row ${rowIndex + 2}: ${value}`
+              `Row ${rowIndex + headerRowIndex + 2}: ${value}`
             );
           }
         }
 
+
         row.forEach(
           (value, colIndex) => {
+
             if (
               isErrorValue(value)
             ) {
+
               errors.push(
-                `Row ${rowIndex + 2}, ${
+                `Row ${rowIndex + headerRowIndex + 2}, ${
                   headers[colIndex] ||
                   `Column ${colIndex + 1}`
                 }: ${value}`
               );
             }
 
+
             const formula =
               getFormulaAt(
-                currentWorksheet,
+                worksheet,
                 rowIndex +
-                  currentAnalysisHeaderRowOffset(),
+                  headerRowIndex +
+                  1,
                 colIndex
               );
 
@@ -2688,32 +3231,37 @@
               formulas++;
             }
 
-            const headerType =
-              detectHeaderType(
-                headers[colIndex]
-              );
 
             if (
-              headerType === "date" &&
+              detectHeaderType(
+                headers[colIndex]
+              ) === "date" &&
               !isEmptyCell(value) &&
               !isDateLike(value)
             ) {
+
               invalidDates++;
 
               invalidDatesList.push(
-                `Row ${rowIndex + 2}: ${value}`
+                `Row ${rowIndex + headerRowIndex + 2}: ${value}`
               );
             }
+
           }
         );
+
       }
     );
 
-    const exactKeys = new Map();
+
+    const exactKeys =
+      new Map();
+
     const duplicateRows = [];
 
     rows.forEach(
       (row, rowIndex) => {
+
         const key =
           makeRowKey(row);
 
@@ -2729,13 +3277,21 @@
         if (
           exactKeys.has(key)
         ) {
+
           duplicateRows.push({
             first:
-              exactKeys.get(key) + 2,
+              exactKeys.get(key) +
+              headerRowIndex +
+              2,
+
             second:
-              rowIndex + 2
+              rowIndex +
+              headerRowIndex +
+              2
           });
+
         } else {
+
           exactKeys.set(
             key,
             rowIndex
@@ -2744,53 +3300,48 @@
       }
     );
 
+
     return {
+
       emailIndex,
+
       phoneIndex,
+
       invalidEmails,
+
       invalidEmailsList,
+
       invalidPhones,
+
       invalidPhonesList,
+
       invalidDates,
+
       invalidDatesList,
+
       errors,
+
       formulas,
+
       duplicateRows,
+
       potentialDuplicates:
         buildIdentityDuplicateInfo(
           rows,
           headers
         ),
+
       missingValues:
         countMissingValues(rows),
+
       emptyColumnIndexes:
         getEmptyColumnIndexes(
           rows,
           headers.length
         ),
+
       types
     };
-  }
-
-
-  function currentAnalysisHeaderRow() {
-    if (
-      currentAnalysis &&
-      Number.isInteger(
-        currentAnalysis.headerRowIndex
-      )
-    ) {
-      return currentAnalysis.headerRowIndex;
-    }
-
-    return 0;
-  }
-
-
-  function currentAnalysisHeaderRowOffset() {
-    return (
-      currentAnalysisHeaderRow() + 1
-    );
   }
 
 
@@ -2798,73 +3349,104 @@
     value,
     header
   ) {
-    const text =
-      String(value ?? "").trim();
 
-    if (!text) return text;
+    const text =
+      String(
+        value ?? ""
+      ).trim();
+
+    if (!text) {
+      return text;
+    }
 
     const lower =
       text.toLowerCase();
 
     const headerLower =
-      String(header || "")
-        .toLowerCase();
+      String(
+        header || ""
+      ).toLowerCase();
+
 
     if (
       /gender|sex/.test(
         headerLower
       )
     ) {
+
       if (
-        ["m", "male", "man"]
-          .includes(lower)
+        [
+          "m",
+          "male",
+          "man"
+        ].includes(lower)
       ) {
         return "Male";
       }
 
       if (
-        ["f", "female", "woman"]
-          .includes(lower)
+        [
+          "f",
+          "female",
+          "woman"
+        ].includes(lower)
       ) {
         return "Female";
       }
 
       if (
-        ["o", "other", "others"]
-          .includes(lower)
+        [
+          "o",
+          "other",
+          "others"
+        ].includes(lower)
       ) {
         return "Other";
       }
     }
+
 
     if (
       /consent|agree|subscribed/.test(
         headerLower
       )
     ) {
+
       if (
-        ["y", "yes", "true", "1"]
-          .includes(lower)
+        [
+          "y",
+          "yes",
+          "true",
+          "1"
+        ].includes(lower)
       ) {
         return "Yes";
       }
 
       if (
-        ["n", "no", "false", "0"]
-          .includes(lower)
+        [
+          "n",
+          "no",
+          "false",
+          "0"
+        ].includes(lower)
       ) {
         return "No";
       }
     }
+
 
     if (
       /status/.test(
         headerLower
       )
     ) {
+
       if (
-        ["active", "activate"]
-          .includes(lower)
+        [
+          "active",
+          "activate"
+        ].includes(lower)
       ) {
         return "Active";
       }
@@ -2880,6 +3462,7 @@
       }
     }
 
+
     return text.replace(
       /\s+/g,
       " "
@@ -2890,8 +3473,10 @@
   function cleanRows(
     sourceRows,
     headers,
-    worksheet
+    worksheet,
+    headerRowIndex
   ) {
+
     const columnCount =
       headers.length;
 
@@ -2911,36 +3496,41 @@
         ]
       );
 
+
     const emptyColumnIndexes =
       getEmptyColumnIndexes(
         sourceRows,
         columnCount
       );
 
-    const removedColumnSet =
+    const removed =
       new Set(
         emptyColumnIndexes
       );
 
+
     const originalToCleanedColumn =
       {};
 
-    let cleanedColIndex = 0;
+    let outputCol = 0;
 
     for (
-      let i = 0;
-      i < columnCount;
-      i++
+      let col = 0;
+      col < columnCount;
+      col++
     ) {
-      if (
-        !removedColumnSet.has(i)
-      ) {
-        originalToCleanedColumn[i] =
-          cleanedColIndex;
 
-        cleanedColIndex++;
+      if (
+        !removed.has(col)
+      ) {
+
+        originalToCleanedColumn[col] =
+          outputCol;
+
+        outputCol++;
       }
     }
+
 
     const cleanedRows = [];
     const sourceRowIndexes = [];
@@ -2952,81 +3542,114 @@
     let datesStandardized = 0;
     let categoriesStandardized = 0;
 
-    const exactKeys = new Set();
+
+    const seenRows =
+      new Set();
+
 
     sourceRows.forEach(
       (sourceRow, sourceIndex) => {
+
         if (
           !Array.isArray(sourceRow) ||
           isEmptyRow(sourceRow)
         ) {
+
           blankRowsRemoved++;
+
           return;
         }
 
-        const key =
+
+        const rowKey =
           makeRowKey(sourceRow);
 
+
         if (
-          exactKeys.has(key)
+          seenRows.has(rowKey)
         ) {
+
           duplicateRowsRemoved++;
+
           return;
         }
 
-        exactKeys.add(key);
+
+        seenRows.add(
+          rowKey
+        );
+
 
         const outputRow = [];
 
+
         for (
           let originalCol = 0;
-          originalCol < columnCount;
+          originalCol <
+          columnCount;
           originalCol++
         ) {
+
           if (
-            removedColumnSet.has(
+            removed.has(
               originalCol
             )
           ) {
             continue;
           }
 
-          const originalValue =
+
+          let value =
             normalizeCell(
-              sourceRow[originalCol]
+              sourceRow[
+                originalCol
+              ]
             );
+
 
           const formula =
             getFormulaAt(
               worksheet,
               sourceIndex +
-                currentAnalysisHeaderRowOffset(),
+                headerRowIndex +
+                1,
               originalCol
             );
 
-          /* Protect formulas */
+
+          /*
+            Formula cells are deliberately
+            left untouched.
+          */
           if (formula) {
+
             outputRow.push(
-              originalValue
+              value
             );
+
             continue;
           }
 
-          let value =
-            originalValue;
 
           const header =
-            headers[originalCol] || "";
+            headers[
+              originalCol
+            ] || "";
+
 
           const lowerHeader =
             header.toLowerCase();
 
-          /* Email */
+
+          /* EMAIL */
+
           if (
-            emailIndex === originalCol &&
+            emailIndex ===
+              originalCol &&
             !isEmptyCell(value) &&
             isValidEmail(value)
           ) {
+
             const normalized =
               String(value)
                 .trim()
@@ -3039,17 +3662,24 @@
               emailsNormalized++;
             }
 
-            value = normalized;
+            value =
+              normalized;
           }
 
-          /* Phone */
+
+          /* PHONE */
+
           if (
-            phoneIndex === originalCol &&
+            phoneIndex ===
+              originalCol &&
             !isEmptyCell(value) &&
             isValidPhone(value)
           ) {
+
             const standardized =
-              standardizePhone(value);
+              standardizePhone(
+                value
+              );
 
             if (
               standardized !==
@@ -3058,22 +3688,31 @@
               phonesStandardized++;
             }
 
-            value = standardized;
+            value =
+              standardized;
           }
 
-          /* Date */
+
+          /* DATE */
+
           if (
             /date|dob|birth/.test(
               lowerHeader
             ) &&
             !isEmptyCell(value)
           ) {
+
             const parsed =
-              parseDateValue(value);
+              parseDateValue(
+                value
+              );
 
             if (parsed) {
+
               const standardized =
-                formatDateYMD(parsed);
+                formatDateYMD(
+                  parsed
+                );
 
               if (
                 standardized !==
@@ -3087,7 +3726,9 @@
             }
           }
 
-          /* Categories */
+
+          /* CATEGORY */
+
           const canonical =
             canonicalCategory(
               value,
@@ -3102,10 +3743,15 @@
             categoriesStandardized++;
           }
 
-          value = canonical;
+          value =
+            canonical;
 
-          outputRow.push(value);
+
+          outputRow.push(
+            value
+          );
         }
+
 
         cleanedRows.push(
           outputRow
@@ -3117,37 +3763,55 @@
       }
     );
 
+
     const cleanedHeaders =
       headers.filter(
         (_, index) =>
-          !removedColumnSet.has(
-            index
-          )
+          !removed.has(index)
       );
+
 
     const totalChanges =
       blankRowsRemoved +
       duplicateRowsRemoved +
+      emptyColumnIndexes.length +
       emailsNormalized +
       phonesStandardized +
       datesStandardized +
-      categoriesStandardized +
-      emptyColumnIndexes.length;
+      categoriesStandardized;
+
 
     return {
-      headers: cleanedHeaders,
-      rows: cleanedRows,
+
+      headers:
+        cleanedHeaders,
+
+      rows:
+        cleanedRows,
+
       sourceRows,
+
       sourceRowIndexes,
-      originalHeaders: headers,
+
+      originalHeaders:
+        headers,
+
       originalToCleanedColumn,
+
       emptyColumnIndexes,
+
       blankRowsRemoved,
+
       duplicateRowsRemoved,
+
       emailsNormalized,
+
       phonesStandardized,
+
       datesStandardized,
+
       categoriesStandardized,
+
       totalChanges
     };
   }
@@ -3156,24 +3820,31 @@
   function renderList(
     id,
     items,
-    emptyText = "None"
+    emptyText
   ) {
-    const element = $(id);
 
-    if (!element) return;
+    const el =
+      $(id);
+
+    if (!el) {
+      return;
+    }
 
     if (
       !Array.isArray(items) ||
       items.length === 0
     ) {
-      element.innerHTML =
+
+      el.innerHTML =
         `<li>${escapeHtml(
-          emptyText
+          emptyText || "None"
         )}</li>`;
+
       return;
     }
 
-    element.innerHTML =
+
+    el.innerHTML =
       items
         .slice(0, 100)
         .map(
@@ -3186,341 +3857,17 @@
   }
 
 
-  function renderReviewReport(
-    result
-  ) {
-    if (!result) return;
-
-    const analysis =
-      currentAnalysis;
-
-    const reviewCount =
-      analysis.invalidEmails +
-      analysis.invalidPhones +
-      analysis.invalidDates +
-      analysis.errors.length +
-      analysis.missingValues +
-      analysis.potentialDuplicates
-        .length;
-
-    setText(
-      "automaticCount",
-      result.totalChanges
-    );
-
-    setText(
-      "reviewCount",
-      reviewCount
-    );
-
-    setText(
-      "reviewFormulaCount",
-      analysis.formulas
-    );
-
-    setText(
-      "reviewDuplicateCount",
-      analysis.potentialDuplicates
-        .length
-    );
-
-    setText(
-      "reviewStatusText",
-      reviewCount > 0
-        ? `${reviewCount} item(s) need review`
-        : "No major review items"
-    );
-
-    const automaticItems = [];
-
-    if (
-      result.blankRowsRemoved > 0
-    ) {
-      automaticItems.push(
-        `${result.blankRowsRemoved} blank row(s) removed`
-      );
-    }
-
-    if (
-      result.duplicateRowsRemoved > 0
-    ) {
-      automaticItems.push(
-        `${result.duplicateRowsRemoved} exact duplicate row(s) removed`
-      );
-    }
-
-    if (
-      result.emptyColumnIndexes
-        .length > 0
-    ) {
-      automaticItems.push(
-        `${result.emptyColumnIndexes.length} completely empty column(s) removed`
-      );
-    }
-
-    if (
-      result.emailsNormalized > 0
-    ) {
-      automaticItems.push(
-        `${result.emailsNormalized} email(s) normalized`
-      );
-    }
-
-    if (
-      result.phonesStandardized > 0
-    ) {
-      automaticItems.push(
-        `${result.phonesStandardized} phone number(s) standardized`
-      );
-    }
-
-    if (
-      result.datesStandardized > 0
-    ) {
-      automaticItems.push(
-        `${result.datesStandardized} date(s) standardized`
-      );
-    }
-
-    if (
-      result.categoriesStandardized > 0
-    ) {
-      automaticItems.push(
-        `${result.categoriesStandardized} categoric value(s) standardized`
-      );
-    }
-
-    if (
-      automaticItems.length === 0
-    ) {
-      automaticItems.push(
-        "No automatic changes were required."
-      );
-    }
-
-    const reviewItems = [];
-
-    if (
-      analysis.invalidEmails > 0
-    ) {
-      reviewItems.push(
-        `${analysis.invalidEmails} invalid email value(s)`
-      );
-    }
-
-    if (
-      analysis.invalidPhones > 0
-    ) {
-      reviewItems.push(
-        `${analysis.invalidPhones} invalid phone value(s)`
-      );
-    }
-
-    if (
-      analysis.invalidDates > 0
-    ) {
-      reviewItems.push(
-        `${analysis.invalidDates} invalid date value(s)`
-      );
-    }
-
-    if (
-      analysis.errors.length > 0
-    ) {
-      reviewItems.push(
-        `${analysis.errors.length} spreadsheet error value(s)`
-      );
-    }
-
-    if (
-      analysis.missingValues > 0
-    ) {
-      reviewItems.push(
-        `${analysis.missingValues} missing/empty cell(s)`
-      );
-    }
-
-    if (
-      analysis.potentialDuplicates.length >
-      0
-    ) {
-      reviewItems.push(
-        `${analysis.potentialDuplicates.length} potential duplicate match(es)`
-      );
-    }
-
-    if (
-      reviewItems.length === 0
-    ) {
-      reviewItems.push(
-        "Nothing currently requires review."
-      );
-    }
-
-    renderList(
-      "automaticChangesList",
-      automaticItems
-    );
-
-    renderList(
-      "needsReviewList",
-      reviewItems
-    );
-  }
-
-
-  function safeBaseName(
-    filename
-  ) {
-    const original =
-      String(
-        filename ||
-        "spreadsheet"
-      );
-
-    const dot =
-      original.lastIndexOf(".");
-
-    const withoutExtension =
-      dot > 0
-        ? original.slice(0, dot)
-        : original;
-
-    const cleaned =
-      withoutExtension
-        .replace(
-          /[<>:"/\\|?*]+/g,
-          ""
-        )
-        .replace(
-          /\s+/g,
-          " "
-        )
-        .trim();
-
-    return (
-      cleaned ||
-      "spreadsheet"
-    );
-  }
-
-
-  function safeSheetName(
-    name,
-    usedNames = []
-  ) {
-    let result =
-      String(
-        name ||
-        "Sheet1"
-      )
-        .replace(
-          /[\\\/\?\*\[\]\:]/g,
-          ""
-        )
-        .trim();
-
-    if (!result) {
-      result = "Sheet1";
-    }
-
-    result =
-      result.slice(0, 31);
-
-    let candidate = result;
-    let counter = 2;
-
-    while (
-      usedNames.some(
-        item =>
-          String(item)
-            .toLowerCase() ===
-          candidate.toLowerCase()
-      )
-    ) {
-      const suffix =
-        ` ${counter}`;
-
-      candidate =
-        result.slice(
-          0,
-          31 -
-            suffix.length
-        ) +
-        suffix;
-
-      counter++;
-    }
-
-    usedNames.push(
-      candidate
-    );
-
-    return candidate;
-  }
-
-
-  function renderExportCenter(
-    result
-  ) {
-    if (
-      !result ||
-      !currentFile
-    ) {
-      return;
-    }
-
-    const base =
-      safeBaseName(
-        currentFile.name
-      );
-
-    setText(
-      "xlsxFilename",
-      `${base}_cleaned.xlsx`
-    );
-
-    setText(
-      "csvFilename",
-      `${base}_cleaned.csv`
-    );
-
-    setText(
-      "xlsxRows",
-      result.rows.length
-    );
-
-    setText(
-      "xlsxColumns",
-      result.headers.length
-    );
-
-    setText(
-      "csvRows",
-      result.rows.length
-    );
-
-    setText(
-      "csvColumns",
-      result.headers.length
-    );
-
-    setExportStatus("");
-
-    setSectionVisible(
-      "exportSection",
-      true
-    );
-  }
-
-
   function renderAnalysis() {
-    if (!currentAnalysis) {
+
+    if (
+      !currentAnalysis
+    ) {
       return;
     }
 
-    const analysis =
+    const a =
       currentAnalysis;
+
 
     setText(
       "statRows",
@@ -3529,110 +3876,116 @@
 
     setText(
       "statColumns",
-      analysis.headers.length
+      a.headers.length
     );
 
     setText(
       "statDuplicates",
-      analysis.duplicateRows.length
+      a.duplicateRows.length
     );
 
     setText(
       "statPotentialDuplicates",
-      analysis.potentialDuplicates.length
+      a.potentialDuplicates.length
     );
 
     setText(
       "statMissing",
-      analysis.missingValues
+      a.missingValues
     );
 
     setText(
       "statInvalidEmails",
-      analysis.invalidEmails
+      a.invalidEmails
     );
 
     setText(
       "statInvalidPhones",
-      analysis.invalidPhones
+      a.invalidPhones
     );
 
     setText(
       "statInvalidDates",
-      analysis.invalidDates
+      a.invalidDates
     );
 
     setText(
       "statFormulas",
-      analysis.formulas
+      a.formulas
     );
 
     setText(
       "statErrors",
-      analysis.errors.length
+      a.errors.length
     );
+
 
     setText(
       "headerDetection",
       `Detected — row ${
-        analysis.headerRowIndex + 1
+        a.headerRowIndex + 1
       }`
     );
 
+
     setText(
       "emailColumn",
-      analysis.emailIndex >= 0
-        ? analysis.headers[
-            analysis.emailIndex
+      a.emailIndex >= 0
+        ? a.headers[
+            a.emailIndex
           ]
         : "Not detected"
     );
+
 
     setText(
       "phoneColumn",
-      analysis.phoneIndex >= 0
-        ? analysis.headers[
-            analysis.phoneIndex
+      a.phoneIndex >= 0
+        ? a.headers[
+            a.phoneIndex
           ]
         : "Not detected"
     );
 
+
     setText(
       "emptyColumns",
-      analysis.emptyColumnIndexes
-        .length
+      a.emptyColumnIndexes.length
     );
+
 
     renderList(
       "invalidEmailsList",
-      analysis.invalidEmailsList,
+      a.invalidEmailsList,
       "No invalid email values detected."
     );
 
     renderList(
       "invalidPhonesList",
-      analysis.invalidPhonesList,
+      a.invalidPhonesList,
       "No invalid phone values detected."
     );
 
     renderList(
       "invalidDatesList",
-      analysis.invalidDatesList,
+      a.invalidDatesList,
       "No invalid date values detected."
     );
 
     renderList(
       "errorsList",
-      analysis.errors,
+      a.errors,
       "No spreadsheet errors detected."
     );
 
-    const typesEl =
+
+    const typeList =
       $("typesList");
 
-    if (typesEl) {
-      typesEl.innerHTML =
-        analysis.types
+    if (typeList) {
+
+      typeList.innerHTML =
+        a.types
           .map(
             item => `
               <div
@@ -3663,6 +4016,7 @@
           .join("");
     }
 
+
     setSectionVisible(
       "overviewSection",
       true
@@ -3685,76 +4039,16 @@
   }
 
 
-  function renderPreview(
-    result
-  ) {
-    const wrap =
-      $("previewWrap");
-
-    if (!wrap) return;
-
-    if (
-      !result ||
-      result.rows.length === 0
-    ) {
-      wrap.innerHTML =
-        `
-        <div class="empty-state">
-          No cleaned rows available for preview.
-        </div>
-        `;
-
-      return;
-    }
-
-    const rows = [
-      result.headers,
-      ...result.rows.slice(
-        0,
-        40
-      )
-    ];
-
-    let html = "<table>";
-
-    rows.forEach(
-      (row, rowIndex) => {
-        html += "<tr>";
-
-        row.forEach(
-          cell => {
-            html +=
-              rowIndex === 0
-                ? `<th>${escapeHtml(
-                    cell
-                  )}</th>`
-                : `<td>${escapeHtml(
-                    cell
-                  )}</td>`;
-          }
-        );
-
-        html += "</tr>";
-      }
-    );
-
-    html += "</table>";
-
-    wrap.innerHTML = html;
-
-    setSectionVisible(
-      "previewSection",
-      true
-    );
-  }
-
-
   function renderCleaningSummary(
     result
   ) {
-    if (!result) return;
 
-    const html = `
+    if (!result) {
+      return;
+    }
+
+    $("summaryBox").innerHTML = `
+
       <div class="summary-line">
         <span>Rows</span>
         <span>
@@ -3775,37 +4069,51 @@
 
       <div class="summary-line">
         <span>Blank rows removed</span>
-        <span>${result.blankRowsRemoved}</span>
+        <span>
+          ${result.blankRowsRemoved}
+        </span>
       </div>
 
       <div class="summary-line">
         <span>Duplicate rows removed</span>
-        <span>${result.duplicateRowsRemoved}</span>
+        <span>
+          ${result.duplicateRowsRemoved}
+        </span>
       </div>
 
       <div class="summary-line">
         <span>Empty columns removed</span>
-        <span>${result.emptyColumnIndexes.length}</span>
+        <span>
+          ${result.emptyColumnIndexes.length}
+        </span>
       </div>
 
       <div class="summary-line">
         <span>Emails normalized</span>
-        <span>${result.emailsNormalized}</span>
+        <span>
+          ${result.emailsNormalized}
+        </span>
       </div>
 
       <div class="summary-line">
         <span>Phones standardized</span>
-        <span>${result.phonesStandardized}</span>
+        <span>
+          ${result.phonesStandardized}
+        </span>
       </div>
 
       <div class="summary-line">
         <span>Dates standardized</span>
-        <span>${result.datesStandardized}</span>
+        <span>
+          ${result.datesStandardized}
+        </span>
       </div>
 
       <div class="summary-line">
         <span>Categories standardized</span>
-        <span>${result.categoriesStandardized}</span>
+        <span>
+          ${result.categoriesStandardized}
+        </span>
       </div>
 
       <div class="summary-line">
@@ -3816,8 +4124,6 @@
       </div>
     `;
 
-    $("summaryBox").innerHTML = html;
-
     setSectionVisible(
       "summarySection",
       true
@@ -3825,74 +4131,360 @@
   }
 
 
-  function analysisMessage() {
-    if (!currentAnalysis) {
-      return "";
+  function renderReviewReport(
+    result
+  ) {
+
+    if (!result) {
+      return;
     }
 
-    const warnings = [];
+    const a =
+      currentAnalysis;
+
+
+    const reviewCount =
+      a.invalidEmails +
+      a.invalidPhones +
+      a.invalidDates +
+      a.errors.length +
+      a.missingValues +
+      a.potentialDuplicates.length;
+
+
+    setText(
+      "automaticCount",
+      result.totalChanges
+    );
+
+    setText(
+      "reviewCount",
+      reviewCount
+    );
+
+    setText(
+      "reviewFormulaCount",
+      a.formulas
+    );
+
+    setText(
+      "reviewDuplicateCount",
+      a.potentialDuplicates.length
+    );
+
+
+    setText(
+      "reviewStatusText",
+      reviewCount > 0
+        ? `${reviewCount} item(s) need review`
+        : "No major review items"
+    );
+
+
+    const automatic = [];
+
 
     if (
-      currentAnalysis.invalidEmails > 0
+      result.blankRowsRemoved > 0
     ) {
-      warnings.push(
-        `${currentAnalysis.invalidEmails} invalid email(s)`
+      automatic.push(
+        `${result.blankRowsRemoved} blank row(s) removed`
       );
     }
 
+
     if (
-      currentAnalysis.invalidPhones > 0
+      result.duplicateRowsRemoved > 0
     ) {
-      warnings.push(
-        `${currentAnalysis.invalidPhones} invalid phone(s)`
+      automatic.push(
+        `${result.duplicateRowsRemoved} exact duplicate row(s) removed`
       );
     }
 
+
     if (
-      currentAnalysis.invalidDates > 0
+      result.emptyColumnIndexes.length > 0
     ) {
-      warnings.push(
-        `${currentAnalysis.invalidDates} invalid date(s)`
+      automatic.push(
+        `${result.emptyColumnIndexes.length} completely empty column(s) removed`
       );
     }
 
+
     if (
-      currentAnalysis.errors.length > 0
+      result.emailsNormalized > 0
     ) {
-      warnings.push(
-        `${currentAnalysis.errors.length} spreadsheet error(s)`
+      automatic.push(
+        `${result.emailsNormalized} email(s) normalized`
       );
     }
 
+
     if (
-      warnings.length === 0
+      result.phonesStandardized > 0
     ) {
-      return "The selected worksheet looks clean enough to process.";
+      automatic.push(
+        `${result.phonesStandardized} phone number(s) standardized`
+      );
     }
 
-    return (
-      "Review recommended: " +
-      warnings.join(", ") +
-      "."
+
+    if (
+      result.datesStandardized > 0
+    ) {
+      automatic.push(
+        `${result.datesStandardized} date(s) standardized`
+      );
+    }
+
+
+    if (
+      result.categoriesStandardized > 0
+    ) {
+      automatic.push(
+        `${result.categoriesStandardized} categoric value(s) standardized`
+      );
+    }
+
+
+    if (
+      automatic.length === 0
+    ) {
+      automatic.push(
+        "No automatic changes were required."
+      );
+    }
+
+
+    const review = [];
+
+
+    if (
+      a.invalidEmails > 0
+    ) {
+      review.push(
+        `${a.invalidEmails} invalid email value(s)`
+      );
+    }
+
+
+    if (
+      a.invalidPhones > 0
+    ) {
+      review.push(
+        `${a.invalidPhones} invalid phone value(s)`
+      );
+    }
+
+
+    if (
+      a.invalidDates > 0
+    ) {
+      review.push(
+        `${a.invalidDates} invalid date value(s)`
+      );
+    }
+
+
+    if (
+      a.errors.length > 0
+    ) {
+      review.push(
+        `${a.errors.length} spreadsheet error value(s)`
+      );
+    }
+
+
+    if (
+      a.missingValues > 0
+    ) {
+      review.push(
+        `${a.missingValues} missing/empty cell(s)`
+      );
+    }
+
+
+    if (
+      a.potentialDuplicates.length > 0
+    ) {
+      review.push(
+        `${a.potentialDuplicates.length} potential duplicate match(es)`
+      );
+    }
+
+
+    if (
+      review.length === 0
+    ) {
+      review.push(
+        "Nothing currently requires review."
+      );
+    }
+
+
+    renderList(
+      "automaticChangesList",
+      automatic,
+      "No automatic changes."
+    );
+
+    renderList(
+      "needsReviewList",
+      review,
+      "Nothing needs review."
     );
   }
 
 
-  function normalizeRowsWidth(
-    rows,
-    width
+  function renderExportCenter(
+    result
   ) {
-    return rows.map(
-      row =>
-        Array.from(
-          {
-            length: width
-          },
-          (_, index) =>
-            Array.isArray(row)
-              ? row[index] ?? ""
-              : ""
-        )
+
+    if (
+      !result ||
+      !currentFile
+    ) {
+      return;
+    }
+
+    const base =
+      safeBaseName(
+        currentFile.name
+      );
+
+
+    setText(
+      "xlsxFilename",
+      `${base}_cleaned.xlsx`
+    );
+
+    setText(
+      "csvFilename",
+      `${base}_cleaned.csv`
+    );
+
+
+    setText(
+      "xlsxRows",
+      result.rows.length
+    );
+
+    setText(
+      "xlsxColumns",
+      result.headers.length
+    );
+
+    setText(
+      "csvRows",
+      result.rows.length
+    );
+
+    setText(
+      "csvColumns",
+      result.headers.length
+    );
+
+
+    setExportStatus("");
+
+
+    setSectionVisible(
+      "exportSection",
+      true
+    );
+  }
+
+
+  function renderPreview(
+    result
+  ) {
+
+    const wrap =
+      $("previewWrap");
+
+    if (!wrap) {
+      return;
+    }
+
+
+    if (
+      !result ||
+      result.rows.length === 0
+    ) {
+
+      wrap.innerHTML = `
+        <div
+          style="
+            padding:30px;
+            text-align:center;
+            color:#6d7788;
+          "
+        >
+          No cleaned rows available for preview.
+        </div>
+      `;
+
+      setSectionVisible(
+        "previewSection",
+        true
+      );
+
+      return;
+    }
+
+
+    const rows = [
+      result.headers,
+      ...result.rows.slice(
+        0,
+        40
+      )
+    ];
+
+
+    let html =
+      "<table>";
+
+
+    rows.forEach(
+      (row, rowIndex) => {
+
+        html +=
+          "<tr>";
+
+
+        row.forEach(
+          cell => {
+
+            html +=
+              rowIndex === 0
+                ? `<th>${escapeHtml(
+                    cell
+                  )}</th>`
+                : `<td>${escapeHtml(
+                    cell
+                  )}</td>`;
+          }
+        );
+
+
+        html +=
+          "</tr>";
+      }
+    );
+
+
+    html +=
+      "</table>";
+
+
+    wrap.innerHTML =
+      html;
+
+
+    setSectionVisible(
+      "previewSection",
+      true
     );
   }
 
@@ -3900,35 +4492,47 @@
   async function loadSelectedSheet(
     options = {}
   ) {
+
     if (!workbook) {
+
       showError(
         "No workbook is loaded. Please choose a spreadsheet first."
       );
+
       return;
     }
+
 
     const sheetName =
       options.sheetName ||
       $("sheetSelect").value ||
       workbook.SheetNames[0];
 
+
     if (
       !sheetName ||
-      !workbook.Sheets[sheetName]
+      !workbook.Sheets[
+        sheetName
+      ]
     ) {
+
       showError(
         "The selected worksheet could not be found."
       );
+
       return;
     }
 
+
     try {
+
       setLoading(
         true,
-        "Reading the selected worksheet safely..."
+        "Reading the selected worksheet..."
       );
 
       clearMessages();
+
 
       currentSheetName =
         sheetName;
@@ -3938,20 +4542,24 @@
           sheetName
         ];
 
+
       const rawRows =
         XLSX.utils.sheet_to_json(
           currentWorksheet,
           {
             header: 1,
             raw: true,
-            defval: ""
+            defval: "",
+            blankrows: true
           }
         );
+
 
       if (
         !Array.isArray(rawRows) ||
         rawRows.length === 0
       ) {
+
         currentRows = [];
         currentAnalysis = null;
         cleanedResult = null;
@@ -3973,6 +4581,13 @@
             )
         );
 
+
+        setSectionVisible(
+          "controlsSection",
+          true
+        );
+
+
         showMessage(
           "warningMessage",
           "This worksheet is empty. Choose another worksheet or upload a different file.",
@@ -3982,61 +4597,83 @@
         return;
       }
 
+
       const headerRowIndex =
         chooseHeaderRow(
           rawRows
         );
 
-      const headerSource =
+
+      const rawHeader =
         rawRows[
           headerRowIndex
         ] || [];
 
+
       const columnCount =
         Math.max(
-          getColumnCount(rawRows),
-          headerSource.length
+          getColumnCount(
+            rawRows
+          ),
+          rawHeader.length
         );
+
 
       const headers =
         makeUniqueHeaders(
           Array.from(
             {
-              length: columnCount
+              length:
+                columnCount
             },
             (_, index) =>
-              headerSource[
+              rawHeader[
                 index
               ] ?? ""
           )
         );
+
 
       const dataRows =
         rawRows
           .slice(
             headerRowIndex + 1
           )
-          .filter(
+          .map(
             row =>
-              Array.isArray(row)
+              Array.from(
+                {
+                  length:
+                    columnCount
+                },
+                (_, index) =>
+                  row?.[index] ??
+                  ""
+              )
           );
 
+
       currentRows =
-        normalizeRowsWidth(
-          dataRows,
-          columnCount
-        );
+        dataRows;
+
 
       currentAnalysis = {
+
         headerRowIndex,
+
         headers,
+
         ...analyzeRows(
           currentRows,
-          headers
+          headers,
+          currentWorksheet,
+          headerRowIndex
         )
       };
 
+
       cleanedResult = null;
+
 
       [
         "summarySection",
@@ -4051,35 +4688,48 @@
           )
       );
 
+
       renderAnalysis();
+
 
       setSectionVisible(
         "controlsSection",
         true
       );
 
+
       if (
         currentRows.length === 0
       ) {
+
         showMessage(
           "warningMessage",
           "Only headers were detected. There are no data rows to clean.",
           "warning"
         );
+
       } else {
+
         showMessage(
           "infoMessage",
           escapeHtml(
-            analysisMessage()
+            currentAnalysis.invalidEmails ||
+            currentAnalysis.invalidPhones ||
+            currentAnalysis.invalidDates ||
+            currentAnalysis.errors.length
+              ? "Review recommended before export."
+              : "The selected worksheet is ready to clean."
           ),
           "info"
         );
       }
 
     } catch (error) {
+
       currentRows = [];
       currentAnalysis = null;
       cleanedResult = null;
+
 
       showError(
         `Could not read this worksheet safely.
@@ -4090,23 +4740,32 @@
           )}
         </div>`
       );
+
     } finally {
+
       setLoading(false);
     }
   }
 
 
-  /* MAIN FILE UPLOAD */
+  /* FILE UPLOAD */
+
   async function handleFileUpload(
     file
   ) {
+
     clearMessages();
+
 
     if (!file) {
       return;
     }
 
-    if (!isSupportedFile(file)) {
+
+    if (
+      !isSupportedFile(file)
+    ) {
+
       showError(
         "Unsupported file type. Please choose an XLSX, XLS or CSV file."
       );
@@ -4114,10 +4773,14 @@
       return;
     }
 
+
     if (
-      !Number.isFinite(file.size) ||
+      !Number.isFinite(
+        file.size
+      ) ||
       file.size <= 0
     ) {
+
       showError(
         "The selected file appears to be empty or unreadable."
       );
@@ -4125,14 +4788,16 @@
       return;
     }
 
+
     if (
-      file.size > MAX_FILE_SIZE
+      file.size >
+      MAX_FILE_SIZE
     ) {
+
       showError(
         `This file is ${formatBytes(
           file.size
-        )}.
-        Please use a file up to ${formatBytes(
+        )}. Please use a file up to ${formatBytes(
           MAX_FILE_SIZE
         )}.`
       );
@@ -4140,17 +4805,23 @@
       return;
     }
 
+
     if (
-      typeof XLSX === "undefined"
+      typeof XLSX ===
+      "undefined"
     ) {
+
       showError(
-        "The spreadsheet library did not load. Please refresh the page and try again."
+        "The spreadsheet library did not load. Refresh the page and try again."
       );
 
       return;
     }
 
-    currentFile = file;
+
+    currentFile =
+      file;
+
     workbook = null;
     currentSheetName = "";
     currentRows = [];
@@ -4158,9 +4829,10 @@
     currentAnalysis = null;
     cleanedResult = null;
 
+
     setText(
       "selectedFileText",
-      "Selected: " + file.name
+      `Selected: ${file.name}`
     );
 
     setText(
@@ -4173,7 +4845,10 @@
       getExtension(
         file.name
       )
-        .replace(".", "")
+        .replace(
+          ".",
+          ""
+        )
         .toUpperCase()
     );
 
@@ -4189,6 +4864,7 @@
       "Reading..."
     );
 
+
     setSectionVisible(
       "fileSection",
       true
@@ -4198,6 +4874,7 @@
       "worksheetSection",
       false
     );
+
 
     [
       "overviewSection",
@@ -4217,23 +4894,35 @@
         )
     );
 
+
     try {
+
       setLoading(
         true,
-        "Opening your spreadsheet safely..."
+        "Opening your spreadsheet..."
       );
+
 
       const buffer =
         await file.arrayBuffer();
+
 
       if (
         !buffer ||
         buffer.byteLength === 0
       ) {
+
         throw new Error(
           "The file contains no readable data."
         );
       }
+
+
+      /*
+        Standard XLSX / XLS / CSV read.
+        SheetJS handles the workbook structure
+        and CSV parsing in-browser.
+      */
 
       workbook =
         XLSX.read(
@@ -4243,9 +4932,11 @@
             cellFormula: true,
             cellNF: true,
             cellDates: true,
+            raw: false,
             WTF: false
           }
         );
+
 
       if (
         !workbook ||
@@ -4254,18 +4945,42 @@
         ) ||
         workbook.SheetNames.length === 0
       ) {
+
         throw new Error(
           "No worksheets were found in this file."
         );
       }
+
+
+      /* Validate every worksheet before display */
+
+      for (
+        const sheetName of
+        workbook.SheetNames
+      ) {
+
+        if (
+          !workbook.Sheets[
+            sheetName
+          ]
+        ) {
+
+          throw new Error(
+            `Worksheet "${sheetName}" could not be read.`
+          );
+        }
+      }
+
 
       setText(
         "sheetCount",
         workbook.SheetNames.length
       );
 
+
       const select =
         $("sheetSelect");
+
 
       select.innerHTML =
         workbook.SheetNames
@@ -4281,40 +4996,59 @@
           )
           .join("");
 
+
       setSectionVisible(
         "worksheetSection",
         true
       );
+
 
       await loadSelectedSheet({
         sheetName:
           workbook.SheetNames[0]
       });
 
+
       if (currentAnalysis) {
+
+        const format =
+          getExtension(
+            file.name
+          )
+            .replace(
+              ".",
+              ""
+            )
+            .toUpperCase();
+
+
         showSuccess(
-          `File loaded successfully: ${escapeHtml(
+          `${format} file loaded successfully: ${escapeHtml(
             file.name
           )}`
         );
       }
 
     } catch (error) {
+
       workbook = null;
       currentWorksheet = null;
-      currentAnalysis = null;
       currentRows = [];
+      currentAnalysis = null;
       cleanedResult = null;
+
 
       setText(
         "sheetCount",
         "—"
       );
 
+
       setSectionVisible(
         "worksheetSection",
         false
       );
+
 
       [
         "overviewSection",
@@ -4333,6 +5067,7 @@
           )
       );
 
+
       showError(
         `This spreadsheet could not be opened safely.
         <div class="error-detail">
@@ -4344,20 +5079,25 @@
       );
 
     } finally {
+
       setLoading(false);
     }
   }
 
 
   /* CLEAN */
+
   async function cleanSpreadsheet() {
+
     clearMessages();
+
 
     if (
       !workbook ||
       !currentWorksheet ||
       !currentAnalysis
     ) {
+
       showError(
         "Please upload a valid spreadsheet and select a worksheet before cleaning."
       );
@@ -4365,16 +5105,22 @@
       return;
     }
 
+
     const button =
       $("cleanButton");
 
+
     try {
-      button.disabled = true;
+
+      button.disabled =
+        true;
+
 
       setLoading(
         true,
-        "Cleaning the worksheet and protecting important data..."
+        "Cleaning the worksheet and protecting formulas..."
       );
+
 
       await new Promise(
         resolve =>
@@ -4384,23 +5130,28 @@
           )
       );
 
+
       if (
         !Array.isArray(
           currentRows
         ) ||
         currentRows.length === 0
       ) {
+
         throw new Error(
           "There are no data rows available to clean."
         );
       }
 
+
       cleanedResult =
         cleanRows(
           currentRows,
           currentAnalysis.headers,
-          currentWorksheet
+          currentWorksheet,
+          currentAnalysis.headerRowIndex
         );
+
 
       if (
         !cleanedResult ||
@@ -4408,19 +5159,22 @@
           cleanedResult.headers
         )
       ) {
+
         throw new Error(
-          "Cleaning did not return a valid spreadsheet result."
+          "Cleaning did not return a valid result."
         );
       }
 
+
       if (
-        cleanedResult.headers
-          .length === 0
+        cleanedResult.headers.length === 0
       ) {
+
         throw new Error(
           "All detected columns were empty. No useful columns remain."
         );
       }
+
 
       renderCleaningSummary(
         cleanedResult
@@ -4438,6 +5192,7 @@
         cleanedResult
       );
 
+
       const reviewCount =
         currentAnalysis.invalidEmails +
         currentAnalysis.invalidPhones +
@@ -4445,6 +5200,7 @@
         currentAnalysis.errors.length +
         currentAnalysis.missingValues +
         currentAnalysis.potentialDuplicates.length;
+
 
       showMessage(
         "successMessage",
@@ -4457,7 +5213,10 @@
       );
 
     } catch (error) {
-      cleanedResult = null;
+
+      cleanedResult =
+        null;
+
 
       [
         "summarySection",
@@ -4472,6 +5231,7 @@
           )
       );
 
+
       showError(
         `The spreadsheet could not be cleaned safely.
         <div class="error-detail">
@@ -4483,19 +5243,24 @@
       );
 
     } finally {
+
       setLoading(false);
 
-      button.disabled = false;
+      button.disabled =
+        false;
     }
   }
 
 
   /* FORMULA RESTORATION */
+
   function restoreFormulasInCleanedSheet(
     outputWorksheet,
     result,
-    sourceWorksheet
+    sourceWorksheet,
+    headerRowIndex
   ) {
+
     if (
       !outputWorksheet ||
       !result ||
@@ -4504,8 +5269,6 @@
       return;
     }
 
-    const headerRowOffset =
-      currentAnalysisHeaderRowOffset();
 
     result.sourceRowIndexes.forEach(
       (
@@ -4515,36 +5278,45 @@
 
         const sourceRowIndex =
           sourceDataRowIndex +
-          headerRowOffset;
+          headerRowIndex +
+          1;
+
 
         const outputRowIndex =
-          cleanedDataRowIndex + 1;
+          cleanedDataRowIndex +
+          1;
+
 
         Object.entries(
           result.originalToCleanedColumn
         ).forEach(
           (
             [
-              originalColString,
-              cleanedCol
+              originalColumn,
+              cleanedColumn
             ]
           ) => {
 
             const originalCol =
               Number(
-                originalColString
+                originalColumn
               );
+
 
             const sourceAddress =
               XLSX.utils.encode_cell({
-                r: sourceRowIndex,
-                c: originalCol
+                r:
+                  sourceRowIndex,
+                c:
+                  originalCol
               });
+
 
             const sourceCell =
               sourceWorksheet[
                 sourceAddress
               ];
+
 
             if (
               !sourceCell ||
@@ -4553,43 +5325,57 @@
               return;
             }
 
+
             const outputAddress =
               XLSX.utils.encode_cell({
-                r: outputRowIndex,
-                c: Number(cleanedCol)
+                r:
+                  outputRowIndex,
+                c:
+                  Number(
+                    cleanedColumn
+                  )
               });
+
 
             if (
               !outputWorksheet[
                 outputAddress
               ]
             ) {
+
               outputWorksheet[
                 outputAddress
               ] = {};
             }
+
 
             const outputCell =
               outputWorksheet[
                 outputAddress
               ];
 
+
             outputCell.f =
               sourceCell.f;
+
 
             if (
               "v" in sourceCell
             ) {
+
               outputCell.v =
                 sourceCell.v;
             }
 
+
             if (
               "t" in sourceCell
             ) {
+
               outputCell.t =
                 sourceCell.t;
             }
+
 
             delete outputCell.w;
           }
@@ -4599,80 +5385,39 @@
   }
 
 
-  function prepareCleanedWorksheet(
+  function createOutputWorksheet(
     result,
-    sourceWorksheet
+    sourceWorksheet,
+    headerRowIndex
   ) {
-    const aoa = [
-      result.headers,
-      ...result.rows
-    ];
 
-    const outputWorksheet =
-      XLSX.utils.aoa_to_sheet(
-        aoa
-      );
+    const worksheet =
+      XLSX.utils.aoa_to_sheet([
+        result.headers,
+        ...result.rows
+      ]);
+
 
     restoreFormulasInCleanedSheet(
-      outputWorksheet,
+      worksheet,
       result,
-      sourceWorksheet
+      sourceWorksheet,
+      headerRowIndex
     );
 
-    return outputWorksheet;
-  }
 
-
-  /* DOWNLOAD */
-  function downloadBlob(
-    blob,
-    filename
-  ) {
-    if (
-      !(blob instanceof Blob)
-    ) {
-      throw new Error(
-        "Export data could not be prepared."
-      );
-    }
-
-    const url =
-      URL.createObjectURL(
-        blob
-      );
-
-    const link =
-      document.createElement(
-        "a"
-      );
-
-    link.href = url;
-    link.download = filename;
-    link.style.display = "none";
-
-    document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(
-      () =>
-        URL.revokeObjectURL(
-          url
-        ),
-      1000
-    );
+    return worksheet;
   }
 
 
   /* EXPORT */
+
   function exportWorkbook(
     format
   ) {
+
     if (!cleanedResult) {
+
       setExportStatus(
         "Please click Clean Spreadsheet before exporting.",
         "warning"
@@ -4687,10 +5432,12 @@
       return;
     }
 
+
     if (
       format !== "xlsx" &&
       format !== "csv"
     ) {
+
       setExportStatus(
         "Unsupported export format.",
         "error"
@@ -4699,9 +5446,12 @@
       return;
     }
 
+
     if (
-      typeof XLSX === "undefined"
+      typeof XLSX ===
+      "undefined"
     ) {
+
       setExportStatus(
         "The export library is unavailable. Refresh the page and try again.",
         "error"
@@ -4710,48 +5460,66 @@
       return;
     }
 
+
     try {
+
       setExportStatus(
         "Preparing your cleaned file...",
         "info"
       );
+
 
       const base =
         safeBaseName(
           currentFile?.name
         );
 
+
       /* CSV */
+
       if (
         format === "csv"
       ) {
-        const ws =
+
+        const worksheet =
           XLSX.utils.aoa_to_sheet([
             cleanedResult.headers,
             ...cleanedResult.rows
           ]);
 
+
         const csv =
           XLSX.utils.sheet_to_csv(
-            ws,
+            worksheet,
             {
               blankrows: false
             }
           );
 
+
+        /*
+          UTF-8 BOM helps spreadsheet software
+          correctly recognize Unicode text.
+        */
+
         const blob =
           new Blob(
-            [csv],
+            [
+              "\uFEFF",
+              csv
+            ],
             {
               type:
                 "text/csv;charset=utf-8;"
             }
           );
 
+
         downloadBlob(
           blob,
           `${base}_cleaned.csv`
         );
+
 
         setExportStatus(
           `CSV export completed successfully: ${escapeHtml(
@@ -4760,21 +5528,30 @@
           "success"
         );
 
+
         showSuccess(
           "CSV export completed successfully."
         );
+
 
         return;
       }
 
 
       /* XLSX */
+
       const outputWorkbook =
         XLSX.utils.book_new();
 
+
       const usedNames = [];
 
-      workbook.SheetNames.forEach(
+
+      const originalSheetNames =
+        workbook.SheetNames;
+
+
+      originalSheetNames.forEach(
         sheetName => {
 
           const sourceWorksheet =
@@ -4782,11 +5559,13 @@
               sheetName
             ];
 
+
           if (
             !sourceWorksheet
           ) {
             return;
           }
+
 
           const rawRows =
             XLSX.utils.sheet_to_json(
@@ -4794,9 +5573,22 @@
               {
                 header: 1,
                 raw: true,
-                defval: ""
+                defval: "",
+                blankrows: true
               }
             );
+
+
+          const outputName =
+            safeSheetName(
+              sheetName,
+              usedNames
+            );
+
+
+          /*
+            Preserve completely empty sheets.
+          */
 
           if (
             !Array.isArray(
@@ -4804,47 +5596,51 @@
             ) ||
             rawRows.length === 0
           ) {
-            const emptyWs =
+
+            const emptyWorksheet =
               XLSX.utils.aoa_to_sheet([
                 []
               ]);
 
+
             XLSX.utils.book_append_sheet(
               outputWorkbook,
-              emptyWs,
-              safeSheetName(
-                sheetName,
-                usedNames
-              )
+              emptyWorksheet,
+              outputName
             );
+
 
             return;
           }
+
 
           const headerRowIndex =
             chooseHeaderRow(
               rawRows
             );
 
+
           const rawHeader =
             rawRows[
               headerRowIndex
             ] || [];
 
+
           const columnCount =
-            getColumnCount(
-              rawRows
+            Math.max(
+              getColumnCount(
+                rawRows
+              ),
+              rawHeader.length
             );
+
 
           const headers =
             makeUniqueHeaders(
               Array.from(
                 {
                   length:
-                    Math.max(
-                      columnCount,
-                      rawHeader.length
-                    )
+                    columnCount
                 },
                 (_, index) =>
                   rawHeader[
@@ -4853,66 +5649,94 @@
               )
             );
 
+
           const dataRows =
-            normalizeRowsWidth(
-              rawRows.slice(
+            rawRows
+              .slice(
                 headerRowIndex + 1
-              ),
-              headers.length
-            );
+              )
+              .map(
+                row =>
+                  Array.from(
+                    {
+                      length:
+                        headers.length
+                    },
+                    (_, index) =>
+                      row?.[
+                        index
+                      ] ?? ""
+                  )
+              );
 
-          const previousAnalysis =
-            currentAnalysis;
 
-          currentAnalysis = {
-            headerRowIndex,
-            headers,
-            ...analyzeRows(
-              dataRows,
+          /*
+            Each sheet gets its OWN analysis.
+            This fixes cross-sheet formula detection
+            and makes multi-sheet exports safer.
+          */
+
+          const sheetAnalysis =
+            {
+              headerRowIndex,
               headers
-            )
-          };
+            };
 
-          const result =
+
+          const sheetResult =
             cleanRows(
               dataRows,
               headers,
-              sourceWorksheet
+              sourceWorksheet,
+              headerRowIndex
             );
 
+
+          /*
+            If every data row disappears but headers
+            still exist, keep the cleaned header row.
+          */
+
           const outputWorksheet =
-            prepareCleanedWorksheet(
-              result,
-              sourceWorksheet
+            createOutputWorksheet(
+              sheetResult,
+              sourceWorksheet,
+              headerRowIndex
             );
+
 
           XLSX.utils.book_append_sheet(
             outputWorkbook,
             outputWorksheet,
-            safeSheetName(
-              sheetName,
-              usedNames
-            )
+            outputName
           );
 
-          currentAnalysis =
-            previousAnalysis;
         }
       );
 
+
       if (
-        outputWorkbook.SheetNames
-          .length === 0
+        outputWorkbook.SheetNames.length ===
+        0
       ) {
+
         throw new Error(
           "No exportable worksheets were produced."
         );
       }
 
+
+      /*
+        XLSX export is produced for all worksheets.
+        Formula cells detected in each source sheet
+        are restored into the cleaned worksheet.
+      */
+
       XLSX.writeFile(
         outputWorkbook,
         `${base}_cleaned.xlsx`
       );
+
 
       setExportStatus(
         `XLSX export completed successfully: ${escapeHtml(
@@ -4920,6 +5744,7 @@
         )}_cleaned.xlsx`,
         "success"
       );
+
 
       showSuccess(
         "XLSX export completed successfully. Formula cells were preserved where detected."
@@ -4938,6 +5763,7 @@
         "error"
       );
 
+
       showError(
         `The file could not be exported safely.
         <div class="error-detail">
@@ -4945,9 +5771,68 @@
             error?.message ||
             "Please try again or reload the page."
           )}
-        </div>`
+        </div>`,
+        "error"
       );
     }
+  }
+
+
+  function downloadBlob(
+    blob,
+    filename
+  ) {
+
+    if (
+      !(blob instanceof Blob)
+    ) {
+
+      throw new Error(
+        "Export data could not be prepared."
+      );
+    }
+
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.href =
+      url;
+
+    link.download =
+      filename;
+
+    link.style.display =
+      "none";
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    setTimeout(
+      () =>
+        URL.revokeObjectURL(
+          url
+        ),
+      1000
+    );
   }
 
 
@@ -4966,11 +5851,14 @@
 
 
   /* COPY REPORT */
+
   async function copyCleaningReport() {
+
     if (
       !cleanedResult ||
       !currentAnalysis
     ) {
+
       showMessage(
         "warningMessage",
         "Clean the spreadsheet first to create a report.",
@@ -4980,77 +5868,79 @@
       return;
     }
 
-    const report = [
-      "Clean My Spreadsheet - Cleaning Report",
-      "",
-      `File: ${
-        currentFile?.name ||
-        "Unknown"
-      }`,
-      `Worksheet: ${
-        currentSheetName ||
-        "Unknown"
-      }`,
-      "",
-      `Rows: ${
-        currentRows.length
-      } → ${
-        cleanedResult.rows.length
-      }`,
-      `Columns: ${
-        currentAnalysis.headers.length
-      } → ${
-        cleanedResult.headers.length
-      }`,
-      `Blank rows removed: ${
-        cleanedResult.blankRowsRemoved
-      }`,
-      `Duplicate rows removed: ${
-        cleanedResult.duplicateRowsRemoved
-      }`,
-      `Empty columns removed: ${
-        cleanedResult.emptyColumnIndexes.length
-      }`,
-      `Emails normalized: ${
-        cleanedResult.emailsNormalized
-      }`,
-      `Phones standardized: ${
-        cleanedResult.phonesStandardized
-      }`,
-      `Dates standardized: ${
-        cleanedResult.datesStandardized
-      }`,
-      `Categories standardized: ${
-        cleanedResult.categoriesStandardized
-      }`,
-      `Total automatic changes: ${
-        cleanedResult.totalChanges
-      }`,
-      "",
-      `Invalid emails needing review: ${
-        currentAnalysis.invalidEmails
-      }`,
-      `Invalid phones needing review: ${
-        currentAnalysis.invalidPhones
-      }`,
-      `Invalid dates needing review: ${
-        currentAnalysis.invalidDates
-      }`,
-      `Spreadsheet errors: ${
-        currentAnalysis.errors.length
-      }`,
-      `Missing values: ${
-        currentAnalysis.missingValues
-      }`,
-      `Potential duplicates: ${
-        currentAnalysis
-          .potentialDuplicates
-          .length
-      }`,
-      `Formula cells: ${
-        currentAnalysis.formulas
-      }`
-    ].join("\n");
+
+    const report =
+      [
+        "Clean My Spreadsheet - Cleaning Report",
+        "",
+        `File: ${
+          currentFile?.name ||
+          "Unknown"
+        }`,
+        `Worksheet: ${
+          currentSheetName ||
+          "Unknown"
+        }`,
+        "",
+        `Rows: ${
+          currentRows.length
+        } → ${
+          cleanedResult.rows.length
+        }`,
+        `Columns: ${
+          currentAnalysis.headers.length
+        } → ${
+          cleanedResult.headers.length
+        }`,
+        "",
+        `Blank rows removed: ${
+          cleanedResult.blankRowsRemoved
+        }`,
+        `Duplicate rows removed: ${
+          cleanedResult.duplicateRowsRemoved
+        }`,
+        `Empty columns removed: ${
+          cleanedResult.emptyColumnIndexes.length
+        }`,
+        `Emails normalized: ${
+          cleanedResult.emailsNormalized
+        }`,
+        `Phones standardized: ${
+          cleanedResult.phonesStandardized
+        }`,
+        `Dates standardized: ${
+          cleanedResult.datesStandardized
+        }`,
+        `Categories standardized: ${
+          cleanedResult.categoriesStandardized
+        }`,
+        `Total automatic changes: ${
+          cleanedResult.totalChanges
+        }`,
+        "",
+        `Invalid emails: ${
+          currentAnalysis.invalidEmails
+        }`,
+        `Invalid phones: ${
+          currentAnalysis.invalidPhones
+        }`,
+        `Invalid dates: ${
+          currentAnalysis.invalidDates
+        }`,
+        `Spreadsheet errors: ${
+          currentAnalysis.errors.length
+        }`,
+        `Missing values: ${
+          currentAnalysis.missingValues
+        }`,
+        `Potential duplicates: ${
+          currentAnalysis.potentialDuplicates.length
+        }`,
+        `Formula cells: ${
+          currentAnalysis.formulas
+        }`
+      ].join("\n");
+
 
     try {
 
@@ -5058,9 +5948,11 @@
         navigator.clipboard &&
         navigator.clipboard.writeText
       ) {
+
         await navigator.clipboard.writeText(
           report
         );
+
       } else {
 
         const textarea =
@@ -5090,6 +5982,7 @@
         textarea.remove();
       }
 
+
       showSuccess(
         "Cleaning report copied to your clipboard."
       );
@@ -5110,7 +6003,9 @@
 
 
   /* RESET */
+
   function resetApp() {
+
     workbook = null;
     currentFile = null;
     currentSheetName = "";
@@ -5119,17 +6014,21 @@
     currentAnalysis = null;
     cleanedResult = null;
 
+
     const input =
       $("fileInput");
+
 
     if (input) {
       input.value = "";
     }
 
+
     setText(
       "selectedFileText",
       "No file selected"
     );
+
 
     [
       "fileSection",
@@ -5151,13 +6050,13 @@
         )
     );
 
+
     clearMessages();
 
     setExportStatus("");
 
-    setLoading(
-      false
-    );
+    setLoading(false);
+
 
     window.scrollTo({
       top: 0,
@@ -5167,10 +6066,13 @@
 
 
   /* DRAG & DROP */
+
   function handleDragOver(
     event
   ) {
+
     event.preventDefault();
+
     event.stopPropagation();
 
     $("uploadZone")
@@ -5183,7 +6085,9 @@
   function handleDragLeave(
     event
   ) {
+
     event.preventDefault();
+
     event.stopPropagation();
 
     $("uploadZone")
@@ -5196,7 +6100,9 @@
   function handleDrop(
     event
   ) {
+
     event.preventDefault();
+
     event.stopPropagation();
 
     $("uploadZone")
@@ -5204,11 +6110,15 @@
         "dragover"
       );
 
+
     const file =
-      event.dataTransfer
+      event
+        .dataTransfer
         ?.files?.[0];
 
+
     if (file) {
+
       handleFileUpload(
         file
       );
@@ -5217,6 +6127,7 @@
 
 
   /* STARTUP */
+
   document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -5227,17 +6138,27 @@
       const sheetSelect =
         $("sheetSelect");
 
-      /* DIRECT FILE INPUT */
+
+      /*
+        Direct browser file-input listener.
+        This is intentionally simple so the
+        upload control remains reliable on ChromeOS.
+      */
+
       if (fileInput) {
+
         fileInput.addEventListener(
           "change",
           event => {
 
             const file =
-              event.target
-                .files?.[0];
+              event
+                .target
+                ?.files?.[0];
+
 
             if (file) {
+
               handleFileUpload(
                 file
               );
@@ -5246,13 +6167,16 @@
         );
       }
 
-      /* WORKSHEET CHANGE */
+
       if (sheetSelect) {
+
         sheetSelect.addEventListener(
           "change",
           async () => {
 
-            cleanedResult = null;
+            cleanedResult =
+              null;
+
 
             [
               "summarySection",
@@ -5267,13 +6191,61 @@
                 )
             );
 
+
             await loadSelectedSheet();
+          }
+        );
+      }
+
+
+      const uploadZone =
+        $("uploadZone");
+
+
+      if (uploadZone) {
+
+        uploadZone.addEventListener(
+          "dragover",
+          event => {
+
+            event.preventDefault();
+
+            uploadZone.classList.add(
+              "dragover"
+            );
+          }
+        );
+
+
+        uploadZone.addEventListener(
+          "dragleave",
+          event => {
+
+            event.preventDefault();
+
+            uploadZone.classList.remove(
+              "dragover"
+            );
+          }
+        );
+
+
+        uploadZone.addEventListener(
+          "drop",
+          event => {
+
+            event.preventDefault();
+
+            uploadZone.classList.remove(
+              "dragover"
+            );
           }
         );
       }
 
     }
   );
+
 </script>
 
 </body>
