@@ -62,7 +62,11 @@
     }
 
     header.hero {
-      background: linear-gradient(180deg, #fff 0%, #f6f9fc 100%);
+      background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f6f9fc 100%
+      );
       border-bottom: 1px solid var(--border);
       padding: 42px 0 34px;
     }
@@ -236,6 +240,40 @@
       display: block;
     }
 
+    .progress-wrap {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .progress-wrap.show {
+      display: block;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      overflow: hidden;
+      background: #e9edf3;
+      border-radius: 999px;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--blue);
+      border-radius: 999px;
+      transition: width 0.12s ease;
+    }
+
     .message {
       display: none;
       margin-top: 14px;
@@ -398,6 +436,7 @@
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
+      transform: none;
     }
 
     .green {
@@ -668,15 +707,15 @@
   <div class="container">
 
     <div class="badge">
-      Step 52 • XLSX / XLS / CSV Compatibility
+      Step 53 • Larger Spreadsheet Performance
     </div>
 
     <h1>Clean My Spreadsheet</h1>
 
     <p>
       Clean, validate and standardize messy spreadsheet data in seconds —
-      with safer file processing, broader spreadsheet compatibility,
-      formula protection and reliable exports.
+      with chunked processing for larger spreadsheets, formula protection
+      and reliable exports.
     </p>
 
     <div class="chips">
@@ -689,6 +728,7 @@
       <span class="chip">Duplicate Detection</span>
       <span class="chip">Formula & Error Detection</span>
       <span class="chip">XLSX + XLS + CSV</span>
+      <span class="chip">Large File Processing</span>
     </div>
 
   </div>
@@ -719,6 +759,7 @@
     </div>
   </div>
 
+
   <div
     class="upload-zone"
     id="uploadZone"
@@ -727,14 +768,19 @@
     ondrop="handleDrop(event)"
   >
 
-    <div class="upload-icon">📁</div>
+    <div class="upload-icon">
+      📁
+    </div>
 
-    <h3>Choose your spreadsheet</h3>
+    <h3>
+      Choose your spreadsheet
+    </h3>
 
     <p>
       Drop your file here or select it from your device.
       Maximum recommended file size: 25 MB.
     </p>
+
 
     <label class="file-picker">
 
@@ -750,6 +796,7 @@
 
     </label>
 
+
     <div
       id="selectedFileText"
       class="selected-file"
@@ -759,12 +806,56 @@
 
   </div>
 
+
   <div
     id="loadingBox"
     class="loading-box"
   >
-    Processing your spreadsheet safely...
+    Processing your spreadsheet...
   </div>
+
+
+  <div
+    id="progressWrap"
+    class="progress-wrap"
+  >
+
+    <div class="progress-top">
+
+      <span id="progressLabel">
+        Preparing...
+      </span>
+
+      <span id="progressPercent">
+        0%
+      </span>
+
+    </div>
+
+    <div class="progress-track">
+
+      <div
+        class="progress-bar"
+        id="progressBar"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <div class="action-row hidden" id="cancelRow">
+
+    <button
+      class="danger-btn"
+      onclick="cancelProcessing()"
+      id="cancelButton"
+    >
+      ✕ Cancel Processing
+    </button>
+
+  </div>
+
 
   <div
     id="successMessage"
@@ -801,46 +892,70 @@
     Basic information detected from your uploaded file.
   </p>
 
+
   <div class="file-grid">
 
     <div class="info-card">
-      <div class="info-label">File Name</div>
+
+      <div class="info-label">
+        File Name
+      </div>
+
       <div
         class="info-value"
         id="fileName"
       >
         —
       </div>
+
     </div>
 
+
     <div class="info-card">
-      <div class="info-label">File Type</div>
+
+      <div class="info-label">
+        File Type
+      </div>
+
       <div
         class="info-value"
         id="fileType"
       >
         —
       </div>
+
     </div>
 
+
     <div class="info-card">
-      <div class="info-label">File Size</div>
+
+      <div class="info-label">
+        File Size
+      </div>
+
       <div
         class="info-value"
         id="fileSize"
       >
         —
       </div>
+
     </div>
 
+
     <div class="info-card">
-      <div class="info-label">Worksheets</div>
+
+      <div class="info-label">
+        Worksheets
+      </div>
+
       <div
         class="info-value"
         id="sheetCount"
       >
         —
       </div>
+
     </div>
 
   </div>
@@ -860,6 +975,7 @@
     Select the worksheet you want to review and clean.
   </p>
 
+
   <div class="select-row">
 
     <label for="sheetSelect">
@@ -870,10 +986,12 @@
 
   </div>
 
+
   <div
     id="worksheetMessage"
     class="message info"
   ></div>
+
 
   <div class="action-row">
 
@@ -902,136 +1020,206 @@
     What was detected in the selected worksheet before cleaning.
   </p>
 
+
   <div class="stats-grid">
 
     <div class="stat-card">
-      <div class="stat-label">Rows</div>
+
+      <div class="stat-label">
+        Rows
+      </div>
+
       <div
         class="stat-value"
         id="statRows"
       >
         0
       </div>
+
       <div class="stat-note">
         Data rows detected
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Columns</div>
+
+      <div class="stat-label">
+        Columns
+      </div>
+
       <div
         class="stat-value"
         id="statColumns"
       >
         0
       </div>
+
       <div class="stat-note">
         Columns detected
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Duplicates</div>
+
+      <div class="stat-label">
+        Duplicates
+      </div>
+
       <div
         class="stat-value orange"
         id="statDuplicates"
       >
         0
       </div>
+
       <div class="stat-note">
         Exact duplicate rows
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Potential Duplicates</div>
+
+      <div class="stat-label">
+        Potential Duplicates
+      </div>
+
       <div
         class="stat-value orange"
         id="statPotentialDuplicates"
       >
         0
       </div>
+
       <div class="stat-note">
         Identity-based matches
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Missing Values</div>
+
+      <div class="stat-label">
+        Missing Values
+      </div>
+
       <div
         class="stat-value orange"
         id="statMissing"
       >
         0
       </div>
+
       <div class="stat-note">
         Empty cells
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Invalid Emails</div>
+
+      <div class="stat-label">
+        Invalid Emails
+      </div>
+
       <div
         class="stat-value red"
         id="statInvalidEmails"
       >
         0
       </div>
+
       <div class="stat-note">
         Need review
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Invalid Phones</div>
+
+      <div class="stat-label">
+        Invalid Phones
+      </div>
+
       <div
         class="stat-value red"
         id="statInvalidPhones"
       >
         0
       </div>
+
       <div class="stat-note">
         Need review
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Invalid Dates</div>
+
+      <div class="stat-label">
+        Invalid Dates
+      </div>
+
       <div
         class="stat-value red"
         id="statInvalidDates"
       >
         0
       </div>
+
       <div class="stat-note">
         Need review
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Formulas</div>
+
+      <div class="stat-label">
+        Formulas
+      </div>
+
       <div
         class="stat-value purple"
         id="statFormulas"
       >
         0
       </div>
+
       <div class="stat-note">
         Detected formula cells
       </div>
+
     </div>
 
+
     <div class="stat-card">
-      <div class="stat-label">Spreadsheet Errors</div>
+
+      <div class="stat-label">
+        Spreadsheet Errors
+      </div>
+
       <div
         class="stat-value red"
         id="statErrors"
       >
         0
       </div>
+
       <div class="stat-note">
         Error values detected
       </div>
+
     </div>
 
   </div>
@@ -1051,9 +1239,11 @@
     Important quality checks detected in your spreadsheet.
   </p>
 
+
   <div class="check-grid">
 
     <div class="check-card">
+
       <div class="check-label">
         Header Detection
       </div>
@@ -1061,9 +1251,12 @@
       <strong id="headerDetection">
         —
       </strong>
+
     </div>
 
+
     <div class="check-card">
+
       <div class="check-label">
         Email Column
       </div>
@@ -1071,9 +1264,12 @@
       <strong id="emailColumn">
         —
       </strong>
+
     </div>
 
+
     <div class="check-card">
+
       <div class="check-label">
         Phone Column
       </div>
@@ -1081,9 +1277,12 @@
       <strong id="phoneColumn">
         —
       </strong>
+
     </div>
 
+
     <div class="check-card">
+
       <div class="check-label">
         Empty Columns
       </div>
@@ -1091,6 +1290,7 @@
       <strong id="emptyColumns">
         0
       </strong>
+
     </div>
 
   </div>
@@ -1127,9 +1327,11 @@
     These items are preserved so you can review them before export.
   </p>
 
+
   <div class="list-grid">
 
     <div class="list-box">
+
       <div class="list-box-header">
         Invalid Emails
       </div>
@@ -1137,9 +1339,12 @@
       <ul id="invalidEmailsList">
         <li>None</li>
       </ul>
+
     </div>
 
+
     <div class="list-box">
+
       <div class="list-box-header">
         Invalid Phones
       </div>
@@ -1147,9 +1352,12 @@
       <ul id="invalidPhonesList">
         <li>None</li>
       </ul>
+
     </div>
 
+
     <div class="list-box">
+
       <div class="list-box-header">
         Invalid Dates
       </div>
@@ -1157,9 +1365,12 @@
       <ul id="invalidDatesList">
         <li>None</li>
       </ul>
+
     </div>
 
+
     <div class="list-box">
+
       <div class="list-box-header">
         Spreadsheet Errors
       </div>
@@ -1167,6 +1378,7 @@
       <ul id="errorsList">
         <li>None</li>
       </ul>
+
     </div>
 
   </div>
@@ -1186,10 +1398,12 @@
     A before-and-after summary of the automatic changes.
   </p>
 
+
   <div
     class="summary-box"
     id="summaryBox"
   ></div>
+
 
   <div class="action-row">
 
@@ -1215,7 +1429,9 @@
 
     <div>
 
-      <h2>✅ Review Before Export</h2>
+      <h2>
+        ✅ Review Before Export
+      </h2>
 
       <p
         class="section-subtitle"
@@ -1225,6 +1441,7 @@
       </p>
 
     </div>
+
 
     <div class="review-status">
 
@@ -1238,9 +1455,11 @@
 
   </div>
 
+
   <div class="review-grid">
 
     <div class="review-card">
+
       <div class="review-label">
         Automatic Changes
       </div>
@@ -1251,9 +1470,12 @@
       >
         0
       </strong>
+
     </div>
 
+
     <div class="review-card">
+
       <div class="review-label">
         Needs Review
       </div>
@@ -1264,9 +1486,12 @@
       >
         0
       </strong>
+
     </div>
 
+
     <div class="review-card">
+
       <div class="review-label">
         Formula Cells
       </div>
@@ -1277,9 +1502,12 @@
       >
         0
       </strong>
+
     </div>
 
+
     <div class="review-card">
+
       <div class="review-label">
         Potential Duplicates
       </div>
@@ -1290,9 +1518,11 @@
       >
         0
       </strong>
+
     </div>
 
   </div>
+
 
   <div
     class="list-grid"
@@ -1310,6 +1540,7 @@
       </ul>
 
     </div>
+
 
     <div class="list-box">
 
@@ -1338,7 +1569,9 @@
 
     <div>
 
-      <h2>📦 Export Center</h2>
+      <h2>
+        📦 Export Center
+      </h2>
 
       <p
         class="section-subtitle"
@@ -1348,6 +1581,7 @@
       </p>
 
     </div>
+
 
     <div class="export-status-pill">
 
@@ -1374,6 +1608,7 @@
         Works for Excel-compatible workflows and preserves formulas where detected.
       </p>
 
+
       <div class="export-meta">
 
         <div>
@@ -1384,6 +1619,7 @@
           </strong>
         </div>
 
+
         <div>
           Rows
 
@@ -1392,6 +1628,7 @@
           </strong>
         </div>
 
+
         <div>
           Columns
 
@@ -1399,6 +1636,7 @@
             0
           </strong>
         </div>
+
 
         <div>
           Format
@@ -1409,6 +1647,7 @@
         </div>
 
       </div>
+
 
       <button
         class="export-button xlsx-button"
@@ -1430,6 +1669,7 @@
         Useful for simple data imports and systems that accept CSV files.
       </p>
 
+
       <div class="export-meta">
 
         <div>
@@ -1440,6 +1680,7 @@
           </strong>
         </div>
 
+
         <div>
           Rows
 
@@ -1448,6 +1689,7 @@
           </strong>
         </div>
 
+
         <div>
           Columns
 
@@ -1455,6 +1697,7 @@
             0
           </strong>
         </div>
+
 
         <div>
           Format
@@ -1465,6 +1708,7 @@
         </div>
 
       </div>
+
 
       <button
         class="export-button csv-button"
@@ -1500,6 +1744,7 @@
       📗 Quick XLSX Export
     </button>
 
+
     <button
       class="secondary-btn"
       onclick="exportWorkbook('csv')"
@@ -1518,11 +1763,14 @@
   id="previewSection"
 >
 
-  <h2>👀 Cleaned Preview</h2>
+  <h2>
+    👀 Cleaned Preview
+  </h2>
 
   <p class="section-subtitle">
     Preview the cleaned data before downloading it.
   </p>
+
 
   <div
     class="preview-wrap"
@@ -1538,11 +1786,14 @@
   id="controlsSection"
 >
 
-  <h2>🔄 Start Again</h2>
+  <h2>
+    🔄 Start Again
+  </h2>
 
   <p class="section-subtitle">
     Start with another spreadsheet.
   </p>
+
 
   <div class="action-row">
 
@@ -1578,6 +1829,20 @@
     ".csv"
   ];
 
+  /*
+    Number of rows handled before giving
+    the browser a chance to update the UI.
+  */
+  const PROCESS_CHUNK_SIZE = 500;
+
+  /*
+    Type inference samples a limited number
+    of rows for large files. This prevents
+    large workbooks from repeatedly scanning
+    thousands of rows per column.
+  */
+  const TYPE_SAMPLE_SIZE = 3000;
+
 
   let workbook = null;
   let currentFile = null;
@@ -1587,13 +1852,19 @@
   let currentAnalysis = null;
   let cleanedResult = null;
 
+  let processingCancelled = false;
+  let processingActive = false;
+
 
   function $(id) {
     return document.getElementById(id);
   }
 
 
-  function setText(id, value) {
+  function setText(
+    id,
+    value
+  ) {
 
     const el = $(id);
 
@@ -1607,14 +1878,31 @@
   }
 
 
-  function escapeHtml(value) {
+  function escapeHtml(
+    value
+  ) {
 
     return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
   }
 
 
@@ -1636,7 +1924,9 @@
   }
 
 
-  function hideMessage(id) {
+  function hideMessage(
+    id
+  ) {
 
     const el = $(id);
 
@@ -1651,14 +1941,27 @@
 
   function clearMessages() {
 
-    hideMessage("successMessage");
-    hideMessage("errorMessage");
-    hideMessage("warningMessage");
-    hideMessage("infoMessage");
+    hideMessage(
+      "successMessage"
+    );
+
+    hideMessage(
+      "errorMessage"
+    );
+
+    hideMessage(
+      "warningMessage"
+    );
+
+    hideMessage(
+      "infoMessage"
+    );
   }
 
 
-  function showSuccess(message) {
+  function showSuccess(
+    message
+  ) {
 
     clearMessages();
 
@@ -1670,7 +1973,9 @@
   }
 
 
-  function showError(message) {
+  function showError(
+    message
+  ) {
 
     clearMessages();
 
@@ -1712,8 +2017,7 @@
 
   function setLoading(
     show,
-    message =
-      "Processing your spreadsheet safely..."
+    message
   ) {
 
     const el =
@@ -1722,11 +2026,82 @@
     if (!el) return;
 
     el.textContent =
-      message;
+      message ||
+      "Processing your spreadsheet...";
 
     el.classList.toggle(
       "show",
       !!show
+    );
+  }
+
+
+  function setProgress(
+    percent,
+    label
+  ) {
+
+    const safePercent =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          Number(percent) || 0
+        )
+      );
+
+    const bar =
+      $("progressBar");
+
+    if (bar) {
+      bar.style.width =
+        `${safePercent}%`;
+    }
+
+    setText(
+      "progressPercent",
+      `${Math.round(
+        safePercent
+      )}%`
+    );
+
+    if (label) {
+      setText(
+        "progressLabel",
+        label
+      );
+    }
+  }
+
+
+  function showProgress(
+    show
+  ) {
+
+    const wrap =
+      $("progressWrap");
+
+    if (!wrap) return;
+
+    wrap.classList.toggle(
+      "show",
+      !!show
+    );
+  }
+
+
+  function showCancelButton(
+    show
+  ) {
+
+    const row =
+      $("cancelRow");
+
+    if (!row) return;
+
+    row.classList.toggle(
+      "hidden",
+      !show
     );
   }
 
@@ -1747,10 +2122,14 @@
   }
 
 
-  function formatBytes(bytes) {
+  function formatBytes(
+    bytes
+  ) {
 
     if (
-      !Number.isFinite(bytes) ||
+      !Number.isFinite(
+        bytes
+      ) ||
       bytes <= 0
     ) {
       return "0 B";
@@ -1763,21 +2142,21 @@
       "GB"
     ];
 
-    let size = bytes;
+    let value = bytes;
     let index = 0;
 
     while (
-      size >= 1024 &&
+      value >= 1024 &&
       index <
         units.length - 1
     ) {
 
-      size /= 1024;
+      value /= 1024;
       index++;
     }
 
     return (
-      size.toFixed(
+      value.toFixed(
         index === 0 ? 0 : 2
       ) +
       " " +
@@ -1874,11 +2253,15 @@
         .trim();
 
     if (!result) {
-      result = "Sheet1";
+      result =
+        "Sheet1";
     }
 
     result =
-      result.slice(0, 31);
+      result.slice(
+        0,
+        31
+      );
 
     let candidate =
       result;
@@ -1887,8 +2270,9 @@
 
     while (
       usedNames.some(
-        name =>
-          name.toLowerCase() ===
+        item =>
+          String(item)
+            .toLowerCase() ===
           candidate.toLowerCase()
       )
     ) {
@@ -1907,7 +2291,9 @@
       count++;
     }
 
-    usedNames.push(candidate);
+    usedNames.push(
+      candidate
+    );
 
     return candidate;
   }
@@ -1918,8 +2304,9 @@
   ) {
 
     let text =
-      String(value ?? "")
-        .trim();
+      String(
+        value ?? ""
+      ).trim();
 
     if (!text) {
       return "";
@@ -1969,28 +2356,40 @@
   ) {
 
     const v =
-      String(value ?? "").trim();
+      String(
+        value ?? ""
+      ).trim();
 
     if (!v) return false;
 
-    if (isValidEmail(v)) {
-      return true;
-    }
-
-    if (isValidPhone(v)) {
-      return true;
-    }
-
-    if (isErrorValue(v)) {
-      return true;
-    }
-
-    if (isDateLike(v)) {
+    if (
+      isValidEmail(v)
+    ) {
       return true;
     }
 
     if (
-      /^\d+(?:\.\d+)?$/.test(v)
+      isValidPhone(v)
+    ) {
+      return true;
+    }
+
+    if (
+      isErrorValue(v)
+    ) {
+      return true;
+    }
+
+    if (
+      isDateLike(v)
+    ) {
+      return true;
+    }
+
+    if (
+      /^\d+(?:\.\d+)?$/.test(
+        v
+      )
     ) {
       return true;
     }
@@ -1999,7 +2398,9 @@
   }
 
 
-  function headerScore(row) {
+  function headerScore(
+    row
+  ) {
 
     if (
       !Array.isArray(row) ||
@@ -2015,14 +2416,18 @@
     ) {
 
       const value =
-        String(cell ?? "").trim();
+        String(
+          cell ?? ""
+        ).trim();
 
       if (!value) {
         continue;
       }
 
       if (
-        headerLooksLikeData(value)
+        headerLooksLikeData(
+          value
+        )
       ) {
 
         score -= 2;
@@ -2082,7 +2487,8 @@
         );
 
       if (
-        score > bestScore
+        score >
+        bestScore
       ) {
 
         bestScore = score;
@@ -2102,7 +2508,10 @@
     const result = [];
 
     headers.forEach(
-      (value, index) => {
+      (
+        value,
+        index
+      ) => {
 
         let header =
           normalizeHeader(
@@ -2112,20 +2521,27 @@
         if (!header) {
 
           header =
-            `Column ${index + 1}`;
+            `Column ${
+              index + 1
+            }`;
         }
 
         if (!seen[header]) {
 
           seen[header] = 1;
-          result.push(header);
+
+          result.push(
+            header
+          );
 
         } else {
 
           seen[header]++;
 
           result.push(
-            `${header} ${seen[header]}`
+            `${header} ${
+              seen[header]
+            }`
           );
         }
       }
@@ -2146,7 +2562,10 @@
     }
 
     return rows.reduce(
-      (max, row) =>
+      (
+        max,
+        row
+      ) =>
         Math.max(
           max,
           Array.isArray(row)
@@ -2185,8 +2604,9 @@
   ) {
 
     return (
-      String(value ?? "")
-        .trim() === ""
+      String(
+        value ?? ""
+      ).trim() === ""
     );
   }
 
@@ -2416,7 +2836,8 @@
           11,
           30
         ) +
-        serial * 86400000
+        serial *
+          86400000
       );
 
     return Number.isNaN(
@@ -2498,13 +2919,20 @@
     if (match) {
 
       const a =
-        Number(match[1]);
+        Number(
+          match[1]
+        );
 
       const b =
-        Number(match[2]);
+        Number(
+          match[2]
+        );
 
       const year =
-        Number(match[3]);
+        Number(
+          match[3]
+        );
+
 
       if (
         a > 12 &&
@@ -2521,14 +2949,17 @@
           );
 
         if (
-          date.getUTCFullYear() === year &&
+          date.getUTCFullYear() ===
+            year &&
           date.getUTCMonth() ===
             b - 1 &&
-          date.getUTCDate() === a
+          date.getUTCDate() ===
+            a
         ) {
           return date;
         }
       }
+
 
       if (
         b > 12 &&
@@ -2545,16 +2976,23 @@
           );
 
         if (
-          date.getUTCFullYear() === year &&
+          date.getUTCFullYear() ===
+            year &&
           date.getUTCMonth() ===
             a - 1 &&
-          date.getUTCDate() === b
+          date.getUTCDate() ===
+            b
         ) {
           return date;
         }
       }
 
-      /* Default: DD/MM/YYYY */
+
+      /*
+        Default:
+        DD/MM/YYYY
+      */
+
       const date =
         new Date(
           Date.UTC(
@@ -2565,30 +3003,41 @@
         );
 
       if (
-        date.getUTCFullYear() === year &&
+        date.getUTCFullYear() ===
+          year &&
         date.getUTCMonth() ===
           b - 1 &&
-        date.getUTCDate() === a
+        date.getUTCDate() ===
+          a
       ) {
         return date;
       }
     }
+
 
     match =
       text.match(
         /^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})$/
       );
 
+
     if (match) {
 
       const year =
-        Number(match[1]);
+        Number(
+          match[1]
+        );
 
       const month =
-        Number(match[2]);
+        Number(
+          match[2]
+        );
 
       const day =
-        Number(match[3]);
+        Number(
+          match[3]
+        );
+
 
       const date =
         new Date(
@@ -2599,15 +3048,19 @@
           )
         );
 
+
       if (
-        date.getUTCFullYear() === year &&
+        date.getUTCFullYear() ===
+          year &&
         date.getUTCMonth() ===
           month - 1 &&
-        date.getUTCDate() === day
+        date.getUTCDate() ===
+          day
       ) {
         return date;
       }
     }
+
 
     const parsed =
       new Date(text);
@@ -2632,14 +3085,17 @@
       );
     }
 
+
     const text =
       String(
         value ?? ""
       ).trim();
 
+
     if (!text) {
       return false;
     }
+
 
     if (
       /^\d{4}[\/.-]\d{1,2}[\/.-]\d{1,2}$/.test(
@@ -2651,6 +3107,7 @@
       );
     }
 
+
     if (
       /^\d{1,2}[\/.-]\d{1,2}[\/.-]\d{4}$/.test(
         text
@@ -2660,6 +3117,7 @@
         text
       );
     }
+
 
     return false;
   }
@@ -2675,14 +3133,19 @@
       return null;
     }
 
+
     const address =
       XLSX.utils.encode_cell({
         r: rowIndex,
         c: colIndex
       });
 
+
     const cell =
-      worksheet[address];
+      worksheet[
+        address
+      ];
+
 
     if (
       !cell ||
@@ -2690,6 +3153,7 @@
     ) {
       return null;
     }
+
 
     return {
       address,
@@ -2711,6 +3175,7 @@
       return -1;
     }
 
+
     for (
       let i = 0;
       i < headers.length;
@@ -2719,18 +3184,23 @@
 
       const text =
         String(
-          headers[i] || ""
+          headers[i] ||
+          ""
         ).toLowerCase();
+
 
       if (
         patterns.some(
           pattern =>
-            text.includes(pattern)
+            text.includes(
+              pattern
+            )
         )
       ) {
         return i;
       }
     }
+
 
     return -1;
   }
@@ -2742,14 +3212,17 @@
 
     const text =
       String(
-        header || ""
+        header ||
+        ""
       ).toLowerCase();
+
 
     if (
       /email|e-mail/.test(text)
     ) {
       return "email";
     }
+
 
     if (
       /phone|mobile|contact/.test(
@@ -2759,11 +3232,13 @@
       return "phone";
     }
 
+
     if (
       /date|dob|birth/.test(text)
     ) {
       return "date";
     }
+
 
     if (
       /gender|sex/.test(text)
@@ -2771,11 +3246,13 @@
       return "gender";
     }
 
+
     if (
       /consent/.test(text)
     ) {
       return "consent";
     }
+
 
     if (
       /status/.test(text)
@@ -2783,11 +3260,13 @@
       return "status";
     }
 
+
     if (
       /name/.test(text)
     ) {
       return "name";
     }
+
 
     if (
       /city|state|country/.test(
@@ -2797,121 +3276,269 @@
       return "location";
     }
 
+
     return "general";
   }
 
 
-  function inferColumnType(
+  /*
+    Fast column type detection.
+
+    Instead of scanning a 100,000-row
+    spreadsheet repeatedly for every column,
+    we sample at most TYPE_SAMPLE_SIZE rows.
+  */
+
+  function inferColumnTypes(
     rows,
-    columnIndex
+    headers
   ) {
 
-    let nonEmpty = 0;
-    let emails = 0;
-    let phones = 0;
-    let dates = 0;
-    let numbers = 0;
+    const sample =
+      rows.slice(
+        0,
+        Math.min(
+          rows.length,
+          TYPE_SAMPLE_SIZE
+        )
+      );
 
-    rows.forEach(
-      row => {
 
-        if (
-          !Array.isArray(row)
-        ) {
-          return;
-        }
+    const stats =
+      headers.map(
+        () => ({
+          nonEmpty: 0,
+          emails: 0,
+          phones: 0,
+          dates: 0,
+          numbers: 0
+        })
+      );
+
+
+    for (
+      const row of sample
+    ) {
+
+      if (
+        !Array.isArray(row)
+      ) {
+        continue;
+      }
+
+
+      for (
+        let col = 0;
+        col < headers.length;
+        col++
+      ) {
 
         const value =
-          row[columnIndex];
+          row[col];
+
 
         if (
           isEmptyCell(value)
         ) {
-          return;
+          continue;
         }
 
-        nonEmpty++;
+
+        const item =
+          stats[col];
+
+        item.nonEmpty++;
+
 
         if (
           isValidEmail(value)
         ) {
-          emails++;
+          item.emails++;
         }
+
 
         if (
           isValidPhone(value)
         ) {
-          phones++;
+          item.phones++;
         }
+
 
         if (
           isDateLike(value)
         ) {
-          dates++;
+          item.dates++;
         }
+
 
         if (
           typeof value ===
           "number"
         ) {
-          numbers++;
+          item.numbers++;
         }
       }
+    }
+
+
+    return headers.map(
+      (
+        header,
+        index
+      ) => {
+
+        const item =
+          stats[index];
+
+        const headerType =
+          detectHeaderType(
+            header
+          );
+
+
+        let inferredType =
+          "text";
+
+
+        if (
+          item.nonEmpty === 0
+        ) {
+
+          inferredType =
+            "empty";
+
+        } else if (
+          item.emails >=
+          Math.max(
+            2,
+            Math.ceil(
+              item.nonEmpty *
+                0.5
+            )
+          )
+        ) {
+
+          inferredType =
+            "email";
+
+        } else if (
+          item.phones >=
+          Math.max(
+            2,
+            Math.ceil(
+              item.nonEmpty *
+                0.5
+            )
+          )
+        ) {
+
+          inferredType =
+            "phone";
+
+        } else if (
+          item.dates >=
+          Math.max(
+            2,
+            Math.ceil(
+              item.nonEmpty *
+                0.5
+            )
+          )
+        ) {
+
+          inferredType =
+            "date";
+
+        } else if (
+          item.numbers >=
+          Math.max(
+            2,
+            Math.ceil(
+              item.nonEmpty *
+                0.7
+            )
+        ) {
+
+          inferredType =
+            "number";
+        }
+
+
+        return {
+          header,
+          headerType,
+          inferredType
+        };
+      }
     );
+  }
 
-    if (nonEmpty === 0) {
-      return "empty";
-    }
 
-    if (
-      emails >=
-      Math.max(
-        2,
-        Math.ceil(
-          nonEmpty * 0.5
-        )
-      )
+  /*
+    Process chunks while allowing the
+    browser event loop to breathe.
+  */
+
+  async function runInChunks(
+    start,
+    end,
+    chunkSize,
+    callback,
+    progressCallback
+  ) {
+
+    for (
+      let index = start;
+      index < end;
+      index += chunkSize
     ) {
-      return "email";
-    }
 
-    if (
-      phones >=
-      Math.max(
-        2,
-        Math.ceil(
-          nonEmpty * 0.5
-        )
-      )
-    ) {
-      return "phone";
-    }
+      if (
+        processingCancelled
+      ) {
+        throw new Error(
+          "__CANCELLED__"
+        );
+      }
 
-    if (
-      dates >=
-      Math.max(
-        2,
-        Math.ceil(
-          nonEmpty * 0.5
-        )
-      )
-    ) {
-      return "date";
-    }
 
-    if (
-      numbers >=
-      Math.max(
-        2,
-        Math.ceil(
-          nonEmpty * 0.7
-        )
-      )
-    ) {
-      return "number";
-    }
+      const chunkEnd =
+        Math.min(
+          end,
+          index + chunkSize
+        );
 
-    return "text";
+
+      await callback(
+        index,
+        chunkEnd
+      );
+
+
+      if (
+        typeof progressCallback ===
+        "function"
+      ) {
+
+        progressCallback(
+          chunkEnd,
+          end
+        );
+      }
+
+
+      /*
+        Give Chrome a rendering opportunity.
+      */
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            0
+          )
+      );
+    }
   }
 
 
@@ -2921,27 +3548,29 @@
 
     let count = 0;
 
-    rows.forEach(
-      row => {
+    for (
+      const row of rows
+    ) {
+
+      if (
+        !Array.isArray(row)
+      ) {
+        continue;
+      }
+
+
+      for (
+        const value of row
+      ) {
 
         if (
-          !Array.isArray(row)
+          isEmptyCell(value)
         ) {
-          return;
+          count++;
         }
-
-        row.forEach(
-          value => {
-
-            if (
-              isEmptyCell(value)
-            ) {
-              count++;
-            }
-          }
-        );
       }
-    );
+    }
+
 
     return count;
   }
@@ -2954,13 +3583,16 @@
 
     const indexes = [];
 
+
     for (
       let col = 0;
       col < columnCount;
       col++
     ) {
 
-      let hasValue = false;
+      let hasValue =
+        false;
+
 
       for (
         const row of rows
@@ -2972,32 +3604,151 @@
             row[col]
           )
         ) {
-          hasValue = true;
+
+          hasValue =
+            true;
+
           break;
         }
       }
 
+
       if (!hasValue) {
-        indexes.push(col);
+        indexes.push(
+          col
+        );
       }
     }
+
 
     return indexes;
   }
 
 
-  function buildIdentityDuplicateInfo(
+  async function findEmptyColumnsAsync(
     rows,
-    headers
+    columnCount
+  ) {
+
+    const hasValues =
+      new Array(
+        columnCount
+      ).fill(false);
+
+
+    const rowCount =
+      rows.length;
+
+
+    await runInChunks(
+      0,
+      rowCount,
+      PROCESS_CHUNK_SIZE,
+      async (
+        start,
+        end
+      ) => {
+
+        for (
+          let rowIndex =
+            start;
+          rowIndex < end;
+          rowIndex++
+        ) {
+
+          const row =
+            rows[rowIndex];
+
+          if (
+            !Array.isArray(row)
+          ) {
+            continue;
+          }
+
+
+          for (
+            let col = 0;
+            col < columnCount;
+            col++
+          ) {
+
+            if (
+              !hasValues[col] &&
+              !isEmptyCell(
+                row[col]
+              )
+            ) {
+
+              hasValues[col] =
+                true;
+            }
+          }
+        }
+      },
+      (
+        current,
+        total
+      ) => {
+
+        /*
+          Progress is intentionally
+          conservative here.
+        */
+
+        setProgress(
+          2 +
+            (
+              current /
+              Math.max(
+                total,
+                1
+              )
+            ) *
+              8,
+          "Checking columns..."
+        );
+      }
+    );
+
+
+    const indexes = [];
+
+
+    for (
+      let col = 0;
+      col < columnCount;
+      col++
+    ) {
+
+      if (
+        !hasValues[col]
+      ) {
+        indexes.push(
+          col
+        );
+      }
+    }
+
+
+    return indexes;
+  }
+
+
+  async function buildIdentityDuplicateInfoAsync(
+    rows,
+    headers,
+    headerRowIndex
   ) {
 
     const identityColumns = [];
+
 
     const emailIndex =
       findColumn(
         headers,
         ["email"]
       );
+
 
     const phoneIndex =
       findColumn(
@@ -3009,6 +3760,7 @@
         ]
       );
 
+
     const nameIndex =
       findColumn(
         headers,
@@ -3018,79 +3770,145 @@
         ]
       );
 
-    if (emailIndex >= 0) {
+
+    if (
+      emailIndex >= 0
+    ) {
       identityColumns.push(
         emailIndex
       );
     }
 
-    if (phoneIndex >= 0) {
+
+    if (
+      phoneIndex >= 0
+    ) {
       identityColumns.push(
         phoneIndex
       );
     }
 
-    if (nameIndex >= 0) {
+
+    if (
+      nameIndex >= 0
+    ) {
       identityColumns.push(
         nameIndex
       );
     }
 
+
     const map =
       new Map();
 
-    const duplicates = [];
+    const duplicates =
+      [];
 
-    rows.forEach(
-      (row, index) => {
 
-        const values =
-          identityColumns
-            .map(
-              col =>
-                String(
-                  row[col] ?? ""
-                )
-                  .trim()
-                  .toLowerCase()
-            )
-            .filter(Boolean);
+    await runInChunks(
+      0,
+      rows.length,
+      PROCESS_CHUNK_SIZE,
+      async (
+        start,
+        end
+      ) => {
 
-        if (
-          values.length === 0
-        ) {
-          return;
-        }
-
-        const key =
-          values.join("¦");
-
-        if (
-          map.has(key)
+        for (
+          let rowIndex =
+            start;
+          rowIndex < end;
+          rowIndex++
         ) {
 
-          duplicates.push({
-            firstRow:
-              map.get(key) + 2,
-            secondRow:
-              index + 2
-          });
+          const row =
+            rows[rowIndex];
 
-        } else {
+          if (
+            !Array.isArray(row)
+          ) {
+            continue;
+          }
 
-          map.set(
-            key,
-            index
-          );
+
+          const values =
+            identityColumns
+              .map(
+                col =>
+                  String(
+                    row[col] ??
+                    ""
+                  )
+                    .trim()
+                    .toLowerCase()
+              )
+              .filter(Boolean);
+
+
+          if (
+            values.length === 0
+          ) {
+            continue;
+          }
+
+
+          const key =
+            values.join(
+              "¦"
+            );
+
+
+          if (
+            map.has(key)
+          ) {
+
+            duplicates.push({
+              firstRow:
+                map.get(key) +
+                headerRowIndex +
+                2,
+
+              secondRow:
+                rowIndex +
+                headerRowIndex +
+                2
+            });
+
+          } else {
+
+            map.set(
+              key,
+              rowIndex
+            );
+          }
         }
+      },
+      (
+        current,
+        total
+      ) => {
+
+        setProgress(
+          72 +
+            (
+              current /
+              Math.max(
+                total,
+                1
+              )
+            ) *
+              8,
+          "Checking potential duplicates..."
+        );
       }
     );
+
 
     return duplicates;
   }
 
 
-  function analyzeRows(
+  async function analyzeRowsAsync(
     rows,
     headers,
     worksheet,
@@ -3103,6 +3921,7 @@
         ["email"]
       );
 
+
     const phoneIndex =
       findColumn(
         headers,
@@ -3113,108 +3932,219 @@
         ]
       );
 
+
     let invalidEmails = 0;
     let invalidPhones = 0;
     let invalidDates = 0;
     let formulas = 0;
+    let missingValues = 0;
+
 
     const invalidEmailsList = [];
     const invalidPhonesList = [];
     const invalidDatesList = [];
     const errors = [];
-    const types = [];
 
-    headers.forEach(
-      (header, colIndex) => {
 
-        types.push({
-          header,
-          headerType:
-            detectHeaderType(
-              header
-            ),
-          inferredType:
-            inferColumnType(
-              rows,
-              colIndex
-            )
-        });
-      }
+    const exactKeys =
+      new Map();
+
+
+    const duplicateRows =
+      [];
+
+
+    const emptyColumns =
+      await findEmptyColumnsAsync(
+        rows,
+        headers.length
+      );
+
+
+    setProgress(
+      12,
+      "Checking data quality..."
     );
 
 
-    rows.forEach(
-      (row, rowIndex) => {
+    /*
+      Main quality-analysis pass.
 
-        if (
-          !Array.isArray(row)
+      One scan handles:
+      email validation
+      phone validation
+      dates
+      formulas
+      errors
+      missing values
+      exact duplicates
+    */
+
+    await runInChunks(
+      0,
+      rows.length,
+      PROCESS_CHUNK_SIZE,
+      async (
+        start,
+        end
+      ) => {
+
+        for (
+          let rowIndex =
+            start;
+          rowIndex < end;
+          rowIndex++
         ) {
-          return;
-        }
 
-        if (
-          emailIndex >= 0 &&
-          !isEmptyCell(
-            row[emailIndex]
-          )
-        ) {
+          const row =
+            rows[rowIndex];
 
-          const value =
-            String(
-              row[emailIndex]
-            ).trim();
 
           if (
-            !isValidEmail(value)
+            !Array.isArray(row)
           ) {
-
-            invalidEmails++;
-
-            invalidEmailsList.push(
-              `Row ${rowIndex + headerRowIndex + 2}: ${value}`
-            );
+            continue;
           }
-        }
 
 
-        if (
-          phoneIndex >= 0 &&
-          !isEmptyCell(
-            row[phoneIndex]
-          )
-        ) {
+          const sheetRowNumber =
+            rowIndex +
+            headerRowIndex +
+            2;
 
-          const value =
-            String(
-              row[phoneIndex]
-            ).trim();
+
+          const rowKey =
+            makeRowKey(
+              row
+            );
+
 
           if (
-            !isValidPhone(value)
+            rowKey.replace(
+              /¦/g,
+              ""
+            )
           ) {
-
-            invalidPhones++;
-
-            invalidPhonesList.push(
-              `Row ${rowIndex + headerRowIndex + 2}: ${value}`
-            );
-          }
-        }
-
-
-        row.forEach(
-          (value, colIndex) => {
 
             if (
-              isErrorValue(value)
+              exactKeys.has(
+                rowKey
+              )
             ) {
 
-              errors.push(
-                `Row ${rowIndex + headerRowIndex + 2}, ${
-                  headers[colIndex] ||
-                  `Column ${colIndex + 1}`
-                }: ${value}`
+              duplicateRows.push({
+                first:
+                  exactKeys.get(
+                    rowKey
+                  ) +
+                  headerRowIndex +
+                  2,
+
+                second:
+                  sheetRowNumber
+              });
+
+            } else {
+
+              exactKeys.set(
+                rowKey,
+                rowIndex
               );
+            }
+          }
+
+
+          for (
+            let colIndex = 0;
+            colIndex < headers.length;
+            colIndex++
+          ) {
+
+            const value =
+              row[colIndex];
+
+
+            if (
+              isEmptyCell(value)
+            ) {
+
+              missingValues++;
+            }
+
+
+            if (
+              emailIndex ===
+                colIndex &&
+              !isEmptyCell(value)
+            ) {
+
+              if (
+                !isValidEmail(
+                  value
+                )
+              ) {
+
+                invalidEmails++;
+
+                if (
+                  invalidEmailsList
+                    .length < 100
+                ) {
+
+                  invalidEmailsList.push(
+                    `Row ${sheetRowNumber}: ${value}`
+                  );
+                }
+              }
+            }
+
+
+            if (
+              phoneIndex ===
+                colIndex &&
+              !isEmptyCell(value)
+            ) {
+
+              if (
+                !isValidPhone(
+                  value
+                )
+              ) {
+
+                invalidPhones++;
+
+                if (
+                  invalidPhonesList
+                    .length < 100
+                ) {
+
+                  invalidPhonesList.push(
+                    `Row ${sheetRowNumber}: ${value}`
+                  );
+                }
+              }
+            }
+
+
+            if (
+              isErrorValue(
+                value
+              )
+            ) {
+
+              if (
+                errors.length < 100
+              ) {
+
+                errors.push(
+                  `Row ${sheetRowNumber}, ${
+                    headers[colIndex] ||
+                    `Column ${
+                      colIndex + 1
+                    }`
+                  }: ${value}`
+                );
+              }
             }
 
 
@@ -3226,6 +4156,7 @@
                   1,
                 colIndex
               );
+
 
             if (formula) {
               formulas++;
@@ -3242,63 +4173,71 @@
 
               invalidDates++;
 
-              invalidDatesList.push(
-                `Row ${rowIndex + headerRowIndex + 2}: ${value}`
-              );
+              if (
+                invalidDatesList
+                  .length < 100
+              ) {
+
+                invalidDatesList.push(
+                  `Row ${sheetRowNumber}: ${value}`
+                );
+              }
             }
-
           }
+        }
+      },
+      (
+        current,
+        total
+      ) => {
+
+        setProgress(
+          20 +
+            (
+              current /
+              Math.max(
+                total,
+                1
+              )
+            ) *
+              45,
+          "Validating rows..."
         );
-
       }
     );
 
 
-    const exactKeys =
-      new Map();
+    const potentialDuplicates =
+      await buildIdentityDuplicateInfoAsync(
+        rows,
+        headers,
+        headerRowIndex
+      );
 
-    const duplicateRows = [];
 
-    rows.forEach(
-      (row, rowIndex) => {
-
-        const key =
-          makeRowKey(row);
-
-        if (
-          !key.replace(
-            /¦/g,
-            ""
-          )
-        ) {
-          return;
-        }
-
-        if (
-          exactKeys.has(key)
-        ) {
-
-          duplicateRows.push({
-            first:
-              exactKeys.get(key) +
-              headerRowIndex +
-              2,
-
-            second:
-              rowIndex +
-              headerRowIndex +
-              2
-          });
-
-        } else {
-
-          exactKeys.set(
-            key,
-            rowIndex
-          );
-        }
-      }
+    setProgress(
+      82,
+      "Detecting column types..."
     );
+
+
+    const types =
+      inferColumnTypes(
+        rows,
+        headers
+      );
+
+
+    setProgress(
+      88,
+      "Finalizing analysis..."
+    );
+
+
+    /*
+      The full empty-column scan is already
+      completed separately. It is not repeated.
+    */
 
 
     return {
@@ -3325,20 +4264,12 @@
 
       duplicateRows,
 
-      potentialDuplicates:
-        buildIdentityDuplicateInfo(
-          rows,
-          headers
-        ),
+      potentialDuplicates,
 
-      missingValues:
-        countMissingValues(rows),
+      missingValues,
 
       emptyColumnIndexes:
-        getEmptyColumnIndexes(
-          rows,
-          headers.length
-        ),
+        emptyColumns,
 
       types
     };
@@ -3355,12 +4286,15 @@
         value ?? ""
       ).trim();
 
+
     if (!text) {
       return text;
     }
 
+
     const lower =
       text.toLowerCase();
+
 
     const headerLower =
       String(
@@ -3379,27 +4313,35 @@
           "m",
           "male",
           "man"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "Male";
       }
+
 
       if (
         [
           "f",
           "female",
           "woman"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "Female";
       }
+
 
       if (
         [
           "o",
           "other",
           "others"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "Other";
       }
@@ -3418,10 +4360,13 @@
           "yes",
           "true",
           "1"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "Yes";
       }
+
 
       if (
         [
@@ -3429,7 +4374,9 @@
           "no",
           "false",
           "0"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "No";
       }
@@ -3446,17 +4393,22 @@
         [
           "active",
           "activate"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "Active";
       }
+
 
       if (
         [
           "inactive",
           "deactive",
           "deactivated"
-        ].includes(lower)
+        ].includes(
+          lower
+        )
       ) {
         return "Inactive";
       }
@@ -3470,7 +4422,7 @@
   }
 
 
-  function cleanRows(
+  async function cleanRowsAsync(
     sourceRows,
     headers,
     worksheet,
@@ -3480,11 +4432,13 @@
     const columnCount =
       headers.length;
 
+
     const emailIndex =
       findColumn(
         headers,
         ["email"]
       );
+
 
     const phoneIndex =
       findColumn(
@@ -3497,11 +4451,16 @@
       );
 
 
+    /*
+      We use the analysis result where possible
+      instead of scanning empty columns again.
+    */
+
     const emptyColumnIndexes =
-      getEmptyColumnIndexes(
-        sourceRows,
-        columnCount
-      );
+      currentAnalysis
+        ?.emptyColumnIndexes ||
+      [];
+
 
     const removed =
       new Set(
@@ -3512,7 +4471,10 @@
     const originalToCleanedColumn =
       {};
 
-    let outputCol = 0;
+
+    let outputColumn =
+      0;
+
 
     for (
       let col = 0;
@@ -3524,16 +4486,19 @@
         !removed.has(col)
       ) {
 
-        originalToCleanedColumn[col] =
-          outputCol;
+        originalToCleanedColumn[
+          col
+        ] =
+          outputColumn;
 
-        outputCol++;
+        outputColumn++;
       }
     }
 
 
     const cleanedRows = [];
     const sourceRowIndexes = [];
+
 
     let blankRowsRemoved = 0;
     let duplicateRowsRemoved = 0;
@@ -3547,218 +4512,301 @@
       new Set();
 
 
-    sourceRows.forEach(
-      (sourceRow, sourceIndex) => {
-
-        if (
-          !Array.isArray(sourceRow) ||
-          isEmptyRow(sourceRow)
-        ) {
-
-          blankRowsRemoved++;
-
-          return;
-        }
+    setProgress(
+      4,
+      "Preparing cleaned output..."
+    );
 
 
-        const rowKey =
-          makeRowKey(sourceRow);
-
-
-        if (
-          seenRows.has(rowKey)
-        ) {
-
-          duplicateRowsRemoved++;
-
-          return;
-        }
-
-
-        seenRows.add(
-          rowKey
-        );
-
-
-        const outputRow = [];
-
+    await runInChunks(
+      0,
+      sourceRows.length,
+      PROCESS_CHUNK_SIZE,
+      async (
+        start,
+        end
+      ) => {
 
         for (
-          let originalCol = 0;
-          originalCol <
-          columnCount;
-          originalCol++
+          let sourceIndex =
+            start;
+          sourceIndex < end;
+          sourceIndex++
         ) {
 
+          const sourceRow =
+            sourceRows[
+              sourceIndex
+            ];
+
+
           if (
-            removed.has(
-              originalCol
+            !Array.isArray(
+              sourceRow
+            ) ||
+            isEmptyRow(
+              sourceRow
             )
           ) {
+
+            blankRowsRemoved++;
+
             continue;
           }
 
 
-          let value =
-            normalizeCell(
-              sourceRow[
+          const rowKey =
+            makeRowKey(
+              sourceRow
+            );
+
+
+          if (
+            seenRows.has(
+              rowKey
+            )
+          ) {
+
+            duplicateRowsRemoved++;
+
+            continue;
+          }
+
+
+          seenRows.add(
+            rowKey
+          );
+
+
+          const outputRow =
+            [];
+
+
+          for (
+            let originalCol = 0;
+            originalCol <
+            columnCount;
+            originalCol++
+          ) {
+
+            if (
+              removed.has(
                 originalCol
-              ]
-            );
-
-
-          const formula =
-            getFormulaAt(
-              worksheet,
-              sourceIndex +
-                headerRowIndex +
-                1,
-              originalCol
-            );
-
-
-          /*
-            Formula cells are deliberately
-            left untouched.
-          */
-          if (formula) {
-
-            outputRow.push(
-              value
-            );
-
-            continue;
-          }
-
-
-          const header =
-            headers[
-              originalCol
-            ] || "";
-
-
-          const lowerHeader =
-            header.toLowerCase();
-
-
-          /* EMAIL */
-
-          if (
-            emailIndex ===
-              originalCol &&
-            !isEmptyCell(value) &&
-            isValidEmail(value)
-          ) {
-
-            const normalized =
-              String(value)
-                .trim()
-                .toLowerCase();
-
-            if (
-              normalized !==
-              String(value).trim()
+              )
             ) {
-              emailsNormalized++;
+              continue;
             }
 
-            value =
-              normalized;
-          }
+
+            let value =
+              normalizeCell(
+                sourceRow[
+                  originalCol
+                ]
+              );
 
 
-          /* PHONE */
+            const formula =
+              getFormulaAt(
+                worksheet,
+                sourceIndex +
+                  headerRowIndex +
+                  1,
+                originalCol
+              );
 
-          if (
-            phoneIndex ===
-              originalCol &&
-            !isEmptyCell(value) &&
-            isValidPhone(value)
-          ) {
 
-            const standardized =
-              standardizePhone(
+            /*
+              Never modify formula cells.
+            */
+
+            if (formula) {
+
+              outputRow.push(
                 value
               );
 
-            if (
-              standardized !==
-              String(value).trim()
-            ) {
-              phonesStandardized++;
+              continue;
             }
 
-            value =
-              standardized;
-          }
+
+            const header =
+              headers[
+                originalCol
+              ] || "";
 
 
-          /* DATE */
+            const lowerHeader =
+              header.toLowerCase();
 
-          if (
-            /date|dob|birth/.test(
-              lowerHeader
-            ) &&
-            !isEmptyCell(value)
-          ) {
 
-            const parsed =
-              parseDateValue(
-                value
-              );
+            /*
+              EMAIL
+            */
 
-            if (parsed) {
+            if (
+              emailIndex ===
+                originalCol &&
+              !isEmptyCell(value) &&
+              isValidEmail(value)
+            ) {
+
+              const normalized =
+                String(
+                  value
+                )
+                  .trim()
+                  .toLowerCase();
+
+
+              if (
+                normalized !==
+                String(
+                  value
+                ).trim()
+              ) {
+
+                emailsNormalized++;
+              }
+
+
+              value =
+                normalized;
+            }
+
+
+            /*
+              PHONE
+            */
+
+            if (
+              phoneIndex ===
+                originalCol &&
+              !isEmptyCell(value) &&
+              isValidPhone(value)
+            ) {
 
               const standardized =
-                formatDateYMD(
-                  parsed
+                standardizePhone(
+                  value
                 );
+
 
               if (
                 standardized !==
-                String(value).trim()
+                String(
+                  value
+                ).trim()
               ) {
-                datesStandardized++;
+
+                phonesStandardized++;
               }
+
 
               value =
                 standardized;
             }
-          }
 
 
-          /* CATEGORY */
+            /*
+              DATE
+            */
 
-          const canonical =
-            canonicalCategory(
-              value,
-              header
+            if (
+              /date|dob|birth/.test(
+                lowerHeader
+              ) &&
+              !isEmptyCell(value)
+            ) {
+
+              const parsed =
+                parseDateValue(
+                  value
+                );
+
+
+              if (parsed) {
+
+                const standardized =
+                  formatDateYMD(
+                    parsed
+                  );
+
+
+                if (
+                  standardized !==
+                  String(
+                    value
+                  ).trim()
+                ) {
+
+                  datesStandardized++;
+                }
+
+
+                value =
+                  standardized;
+              }
+            }
+
+
+            /*
+              CATEGORY
+            */
+
+            const canonical =
+              canonicalCategory(
+                value,
+                header
+              );
+
+
+            if (
+              !isEmptyCell(value) &&
+              String(canonical) !==
+                String(value)
+            ) {
+
+              categoriesStandardized++;
+            }
+
+
+            value =
+              canonical;
+
+
+            outputRow.push(
+              value
             );
-
-          if (
-            !isEmptyCell(value) &&
-            String(canonical) !==
-              String(value)
-          ) {
-            categoriesStandardized++;
           }
 
-          value =
-            canonical;
+
+          cleanedRows.push(
+            outputRow
+          );
 
 
-          outputRow.push(
-            value
+          sourceRowIndexes.push(
+            sourceIndex
           );
         }
+      },
+      (
+        current,
+        total
+      ) => {
 
-
-        cleanedRows.push(
-          outputRow
-        );
-
-        sourceRowIndexes.push(
-          sourceIndex
+        setProgress(
+          88 +
+            (
+              current /
+              Math.max(
+                total,
+                1
+              )
+            ) *
+              10,
+          "Cleaning rows..."
         );
       }
     );
@@ -3766,8 +4814,13 @@
 
     const cleanedHeaders =
       headers.filter(
-        (_, index) =>
-          !removed.has(index)
+        (
+          _,
+          index
+        ) =>
+          !removed.has(
+            index
+          )
       );
 
 
@@ -3779,6 +4832,12 @@
       phonesStandardized +
       datesStandardized +
       categoriesStandardized;
+
+
+    setProgress(
+      100,
+      "Cleaning completed..."
+    );
 
 
     return {
@@ -3826,9 +4885,8 @@
     const el =
       $(id);
 
-    if (!el) {
-      return;
-    }
+    if (!el) return;
+
 
     if (
       !Array.isArray(items) ||
@@ -3837,7 +4895,8 @@
 
       el.innerHTML =
         `<li>${escapeHtml(
-          emptyText || "None"
+          emptyText ||
+          "None"
         )}</li>`;
 
       return;
@@ -3846,7 +4905,10 @@
 
     el.innerHTML =
       items
-        .slice(0, 100)
+        .slice(
+          0,
+          100
+        )
         .map(
           item =>
             `<li>${escapeHtml(
@@ -3865,6 +4927,7 @@
       return;
     }
 
+
     const a =
       currentAnalysis;
 
@@ -3874,45 +4937,54 @@
       currentRows.length
     );
 
+
     setText(
       "statColumns",
       a.headers.length
     );
+
 
     setText(
       "statDuplicates",
       a.duplicateRows.length
     );
 
+
     setText(
       "statPotentialDuplicates",
       a.potentialDuplicates.length
     );
+
 
     setText(
       "statMissing",
       a.missingValues
     );
 
+
     setText(
       "statInvalidEmails",
       a.invalidEmails
     );
+
 
     setText(
       "statInvalidPhones",
       a.invalidPhones
     );
 
+
     setText(
       "statInvalidDates",
       a.invalidDates
     );
 
+
     setText(
       "statFormulas",
       a.formulas
     );
+
 
     setText(
       "statErrors",
@@ -3960,17 +5032,20 @@
       "No invalid email values detected."
     );
 
+
     renderList(
       "invalidPhonesList",
       a.invalidPhonesList,
       "No invalid phone values detected."
     );
 
+
     renderList(
       "invalidDatesList",
       a.invalidDatesList,
       "No invalid date values detected."
     );
+
 
     renderList(
       "errorsList",
@@ -3979,12 +5054,13 @@
     );
 
 
-    const typeList =
+    const types =
       $("typesList");
 
-    if (typeList) {
 
-      typeList.innerHTML =
+    if (types) {
+
+      types.innerHTML =
         a.types
           .map(
             item => `
@@ -3992,6 +5068,7 @@
                 class="info-card"
                 style="margin-bottom:8px;"
               >
+
                 <div class="info-label">
                   ${escapeHtml(
                     item.header
@@ -4010,6 +5087,7 @@
                     item.inferredType
                   )}
                 </div>
+
               </div>
             `
           )
@@ -4047,10 +5125,12 @@
       return;
     }
 
+
     $("summaryBox").innerHTML = `
 
       <div class="summary-line">
         <span>Rows</span>
+
         <span>
           ${currentRows.length}
           →
@@ -4058,8 +5138,10 @@
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Columns</span>
+
         <span>
           ${currentAnalysis.headers.length}
           →
@@ -4067,62 +5149,80 @@
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Blank rows removed</span>
+
         <span>
           ${result.blankRowsRemoved}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Duplicate rows removed</span>
+
         <span>
           ${result.duplicateRowsRemoved}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Empty columns removed</span>
+
         <span>
           ${result.emptyColumnIndexes.length}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Emails normalized</span>
+
         <span>
           ${result.emailsNormalized}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Phones standardized</span>
+
         <span>
           ${result.phonesStandardized}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Dates standardized</span>
+
         <span>
           ${result.datesStandardized}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Categories standardized</span>
+
         <span>
           ${result.categoriesStandardized}
         </span>
       </div>
 
+
       <div class="summary-line">
         <span>Total automatic changes</span>
+
         <span class="green">
           ${result.totalChanges}
         </span>
       </div>
+
     `;
+
 
     setSectionVisible(
       "summarySection",
@@ -4138,6 +5238,7 @@
     if (!result) {
       return;
     }
+
 
     const a =
       currentAnalysis;
@@ -4157,15 +5258,18 @@
       result.totalChanges
     );
 
+
     setText(
       "reviewCount",
       reviewCount
     );
 
+
     setText(
       "reviewFormulaCount",
       a.formulas
     );
+
 
     setText(
       "reviewDuplicateCount",
@@ -4187,6 +5291,7 @@
     if (
       result.blankRowsRemoved > 0
     ) {
+
       automatic.push(
         `${result.blankRowsRemoved} blank row(s) removed`
       );
@@ -4196,6 +5301,7 @@
     if (
       result.duplicateRowsRemoved > 0
     ) {
+
       automatic.push(
         `${result.duplicateRowsRemoved} exact duplicate row(s) removed`
       );
@@ -4205,6 +5311,7 @@
     if (
       result.emptyColumnIndexes.length > 0
     ) {
+
       automatic.push(
         `${result.emptyColumnIndexes.length} completely empty column(s) removed`
       );
@@ -4214,6 +5321,7 @@
     if (
       result.emailsNormalized > 0
     ) {
+
       automatic.push(
         `${result.emailsNormalized} email(s) normalized`
       );
@@ -4223,6 +5331,7 @@
     if (
       result.phonesStandardized > 0
     ) {
+
       automatic.push(
         `${result.phonesStandardized} phone number(s) standardized`
       );
@@ -4232,6 +5341,7 @@
     if (
       result.datesStandardized > 0
     ) {
+
       automatic.push(
         `${result.datesStandardized} date(s) standardized`
       );
@@ -4241,6 +5351,7 @@
     if (
       result.categoriesStandardized > 0
     ) {
+
       automatic.push(
         `${result.categoriesStandardized} categoric value(s) standardized`
       );
@@ -4250,6 +5361,7 @@
     if (
       automatic.length === 0
     ) {
+
       automatic.push(
         "No automatic changes were required."
       );
@@ -4262,6 +5374,7 @@
     if (
       a.invalidEmails > 0
     ) {
+
       review.push(
         `${a.invalidEmails} invalid email value(s)`
       );
@@ -4271,6 +5384,7 @@
     if (
       a.invalidPhones > 0
     ) {
+
       review.push(
         `${a.invalidPhones} invalid phone value(s)`
       );
@@ -4280,6 +5394,7 @@
     if (
       a.invalidDates > 0
     ) {
+
       review.push(
         `${a.invalidDates} invalid date value(s)`
       );
@@ -4289,6 +5404,7 @@
     if (
       a.errors.length > 0
     ) {
+
       review.push(
         `${a.errors.length} spreadsheet error value(s)`
       );
@@ -4298,6 +5414,7 @@
     if (
       a.missingValues > 0
     ) {
+
       review.push(
         `${a.missingValues} missing/empty cell(s)`
       );
@@ -4307,6 +5424,7 @@
     if (
       a.potentialDuplicates.length > 0
     ) {
+
       review.push(
         `${a.potentialDuplicates.length} potential duplicate match(es)`
       );
@@ -4316,6 +5434,7 @@
     if (
       review.length === 0
     ) {
+
       review.push(
         "Nothing currently requires review."
       );
@@ -4327,6 +5446,7 @@
       automatic,
       "No automatic changes."
     );
+
 
     renderList(
       "needsReviewList",
@@ -4347,6 +5467,7 @@
       return;
     }
 
+
     const base =
       safeBaseName(
         currentFile.name
@@ -4357,6 +5478,7 @@
       "xlsxFilename",
       `${base}_cleaned.xlsx`
     );
+
 
     setText(
       "csvFilename",
@@ -4369,15 +5491,18 @@
       result.rows.length
     );
 
+
     setText(
       "xlsxColumns",
       result.headers.length
     );
 
+
     setText(
       "csvRows",
       result.rows.length
     );
+
 
     setText(
       "csvColumns",
@@ -4402,6 +5527,7 @@
     const wrap =
       $("previewWrap");
 
+
     if (!wrap) {
       return;
     }
@@ -4424,16 +5550,24 @@
         </div>
       `;
 
+
       setSectionVisible(
         "previewSection",
         true
       );
 
+
       return;
     }
 
 
-    const rows = [
+    /*
+      Keep the preview intentionally small.
+      This prevents a giant table from being
+      rendered into the browser.
+    */
+
+    const previewRows = [
       result.headers,
       ...result.rows.slice(
         0,
@@ -4446,8 +5580,11 @@
       "<table>";
 
 
-    rows.forEach(
-      (row, rowIndex) => {
+    previewRows.forEach(
+      (
+        row,
+        rowIndex
+      ) => {
 
         html +=
           "<tr>";
@@ -4524,6 +5661,10 @@
     }
 
 
+    processingCancelled =
+      false;
+
+
     try {
 
       setLoading(
@@ -4531,11 +5672,19 @@
         "Reading the selected worksheet..."
       );
 
-      clearMessages();
+      showProgress(
+        true
+      );
+
+      setProgress(
+        0,
+        "Reading worksheet..."
+      );
 
 
       currentSheetName =
         sheetName;
+
 
       currentWorksheet =
         workbook.Sheets[
@@ -4556,13 +5705,16 @@
 
 
       if (
-        !Array.isArray(rawRows) ||
+        !Array.isArray(
+          rawRows
+        ) ||
         rawRows.length === 0
       ) {
 
         currentRows = [];
         currentAnalysis = null;
         cleanedResult = null;
+
 
         [
           "overviewSection",
@@ -4594,8 +5746,15 @@
           "warning"
         );
 
+
         return;
       }
+
+
+      setProgress(
+        8,
+        "Detecting header row..."
+      );
 
 
       const headerRowIndex =
@@ -4626,7 +5785,10 @@
               length:
                 columnCount
             },
-            (_, index) =>
+            (
+              _,
+              index
+            ) =>
               rawHeader[
                 index
               ] ?? ""
@@ -4634,7 +5796,11 @@
         );
 
 
-      const dataRows =
+      /*
+        Normalize row widths once.
+      */
+
+      currentRows =
         rawRows
           .slice(
             headerRowIndex + 1
@@ -4646,33 +5812,40 @@
                   length:
                     columnCount
                 },
-                (_, index) =>
-                  row?.[index] ??
-                  ""
+                (
+                  _,
+                  index
+                ) =>
+                  row?.[
+                    index
+                  ] ?? ""
               )
           );
 
 
-      currentRows =
-        dataRows;
+      /*
+        Run the expensive analysis
+        in chunks.
+      */
 
-
-      currentAnalysis = {
-
-        headerRowIndex,
-
-        headers,
-
-        ...analyzeRows(
+      const analysis =
+        await analyzeRowsAsync(
           currentRows,
           headers,
           currentWorksheet,
           headerRowIndex
-        )
+        );
+
+
+      currentAnalysis = {
+        headerRowIndex,
+        headers,
+        ...analysis
       };
 
 
-      cleanedResult = null;
+      cleanedResult =
+        null;
 
 
       [
@@ -4690,6 +5863,12 @@
 
 
       renderAnalysis();
+
+
+      setProgress(
+        100,
+        "Analysis completed."
+      );
 
 
       setSectionVisible(
@@ -4712,14 +5891,9 @@
 
         showMessage(
           "infoMessage",
-          escapeHtml(
-            currentAnalysis.invalidEmails ||
-            currentAnalysis.invalidPhones ||
-            currentAnalysis.invalidDates ||
-            currentAnalysis.errors.length
-              ? "Review recommended before export."
-              : "The selected worksheet is ready to clean."
-          ),
+          currentRows.length >= 50000
+            ? "Large worksheet detected. Cleaning will run in chunks to keep the browser responsive."
+            : "The selected worksheet is ready to clean.",
           "info"
         );
       }
@@ -4731,30 +5905,54 @@
       cleanedResult = null;
 
 
-      showError(
-        `Could not read this worksheet safely.
-        <div class="error-detail">
-          ${escapeHtml(
-            error?.message ||
-            "Unknown worksheet error."
-          )}
-        </div>`
-      );
+      if (
+        error?.message ===
+        "__CANCELLED__"
+      ) {
+
+        showMessage(
+          "warningMessage",
+          "Processing was cancelled.",
+          "warning"
+        );
+
+      } else {
+
+        showError(
+          `Could not read this worksheet safely.
+          <div class="error-detail">
+            ${escapeHtml(
+              error?.message ||
+              "Unknown worksheet error."
+            )}
+          </div>`
+        );
+      }
 
     } finally {
 
-      setLoading(false);
+      setLoading(
+        false
+      );
+
+      if (
+        !processingActive
+      ) {
+        showProgress(false);
+      }
     }
   }
 
-
-  /* FILE UPLOAD */
 
   async function handleFileUpload(
     file
   ) {
 
     clearMessages();
+
+
+    processingCancelled =
+      false;
 
 
     if (!file) {
@@ -4835,10 +6033,12 @@
       `Selected: ${file.name}`
     );
 
+
     setText(
       "fileName",
       file.name
     );
+
 
     setText(
       "fileType",
@@ -4852,12 +6052,14 @@
         .toUpperCase()
     );
 
+
     setText(
       "fileSize",
       formatBytes(
         file.size
       )
     );
+
 
     setText(
       "sheetCount",
@@ -4870,13 +6072,9 @@
       true
     );
 
-    setSectionVisible(
-      "worksheetSection",
-      false
-    );
-
 
     [
+      "worksheetSection",
       "overviewSection",
       "checksSection",
       "typesSection",
@@ -4903,6 +6101,22 @@
       );
 
 
+      showProgress(
+        true
+      );
+
+
+      showCancelButton(
+        false
+      );
+
+
+      setProgress(
+        2,
+        "Reading file..."
+      );
+
+
       const buffer =
         await file.arrayBuffer();
 
@@ -4918,11 +6132,11 @@
       }
 
 
-      /*
-        Standard XLSX / XLS / CSV read.
-        SheetJS handles the workbook structure
-        and CSV parsing in-browser.
-      */
+      setProgress(
+        15,
+        "Opening workbook..."
+      );
+
 
       workbook =
         XLSX.read(
@@ -4943,7 +6157,8 @@
         !Array.isArray(
           workbook.SheetNames
         ) ||
-        workbook.SheetNames.length === 0
+        workbook.SheetNames.length ===
+          0
       ) {
 
         throw new Error(
@@ -4951,8 +6166,6 @@
         );
       }
 
-
-      /* Validate every worksheet before display */
 
       for (
         const sheetName of
@@ -5003,15 +6216,22 @@
       );
 
 
+      /*
+        Loading the first worksheet
+        automatically analyses it.
+      */
+
       await loadSelectedSheet({
         sheetName:
           workbook.SheetNames[0]
       });
 
 
-      if (currentAnalysis) {
+      if (
+        currentAnalysis
+      ) {
 
-        const format =
+        const type =
           getExtension(
             file.name
           )
@@ -5023,7 +6243,7 @@
 
 
         showSuccess(
-          `${format} file loaded successfully: ${escapeHtml(
+          `${type} file loaded successfully: ${escapeHtml(
             file.name
           )}`
         );
@@ -5044,13 +6264,8 @@
       );
 
 
-      setSectionVisible(
-        "worksheetSection",
-        false
-      );
-
-
       [
+        "worksheetSection",
         "overviewSection",
         "checksSection",
         "typesSection",
@@ -5080,12 +6295,20 @@
 
     } finally {
 
-      setLoading(false);
+      setLoading(
+        false
+      );
+
+      showProgress(
+        false
+      );
+
+      showCancelButton(
+        false
+      );
     }
   }
 
-
-  /* CLEAN */
 
   async function cleanSpreadsheet() {
 
@@ -5106,46 +6329,79 @@
     }
 
 
+    if (
+      !Array.isArray(
+        currentRows
+      ) ||
+      currentRows.length === 0
+    ) {
+
+      showError(
+        "There are no data rows available to clean."
+      );
+
+      return;
+    }
+
+
     const button =
       $("cleanButton");
 
 
     try {
 
+      processingCancelled =
+        false;
+
+      processingActive =
+        true;
+
+
       button.disabled =
         true;
 
 
+      showCancelButton(
+        true
+      );
+
+
       setLoading(
         true,
-        "Cleaning the worksheet and protecting formulas..."
+        "Cleaning your spreadsheet in chunks..."
       );
 
 
-      await new Promise(
-        resolve =>
-          setTimeout(
-            resolve,
-            20
-          )
+      showProgress(
+        true
       );
 
+
+      setProgress(
+        1,
+        "Preparing cleaning..."
+      );
+
+
+      /*
+        For a large worksheet, make the user aware
+        that processing is intentionally chunked.
+      */
 
       if (
-        !Array.isArray(
-          currentRows
-        ) ||
-        currentRows.length === 0
+        currentRows.length >=
+        50000
       ) {
 
-        throw new Error(
-          "There are no data rows available to clean."
+        setText(
+          "progressLabel",
+          "Large worksheet detected..."
         );
       }
 
 
       cleanedResult =
-        cleanRows(
+        await cleanRowsAsync(
           currentRows,
           currentAnalysis.headers,
           currentWorksheet,
@@ -5167,7 +6423,8 @@
 
 
       if (
-        cleanedResult.headers.length === 0
+        cleanedResult.headers.length ===
+        0
       ) {
 
         throw new Error(
@@ -5176,17 +6433,30 @@
       }
 
 
+      if (
+        processingCancelled
+      ) {
+
+        throw new Error(
+          "__CANCELLED__"
+        );
+      }
+
+
       renderCleaningSummary(
         cleanedResult
       );
+
 
       renderReviewReport(
         cleanedResult
       );
 
+
       renderPreview(
         cleanedResult
       );
+
 
       renderExportCenter(
         cleanedResult
@@ -5200,6 +6470,12 @@
         currentAnalysis.errors.length +
         currentAnalysis.missingValues +
         currentAnalysis.potentialDuplicates.length;
+
+
+      setProgress(
+        100,
+        "Cleaning completed successfully."
+      );
 
 
       showMessage(
@@ -5232,19 +6508,47 @@
       );
 
 
-      showError(
-        `The spreadsheet could not be cleaned safely.
-        <div class="error-detail">
-          ${escapeHtml(
-            error?.message ||
-            "Unknown cleaning error."
-          )}
-        </div>`
-      );
+      if (
+        error?.message ===
+        "__CANCELLED__"
+      ) {
+
+        showMessage(
+          "warningMessage",
+          "Cleaning was cancelled. No cleaned export was created.",
+          "warning"
+        );
+
+      } else {
+
+        showError(
+          `The spreadsheet could not be cleaned safely.
+          <div class="error-detail">
+            ${escapeHtml(
+              error?.message ||
+              "Unknown cleaning error."
+            )}
+          </div>`
+        );
+      }
 
     } finally {
 
-      setLoading(false);
+      processingActive =
+        false;
+
+      setLoading(
+        false
+      );
+
+      showCancelButton(
+        false
+      );
+
+      showProgress(
+        false
+      );
+
 
       button.disabled =
         false;
@@ -5252,7 +6556,34 @@
   }
 
 
-  /* FORMULA RESTORATION */
+  function cancelProcessing() {
+
+    if (
+      !processingActive
+    ) {
+      return;
+    }
+
+    processingCancelled =
+      true;
+
+
+    setText(
+      "progressLabel",
+      "Cancelling..."
+    );
+
+
+    const button =
+      $("cancelButton");
+
+
+    if (button) {
+      button.disabled =
+        true;
+    }
+  }
+
 
   function restoreFormulasInCleanedSheet(
     outputWorksheet,
@@ -5410,374 +6741,6 @@
   }
 
 
-  /* EXPORT */
-
-  function exportWorkbook(
-    format
-  ) {
-
-    if (!cleanedResult) {
-
-      setExportStatus(
-        "Please click Clean Spreadsheet before exporting.",
-        "warning"
-      );
-
-      showMessage(
-        "warningMessage",
-        "Please clean the spreadsheet first.",
-        "warning"
-      );
-
-      return;
-    }
-
-
-    if (
-      format !== "xlsx" &&
-      format !== "csv"
-    ) {
-
-      setExportStatus(
-        "Unsupported export format.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    if (
-      typeof XLSX ===
-      "undefined"
-    ) {
-
-      setExportStatus(
-        "The export library is unavailable. Refresh the page and try again.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    try {
-
-      setExportStatus(
-        "Preparing your cleaned file...",
-        "info"
-      );
-
-
-      const base =
-        safeBaseName(
-          currentFile?.name
-        );
-
-
-      /* CSV */
-
-      if (
-        format === "csv"
-      ) {
-
-        const worksheet =
-          XLSX.utils.aoa_to_sheet([
-            cleanedResult.headers,
-            ...cleanedResult.rows
-          ]);
-
-
-        const csv =
-          XLSX.utils.sheet_to_csv(
-            worksheet,
-            {
-              blankrows: false
-            }
-          );
-
-
-        /*
-          UTF-8 BOM helps spreadsheet software
-          correctly recognize Unicode text.
-        */
-
-        const blob =
-          new Blob(
-            [
-              "\uFEFF",
-              csv
-            ],
-            {
-              type:
-                "text/csv;charset=utf-8;"
-            }
-          );
-
-
-        downloadBlob(
-          blob,
-          `${base}_cleaned.csv`
-        );
-
-
-        setExportStatus(
-          `CSV export completed successfully: ${escapeHtml(
-            base
-          )}_cleaned.csv`,
-          "success"
-        );
-
-
-        showSuccess(
-          "CSV export completed successfully."
-        );
-
-
-        return;
-      }
-
-
-      /* XLSX */
-
-      const outputWorkbook =
-        XLSX.utils.book_new();
-
-
-      const usedNames = [];
-
-
-      const originalSheetNames =
-        workbook.SheetNames;
-
-
-      originalSheetNames.forEach(
-        sheetName => {
-
-          const sourceWorksheet =
-            workbook.Sheets[
-              sheetName
-            ];
-
-
-          if (
-            !sourceWorksheet
-          ) {
-            return;
-          }
-
-
-          const rawRows =
-            XLSX.utils.sheet_to_json(
-              sourceWorksheet,
-              {
-                header: 1,
-                raw: true,
-                defval: "",
-                blankrows: true
-              }
-            );
-
-
-          const outputName =
-            safeSheetName(
-              sheetName,
-              usedNames
-            );
-
-
-          /*
-            Preserve completely empty sheets.
-          */
-
-          if (
-            !Array.isArray(
-              rawRows
-            ) ||
-            rawRows.length === 0
-          ) {
-
-            const emptyWorksheet =
-              XLSX.utils.aoa_to_sheet([
-                []
-              ]);
-
-
-            XLSX.utils.book_append_sheet(
-              outputWorkbook,
-              emptyWorksheet,
-              outputName
-            );
-
-
-            return;
-          }
-
-
-          const headerRowIndex =
-            chooseHeaderRow(
-              rawRows
-            );
-
-
-          const rawHeader =
-            rawRows[
-              headerRowIndex
-            ] || [];
-
-
-          const columnCount =
-            Math.max(
-              getColumnCount(
-                rawRows
-              ),
-              rawHeader.length
-            );
-
-
-          const headers =
-            makeUniqueHeaders(
-              Array.from(
-                {
-                  length:
-                    columnCount
-                },
-                (_, index) =>
-                  rawHeader[
-                    index
-                  ] ?? ""
-              )
-            );
-
-
-          const dataRows =
-            rawRows
-              .slice(
-                headerRowIndex + 1
-              )
-              .map(
-                row =>
-                  Array.from(
-                    {
-                      length:
-                        headers.length
-                    },
-                    (_, index) =>
-                      row?.[
-                        index
-                      ] ?? ""
-                  )
-              );
-
-
-          /*
-            Each sheet gets its OWN analysis.
-            This fixes cross-sheet formula detection
-            and makes multi-sheet exports safer.
-          */
-
-          const sheetAnalysis =
-            {
-              headerRowIndex,
-              headers
-            };
-
-
-          const sheetResult =
-            cleanRows(
-              dataRows,
-              headers,
-              sourceWorksheet,
-              headerRowIndex
-            );
-
-
-          /*
-            If every data row disappears but headers
-            still exist, keep the cleaned header row.
-          */
-
-          const outputWorksheet =
-            createOutputWorksheet(
-              sheetResult,
-              sourceWorksheet,
-              headerRowIndex
-            );
-
-
-          XLSX.utils.book_append_sheet(
-            outputWorkbook,
-            outputWorksheet,
-            outputName
-          );
-
-        }
-      );
-
-
-      if (
-        outputWorkbook.SheetNames.length ===
-        0
-      ) {
-
-        throw new Error(
-          "No exportable worksheets were produced."
-        );
-      }
-
-
-      /*
-        XLSX export is produced for all worksheets.
-        Formula cells detected in each source sheet
-        are restored into the cleaned worksheet.
-      */
-
-      XLSX.writeFile(
-        outputWorkbook,
-        `${base}_cleaned.xlsx`
-      );
-
-
-      setExportStatus(
-        `XLSX export completed successfully: ${escapeHtml(
-          base
-        )}_cleaned.xlsx`,
-        "success"
-      );
-
-
-      showSuccess(
-        "XLSX export completed successfully. Formula cells were preserved where detected."
-      );
-
-    } catch (error) {
-
-      setExportStatus(
-        `Export failed.
-        <div class="error-detail">
-          ${escapeHtml(
-            error?.message ||
-            "The browser could not create the export file."
-          )}
-        </div>`,
-        "error"
-      );
-
-
-      showError(
-        `The file could not be exported safely.
-        <div class="error-detail">
-          ${escapeHtml(
-            error?.message ||
-            "Please try again or reload the page."
-          )}
-        </div>`,
-        "error"
-      );
-    }
-  }
-
-
   function downloadBlob(
     blob,
     filename
@@ -5836,7 +6799,539 @@
   }
 
 
+  async function exportWorkbook(
+    format
+  ) {
+
+    if (!cleanedResult) {
+
+      setExportStatus(
+        "Please click Clean Spreadsheet before exporting.",
+        "warning"
+      );
+
+      showMessage(
+        "warningMessage",
+        "Please clean the spreadsheet first.",
+        "warning"
+      );
+
+      return;
+    }
+
+
+    if (
+      format !== "xlsx" &&
+      format !== "csv"
+    ) {
+
+      setExportStatus(
+        "Unsupported export format.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (
+      typeof XLSX ===
+      "undefined"
+    ) {
+
+      setExportStatus(
+        "The export library is unavailable. Refresh the page and try again.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    try {
+
+      processingCancelled =
+        false;
+
+      processingActive =
+        true;
+
+
+      showProgress(
+        true
+      );
+
+      showCancelButton(
+        true
+      );
+
+
+      setLoading(
+        true,
+        "Preparing your export..."
+      );
+
+
+      setProgress(
+        5,
+        "Preparing export..."
+      );
+
+
+      const base =
+        safeBaseName(
+          currentFile?.name
+        );
+
+
+      /*
+        CSV:
+        Only selected cleaned worksheet.
+      */
+
+      if (
+        format === "csv"
+      ) {
+
+        const worksheet =
+          XLSX.utils.aoa_to_sheet([
+            cleanedResult.headers,
+            ...cleanedResult.rows
+          ]);
+
+
+        const csv =
+          XLSX.utils.sheet_to_csv(
+            worksheet,
+            {
+              blankrows: false
+            }
+          );
+
+
+        const blob =
+          new Blob(
+            [
+              "\uFEFF",
+              csv
+            ],
+            {
+              type:
+                "text/csv;charset=utf-8;"
+            }
+          );
+
+
+        if (
+          processingCancelled
+        ) {
+          throw new Error(
+            "__CANCELLED__"
+          );
+        }
+
+
+        downloadBlob(
+          blob,
+          `${base}_cleaned.csv`
+        );
+
+
+        setProgress(
+          100,
+          "CSV export completed."
+        );
+
+
+        setExportStatus(
+          `CSV export completed successfully: ${escapeHtml(
+            base
+          )}_cleaned.csv`,
+          "success"
+        );
+
+
+        showSuccess(
+          "CSV export completed successfully."
+        );
+
+
+        return;
+      }
+
+
+      /*
+        XLSX:
+        Process every worksheet independently.
+      */
+
+      const outputWorkbook =
+        XLSX.utils.book_new();
+
+
+      const usedNames = [];
+
+
+      for (
+        let sheetIndex = 0;
+        sheetIndex <
+        workbook.SheetNames.length;
+        sheetIndex++
+      ) {
+
+        if (
+          processingCancelled
+        ) {
+
+          throw new Error(
+            "__CANCELLED__"
+          );
+        }
+
+
+        const sheetName =
+          workbook.SheetNames[
+            sheetIndex
+          ];
+
+
+        const sourceWorksheet =
+          workbook.Sheets[
+            sheetName
+          ];
+
+
+        if (
+          !sourceWorksheet
+        ) {
+          continue;
+        }
+
+
+        setProgress(
+          10 +
+            (
+              sheetIndex /
+              Math.max(
+                workbook.SheetNames.length,
+                1
+              )
+            ) *
+              20,
+          `Preparing worksheet ${sheetIndex + 1} of ${workbook.SheetNames.length}...`
+        );
+
+
+        const rawRows =
+          XLSX.utils.sheet_to_json(
+            sourceWorksheet,
+            {
+              header: 1,
+              raw: true,
+              defval: "",
+              blankrows: true
+            }
+          );
+
+
+        const outputName =
+          safeSheetName(
+            sheetName,
+            usedNames
+          );
+
+
+        if (
+          !Array.isArray(
+            rawRows
+          ) ||
+          rawRows.length === 0
+        ) {
+
+          const emptyWorksheet =
+            XLSX.utils.aoa_to_sheet([
+              []
+            ]);
+
+
+          XLSX.utils.book_append_sheet(
+            outputWorkbook,
+            emptyWorksheet,
+            outputName
+          );
+
+
+          continue;
+        }
+
+
+        const headerRowIndex =
+          chooseHeaderRow(
+            rawRows
+          );
+
+
+        const rawHeader =
+          rawRows[
+            headerRowIndex
+          ] || [];
+
+
+        const columnCount =
+          Math.max(
+            getColumnCount(
+              rawRows
+            ),
+            rawHeader.length
+          );
+
+
+        const headers =
+          makeUniqueHeaders(
+            Array.from(
+              {
+                length:
+                  columnCount
+              },
+              (
+                _,
+                index
+              ) =>
+                rawHeader[
+                  index
+                ] ?? ""
+            )
+          );
+
+
+        const dataRows =
+          rawRows
+            .slice(
+              headerRowIndex + 1
+            )
+            .map(
+              row =>
+                Array.from(
+                  {
+                    length:
+                      headers.length
+                  },
+                  (
+                    _,
+                    index
+                  ) =>
+                    row?.[
+                      index
+                    ] ?? ""
+                )
+            );
+
+
+        /*
+          Create sheet-specific analysis
+          for compatibility and formula mapping.
+        */
+
+        const sheetAnalysis =
+          await analyzeRowsAsync(
+            dataRows,
+            headers,
+            sourceWorksheet,
+            headerRowIndex
+          );
+
+
+        /*
+          Temporarily point the current analysis
+          at this sheet so empty column mapping
+          stays correct.
+        */
+
+        const previousAnalysis =
+          currentAnalysis;
+
+
+        currentAnalysis = {
+          headerRowIndex,
+          headers,
+          ...sheetAnalysis
+        };
+
+
+        const sheetResult =
+          await cleanRowsAsync(
+            dataRows,
+            headers,
+            sourceWorksheet,
+            headerRowIndex
+          );
+
+
+        const outputWorksheet =
+          createOutputWorksheet(
+            sheetResult,
+            sourceWorksheet,
+            headerRowIndex
+          );
+
+
+        XLSX.utils.book_append_sheet(
+          outputWorkbook,
+          outputWorksheet,
+          outputName
+        );
+
+
+        currentAnalysis =
+          previousAnalysis;
+
+
+        setProgress(
+          30 +
+            (
+              (
+                sheetIndex + 1
+              ) /
+              Math.max(
+                workbook.SheetNames.length,
+                1
+              )
+            ) *
+              65,
+          `Processed worksheet ${
+            sheetIndex + 1
+          } of ${
+            workbook.SheetNames.length
+          }`
+        );
+
+
+        await new Promise(
+          resolve =>
+            setTimeout(
+              resolve,
+              0
+            )
+        );
+      }
+
+
+      if (
+        outputWorkbook.SheetNames.length ===
+        0
+      ) {
+
+        throw new Error(
+          "No exportable worksheets were produced."
+        );
+      }
+
+
+      if (
+        processingCancelled
+      ) {
+
+        throw new Error(
+          "__CANCELLED__"
+        );
+      }
+
+
+      setProgress(
+        96,
+        "Writing XLSX file..."
+      );
+
+
+      XLSX.writeFile(
+        outputWorkbook,
+        `${base}_cleaned.xlsx`
+      );
+
+
+      setProgress(
+        100,
+        "XLSX export completed."
+      );
+
+
+      setExportStatus(
+        `XLSX export completed successfully: ${escapeHtml(
+          base
+        )}_cleaned.xlsx`,
+        "success"
+      );
+
+
+      showSuccess(
+        "XLSX export completed successfully. Formula cells were preserved where detected."
+      );
+
+    } catch (error) {
+
+      if (
+        error?.message ===
+        "__CANCELLED__"
+      ) {
+
+        setExportStatus(
+          "Export was cancelled. No new export was created.",
+          "warning"
+        );
+
+        showMessage(
+          "warningMessage",
+          "Export was cancelled.",
+          "warning"
+        );
+
+      } else {
+
+        setExportStatus(
+          `Export failed.
+          <div class="error-detail">
+            ${escapeHtml(
+              error?.message ||
+              "The browser could not create the export file."
+            )}
+          </div>`,
+          "error"
+        );
+
+
+        showError(
+          `The file could not be exported safely.
+          <div class="error-detail">
+            ${escapeHtml(
+              error?.message ||
+              "Please try again or reload the page."
+            )}
+          </div>`
+        );
+      }
+
+    } finally {
+
+      processingActive =
+        false;
+
+      setLoading(
+        false
+      );
+
+      showProgress(
+        false
+      );
+
+      showCancelButton(
+        false
+      );
+    }
+  }
+
+
   function exportXlsx() {
+
     exportWorkbook(
       "xlsx"
     );
@@ -5844,13 +7339,12 @@
 
 
   function exportCsv() {
+
     exportWorkbook(
       "csv"
     );
   }
 
-
-  /* COPY REPORT */
 
   async function copyCleaningReport() {
 
@@ -5960,24 +7454,31 @@
             "textarea"
           );
 
+
         textarea.value =
           report;
+
 
         textarea.style.position =
           "fixed";
 
+
         textarea.style.left =
           "-9999px";
+
 
         document.body.appendChild(
           textarea
         );
 
+
         textarea.select();
+
 
         document.execCommand(
           "copy"
         );
+
 
         textarea.remove();
       }
@@ -6002,9 +7503,14 @@
   }
 
 
-  /* RESET */
-
   function resetApp() {
+
+    processingCancelled =
+      true;
+
+    processingActive =
+      false;
+
 
     workbook = null;
     currentFile = null;
@@ -6053,9 +7559,23 @@
 
     clearMessages();
 
+
     setExportStatus("");
 
-    setLoading(false);
+
+    setLoading(
+      false
+    );
+
+
+    showProgress(
+      false
+    );
+
+
+    showCancelButton(
+      false
+    );
 
 
     window.scrollTo({
@@ -6064,8 +7584,6 @@
     });
   }
 
-
-  /* DRAG & DROP */
 
   function handleDragOver(
     event
@@ -6126,8 +7644,6 @@
   }
 
 
-  /* STARTUP */
-
   document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -6135,15 +7651,10 @@
       const fileInput =
         $("fileInput");
 
+
       const sheetSelect =
         $("sheetSelect");
 
-
-      /*
-        Direct browser file-input listener.
-        This is intentionally simple so the
-        upload control remains reliable on ChromeOS.
-      */
 
       if (fileInput) {
 
@@ -6173,6 +7684,10 @@
         sheetSelect.addEventListener(
           "change",
           async () => {
+
+            processingCancelled =
+              true;
+
 
             cleanedResult =
               null;
