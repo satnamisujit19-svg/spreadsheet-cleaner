@@ -235,10 +235,10 @@
     <section class="hero">
       <div class="brand-row">
         <div class="brand">Clean My Spreadsheet</div>
-        <div class="step-badge">Step 54 • Mobile-Friendly Customer Experience</div>
+        <div class="step-badge">Step 54.1 • Mobile + Large File Performance</div>
       </div>
       <h1>Clean My Spreadsheet</h1>
-      <p class="hero-text">Clean, validate and standardize messy spreadsheet data in seconds — now with a cleaner mobile layout, easier review and customer-friendly exports.</p>
+      <p class="hero-text">Clean, validate and standardize messy spreadsheet data in seconds — with a cleaner mobile layout, smoother large-file processing, easier review and customer-friendly exports.</p>
       <div class="chips">
         <span class="chip">Email Validation</span>
         <span class="chip">Email Normalization</span>
@@ -528,6 +528,7 @@
     let currentAnalysis = null;
     let cleanedResult = null;
     let processingCancelled = false;
+    const PROCESS_CHUNK_SIZE = 500;
 
     fileInput.addEventListener("change", handleFileUpload);
     sheetSelect.addEventListener("change", function () {
@@ -1051,110 +1052,374 @@
       return { groups, participatingRowsCount: participatingRows.size };
     }
 
-    function analyzeRows(rawRows, worksheet) {
-      if (!rawRows.length) {
-        return { headers:[], dataRows:[], rowCount:0, columnCount:0, duplicateRows:0, potentialDuplicates:0, missingValues:0, invalidEmails:0, invalidPhones:0, detectedDates:0, formulas:[], errors:[], emptyColumns:0, emptyColumnIndexes:[], columnTypes:[], emailIndex:-1, phoneIndex:-1, headerRowIndex:0, missingList:[] };
+    async function buildIdentityDuplicateInfoAsync(headers, dataRows) {
+      const identityIndexes = [];
+
+      for (let index = 0; index < headers.length; index++) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const header = headers[index];
+        const h = normalizeHeader(header);
+
+        if (h.includes("email") || h === "id" || h.endsWith("id")) {
+          identityIndexes.push(index);
+          continue;
+        }
+
+        const values = [];
+        for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+          if (processingCancelled) throw new Error("Processing cancelled.");
+          const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+          for (let r = start; r < end; r++) {
+            const value = String(dataRows[r]?.[index] ?? "").trim();
+            if (value) values.push(value);
+          }
+          if (end < dataRows.length) await yieldToBrowser();
+        }
+
+        if (!values.length) continue;
+
+        const emailLike = values.filter(value => /@/.test(value) && /[A-Za-z]/.test(value)).length;
+        const idLike = values.filter(value => /^[A-Za-z]{1,6}\d{2,}$/.test(value)).length;
+
+        if (emailLike >= 2 && emailLike / values.length >= 0.4) {
+          identityIndexes.push(index);
+          continue;
+        }
+
+        if (idLike >= 2 && idLike / values.length >= 0.7) {
+          identityIndexes.push(index);
+        }
+
+        await yieldToBrowser();
       }
+
+      const groups = [];
+      const participatingRows = new Set();
+
+      for (let ii = 0; ii < identityIndexes.length; ii++) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const index = identityIndexes[ii];
+        const byValue = new Map();
+
+        for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+          if (processingCancelled) throw new Error("Processing cancelled.");
+          const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+
+          for (let rowIndex = start; rowIndex < end; rowIndex++) {
+            const value = normalizeCell(dataRows[rowIndex]?.[index]);
+            if (!value || isErrorValue(value)) continue;
+            if (!byValue.has(value)) byValue.set(value, []);
+            byValue.get(value).push(rowIndex + 1);
+          }
+
+          if (end < dataRows.length) await yieldToBrowser();
+        }
+
+        for (const [value, rows] of byValue.entries()) {
+          if (rows.length >= 2) {
+            groups.push({
+              rows,
+              field: headers[index] || `Column ${index + 1}`,
+              value
+            });
+            rows.forEach(r => participatingRows.add(r));
+          }
+        }
+
+        await yieldToBrowser();
+      }
+
+      return {
+        groups,
+        participatingRowsCount: participatingRows.size
+      };
+    }
+
+    async function analyzeRowsAsync(rawRows, worksheet) {
+      if (!rawRows.length) {
+        return {
+          headers:[], dataRows:[], rowCount:0, columnCount:0,
+          duplicateRows:0, potentialDuplicates:0, missingValues:0,
+          invalidEmails:0, invalidPhones:0, detectedDates:0,
+          formulas:[], errors:[], emptyColumns:0,
+          emptyColumnIndexes:[], columnTypes:[], emailIndex:-1,
+          phoneIndex:-1, headerRowIndex:0, missingList:[]
+        };
+      }
+
       const headerInfo = chooseHeaderRow(rawRows);
       const headerRowIndex = headerInfo.headerIndex;
       const headers = [...headerInfo.headers];
       const dataRows = headerRowIndex >= 0
         ? rawRows.slice(headerRowIndex + 1)
         : rawRows;
+
       const columnCount = Math.max(getColumnCount(rawRows), headers.length);
       while (headers.length < columnCount) headers.push(`Column ${headers.length + 1}`);
+
+      await yieldToBrowser();
+      if (processingCancelled) throw new Error("Processing cancelled.");
+
       const emailIndex = findColumn(headers, "email", dataRows);
       const phoneIndex = findColumn(headers, "phone", dataRows);
+
       let invalidEmails = 0;
       let invalidPhones = 0;
       let detectedDates = 0;
       const emailIssues = [];
       const phoneIssues = [];
-      for (let r = 0; r < dataRows.length; r++) {
-        const emailValue = emailIndex >= 0 ? String(dataRows[r][emailIndex] ?? "").trim() : "";
-        if (emailIndex >= 0 && emailValue && !isValidEmail(emailValue)) {
-          invalidEmails++;
-          emailIssues.push({ row:r + 1, field:headers[emailIndex], value:emailValue });
+
+      for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+
+        for (let r = start; r < end; r++) {
+          const row = dataRows[r];
+          const emailValue = emailIndex >= 0 ? String(row[emailIndex] ?? "").trim() : "";
+          if (emailIndex >= 0 && emailValue && !isValidEmail(emailValue)) {
+            invalidEmails++;
+            emailIssues.push({ row:r + 1, field:headers[emailIndex], value:emailValue });
+          }
+
+          const phoneValue = phoneIndex >= 0 ? String(row[phoneIndex] ?? "").trim() : "";
+          if (phoneIndex >= 0 && phoneValue && !isValidPhone(phoneValue)) {
+            invalidPhones++;
+            phoneIssues.push({ row:r + 1, field:headers[phoneIndex], value:phoneValue });
+          }
+
+          for (let c = 0; c < columnCount; c++) {
+            if (!isEmptyCell(row[c]) && isDateLike(row[c])) detectedDates++;
+          }
         }
-        const phoneValue = phoneIndex >= 0 ? String(dataRows[r][phoneIndex] ?? "").trim() : "";
-        if (phoneIndex >= 0 && phoneValue && !isValidPhone(phoneValue)) {
-          invalidPhones++;
-          phoneIssues.push({ row:r + 1, field:headers[phoneIndex], value:phoneValue });
-        }
-        for (let c = 0; c < columnCount; c++) {
-          if (!isEmptyCell(dataRows[r][c]) && isDateLike(dataRows[r][c])) detectedDates++;
-        }
+
+        setProgress(
+          12 + Math.round((end / Math.max(dataRows.length, 1)) * 18),
+          "Checking emails, phones and dates…"
+        );
+
+        if (end < dataRows.length) await yieldToBrowser();
       }
+
       const seen = new Set();
       let duplicateRows = 0;
-      for (const row of dataRows) {
-        if (isEmptyRow(row)) continue;
-        const key = makeRowKey(row);
-        if (seen.has(key)) duplicateRows++; else seen.add(key);
+
+      for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+
+        for (let r = start; r < end; r++) {
+          const row = dataRows[r];
+          if (isEmptyRow(row)) continue;
+          const key = makeRowKey(row);
+          if (seen.has(key)) duplicateRows++;
+          else seen.add(key);
+        }
+
+        setProgress(
+          30 + Math.round((end / Math.max(dataRows.length, 1)) * 8),
+          "Checking duplicate rows…"
+        );
+
+        if (end < dataRows.length) await yieldToBrowser();
       }
-      const emptyColumnIndexes = getEmptyColumnIndexes(dataRows, columnCount);
-      const missingList = countMissingValues(dataRows, columnCount, headers);
+
+      const emptyColumnIndexes = [];
+      for (let c = 0; c < columnCount; c++) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        let hasData = false;
+
+        for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+          const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+          for (let r = start; r < end; r++) {
+            if (!isEmptyCell(dataRows[r]?.[c])) {
+              hasData = true;
+              break;
+            }
+          }
+          if (hasData || end >= dataRows.length) break;
+          await yieldToBrowser();
+        }
+
+        if (!hasData) emptyColumnIndexes.push(c);
+      }
+      setProgress(40, "Checking missing values and empty columns…");
+      await yieldToBrowser();
+
+      const missingList = [];
+      for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+
+        for (let r = start; r < end; r++) {
+          const row = dataRows[r];
+          for (let c = 0; c < columnCount; c++) {
+            if (isEmptyCell(row[c])) {
+              missingList.push({
+                row:r + 1,
+                column:c,
+                label:headers[c] || `Column ${c + 1}`
+              });
+            }
+          }
+        }
+
+        if (end < dataRows.length) await yieldToBrowser();
+      }
+
       const missingByColumn = [];
       for (let c = 0; c < columnCount; c++) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
         const missingRows = [];
-        for (let r = 0; r < dataRows.length; r++) {
-          if (isEmptyCell(dataRows[r][c])) missingRows.push(r + 1);
+
+        for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+          const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+          for (let r = start; r < end; r++) {
+            if (isEmptyCell(dataRows[r]?.[c])) missingRows.push(r + 1);
+          }
+          if (end < dataRows.length) await yieldToBrowser();
         }
+
         if (missingRows.length) {
           missingByColumn.push({
-            column: c,
-            label: headers[c] || `Column ${c + 1}`,
-            missing: missingRows.length,
-            total: dataRows.length,
-            percent: dataRows.length ? (missingRows.length / dataRows.length) * 100 : 0,
-            rows: missingRows
+            column:c,
+            label:headers[c] || `Column ${c + 1}`,
+            missing:missingRows.length,
+            total:dataRows.length,
+            percent:dataRows.length ? (missingRows.length / dataRows.length) * 100 : 0,
+            rows:missingRows
           });
         }
       }
+
       const formulaMap = getFormulaMap(worksheet);
       const formulas = [];
       const errors = [];
+
       if (worksheet && worksheet['!ref']) {
         const range = XLSX.utils.decode_range(worksheet['!ref']);
-        for (let r = range.s.r; r <= range.e.r; r++) {
-          for (let c = range.s.c; c <= range.e.c; c++) {
-            const address = XLSX.utils.encode_cell({r,c});
-            const cell = worksheet[address];
-            if (headerRowIndex >= 0 && r <= headerRowIndex) continue;
-            const displayRow = headerRowIndex >= 0
-              ? r - headerRowIndex
-              : r + 1;
-            const field = headers[c] || `Column ${c + 1}`;
-            if (cell && cell.f) formulas.push({ row:displayRow, field, value: cell.w ?? cell.v ?? "", formula:cell.f });
+
+        for (let rStart = range.s.r; rStart <= range.e.r; rStart += PROCESS_CHUNK_SIZE) {
+          if (processingCancelled) throw new Error("Processing cancelled.");
+          const rEnd = Math.min(rStart + PROCESS_CHUNK_SIZE - 1, range.e.r);
+
+          for (let r = rStart; r <= rEnd; r++) {
+            for (let c = range.s.c; c <= range.e.c; c++) {
+              const address = XLSX.utils.encode_cell({r,c});
+              const cell = worksheet[address];
+              if (headerRowIndex >= 0 && r <= headerRowIndex) continue;
+
+              const displayRow = headerRowIndex >= 0 ? r - headerRowIndex : r + 1;
+              const field = headers[c] || `Column ${c + 1}`;
+
+              if (cell && cell.f) {
+                formulas.push({
+                  row:displayRow,
+                  field,
+                  value:cell.w ?? cell.v ?? "",
+                  formula:cell.f
+                });
+              }
+            }
+          }
+
+          await yieldToBrowser();
+        }
+      }
+
+      for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+
+        for (let r = start; r < end; r++) {
+          const row = dataRows[r];
+          for (let c = 0; c < columnCount; c++) {
+            const value = String(row[c] ?? "").trim();
+            if (isErrorValue(value)) {
+              errors.push({
+                row:r + 1,
+                field:headers[c] || `Column ${c + 1}`,
+                value
+              });
+            }
           }
         }
+
+        if (end < dataRows.length) await yieldToBrowser();
       }
-      dataRows.forEach((row, r) => {
-        for (let c = 0; c < columnCount; c++) {
-          const value = String(row[c] ?? "").trim();
-          if (isErrorValue(value)) errors.push({ row:r + 1, field:headers[c] || `Column ${c + 1}`, value });
-        }
-      });
-      const identity = buildIdentityDuplicateInfo(headers, dataRows);
+
+      setProgress(55, "Checking duplicate identities and column types…");
+      const identity = await buildIdentityDuplicateInfoAsync(headers, dataRows);
+
       const columnTypes = [];
       for (let c = 0; c < columnCount; c++) {
-        const values = dataRows.map(row => row[c]);
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const values = [];
+
+        for (let start = 0; start < dataRows.length; start += PROCESS_CHUNK_SIZE) {
+          const end = Math.min(start + PROCESS_CHUNK_SIZE, dataRows.length);
+          for (let r = start; r < end; r++) values.push(dataRows[r]?.[c]);
+          if (end < dataRows.length) await yieldToBrowser();
+        }
+
         const type = inferColumnType(headers[c], values);
-        const filled = values.filter(v => !isEmptyCell(v)).length;
-        const missing = values.length - filled;
-        const unique = new Set(values.filter(v => !isEmptyCell(v)).map(normalizeCell)).size;
-        columnTypes.push({ header:headers[c], type, filled, missing, unique });
+        let filled = 0;
+        const normalized = new Set();
+
+        for (let start = 0; start < values.length; start += PROCESS_CHUNK_SIZE) {
+          const end = Math.min(start + PROCESS_CHUNK_SIZE, values.length);
+          for (let i = start; i < end; i++) {
+            const v = values[i];
+            if (!isEmptyCell(v)) {
+              filled++;
+              normalized.add(normalizeCell(v));
+            }
+          }
+          if (end < values.length) await yieldToBrowser();
+        }
+
+        columnTypes.push({
+          header:headers[c],
+          type,
+          filled,
+          missing:values.length - filled,
+          unique:normalized.size
+        });
+
+        if (c + 1 < columnCount) {
+          setProgress(
+            70 + Math.round(((c + 1) / Math.max(columnCount, 1)) * 8),
+            "Finishing column analysis…"
+          );
+          await yieldToBrowser();
+        }
       }
+
       return {
-        headers, dataRows, rowCount:dataRows.length, columnCount,
-        duplicateRows, potentialDuplicates:identity.participatingRowsCount,
-        potentialGroups:identity.groups, missingValues:missingList.length,
-        invalidEmails, invalidPhones, detectedDates,
-        formulas, errors,
-        emptyColumns:emptyColumnIndexes.length, emptyColumnIndexes,
-        columnTypes, emailIndex, phoneIndex, headerRowIndex,
-        missingList, missingByColumn, emailIssues, phoneIssues, whitespaceCells:countWhitespaceCells(rawRows),
-        headerDetected: headerInfo.detected !== false
+        headers,
+        dataRows,
+        rowCount:dataRows.length,
+        columnCount,
+        duplicateRows,
+        potentialDuplicates:identity.participatingRowsCount,
+        potentialGroups:identity.groups,
+        missingValues:missingList.length,
+        invalidEmails,
+        invalidPhones,
+        detectedDates,
+        formulas,
+        errors,
+        emptyColumns:emptyColumnIndexes.length,
+        emptyColumnIndexes,
+        columnTypes,
+        emailIndex,
+        phoneIndex,
+        headerRowIndex,
+        missingList,
+        missingByColumn,
+        emailIssues,
+        phoneIssues,
+        whitespaceCells:countWhitespaceCells(rawRows),
+        headerDetected:headerInfo.detected !== false
       };
     }
 
@@ -1172,8 +1437,165 @@
       return standard || text;
     }
 
+    async function cleanRowsAsync(rawRows, worksheet) {
+      const before = await analyzeRowsAsync(rawRows, worksheet);
+      const originalColumnCount = before.columnCount;
+      const headers = [...before.headers];
+      const rawDataRows = [];
+      for (let start = 0; start < before.dataRows.length; start += PROCESS_CHUNK_SIZE) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const end = Math.min(start + PROCESS_CHUNK_SIZE, before.dataRows.length);
+        for (let r = start; r < end; r++) {
+          const row = before.dataRows[r];
+          if (!isEmptyRow(row)) rawDataRows.push(row);
+        }
+        if (end < before.dataRows.length) await yieldToBrowser();
+      }
+
+      const blankRowsRemoved = before.dataRows.length - rawDataRows.length;
+      const emptyColumnIndexes = before.emptyColumnIndexes;
+      const emptySet = new Set(emptyColumnIndexes);
+      const cleanedHeaders = [];
+
+      for (let c = 0; c < originalColumnCount; c++) {
+        if (!emptySet.has(c)) cleanedHeaders.push(headers[c] || `Column ${c + 1}`);
+      }
+
+      const cleanedDataRows = [];
+      const formulasToRestore = [];
+      const formulaMap = getFormulaMap(worksheet);
+      const seen = new Set();
+
+      let duplicateRowsRemoved = 0;
+      let emailsNormalized = 0;
+      let phonesStandardized = 0;
+      let datesStandardized = 0;
+      let categoriesStandardized = 0;
+
+      for (let start = 0; start < before.dataRows.length; start += PROCESS_CHUNK_SIZE) {
+        if (processingCancelled) throw new Error("Processing cancelled.");
+        const end = Math.min(start + PROCESS_CHUNK_SIZE, before.dataRows.length);
+
+        for (let dataIndex = start; dataIndex < end; dataIndex++) {
+          const row = before.dataRows[dataIndex];
+          if (isEmptyRow(row)) continue;
+
+          const sourceSheetRow =
+            before.headerRowIndex >= 0
+              ? before.headerRowIndex + 1 + dataIndex
+              : dataIndex;
+
+          const newRow = [];
+          const outputSheetRow = cleanedDataRows.length + 1;
+
+          for (let c = 0; c < originalColumnCount; c++) {
+            if (emptySet.has(c)) continue;
+
+            const header = headers[c] || `Column ${c + 1}`;
+            let value = row[c] ?? "";
+            const originalValue = String(value ?? "").trim();
+
+            if (typeof value === "string") value = value.trim();
+
+            if (c === before.emailIndex && !isEmptyCell(value)) {
+              const normalized = String(value).trim().toLowerCase();
+              if (normalized !== originalValue) emailsNormalized++;
+              value = normalized;
+            }
+
+            if (c === before.phoneIndex && !isEmptyCell(value)) {
+              const standardized = standardizePhone(value);
+              if (standardized !== originalValue) phonesStandardized++;
+              value = standardized;
+            }
+
+            const normalizedHeader = normalizeHeader(header);
+            if (
+              normalizedHeader.includes("date") ||
+              normalizedHeader.includes("dob") ||
+              normalizedHeader.includes("birth")
+            ) {
+              const parsed = parseDateValue(value);
+              if (parsed) {
+                const standardized = formatDateYMD(parsed);
+                if (standardized !== originalValue) datesStandardized++;
+                value = standardized;
+              }
+            }
+
+            const categorical = canonicalCategory(header, value);
+            if (categorical !== String(value ?? "").trim()) categoriesStandardized++;
+            value = categorical;
+
+            const outputCol = newRow.length;
+            newRow.push(value);
+
+            const formula = formulaMap.get(`${sourceSheetRow}:${c}`);
+            if (formula) {
+              formulasToRestore.push({
+                r:outputSheetRow,
+                c:outputCol,
+                formula:String(formula)
+              });
+            }
+          }
+
+          const key = makeRowKey(newRow);
+          if (seen.has(key)) {
+            duplicateRowsRemoved++;
+            continue;
+          }
+
+          seen.add(key);
+          cleanedDataRows.push(newRow);
+        }
+
+        setProgress(
+          78 + Math.round((end / Math.max(before.dataRows.length, 1)) * 16),
+          "Cleaning and standardizing rows…"
+        );
+
+        if (end < before.dataRows.length) await yieldToBrowser();
+      }
+
+      const cleaned = [cleanedHeaders, ...cleanedDataRows];
+      const rowsBefore = before.rowCount;
+      const rowsAfter = cleanedDataRows.length;
+      const columnsBefore = before.columnCount;
+      const columnsAfter = cleanedHeaders.length;
+
+      const totalChanges =
+        blankRowsRemoved +
+        duplicateRowsRemoved +
+        emailsNormalized +
+        phonesStandardized +
+        datesStandardized +
+        categoriesStandardized +
+        emptyColumnIndexes.length;
+
+      return {
+        rows:cleaned,
+        rowsBefore,
+        rowsAfter,
+        columnsBefore,
+        columnsAfter,
+        blankRowsRemoved,
+        duplicateRowsRemoved,
+        emailsNormalized,
+        phonesStandardized,
+        datesStandardized,
+        categoriesStandardized,
+        emptyColumnsRemoved:emptyColumnIndexes.length,
+        totalChanges,
+        analysisBefore:before,
+        formulasToRestore
+      };
+    }
+
+    // Retained for compatibility with older code paths; normal UI processing
+    // uses the chunked async version above.
     function cleanRows(rawRows, worksheet) {
-      const before = analyzeRows(rawRows, worksheet);
+      const before = analyzeRowsSyncForExport(rawRows, worksheet);
       const originalColumnCount = before.columnCount;
       const headers = [...before.headers];
       const rawDataRows = before.dataRows.filter(row => !isEmptyRow(row));
@@ -1191,6 +1613,7 @@
       let phonesStandardized = 0;
       let datesStandardized = 0;
       let categoriesStandardized = 0;
+
       for (let dataIndex = 0; dataIndex < before.dataRows.length; dataIndex++) {
         const row = before.dataRows[dataIndex];
         if (isEmptyRow(row)) continue;
@@ -1213,7 +1636,8 @@
             if (standardized !== originalValue) phonesStandardized++;
             value = standardized;
           }
-          if (normalizeHeader(header).includes("date") || normalizeHeader(header).includes("dob") || normalizeHeader(header).includes("birth")) {
+          const normalizedHeader = normalizeHeader(header);
+          if (normalizedHeader.includes("date") || normalizedHeader.includes("dob") || normalizedHeader.includes("birth")) {
             const parsed = parseDateValue(value);
             if (parsed) {
               const standardized = formatDateYMD(parsed);
@@ -1227,19 +1651,21 @@
           const outputCol = newRow.length;
           newRow.push(value);
           const formula = formulaMap.get(`${sourceSheetRow}:${c}`);
-          if (formula) formulasToRestore.push({ r: outputSheetRow, c: outputCol, formula: String(formula) });
+          if (formula) formulasToRestore.push({ r:outputSheetRow, c:outputCol, formula:String(formula) });
         }
         const key = makeRowKey(newRow);
         if (seen.has(key)) { duplicateRowsRemoved++; continue; }
         seen.add(key);
         cleanedDataRows.push(newRow);
       }
+
       const cleaned = [cleanedHeaders, ...cleanedDataRows];
       const rowsBefore = before.rowCount;
       const rowsAfter = cleanedDataRows.length;
       const columnsBefore = before.columnCount;
       const columnsAfter = cleanedHeaders.length;
       const totalChanges = blankRowsRemoved + duplicateRowsRemoved + emailsNormalized + phonesStandardized + datesStandardized + categoriesStandardized + emptyColumnIndexes.length;
+
       return {
         rows:cleaned,
         rowsBefore, rowsAfter, columnsBefore, columnsAfter,
@@ -1247,6 +1673,109 @@
         emailsNormalized, phonesStandardized, datesStandardized,
         categoriesStandardized, emptyColumnsRemoved:emptyColumnIndexes.length,
         totalChanges, analysisBefore:before, formulasToRestore
+      };
+    }
+
+    function analyzeRowsSyncForExport(rawRows, worksheet) {
+      // Export fallback intentionally uses the existing synchronous analysis
+      // logic by approximating through the same completed structures used by
+      // the async analyzer. This path is only for legacy callers.
+      const headerInfo = chooseHeaderRow(rawRows);
+      const headerRowIndex = headerInfo.headerIndex;
+      const headers = [...headerInfo.headers];
+      const dataRows = headerRowIndex >= 0 ? rawRows.slice(headerRowIndex + 1) : rawRows;
+      const columnCount = Math.max(getColumnCount(rawRows), headers.length);
+      while (headers.length < columnCount) headers.push(`Column ${headers.length + 1}`);
+
+      const emailIndex = findColumn(headers, "email", dataRows);
+      const phoneIndex = findColumn(headers, "phone", dataRows);
+      let invalidEmails = 0, invalidPhones = 0, detectedDates = 0;
+      const emailIssues = [], phoneIssues = [];
+
+      for (let r = 0; r < dataRows.length; r++) {
+        const emailValue = emailIndex >= 0 ? String(dataRows[r][emailIndex] ?? "").trim() : "";
+        if (emailIndex >= 0 && emailValue && !isValidEmail(emailValue)) {
+          invalidEmails++;
+          emailIssues.push({row:r + 1, field:headers[emailIndex], value:emailValue});
+        }
+        const phoneValue = phoneIndex >= 0 ? String(dataRows[r][phoneIndex] ?? "").trim() : "";
+        if (phoneIndex >= 0 && phoneValue && !isValidPhone(phoneValue)) {
+          invalidPhones++;
+          phoneIssues.push({row:r + 1, field:headers[phoneIndex], value:phoneValue});
+        }
+        for (let c = 0; c < columnCount; c++) {
+          if (!isEmptyCell(dataRows[r][c]) && isDateLike(dataRows[r][c])) detectedDates++;
+        }
+      }
+
+      const seen = new Set();
+      let duplicateRows = 0;
+      dataRows.forEach(row => {
+        if (isEmptyRow(row)) return;
+        const key = makeRowKey(row);
+        if (seen.has(key)) duplicateRows++; else seen.add(key);
+      });
+
+      const emptyColumnIndexes = getEmptyColumnIndexes(dataRows, columnCount);
+      const missingList = countMissingValues(dataRows, columnCount, headers);
+      const missingByColumn = [];
+      for (let c = 0; c < columnCount; c++) {
+        const missingRows = [];
+        for (let r = 0; r < dataRows.length; r++) if (isEmptyCell(dataRows[r][c])) missingRows.push(r + 1);
+        if (missingRows.length) missingByColumn.push({
+          column:c,
+          label:headers[c] || `Column ${c + 1}`,
+          missing:missingRows.length,
+          total:dataRows.length,
+          percent:dataRows.length ? (missingRows.length / dataRows.length) * 100 : 0,
+          rows:missingRows
+        });
+      }
+
+      const formulas = [];
+      const errors = [];
+      if (worksheet && worksheet['!ref']) {
+        const range = XLSX.utils.decode_range(worksheet['!ref']);
+        for (let r = range.s.r; r <= range.e.r; r++) {
+          for (let c = range.s.c; c <= range.e.c; c++) {
+            const address = XLSX.utils.encode_cell({r,c});
+            const cell = worksheet[address];
+            if (headerRowIndex >= 0 && r <= headerRowIndex) continue;
+            const displayRow = headerRowIndex >= 0 ? r - headerRowIndex : r + 1;
+            const field = headers[c] || `Column ${c + 1}`;
+            if (cell && cell.f) formulas.push({row:displayRow, field, value:cell.w ?? cell.v ?? "", formula:cell.f});
+          }
+        }
+      }
+
+      dataRows.forEach((row, r) => {
+        for (let c = 0; c < columnCount; c++) {
+          const value = String(row[c] ?? "").trim();
+          if (isErrorValue(value)) errors.push({row:r + 1, field:headers[c] || `Column ${c + 1}`, value});
+        }
+      });
+
+      const identity = buildIdentityDuplicateInfo(headers, dataRows);
+      const columnTypes = [];
+      for (let c = 0; c < columnCount; c++) {
+        const values = dataRows.map(row => row[c]);
+        const type = inferColumnType(headers[c], values);
+        const filled = values.filter(v => !isEmptyCell(v)).length;
+        const missing = values.length - filled;
+        const unique = new Set(values.filter(v => !isEmptyCell(v)).map(normalizeCell)).size;
+        columnTypes.push({header:headers[c], type, filled, missing, unique});
+      }
+
+      return {
+        headers, dataRows, rowCount:dataRows.length, columnCount,
+        duplicateRows, potentialDuplicates:identity.participatingRowsCount,
+        potentialGroups:identity.groups, missingValues:missingList.length,
+        invalidEmails, invalidPhones, detectedDates, formulas, errors,
+        emptyColumns:emptyColumnIndexes.length, emptyColumnIndexes,
+        columnTypes, emailIndex, phoneIndex, headerRowIndex,
+        missingList, missingByColumn, emailIssues, phoneIssues,
+        whitespaceCells:countWhitespaceCells(rawRows),
+        headerDetected:headerInfo.detected !== false
       };
     }
 
@@ -1557,7 +2086,7 @@
       return `Loaded “${currentSheetName}” and completed the initial checks.`;
     }
 
-    function loadSelectedSheet() {
+    async function loadSelectedSheet() {
       if (!workbook || !currentSheetName) return;
       currentWorksheet = workbook.Sheets[currentSheetName];
       currentRows = XLSX.utils.sheet_to_json(currentWorksheet, { header:1, defval:"", raw:false, blankrows:true });
@@ -1575,7 +2104,8 @@
       downloadCsvBtn.disabled = true;
       centerXlsxBtn.disabled = true;
       centerCsvBtn.disabled = true;
-      currentAnalysis = analyzeRows(currentRows, currentWorksheet);
+      setProgress(45, "Detecting worksheets and headers…");
+      currentAnalysis = await analyzeRowsAsync(currentRows, currentWorksheet);
       renderAnalysis(currentAnalysis);
       setText("infoSheets", workbook.SheetNames.length);
       setText("detailSheet", currentSheetName);
@@ -1584,6 +2114,9 @@
       worksheetSection.classList.remove("hidden");
       actionBar.classList.remove("hidden");
       cleanBtn.disabled = false;
+      setProgress(100, "Initial checks completed");
+      await yieldToBrowser();
+      hideProgress();
       showSuccess(
         analysisMessage(currentAnalysis)
       );
@@ -1614,7 +2147,7 @@
         const arrayBuffer = await file.arrayBuffer();
         workbook = XLSX.read(arrayBuffer, { type:"array", cellFormula:true, cellStyles:false, cellDates:false });
         await yieldToBrowser();
-        setProgress(45, "Detecting worksheets and headers…");
+        setProgress(25, "Detecting worksheets…");
         if (!workbook.SheetNames.length) throw new Error("No worksheet was found.");
         infoFileName.textContent = file.name;
         infoFileSize.textContent = formatBytes(file.size);
@@ -1632,7 +2165,7 @@
         worksheetSection.classList.remove("hidden");
         actionBar.classList.remove("hidden");
         cleanBtn.disabled = false;
-        loadSelectedSheet();
+        await loadSelectedSheet();
       } catch (error) {
         resetResultsOnly();
         showError(`Could not read this spreadsheet: ${error.message}`);
@@ -1650,7 +2183,7 @@
         await yieldToBrowser();
         if (processingCancelled) throw new Error("Processing cancelled.");
         setProgress(30, "Cleaning rows and checking duplicates…");
-        const result = cleanRows(currentRows, currentWorksheet);
+        const result = await cleanRowsAsync(currentRows, currentWorksheet);
         await yieldToBrowser();
         if (processingCancelled) throw new Error("Processing cancelled.");
         setProgress(72, "Preparing review and preview…");
@@ -1667,14 +2200,19 @@
         setText("exportXlsxDetails", `${safeBaseName(currentFile.name)}_cleaned.xlsx · ${result.rowsAfter} rows · ${result.columnsAfter} columns`);
         setText("exportCsvDetails", `${safeBaseName(currentFile.name)}_cleaned.csv · current sheet · ${result.rowsAfter} rows · ${result.columnsAfter} columns`);
         setProgress(100, "Cleaning completed");
+        await yieldToBrowser();
+        hideProgress();
+        cancelBtn.classList.add("hidden");
         showSuccess(`Cleaning completed successfully. ${cleanedResult.totalChanges} change(s) were recorded in the selected worksheet.`);
       } catch (error) {
         cleanBtn.disabled = false;
         if (String(error.message).includes("cancelled")) {
           hideProgress();
+          cancelBtn.classList.add("hidden");
           showError("Processing was cancelled. Your original spreadsheet was not changed.");
         } else {
           setProgress(100, "Cleaning failed");
+          cancelBtn.classList.add("hidden");
           showError(`Cleaning could not be completed: ${error.message}`);
         }
       } finally {
@@ -1682,12 +2220,13 @@
       }
     }
 
-    function exportWorkbook(type) {
+    async function exportWorkbook(type) {
       if (!workbook || !currentFile) return;
       try {
         exportMessage.textContent = "Preparing download…";
         if (type === "csv") {
-          if (!cleanedResult) { cleanSpreadsheet(); return; }
+          if (!cleanedResult) { await cleanSpreadsheet(); }
+          if (!cleanedResult) return;
           const ws = XLSX.utils.aoa_to_sheet(cleanedResult.rows);
           const csv = "\ufeff" + XLSX.utils.sheet_to_csv(ws);
           const blob = new Blob([csv], { type:"text/csv;charset=utf-8;" });
@@ -1704,24 +2243,49 @@
           return;
         }
         const out = XLSX.utils.book_new();
-        workbook.SheetNames.forEach(sheetName => {
+        processingCancelled = false;
+        cancelBtn.classList.remove("hidden");
+        setProgress(5, "Preparing XLSX export…");
+
+        for (let sheetIndex = 0; sheetIndex < workbook.SheetNames.length; sheetIndex++) {
+          const sheetName = workbook.SheetNames[sheetIndex];
+          if (processingCancelled) throw new Error("Processing cancelled.");
+
           const ws = workbook.Sheets[sheetName];
           const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:"", raw:false, blankrows:true });
+          setProgress(
+            5 + Math.round((sheetIndex / Math.max(workbook.SheetNames.length, 1)) * 15),
+            `Processing worksheet ${sheetIndex + 1} of ${workbook.SheetNames.length}…`
+          );
           if (!rows.length || !rows.some(row => !isEmptyRow(row))) {
             XLSX.utils.book_append_sheet(out, XLSX.utils.aoa_to_sheet([["No data"]]), safeSheetName(sheetName, out.SheetNames));
-            return;
+            await yieldToBrowser();
+            continue;
           }
-          const result = cleanRows(rows, ws);
+          const result = await cleanRowsAsync(rows, ws);
           const cleanSheet = XLSX.utils.aoa_to_sheet(result.rows);
           restoreFormulaCells(cleanSheet, result.formulasToRestore);
           XLSX.utils.book_append_sheet(out, cleanSheet, safeSheetName(sheetName, out.SheetNames));
-        });
+          await yieldToBrowser();
+        }
+
+        setProgress(98, "Writing cleaned XLSX file…");
+        await yieldToBrowser();
         XLSX.writeFile(out, `${safeBaseName(currentFile.name)}_cleaned.xlsx`, { bookType:"xlsx" });
+        setProgress(100, "XLSX export completed");
+        hideProgress();
+        cancelBtn.classList.add("hidden");
         exportMessage.textContent = "✅ XLSX export completed successfully. Formula cells were restored where supported.";
         setText("exportStatusText", `XLSX ready: ${safeBaseName(currentFile.name)}_cleaned.xlsx`);
       } catch (error) {
         exportMessage.textContent = "";
-        showError(`The cleaned file could not be exported: ${error.message}`);
+        cancelBtn.classList.add("hidden");
+        hideProgress();
+        if (String(error.message).includes("cancelled")) {
+          showError("Export was cancelled. Your original spreadsheet was not changed.");
+        } else {
+          showError(`The cleaned file could not be exported: ${error.message}`);
+        }
       }
     }
 
@@ -1749,6 +2313,7 @@
       currentSheetName = "";
       currentAnalysis = null;
       cleanedResult = null;
+      processingCancelled = false;
       actionBar.classList.add("hidden");
       worksheetSection.classList.add("hidden");
       overviewSection.classList.add("hidden");
@@ -1765,6 +2330,7 @@
       downloadCsvBtn.disabled = true;
       centerXlsxBtn.disabled = true;
       centerCsvBtn.disabled = true;
+      cancelBtn.classList.add("hidden");
       copyReportBtn.textContent = "📋 Copy Cleaning Report";
       previewTable.innerHTML = "";
       previewMetrics.classList.add("hidden");
