@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clean My Spreadsheet</title>
+
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
@@ -34,7 +35,9 @@
       color: var(--text);
     }
 
-    button, input, select {
+    button,
+    input,
+    select {
       font: inherit;
     }
 
@@ -73,1301 +76,1240 @@
     .brand-row {
       position: relative;
       z-index: 1;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
     }
 
     .brand {
-      font-size:13px;
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:#687386;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #687386;
     }
 
     .step-badge {
-      padding:7px 11px;
-      border-radius:999px;
-      background:#eef2f7;
-      color:#465264;
-      border:1px solid #e1e6ed;
-      font-size:12px;
-      font-weight:800;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #465264;
+      border: 1px solid #e1e6ed;
+      font-size: 12px;
+      font-weight: 800;
     }
 
     h1 {
-      position:relative;
-      z-index:1;
-      margin:14px 0 8px;
-      font-size:clamp(30px,5vw,42px);
-      line-height:1.08;
+      position: relative;
+      z-index: 1;
+      margin: 14px 0 8px;
+      font-size: clamp(30px,5vw,42px);
+      line-height: 1.08;
     }
 
     .hero-text {
-      position:relative;
-      z-index:1;
-      max-width:900px;
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.65;
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
     }
 
     .chips {
-      position:relative;
-      z-index:1;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:18px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
     }
 
     .chip {
-      padding:7px 10px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #e4eaf2;
-      color:#546073;
-      font-size:12px;
-      font-weight:700;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #e4eaf2;
+      color: #546073;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .upload-box {
-      position:relative;
-      z-index:1;
-      margin-top:22px;
-      min-height:175px;
-      border:2px dashed #cad3df;
-      border-radius:18px;
-      background:rgba(255,255,255,.86);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      cursor:pointer;
-      transition:.2s ease;
-      padding:24px;
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+      min-height: 175px;
+      border: 2px dashed #cad3df;
+      border-radius: 18px;
+      background: rgba(255,255,255,.86);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: .2s ease;
+      padding: 24px;
     }
 
     .upload-box:hover {
-      border-color:#7f8b9c;
-      background:#fff;
-      transform:translateY(-1px);
+      border-color: #7f8b9c;
+      background: #fff;
+      transform: translateY(-1px);
     }
 
     .upload-icon {
-      font-size:34px;
-      margin-bottom:8px;
+      font-size: 34px;
+      margin-bottom: 8px;
     }
 
     .upload-box strong {
-      display:block;
-      font-size:19px;
-      margin-bottom:7px;
+      display: block;
+      font-size: 19px;
+      margin-bottom: 7px;
     }
 
     .upload-box span {
-      display:block;
-      color:#7a8494;
-      font-size:14px;
+      display: block;
+      color: #7a8494;
+      font-size: 14px;
     }
 
     .supported {
-      margin-top:8px;
-      font-size:12px !important;
-      color:#98a1af !important;
+      margin-top: 8px;
+      font-size: 12px !important;
+      color: #98a1af !important;
     }
 
     #fileInput {
-      display:none;
+      display: none;
     }
 
     .progress-panel {
-      margin-top:14px;
-      padding:13px 14px;
-      border:1px solid #e0e7f0;
-      border-radius:13px;
-      background:#fbfcfe;
+      margin-top: 14px;
+      padding: 13px 14px;
+      border: 1px solid #e0e7f0;
+      border-radius: 13px;
+      background: #fbfcfe;
     }
 
     .progress-head {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      font-size:12px;
-      color:#667386;
-      font-weight:800;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #667386;
+      font-weight: 800;
     }
 
     .progress-track {
-      height:9px;
-      margin-top:9px;
-      border-radius:999px;
-      overflow:hidden;
-      background:#e9edf3;
+      height: 9px;
+      margin-top: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e9edf3;
     }
 
     .progress-fill {
-      width:0;
-      height:100%;
-      border-radius:999px;
-      transition:width .2s ease;
-      background:#2456a6;
+      width: 0;
+      height: 100%;
+      border-radius: 999px;
+      transition: width .2s ease;
+      background: #2456a6;
     }
 
     .progress-actions {
-      margin-top:9px;
-      display:flex;
-      justify-content:flex-end;
+      margin-top: 9px;
+      display: flex;
+      justify-content: flex-end;
     }
 
     .cancel-btn {
-      padding:8px 11px;
-      font-size:12px;
+      padding: 8px 11px;
+      font-size: 12px;
     }
 
     .review-grid {
-      display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:10px;
+      display: grid;
+      grid-template-columns: repeat(5,minmax(0,1fr));
+      gap: 10px;
     }
 
     .review-card {
-      padding:14px;
-      border:1px solid #e5eaf0;
-      border-radius:12px;
-      background:#fbfcfe;
+      padding: 14px;
+      border: 1px solid #e5eaf0;
+      border-radius: 12px;
+      background: #fbfcfe;
     }
 
     .review-card strong {
-      display:block;
-      font-size:21px;
-      margin-bottom:5px;
+      display: block;
+      font-size: 21px;
+      margin-bottom: 5px;
     }
 
     .review-card span {
-      color:#748092;
-      font-size:11px;
-      line-height:1.35;
+      color: #748092;
+      font-size: 11px;
+      line-height: 1.35;
     }
 
     .review-card.issue {
-      background:#fffafa;
-      border-color:#f0d8d5;
+      background: #fffafa;
+      border-color: #f0d8d5;
     }
 
     .review-card.warn {
-      background:#fffaf1;
-      border-color:#efdfbe;
+      background: #fffaf1;
+      border-color: #efdfbe;
     }
 
     .review-card.formula {
-      background:#f7fbff;
-      border-color:#dce8f5;
+      background: #f7fbff;
+      border-color: #dce8f5;
     }
 
     .result-banner {
-      border:1px solid #dce4ed;
-      border-radius:16px;
-      padding:17px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      background:#fbfcfe;
+      border: 1px solid #dce4ed;
+      border-radius: 16px;
+      padding: 17px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      background: #fbfcfe;
     }
 
     .result-banner.good {
-      background:var(--green-bg);
-      border-color:#cfe9da;
+      background: var(--green-bg);
+      border-color: #cfe9da;
     }
 
     .result-banner.warn {
-      background:var(--orange-bg);
-      border-color:#efdfbe;
+      background: var(--orange-bg);
+      border-color: #efdfbe;
     }
 
     .result-main {
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-      min-width:0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-width: 0;
     }
 
     .result-icon {
-      width:38px;
-      height:38px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex:0 0 auto;
-      border-radius:12px;
-      background:#fff;
-      border:1px solid #e5eaf0;
-      font-size:21px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #e5eaf0;
+      font-size: 21px;
     }
 
     .result-title {
-      margin:0;
-      font-size:16px;
-      line-height:1.35;
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.35;
     }
 
     .result-text {
-      margin:5px 0 0;
-      color:#667386;
-      font-size:12px;
-      line-height:1.5;
+      margin: 5px 0 0;
+      color: #667386;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .result-side {
-      flex:0 0 auto;
-      min-width:150px;
-      padding:10px 12px;
-      border-radius:12px;
-      background:rgba(255,255,255,.75);
-      border:1px solid rgba(220,228,237,.8);
-      text-align:center;
+      flex: 0 0 auto;
+      min-width: 150px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(220,228,237,.8);
+      text-align: center;
     }
 
     .result-side strong {
-      display:block;
-      font-size:22px;
-      line-height:1;
-      margin-bottom:5px;
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+      margin-bottom: 5px;
     }
 
     .result-side span {
-      color:#748092;
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      font-weight:800;
+      color: #748092;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 800;
     }
 
     .result-meta {
-      margin-top:11px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:7px;
+      margin-top: 11px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
     }
 
     .result-meta-pill {
-      display:inline-flex;
-      align-items:center;
-      gap:5px;
-      padding:6px 9px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #e5eaf0;
-      color:#5f6b7c;
-      font-size:10px;
-      font-weight:800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #e5eaf0;
+      color: #5f6b7c;
+      font-size: 10px;
+      font-weight: 800;
     }
 
     .export-center {
-      border:1px solid #e1e7ee;
-      border-radius:16px;
-      padding:16px;
-      background:linear-gradient(180deg,#fff,#fbfcfe);
+      border: 1px solid #e1e7ee;
+      border-radius: 16px;
+      padding: 16px;
+      background: linear-gradient(180deg,#fff,#fbfcfe);
     }
 
     .export-status {
-      display:flex;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
 
     .ready-pill {
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:var(--green-bg);
-      color:var(--green);
-      font-size:11px;
-      font-weight:800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .export-grid {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
     }
 
     .export-card {
-      padding:14px;
-      border:1px solid #e5eaf0;
-      border-radius:13px;
-      background:#fff;
+      padding: 14px;
+      border: 1px solid #e5eaf0;
+      border-radius: 13px;
+      background: #fff;
     }
 
     .export-card h3 {
-      margin:0 0 7px;
-      font-size:14px;
+      margin: 0 0 7px;
+      font-size: 14px;
     }
 
     .export-card p {
-      margin:0;
-      color:#748092;
-      font-size:12px;
-      line-height:1.45;
+      margin: 0;
+      color: #748092;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .export-card .export-btn {
-      margin-top:12px;
-      width:100%;
-      min-height:44px;
+      margin-top: 12px;
+      width: 100%;
+      min-height: 44px;
     }
 
     .export-file-name {
-      display:block;
-      margin-top:9px;
-      padding:8px 9px;
-      border-radius:9px;
-      background:#f8fafc;
-      border:1px solid #e7ecf2;
-      color:#566174;
-      font-size:10px;
-      line-height:1.4;
-      word-break:break-word;
+      display: block;
+      margin-top: 9px;
+      padding: 8px 9px;
+      border-radius: 9px;
+      background: #f8fafc;
+      border: 1px solid #e7ecf2;
+      color: #566174;
+      font-size: 10px;
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     .export-file-name strong {
-      color:#354154;
+      color: #354154;
     }
 
     .export-done {
-      display:inline-flex;
-      align-items:center;
-      gap:5px;
-      margin-top:8px;
-      color:var(--green);
-      font-size:10px;
-      font-weight:800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
     }
 
     .download-both-wrap {
-      margin-top:12px;
-      padding:13px;
-      border:1px solid #e5eaf0;
-      border-radius:13px;
-      background:#fff;
+      margin-top: 12px;
+      padding: 13px;
+      border: 1px solid #e5eaf0;
+      border-radius: 13px;
+      background: #fff;
     }
 
     .download-both-wrap h3 {
-      margin:0 0 5px;
-      font-size:14px;
+      margin: 0 0 5px;
+      font-size: 14px;
     }
 
     .download-both-wrap p {
-      margin:0;
-      color:#748092;
-      font-size:12px;
-      line-height:1.45;
+      margin: 0;
+      color: #748092;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .download-both-btn {
-      margin-top:11px;
-      width:100%;
-      min-height:46px;
+      margin-top: 11px;
+      width: 100%;
+      min-height: 46px;
     }
 
     .export-meta {
-      margin-top:11px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      color:#8a94a3;
-      font-size:10px;
+      margin-top: 11px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: #8a94a3;
+      font-size: 10px;
     }
 
     .export-tip {
-      margin-top:12px;
-      padding:11px 12px;
-      border-radius:11px;
-      background:#eef5ff;
-      border:1px solid #d7e5fb;
-      color:#31558b;
-      font-size:12px;
-      line-height:1.45;
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 11px;
+      background: #eef5ff;
+      border: 1px solid #d7e5fb;
+      color: #31558b;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .export-message {
-      margin-top:10px;
-      font-size:12px;
-      color:#637084;
-      min-height:18px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #637084;
+      min-height: 18px;
     }
 
     .mobile-note {
-      display:none;
+      display: none;
     }
 
     .file-info {
-      margin-top:14px;
+      margin-top: 14px;
     }
 
     .file-info-title {
-      font-size:13px;
-      font-weight:800;
-      color:#4b5668;
-      margin-bottom:8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #4b5668;
+      margin-bottom: 8px;
     }
 
     .file-info-grid {
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:10px;
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 10px;
     }
 
     .file-info-item {
-      padding:12px 13px;
-      border:1px solid #e5eaf0;
-      border-radius:12px;
-      background:#fbfcfe;
-      min-width:0;
+      padding: 12px 13px;
+      border: 1px solid #e5eaf0;
+      border-radius: 12px;
+      background: #fbfcfe;
+      min-width: 0;
     }
 
     .file-info-label {
-      display:block;
-      color:#7a8494;
-      font-size:11px;
-      margin-bottom:5px;
+      display: block;
+      color: #7a8494;
+      font-size: 11px;
+      margin-bottom: 5px;
     }
 
     .file-info-value {
-      display:block;
-      font-size:13px;
-      font-weight:800;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .action-bar {
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
     }
 
     button {
-      border:0;
-      border-radius:11px;
-      padding:11px 16px;
-      font-size:14px;
-      font-weight:800;
-      cursor:pointer;
-      transition:.18s ease;
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .18s ease;
     }
 
     button:hover:not(:disabled) {
-      transform:translateY(-1px);
+      transform: translateY(-1px);
     }
 
     button:disabled {
-      opacity:.45;
-      cursor:not-allowed;
-      transform:none;
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .btn-dark {
-      background:var(--dark);
-      color:#fff;
+      background: var(--dark);
+      color: #fff;
     }
 
     .btn-green {
-      background:var(--green-bg);
-      color:var(--green);
-      border:1px solid #ccebd8;
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid #ccebd8;
     }
 
     .btn-soft {
-      background:#eef2f7;
-      color:#263144;
-      border:1px solid #e0e5ec;
+      background: #eef2f7;
+      color: #263144;
+      border: 1px solid #e0e5ec;
     }
 
     .notice {
-      margin-top:18px;
-      padding:14px 15px;
-      border-radius:13px;
-      font-size:14px;
-      line-height:1.5;
-      border:1px solid #e6ebf1;
-      background:#f8fafc;
-      color:#5f6b7c;
+      margin-top: 18px;
+      padding: 14px 15px;
+      border-radius: 13px;
+      font-size: 14px;
+      line-height: 1.5;
+      border: 1px solid #e6ebf1;
+      background: #f8fafc;
+      color: #5f6b7c;
     }
 
     .notice.success {
-      background:var(--green-bg);
-      color:#22683f;
-      border-color:#cfe9da;
+      background: var(--green-bg);
+      color: #22683f;
+      border-color: #cfe9da;
     }
 
     .notice.error {
-      background:var(--red-bg);
-      color:#992015;
-      border-color:#f3c4bf;
+      background: var(--red-bg);
+      color: #992015;
+      border-color: #f3c4bf;
     }
 
     .privacy-note {
-      margin-top:14px;
-      padding:13px 14px;
-      border-radius:13px;
-      background:var(--blue-bg);
-      border:1px solid #d7e5fb;
-      color:#31558b;
-      font-size:13px;
-      line-height:1.5;
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-radius: 13px;
+      background: var(--blue-bg);
+      border: 1px solid #d7e5fb;
+      color: #31558b;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     .section {
-      margin-top:20px;
-      padding:22px;
+      margin-top: 20px;
+      padding: 22px;
     }
 
     .section-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
     .section-title {
-      margin:0;
-      font-size:20px;
+      margin: 0;
+      font-size: 20px;
     }
 
     .section-description {
-      margin:5px 0 0;
-      color:#778293;
-      font-size:13px;
-      line-height:1.5;
+      margin: 5px 0 0;
+      color: #778293;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     .worksheet-bar {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .worksheet-bar label {
-      font-size:13px;
-      color:#6d7888;
-      font-weight:700;
+      font-size: 13px;
+      color: #6d7888;
+      font-weight: 700;
     }
 
     select {
-      min-width:220px;
-      padding:9px 11px;
-      border:1px solid #d8dee7;
-      border-radius:10px;
-      background:#fff;
-      color:#273245;
+      min-width: 220px;
+      padding: 9px 11px;
+      border: 1px solid #d8dee7;
+      border-radius: 10px;
+      background: #fff;
+      color: #273245;
     }
 
     .stats-grid {
-      display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:12px;
+      display: grid;
+      grid-template-columns: repeat(5,minmax(0,1fr));
+      gap: 12px;
     }
 
     .stat-card {
-      background:#fff;
-      border:1px solid #e5eaf0;
-      border-radius:14px;
-      padding:16px;
+      background: #fff;
+      border: 1px solid #e5eaf0;
+      border-radius: 14px;
+      padding: 16px;
     }
 
     .stat-label {
-      font-size:12px;
-      color:#707b8c;
-      margin-bottom:8px;
+      font-size: 12px;
+      color: #707b8c;
+      margin-bottom: 8px;
     }
 
     .stat-value {
-      font-size:26px;
-      font-weight:800;
-      line-height:1;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
     }
 
     .stat-sub {
-      margin-top:7px;
-      color:#8892a0;
-      font-size:11px;
-      line-height:1.35;
-    }
-
-    .checks-grid {
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-    }
-
-    .check-card {
-      padding:16px;
-      border:1px solid #e5eaf0;
-      border-radius:14px;
-      background:#fff;
-    }
-
-    .check-top {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-
-    .check-name {
-      font-size:14px;
-      font-weight:800;
-    }
-
-    .check-value {
-      margin-top:9px;
-      font-size:23px;
-      font-weight:800;
-      line-height:1.1;
-    }
-
-    .check-desc {
-      margin-top:6px;
-      color:#7a8594;
-      font-size:12px;
-      line-height:1.45;
-    }
-
-    .status-dot {
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      background:#bec6d1;
-      flex:0 0 auto;
-    }
-
-    .status-dot.good {
-      background:#3c9d64;
-    }
-
-    .status-dot.issue {
-      background:#d65145;
+      margin-top: 7px;
+      color: #8892a0;
+      font-size: 11px;
+      line-height: 1.35;
     }
 
     .details-box {
-      border:1px solid #e6ebf1;
-      border-radius:13px;
-      overflow:hidden;
+      border: 1px solid #e6ebf1;
+      border-radius: 13px;
+      overflow: hidden;
     }
 
     .detail-row {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-      padding:12px 14px;
-      border-bottom:1px solid #edf1f5;
-      font-size:13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf1f5;
+      font-size: 13px;
     }
 
     .detail-row:last-child {
-      border-bottom:0;
+      border-bottom: 0;
     }
 
     .detail-label {
-      color:#6d7888;
+      color: #6d7888;
     }
 
     .pill {
-      max-width:65%;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-      padding:6px 10px;
-      border-radius:999px;
-      background:#eef2f7;
-      color:#354154;
-      font-weight:800;
+      max-width: 65%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #354154;
+      font-weight: 800;
     }
 
     .summary-grid {
-      display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:10px;
+      display: grid;
+      grid-template-columns: repeat(5,minmax(0,1fr));
+      gap: 10px;
     }
 
     .summary-item {
-      padding:14px;
-      border-radius:12px;
-      background:#f8fafc;
-      border:1px solid #e7ecf2;
+      padding: 14px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e7ecf2;
     }
 
     .summary-item strong {
-      display:block;
-      font-size:20px;
-      margin-bottom:5px;
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
     }
 
     .summary-item span {
-      color:#748092;
-      font-size:12px;
+      color: #748092;
+      font-size: 12px;
     }
 
     .summary-note {
-      margin-top:14px;
-      padding:12px 13px;
-      border-radius:12px;
-      background:#fbfcfe;
-      border:1px solid #e6ebf1;
-      color:#6f7a8b;
-      font-size:12px;
-      line-height:1.5;
+      margin-top: 14px;
+      padding: 12px 13px;
+      border-radius: 12px;
+      background: #fbfcfe;
+      border: 1px solid #e6ebf1;
+      color: #6f7a8b;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .summary-actions {
-      display:flex;
-      justify-content:flex-start;
-      margin-top:12px;
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 12px;
     }
 
     .preview-metrics {
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:10px;
-      margin-bottom:14px;
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .preview-metric {
-      padding:13px 14px;
-      border:1px solid #e5eaf0;
-      border-radius:12px;
-      background:#fbfcfe;
+      padding: 13px 14px;
+      border: 1px solid #e5eaf0;
+      border-radius: 12px;
+      background: #fbfcfe;
     }
 
     .preview-metric-label {
-      font-size:11px;
-      color:#7a8494;
-      margin-bottom:6px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
+      font-size: 11px;
+      color: #7a8494;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
     }
 
     .preview-metric-value {
-      font-size:16px;
-      font-weight:800;
+      font-size: 16px;
+      font-weight: 800;
     }
 
     .preview-metric-value .arrow {
-      color:#8b95a3;
-      padding:0 5px;
+      color: #8b95a3;
+      padding: 0 5px;
     }
 
     .table-shell {
-      border:1px solid #e4e9ef;
-      border-radius:13px;
-      overflow:auto;
-      max-height:460px;
-      background:#fff;
+      border: 1px solid #e4e9ef;
+      border-radius: 13px;
+      overflow: auto;
+      max-height: 460px;
+      background: #fff;
     }
 
     table {
-      width:100%;
-      border-collapse:collapse;
-      min-width:850px;
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
     }
 
-    th, td {
-      padding:10px 12px;
-      border-bottom:1px solid #edf1f5;
-      text-align:left;
-      white-space:nowrap;
-      font-size:12px;
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+      white-space: nowrap;
+      font-size: 12px;
     }
 
     th {
-      position:sticky;
-      top:0;
-      z-index:2;
-      background:#f8fafc;
-      color:#5c6879;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #f8fafc;
+      color: #5c6879;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
     }
 
     tr:last-child td {
-      border-bottom:0;
+      border-bottom: 0;
     }
 
     .preview-note {
-      margin-top:10px;
-      color:#8a94a3;
-      font-size:12px;
+      margin-top: 10px;
+      color: #8a94a3;
+      font-size: 12px;
     }
 
     .report-grid {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
     }
 
     .report-card {
-      border:1px solid #e5eaf0;
-      border-radius:14px;
-      padding:15px;
-      background:#fff;
+      border: 1px solid #e5eaf0;
+      border-radius: 14px;
+      padding: 15px;
+      background: #fff;
     }
 
     .report-card h3 {
-      margin:0 0 10px;
-      font-size:14px;
+      margin: 0 0 10px;
+      font-size: 14px;
     }
 
     .report-list {
-      max-height:330px;
-      overflow:auto;
-      padding-right:4px;
+      max-height: 330px;
+      overflow: auto;
+      padding-right: 4px;
     }
 
     .report-row {
-      padding:8px 0;
-      border-bottom:1px solid #edf1f5;
-      font-size:12px;
-      line-height:1.4;
+      padding: 8px 0;
+      border-bottom: 1px solid #edf1f5;
+      font-size: 12px;
+      line-height: 1.4;
     }
 
     .report-row:last-child {
-      border-bottom:0;
+      border-bottom: 0;
     }
 
     .report-empty {
-      color:#8a94a3;
-      font-size:12px;
+      color: #8a94a3;
+      font-size: 12px;
     }
 
     .types-table {
-      width:100%;
-      min-width:700px;
-      border-collapse:collapse;
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
     }
 
     .types-table th,
     .types-table td {
-      padding:10px 12px;
-      border-bottom:1px solid #edf1f5;
-      font-size:12px;
-      text-align:left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #edf1f5;
+      font-size: 12px;
+      text-align: left;
     }
 
     .types-table th {
-      position:sticky;
-      top:0;
-      background:#f8fafc;
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
     }
 
     .report-badge {
-      display:inline-block;
-      margin-right:6px;
-      padding:3px 7px;
-      border-radius:999px;
-      font-size:10px;
-      font-weight:800;
-      vertical-align:middle;
-      background:#eef2f7;
-      color:#526074;
+      display: inline-block;
+      margin-right: 6px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      vertical-align: middle;
+      background: #eef2f7;
+      color: #526074;
     }
 
     .report-badge.issue {
-      background:var(--red-bg);
-      color:var(--red);
+      background: var(--red-bg);
+      color: var(--red);
     }
 
     .report-badge.warn {
-      background:var(--orange-bg);
-      color:var(--orange);
+      background: var(--orange-bg);
+      color: var(--orange);
     }
 
     .report-badge.good {
-      background:var(--green-bg);
-      color:var(--green);
+      background: var(--green-bg);
+      color: var(--green);
     }
 
     .missing-bar {
-      height:6px;
-      margin-top:6px;
-      border-radius:999px;
-      background:#edf1f5;
-      overflow:hidden;
+      height: 6px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: #edf1f5;
+      overflow: hidden;
     }
 
     .missing-fill {
-      height:100%;
-      border-radius:999px;
-      background:var(--orange);
+      height: 100%;
+      border-radius: 999px;
+      background: var(--orange);
     }
 
     .missing-fill.high {
-      background:var(--red);
+      background: var(--red);
     }
 
     .missing-meta {
-      margin-top:4px;
-      color:#7a8494;
-      font-size:11px;
+      margin-top: 4px;
+      color: #7a8494;
+      font-size: 11px;
     }
 
     .empty-column-row {
-      background:#fbfcfe;
-      border:1px solid #e7ecf2;
-      border-radius:10px;
-      padding:9px 10px;
-      margin-bottom:7px;
+      background: #fbfcfe;
+      border: 1px solid #e7ecf2;
+      border-radius: 10px;
+      padding: 9px 10px;
+      margin-bottom: 7px;
     }
 
     .empty-column-row strong {
-      display:block;
-      font-size:12px;
+      display: block;
+      font-size: 12px;
     }
 
     .empty-column-row span {
-      color:#7a8494;
-      font-size:11px;
+      color: #7a8494;
+      font-size: 11px;
     }
 
     .report-note {
-      margin-bottom:9px;
-      color:#7b8594;
-      font-size:11px;
-      line-height:1.45;
+      margin-bottom: 9px;
+      color: #7b8594;
+      font-size: 11px;
+      line-height: 1.45;
     }
 
     .hidden {
-      display:none !important;
+      display: none !important;
     }
 
     .muted {
-      color:#7b8594;
+      color: #7b8594;
     }
 
     .empty-state {
-      margin-top:20px;
-      padding:28px;
-      text-align:center;
-      color:#778293;
+      margin-top: 20px;
+      padding: 28px;
+      text-align: center;
+      color: #778293;
     }
 
     .empty-state .big {
-      font-size:30px;
-      margin-bottom:8px;
+      font-size: 30px;
+      margin-bottom: 8px;
     }
 
     @media (max-width:1100px) {
       .stats-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns: repeat(3,minmax(0,1fr));
       }
 
       .summary-grid {
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns: repeat(3,minmax(0,1fr));
       }
 
       .preview-metrics {
-        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2,minmax(0,1fr));
       }
     }
 
     @media (max-width:850px) {
       .review-grid {
-        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2,minmax(0,1fr));
       }
 
       .export-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
       }
 
-      .checks-grid,
       .report-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
       }
 
       .stats-grid {
-        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2,minmax(0,1fr));
       }
 
       .summary-grid {
-        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-columns: repeat(2,minmax(0,1fr));
       }
 
       .file-info-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
       }
 
       .result-banner {
-        flex-direction:column;
+        flex-direction: column;
       }
 
       .result-side {
-        width:100%;
+        width: 100%;
       }
     }
 
     @media (max-width:620px) {
       body {
-        overflow-x:hidden;
+        overflow-x: hidden;
       }
 
       .container {
-        width:calc(100% - 14px);
-        margin:9px auto 28px;
+        width: calc(100% - 14px);
+        margin: 9px auto 28px;
       }
 
       .hero,
       .section {
-        padding:14px;
-        border-radius:16px;
+        padding: 14px;
+        border-radius: 16px;
       }
 
       .hero {
-        box-shadow:0 5px 18px rgba(20,30,50,.05);
+        box-shadow: 0 5px 18px rgba(20,30,50,.05);
       }
 
       .brand-row {
-        align-items:flex-start;
-        flex-direction:column;
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .brand {
-        font-size:11px;
+        font-size: 11px;
       }
 
       .step-badge {
-        font-size:11px;
-        line-height:1.35;
-        max-width:100%;
+        font-size: 11px;
+        line-height: 1.35;
+        max-width: 100%;
       }
 
       h1 {
-        font-size:30px;
+        font-size: 30px;
       }
 
       .hero-text {
-        font-size:13px;
-        line-height:1.55;
+        font-size: 13px;
+        line-height: 1.55;
       }
 
       .chips {
-        gap:6px;
-        margin-top:14px;
+        gap: 6px;
+        margin-top: 14px;
       }
 
       .chip {
-        padding:6px 8px;
-        font-size:10px;
+        padding: 6px 8px;
+        font-size: 10px;
       }
 
       .upload-box {
-        min-height:150px;
-        margin-top:16px;
-        padding:18px 12px;
+        min-height: 150px;
+        margin-top: 16px;
+        padding: 18px 12px;
       }
 
       .upload-icon {
-        font-size:30px;
+        font-size: 30px;
       }
 
       .upload-box strong {
-        font-size:17px;
+        font-size: 17px;
       }
 
       .upload-box span {
-        font-size:13px;
+        font-size: 13px;
       }
 
       .file-info-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
       }
 
       .action-bar {
-        display:grid;
-        grid-template-columns:1fr;
-        gap:8px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
       }
 
       .action-bar button,
       button {
-        width:100%;
-        min-height:46px;
-        padding:12px 14px;
+        width: 100%;
+        min-height: 46px;
+        padding: 12px 14px;
       }
 
       .section {
-        margin-top:12px;
+        margin-top: 12px;
       }
 
       .section-title {
-        font-size:18px;
+        font-size: 18px;
       }
 
       .section-description {
-        font-size:12px;
+        font-size: 12px;
       }
 
       .worksheet-bar {
-        align-items:stretch;
+        align-items: stretch;
       }
 
       .worksheet-bar label {
-        display:block;
+        display: block;
       }
 
       select {
-        min-width:0;
-        width:100%;
-        min-height:44px;
+        min-width: 0;
+        width: 100%;
+        min-height: 44px;
       }
 
       .stats-grid {
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
 
       .stat-card {
-        padding:12px;
+        padding: 12px;
       }
 
       .stat-value {
-        font-size:22px;
+        font-size: 22px;
       }
 
       .stat-sub {
-        font-size:10px;
+        font-size: 10px;
       }
 
-      .checks-grid,
-      .report-grid {
-        grid-template-columns:1fr;
-      }
-
-      .check-card,
       .report-card {
-        padding:13px;
+        padding: 13px;
       }
 
       .detail-row {
-        align-items:flex-start;
-        gap:6px;
-        padding:11px 12px;
-        flex-direction:column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 11px 12px;
+        flex-direction: column;
       }
 
       .detail-label {
-        font-size:12px;
+        font-size: 12px;
       }
 
       .pill {
-        max-width:100%;
-        width:100%;
-        white-space:normal;
-        overflow-wrap:anywhere;
+        max-width: 100%;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
       }
 
       .summary-grid {
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
 
       .summary-item {
-        padding:12px;
+        padding: 12px;
       }
 
       .summary-item strong {
-        font-size:18px;
+        font-size: 18px;
       }
 
       .summary-item span {
-        font-size:10px;
+        font-size: 10px;
       }
 
       .preview-metrics {
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
 
       .preview-metric {
-        padding:11px;
+        padding: 11px;
       }
 
       .preview-metric-value {
-        font-size:14px;
+        font-size: 14px;
       }
 
       .table-shell {
-        max-width:100%;
-        -webkit-overflow-scrolling:touch;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
       }
 
       .review-grid {
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
 
       .review-card {
-        padding:11px;
+        padding: 11px;
       }
 
       .review-card strong {
-        font-size:18px;
+        font-size: 18px;
       }
 
       .export-card {
-        padding:12px;
+        padding: 12px;
       }
 
       .result-banner {
-        padding:13px;
+        padding: 13px;
       }
 
       .result-main {
-        gap:9px;
+        gap: 9px;
       }
 
       .result-title {
-        font-size:14px;
+        font-size: 14px;
       }
 
       .result-text {
-        font-size:11px;
+        font-size: 11px;
       }
 
       .result-meta {
-        margin-top:9px;
+        margin-top: 9px;
       }
 
       .result-meta-pill {
-        font-size:9px;
+        font-size: 9px;
       }
 
       .mobile-note {
-        display:block;
-        margin-top:8px;
-        color:#8a94a3;
-        font-size:11px;
-        line-height:1.4;
+        display: block;
+        margin-top: 8px;
+        color: #8a94a3;
+        font-size: 11px;
+        line-height: 1.4;
       }
 
       .export-meta {
-        flex-direction:column;
+        flex-direction: column;
       }
     }
 
@@ -1376,11 +1318,11 @@
       .summary-grid,
       .preview-metrics,
       .review-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
       }
 
       .result-side {
-        min-width:0;
+        min-width: 0;
       }
     }
   </style>
@@ -1390,16 +1332,20 @@
   <main class="container">
 
     <section class="hero">
+
       <div class="brand-row">
         <div class="brand">Clean My Spreadsheet</div>
-        <div class="step-badge">Step 55 • Customer-Friendly Report + Export Confirmation</div>
+
+        <div class="step-badge">
+          Step 55 • Customer-Friendly Report + Export Confirmation
+        </div>
       </div>
 
       <h1>Clean My Spreadsheet</h1>
 
       <p class="hero-text">
-        Clean, validate and standardize messy spreadsheet data in seconds — with a clear final report,
-        easy issue review and customer-friendly exports.
+        Clean, validate and standardize messy spreadsheet data in seconds —
+        with a clear final report, easy issue review and customer-friendly exports.
       </p>
 
       <div class="chips">
@@ -1427,47 +1373,109 @@
         </div>
       </label>
 
-      <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+      <input
+        id="fileInput"
+        type="file"
+        accept=".xlsx,.xls,.csv"
+      />
 
       <div id="selectedFile" class="file-info"></div>
 
-      <div id="progressPanel" class="progress-panel hidden" aria-live="polite">
+      <div
+        id="progressPanel"
+        class="progress-panel hidden"
+        aria-live="polite"
+      >
         <div class="progress-head">
-          <span id="progressText">Preparing spreadsheet…</span>
-          <span id="progressPercent">0%</span>
+          <span id="progressText">
+            Preparing spreadsheet…
+          </span>
+
+          <span id="progressPercent">
+            0%
+          </span>
         </div>
 
         <div class="progress-track">
-          <div id="progressFill" class="progress-fill"></div>
+          <div
+            id="progressFill"
+            class="progress-fill"
+          ></div>
         </div>
 
         <div class="progress-actions">
-          <button id="cancelBtn" class="btn-soft cancel-btn" type="button">
+          <button
+            id="cancelBtn"
+            class="btn-soft cancel-btn"
+            type="button"
+          >
             Cancel Processing
           </button>
         </div>
       </div>
 
-      <div id="privacyNote" class="privacy-note hidden">
+      <div
+        id="privacyNote"
+        class="privacy-note hidden"
+      >
         <strong>🔒 Privacy first</strong><br />
-        Your spreadsheet is processed directly in your browser. This page does not upload your spreadsheet to a server.
+        Your spreadsheet is processed directly in your browser.
+        This page does not upload your spreadsheet to a server.
       </div>
 
-      <div id="actionBar" class="action-bar hidden">
-        <button id="cleanBtn" class="btn-dark">✨ Clean Spreadsheet</button>
-        <button id="downloadBtn" class="btn-green" disabled>↓ Export XLSX</button>
-        <button id="downloadCsvBtn" class="btn-soft" disabled>↓ Export CSV</button>
-        <button id="startOverBtn" class="btn-soft">↻ Start Over</button>
+      <div
+        id="actionBar"
+        class="action-bar hidden"
+      >
+        <button id="cleanBtn" class="btn-dark">
+          ✨ Clean Spreadsheet
+        </button>
+
+        <button
+          id="downloadBtn"
+          class="btn-green"
+          disabled
+        >
+          ↓ Export XLSX
+        </button>
+
+        <button
+          id="downloadCsvBtn"
+          class="btn-soft"
+          disabled
+        >
+          ↓ Export CSV
+        </button>
+
+        <button
+          id="startOverBtn"
+          class="btn-soft"
+        >
+          ↻ Start Over
+        </button>
       </div>
 
-      <div id="successMessage" class="notice success hidden"></div>
-      <div id="errorMessage" class="notice error hidden"></div>
+      <div
+        id="successMessage"
+        class="notice success hidden"
+      ></div>
+
+      <div
+        id="errorMessage"
+        class="notice error hidden"
+      ></div>
     </section>
 
-    <section id="fileInfo" class="section hidden">
+    <section
+      id="fileInfo"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">File Details</h2>
+          <h2 class="section-title">
+            File Details
+          </h2>
+
           <p class="section-description">
             Basic information about the spreadsheet you selected.
           </p>
@@ -1475,27 +1483,59 @@
       </div>
 
       <div class="file-info-grid">
+
         <div class="file-info-item">
-          <span class="file-info-label">File Name</span>
-          <span id="infoFileName" class="file-info-value">—</span>
+          <span class="file-info-label">
+            File Name
+          </span>
+
+          <span
+            id="infoFileName"
+            class="file-info-value"
+          >
+            —
+          </span>
         </div>
 
         <div class="file-info-item">
-          <span class="file-info-label">File Size</span>
-          <span id="infoFileSize" class="file-info-value">—</span>
+          <span class="file-info-label">
+            File Size
+          </span>
+
+          <span
+            id="infoFileSize"
+            class="file-info-value"
+          >
+            —
+          </span>
         </div>
 
         <div class="file-info-item">
-          <span class="file-info-label">Worksheets</span>
-          <span id="infoSheets" class="file-info-value">—</span>
+          <span class="file-info-label">
+            Worksheets
+          </span>
+
+          <span
+            id="infoSheets"
+            class="file-info-value"
+          >
+            —
+          </span>
         </div>
+
       </div>
     </section>
 
-    <section id="worksheetSection" class="section hidden">
+    <section
+      id="worksheetSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Worksheet</h2>
+          <h2 class="section-title">
+            Worksheet
+          </h2>
+
           <p class="section-description">
             Choose which sheet to inspect and clean.
           </p>
@@ -1503,15 +1543,24 @@
       </div>
 
       <div class="worksheet-bar">
-        <label for="sheetSelect">Current sheet</label>
+        <label for="sheetSelect">
+          Current sheet
+        </label>
+
         <select id="sheetSelect"></select>
       </div>
     </section>
 
-    <section id="overviewSection" class="section hidden">
+    <section
+      id="overviewSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Overview</h2>
+          <h2 class="section-title">
+            Overview
+          </h2>
+
           <p class="section-description">
             Detected data-quality signals in the selected worksheet.
           </p>
@@ -1519,78 +1568,207 @@
       </div>
 
       <div class="stats-grid">
+
         <div class="stat-card">
-          <div class="stat-label">Rows</div>
-          <div id="statRows" class="stat-value">0</div>
-          <div class="stat-sub">Data rows before cleaning</div>
+          <div class="stat-label">
+            Rows
+          </div>
+
+          <div
+            id="statRows"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Data rows before cleaning
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Columns</div>
-          <div id="statColumns" class="stat-value">0</div>
-          <div class="stat-sub">Columns detected</div>
+          <div class="stat-label">
+            Columns
+          </div>
+
+          <div
+            id="statColumns"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Columns detected
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Duplicate Rows</div>
-          <div id="statDuplicateRows" class="stat-value">0</div>
-          <div class="stat-sub">Exact duplicate rows</div>
+          <div class="stat-label">
+            Duplicate Rows
+          </div>
+
+          <div
+            id="statDuplicateRows"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Exact duplicate rows
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Potential Duplicates</div>
-          <div id="statPotentialDuplicates" class="stat-value">0</div>
-          <div class="stat-sub">Rows sharing identity values</div>
+          <div class="stat-label">
+            Potential Duplicates
+          </div>
+
+          <div
+            id="statPotentialDuplicates"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Rows sharing identity values
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Missing Values</div>
-          <div id="statMissingValues" class="stat-value">0</div>
-          <div class="stat-sub">Blank cells detected</div>
+          <div class="stat-label">
+            Missing Values
+          </div>
+
+          <div
+            id="statMissingValues"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Blank cells detected
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Invalid Emails</div>
-          <div id="statInvalidEmails" class="stat-value">0</div>
-          <div class="stat-sub">Malformed email values</div>
+          <div class="stat-label">
+            Invalid Emails
+          </div>
+
+          <div
+            id="statInvalidEmails"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Malformed email values
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Invalid Phones</div>
-          <div id="statInvalidPhones" class="stat-value">0</div>
-          <div class="stat-sub">Phone values needing review</div>
+          <div class="stat-label">
+            Invalid Phones
+          </div>
+
+          <div
+            id="statInvalidPhones"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Phone values needing review
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Detected Dates</div>
-          <div id="statDetectedDates" class="stat-value">0</div>
-          <div class="stat-sub">Recognized date values</div>
+          <div class="stat-label">
+            Detected Dates
+          </div>
+
+          <div
+            id="statDetectedDates"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Recognized date values
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Formulas</div>
-          <div id="statFormulas" class="stat-value">0</div>
-          <div class="stat-sub">Formula cells detected</div>
+          <div class="stat-label">
+            Formulas
+          </div>
+
+          <div
+            id="statFormulas"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Formula cells detected
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Errors</div>
-          <div id="statErrors" class="stat-value">0</div>
-          <div class="stat-sub">Spreadsheet error values</div>
+          <div class="stat-label">
+            Errors
+          </div>
+
+          <div
+            id="statErrors"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Spreadsheet error values
+          </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Empty Columns</div>
-          <div id="statEmptyColumns" class="stat-value">0</div>
-          <div class="stat-sub">Columns with no data</div>
+          <div class="stat-label">
+            Empty Columns
+          </div>
+
+          <div
+            id="statEmptyColumns"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            Columns with no data
+          </div>
         </div>
+
       </div>
     </section>
 
-    <section id="checksSection" class="section hidden">
+    <section
+      id="checksSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Data Checks</h2>
+          <h2 class="section-title">
+            Data Checks
+          </h2>
+
           <p class="section-description">
             Detailed findings from the selected worksheet.
           </p>
@@ -1598,47 +1776,97 @@
       </div>
 
       <div class="report-grid">
+
         <div class="report-card">
-          <h3>Invalid Emails</h3>
-          <div id="invalidEmailsList" class="report-list"></div>
+          <h3>
+            Invalid Emails
+          </h3>
+
+          <div
+            id="invalidEmailsList"
+            class="report-list"
+          ></div>
         </div>
 
         <div class="report-card">
-          <h3>Invalid Phones</h3>
-          <div id="invalidPhonesList" class="report-list"></div>
+          <h3>
+            Invalid Phones
+          </h3>
+
+          <div
+            id="invalidPhonesList"
+            class="report-list"
+          ></div>
         </div>
 
         <div class="report-card">
-          <h3>Formulas</h3>
-          <div id="formulasList" class="report-list"></div>
+          <h3>
+            Formulas
+          </h3>
+
+          <div
+            id="formulasList"
+            class="report-list"
+          ></div>
         </div>
 
         <div class="report-card">
-          <h3>Spreadsheet Errors</h3>
-          <div id="errorsList" class="report-list"></div>
+          <h3>
+            Spreadsheet Errors
+          </h3>
+
+          <div
+            id="errorsList"
+            class="report-list"
+          ></div>
         </div>
 
         <div class="report-card">
-          <h3>Duplicate & Potential Duplicate Information</h3>
-          <div id="duplicatesList" class="report-list"></div>
+          <h3>
+            Duplicate & Potential Duplicate Information
+          </h3>
+
+          <div
+            id="duplicatesList"
+            class="report-list"
+          ></div>
         </div>
 
         <div class="report-card">
-          <h3>Missing Values by Column</h3>
-          <div id="missingList" class="report-list"></div>
+          <h3>
+            Missing Values by Column
+          </h3>
+
+          <div
+            id="missingList"
+            class="report-list"
+          ></div>
         </div>
 
         <div class="report-card">
-          <h3>Completely Empty Columns</h3>
-          <div id="emptyColumnsList" class="report-list"></div>
+          <h3>
+            Completely Empty Columns
+          </h3>
+
+          <div
+            id="emptyColumnsList"
+            class="report-list"
+          ></div>
         </div>
+
       </div>
     </section>
 
-    <section id="typesSection" class="section hidden">
+    <section
+      id="typesSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Column Types</h2>
+          <h2 class="section-title">
+            Column Types
+          </h2>
+
           <p class="section-description">
             Best-effort detection of the data type in each cleaned worksheet column.
           </p>
@@ -1647,6 +1875,7 @@
 
       <div class="table-shell">
         <table class="types-table">
+
           <thead>
             <tr>
               <th>Column</th>
@@ -1656,15 +1885,23 @@
               <th>Unique</th>
             </tr>
           </thead>
+
           <tbody id="typesBody"></tbody>
+
         </table>
       </div>
     </section>
 
-    <section id="detailsSection" class="section hidden">
+    <section
+      id="detailsSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Validation Details</h2>
+          <h2 class="section-title">
+            Validation Details
+          </h2>
+
           <p class="section-description">
             File and automatically detected contact columns.
           </p>
@@ -1672,42 +1909,98 @@
       </div>
 
       <div class="details-box">
+
         <div class="detail-row">
-          <span class="detail-label">Current File</span>
-          <span id="detailFile" class="pill">—</span>
+          <span class="detail-label">
+            Current File
+          </span>
+
+          <span
+            id="detailFile"
+            class="pill"
+          >
+            —
+          </span>
         </div>
 
         <div class="detail-row">
-          <span class="detail-label">Current Sheet</span>
-          <span id="detailSheet" class="pill">—</span>
+          <span class="detail-label">
+            Current Sheet
+          </span>
+
+          <span
+            id="detailSheet"
+            class="pill"
+          >
+            —
+          </span>
         </div>
 
         <div class="detail-row">
-          <span class="detail-label">Detected Email Column</span>
-          <span id="detailEmailColumn" class="pill">Not found</span>
+          <span class="detail-label">
+            Detected Email Column
+          </span>
+
+          <span
+            id="detailEmailColumn"
+            class="pill"
+          >
+            Not found
+          </span>
         </div>
 
         <div class="detail-row">
-          <span class="detail-label">Detected Phone Column</span>
-          <span id="detailPhoneColumn" class="pill">Not found</span>
+          <span class="detail-label">
+            Detected Phone Column
+          </span>
+
+          <span
+            id="detailPhoneColumn"
+            class="pill"
+          >
+            Not found
+          </span>
         </div>
 
         <div class="detail-row">
-          <span class="detail-label">Header Detection</span>
-          <span id="detailHeaderStatus" class="pill">Waiting</span>
+          <span class="detail-label">
+            Header Detection
+          </span>
+
+          <span
+            id="detailHeaderStatus"
+            class="pill"
+          >
+            Waiting
+          </span>
         </div>
 
         <div class="detail-row">
-          <span class="detail-label">Validation Status</span>
-          <span id="detailValidation" class="pill">Waiting</span>
+          <span class="detail-label">
+            Validation Status
+          </span>
+
+          <span
+            id="detailValidation"
+            class="pill"
+          >
+            Waiting
+          </span>
         </div>
+
       </div>
     </section>
 
-    <section id="summarySection" class="section hidden">
+    <section
+      id="summarySection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Cleaning Summary</h2>
+          <h2 class="section-title">
+            Cleaning Summary
+          </h2>
+
           <p class="section-description">
             What the cleaning operation changed in the selected worksheet.
           </p>
@@ -1715,65 +2008,115 @@
       </div>
 
       <div class="summary-grid">
+
         <div class="summary-item">
-          <strong id="summaryRowsBefore">0</strong>
-          <span>Rows Before</span>
+          <strong id="summaryRowsBefore">
+            0
+          </strong>
+          <span>
+            Rows Before
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryRowsAfter">0</strong>
-          <span>Rows After</span>
+          <strong id="summaryRowsAfter">
+            0
+          </strong>
+          <span>
+            Rows After
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryColumnsBefore">0</strong>
-          <span>Columns Before</span>
+          <strong id="summaryColumnsBefore">
+            0
+          </strong>
+          <span>
+            Columns Before
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryColumnsAfter">0</strong>
-          <span>Columns After</span>
+          <strong id="summaryColumnsAfter">
+            0
+          </strong>
+          <span>
+            Columns After
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryBlankRowsRemoved">0</strong>
-          <span>Blank Rows Removed</span>
+          <strong id="summaryBlankRowsRemoved">
+            0
+          </strong>
+          <span>
+            Blank Rows Removed
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryDuplicateRowsRemoved">0</strong>
-          <span>Duplicate Rows Removed</span>
+          <strong id="summaryDuplicateRowsRemoved">
+            0
+          </strong>
+          <span>
+            Duplicate Rows Removed
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryEmailsNormalized">0</strong>
-          <span>Emails Normalized</span>
+          <strong id="summaryEmailsNormalized">
+            0
+          </strong>
+          <span>
+            Emails Normalized
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryPhonesStandardized">0</strong>
-          <span>Phones Standardized</span>
+          <strong id="summaryPhonesStandardized">
+            0
+          </strong>
+          <span>
+            Phones Standardized
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryDatesStandardized">0</strong>
-          <span>Dates Standardized</span>
+          <strong id="summaryDatesStandardized">
+            0
+          </strong>
+          <span>
+            Dates Standardized
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryCategoriesStandardized">0</strong>
-          <span>Categories Standardized</span>
+          <strong id="summaryCategoriesStandardized">
+            0
+          </strong>
+          <span>
+            Categories Standardized
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryEmptyColumnsRemoved">0</strong>
-          <span>Empty Columns Removed</span>
+          <strong id="summaryEmptyColumnsRemoved">
+            0
+          </strong>
+          <span>
+            Empty Columns Removed
+          </span>
         </div>
 
         <div class="summary-item">
-          <strong id="summaryTotalChanges">0</strong>
-          <span>Total Changes</span>
+          <strong id="summaryTotalChanges">
+            0
+          </strong>
+          <span>
+            Total Changes
+          </span>
         </div>
+
       </div>
 
       <div class="summary-note">
@@ -1783,16 +2126,25 @@
       </div>
 
       <div class="summary-actions">
-        <button id="copyReportBtn" class="btn-soft">
+        <button
+          id="copyReportBtn"
+          class="btn-soft"
+        >
           📋 Copy Cleaning Report
         </button>
       </div>
     </section>
 
-    <section id="reviewSection" class="section hidden">
+    <section
+      id="reviewSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Review Before Export</h2>
+          <h2 class="section-title">
+            Review Before Export
+          </h2>
+
           <p class="section-description">
             A quick final check of issues that were detected and changes that were applied automatically.
           </p>
@@ -1800,102 +2152,189 @@
       </div>
 
       <div class="review-grid">
+
         <div class="review-card issue">
-          <strong id="reviewInvalidEmails">0</strong>
-          <span>Invalid emails to review</span>
+          <strong id="reviewInvalidEmails">
+            0
+          </strong>
+          <span>
+            Invalid emails to review
+          </span>
         </div>
 
         <div class="review-card issue">
-          <strong id="reviewInvalidPhones">0</strong>
-          <span>Invalid phones to review</span>
+          <strong id="reviewInvalidPhones">
+            0
+          </strong>
+          <span>
+            Invalid phones to review
+          </span>
         </div>
 
         <div class="review-card issue">
-          <strong id="reviewErrors">0</strong>
-          <span>Spreadsheet errors to review</span>
+          <strong id="reviewErrors">
+            0
+          </strong>
+          <span>
+            Spreadsheet errors to review
+          </span>
         </div>
 
         <div class="review-card warn">
-          <strong id="reviewMissing">0</strong>
-          <span>Missing cells to review</span>
+          <strong id="reviewMissing">
+            0
+          </strong>
+          <span>
+            Missing cells to review
+          </span>
         </div>
 
         <div class="review-card warn">
-          <strong id="reviewPotential">0</strong>
-          <span>Potential duplicate rows</span>
+          <strong id="reviewPotential">
+            0
+          </strong>
+          <span>
+            Potential duplicate rows
+          </span>
         </div>
 
         <div class="review-card">
-          <strong id="reviewAutomatic">0</strong>
-          <span>Automatic changes applied</span>
+          <strong id="reviewAutomatic">
+            0
+          </strong>
+          <span>
+            Automatic changes applied
+          </span>
         </div>
 
         <div class="review-card formula">
-          <strong id="reviewFormulas">0</strong>
-          <span>Formula cells preserved in XLSX</span>
+          <strong id="reviewFormulas">
+            0
+          </strong>
+          <span>
+            Formula cells preserved in XLSX
+          </span>
         </div>
 
         <div class="review-card">
-          <strong id="reviewTotal">0</strong>
-          <span>Total review items</span>
+          <strong id="reviewTotal">
+            0
+          </strong>
+          <span>
+            Total review items
+          </span>
         </div>
+
       </div>
 
-      <div class="summary-note" style="margin-top:12px;">
+      <div
+        class="summary-note"
+        style="margin-top:12px;"
+      >
         Invalid values are kept for review. The tool does not silently invent replacements for questionable emails, phone numbers or spreadsheet errors.
       </div>
     </section>
 
-    <section id="resultSection" class="section hidden">
+    <section
+      id="resultSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Final Cleaning Report</h2>
+          <h2 class="section-title">
+            Final Cleaning Report
+          </h2>
+
           <p class="section-description">
             A customer-friendly summary of what happened after cleaning.
           </p>
         </div>
       </div>
 
-      <div id="resultBanner" class="result-banner">
+      <div
+        id="resultBanner"
+        class="result-banner"
+      >
+
         <div class="result-main">
-          <div id="resultIcon" class="result-icon">✅</div>
+
+          <div
+            id="resultIcon"
+            class="result-icon"
+          >
+            ✅
+          </div>
 
           <div>
-            <h3 id="resultTitle" class="result-title">
+
+            <h3
+              id="resultTitle"
+              class="result-title"
+            >
               Cleaning complete.
             </h3>
 
-            <p id="resultText" class="result-text">
+            <p
+              id="resultText"
+              class="result-text"
+            >
               Your cleaned spreadsheet is ready.
             </p>
 
             <div class="result-meta">
+
               <span class="result-meta-pill">
-                📄 <span id="resultFileName">—</span>
+                📄
+                <span id="resultFileName">
+                  —
+                </span>
               </span>
 
               <span class="result-meta-pill">
-                📑 <span id="resultSheetName">—</span>
+                📑
+                <span id="resultSheetName">
+                  —
+                </span>
               </span>
 
               <span class="result-meta-pill">
-                ✨ <span id="resultChangeCount">0</span> changes applied
+                ✨
+                <span id="resultChangeCount">
+                  0
+                </span>
+                changes applied
               </span>
+
             </div>
+
           </div>
         </div>
 
         <div class="result-side">
-          <strong id="resultReviewCount">0</strong>
-          <span>Review items remaining</span>
+
+          <strong id="resultReviewCount">
+            0
+          </strong>
+
+          <span>
+            Review items remaining
+          </span>
+
         </div>
+
       </div>
     </section>
 
-    <section id="exportSection" class="section hidden">
+    <section
+      id="exportSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 class="section-title">Export Center</h2>
+          <h2 class="section-title">
+            Export Center
+          </h2>
+
           <p class="section-description">
             Your cleaned spreadsheet is ready. Choose the format that matches your workflow.
           </p>
@@ -1905,16 +2344,27 @@
       <div class="export-center">
 
         <div class="export-status">
-          <span class="ready-pill">✓ READY TO EXPORT</span>
-          <span id="exportStatusText" class="muted">
+
+          <span class="ready-pill">
+            ✓ READY TO EXPORT
+          </span>
+
+          <span
+            id="exportStatusText"
+            class="muted"
+          >
             Cleaned worksheet prepared.
           </span>
+
         </div>
 
         <div class="export-grid">
 
           <div class="export-card">
-            <h3>Cleaned XLSX</h3>
+
+            <h3>
+              Cleaned XLSX
+            </h3>
 
             <p id="exportXlsxDetails">
               Excel workbook with cleaned data.
@@ -1922,8 +2372,13 @@
             </p>
 
             <div class="export-file-name">
-              <strong>File:</strong>
-              <span id="exportXlsxFileName">—</span>
+              <strong>
+                File:
+              </strong>
+
+              <span id="exportXlsxFileName">
+                —
+              </span>
             </div>
 
             <button
@@ -1934,13 +2389,20 @@
               ↓ Download Cleaned XLSX
             </button>
 
-            <div id="xlsxDoneStatus" class="export-done hidden">
+            <div
+              id="xlsxDoneStatus"
+              class="export-done hidden"
+            >
               ✅ XLSX downloaded
             </div>
+
           </div>
 
           <div class="export-card">
-            <h3>Cleaned CSV</h3>
+
+            <h3>
+              Cleaned CSV
+            </h3>
 
             <p id="exportCsvDetails">
               Simple cleaned data from the currently selected worksheet.
@@ -1948,8 +2410,13 @@
             </p>
 
             <div class="export-file-name">
-              <strong>File:</strong>
-              <span id="exportCsvFileName">—</span>
+              <strong>
+                File:
+              </strong>
+
+              <span id="exportCsvFileName">
+                —
+              </span>
             </div>
 
             <button
@@ -1960,15 +2427,23 @@
               ↓ Download Cleaned CSV
             </button>
 
-            <div id="csvDoneStatus" class="export-done hidden">
+            <div
+              id="csvDoneStatus"
+              class="export-done hidden"
+            >
               ✅ CSV downloaded
             </div>
+
           </div>
 
         </div>
 
         <div class="download-both-wrap">
-          <h3>Download Both Formats</h3>
+
+          <h3>
+            Download Both Formats
+          </h3>
+
           <p>
             Download the cleaned XLSX workbook and the cleaned CSV for the selected worksheet.
           </p>
@@ -1981,6 +2456,7 @@
           >
             ↓ Download Both Files
           </button>
+
         </div>
 
         <div class="export-tip">
@@ -1990,57 +2466,115 @@
         </div>
 
         <div class="export-meta">
+
           <span>
-            Prepared: <strong id="exportTimestamp">—</strong>
+            Prepared:
+            <strong id="exportTimestamp">
+              —
+            </strong>
           </span>
 
           <span>
             Original file:
-            <strong id="exportOriginalFile">—</strong>
+            <strong id="exportOriginalFile">
+              —
+            </strong>
           </span>
+
         </div>
 
-        <div id="exportMessage" class="export-message" aria-live="polite"></div>
+        <div
+          id="exportMessage"
+          class="export-message"
+          aria-live="polite"
+        ></div>
 
         <div class="mobile-note">
           On a phone, the download buttons are full-width for easier tapping.
         </div>
+
       </div>
     </section>
 
-    <section id="previewSection" class="section hidden">
+    <section
+      id="previewSection"
+      class="section hidden"
+    >
       <div class="section-header">
         <div>
-          <h2 id="previewTitle" class="section-title">
+
+          <h2
+            id="previewTitle"
+            class="section-title"
+          >
             Cleaned Preview
           </h2>
 
-          <p id="previewDescription" class="section-description">
+          <p
+            id="previewDescription"
+            class="section-description"
+          >
             Review the result before exporting.
           </p>
+
         </div>
       </div>
 
-      <div id="previewMetrics" class="preview-metrics hidden">
+      <div
+        id="previewMetrics"
+        class="preview-metrics hidden"
+      >
 
         <div class="preview-metric">
-          <div class="preview-metric-label">Rows</div>
-          <div id="previewRowsMetric" class="preview-metric-value">—</div>
+          <div class="preview-metric-label">
+            Rows
+          </div>
+
+          <div
+            id="previewRowsMetric"
+            class="preview-metric-value"
+          >
+            —
+          </div>
         </div>
 
         <div class="preview-metric">
-          <div class="preview-metric-label">Columns</div>
-          <div id="previewColumnsMetric" class="preview-metric-value">—</div>
+          <div class="preview-metric-label">
+            Columns
+          </div>
+
+          <div
+            id="previewColumnsMetric"
+            class="preview-metric-value"
+          >
+            —
+          </div>
         </div>
 
         <div class="preview-metric">
-          <div class="preview-metric-label">Rows Removed</div>
-          <div id="previewRowsRemovedMetric" class="preview-metric-value">—</div>
+          <div class="preview-metric-label">
+            Rows Removed
+          </div>
+
+          <div
+            id="previewRowsRemovedMetric"
+            class="preview-metric-value"
+          >
+            —
+          </div>
         </div>
 
         <div class="preview-metric">
-          <div class="preview-metric-label">Columns Removed</div>
-          <div id="previewColumnsRemovedMetric" class="preview-metric-value">—</div>
+          <div class="preview-metric-label">
+            Columns Removed
+          </div>
+
+          <div
+            id="previewColumnsRemovedMetric"
+            class="preview-metric-value"
+          >
+            —
+          </div>
         </div>
 
       </div>
@@ -2054,9 +2588,18 @@
       </div>
     </section>
 
-    <div id="emptyState" class="empty-state">
-      <div class="big">📁</div>
-      <strong>Upload a spreadsheet to begin</strong>
+    <div
+      id="emptyState"
+      class="empty-state"
+    >
+      <div class="big">
+        📁
+      </div>
+
+      <strong>
+        Upload a spreadsheet to begin
+      </strong>
+
       <div style="margin-top:6px;">
         Your file is analyzed directly in your browser.
       </div>
@@ -2080,7 +2623,11 @@
       "#BLOCKED!"
     ]);
 
-    const SUPPORTED_EXTENSIONS = [".xlsx", ".xls", ".csv"];
+    const SUPPORTED_EXTENSIONS = [
+      ".xlsx",
+      ".xls",
+      ".csv"
+    ];
 
     const CATEGORY_MAPS = {
       gender: {
@@ -2165,50 +2712,128 @@
       "formulatestvalue"
     ]);
 
-    const fileInput = document.getElementById("fileInput");
-    const selectedFile = document.getElementById("selectedFile");
-    const privacyNote = document.getElementById("privacyNote");
-    const actionBar = document.getElementById("actionBar");
-    const cleanBtn = document.getElementById("cleanBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
-    const downloadCsvBtn = document.getElementById("downloadCsvBtn");
-    const startOverBtn = document.getElementById("startOverBtn");
-    const copyReportBtn = document.getElementById("copyReportBtn");
-    const successMessage = document.getElementById("successMessage");
-    const errorMessage = document.getElementById("errorMessage");
-    const fileInfoSection = document.getElementById("fileInfo");
-    const infoFileName = document.getElementById("infoFileName");
-    const infoFileSize = document.getElementById("infoFileSize");
-    const infoSheets = document.getElementById("infoSheets");
-    const worksheetSection = document.getElementById("worksheetSection");
-    const sheetSelect = document.getElementById("sheetSelect");
-    const overviewSection = document.getElementById("overviewSection");
-    const checksSection = document.getElementById("checksSection");
-    const typesSection = document.getElementById("typesSection");
-    const detailsSection = document.getElementById("detailsSection");
-    const summarySection = document.getElementById("summarySection");
-    const previewSection = document.getElementById("previewSection");
-    const reviewSection = document.getElementById("reviewSection");
-    const resultSection = document.getElementById("resultSection");
-    const exportSection = document.getElementById("exportSection");
+    const fileInput =
+      document.getElementById("fileInput");
 
-    const progressPanel = document.getElementById("progressPanel");
-    const progressFill = document.getElementById("progressFill");
-    const progressText = document.getElementById("progressText");
-    const progressPercent = document.getElementById("progressPercent");
-    const cancelBtn = document.getElementById("cancelBtn");
+    const selectedFile =
+      document.getElementById("selectedFile");
 
-    const centerXlsxBtn = document.getElementById("centerXlsxBtn");
-    const centerCsvBtn = document.getElementById("centerCsvBtn");
-    const downloadBothBtn = document.getElementById("downloadBothBtn");
+    const privacyNote =
+      document.getElementById("privacyNote");
 
-    const exportMessage = document.getElementById("exportMessage");
-    const emptyState = document.getElementById("emptyState");
-    const previewMetrics = document.getElementById("previewMetrics");
-    const previewTitle = document.getElementById("previewTitle");
-    const previewDescription = document.getElementById("previewDescription");
-    const previewTable = document.getElementById("previewTable");
-    const typesBody = document.getElementById("typesBody");
+    const actionBar =
+      document.getElementById("actionBar");
+
+    const cleanBtn =
+      document.getElementById("cleanBtn");
+
+    const downloadBtn =
+      document.getElementById("downloadBtn");
+
+    const downloadCsvBtn =
+      document.getElementById("downloadCsvBtn");
+
+    const startOverBtn =
+      document.getElementById("startOverBtn");
+
+    const copyReportBtn =
+      document.getElementById("copyReportBtn");
+
+    const successMessage =
+      document.getElementById("successMessage");
+
+    const errorMessage =
+      document.getElementById("errorMessage");
+
+    const fileInfoSection =
+      document.getElementById("fileInfo");
+
+    const infoFileName =
+      document.getElementById("infoFileName");
+
+    const infoFileSize =
+      document.getElementById("infoFileSize");
+
+    const infoSheets =
+      document.getElementById("infoSheets");
+
+    const worksheetSection =
+      document.getElementById("worksheetSection");
+
+    const sheetSelect =
+      document.getElementById("sheetSelect");
+
+    const overviewSection =
+      document.getElementById("overviewSection");
+
+    const checksSection =
+      document.getElementById("checksSection");
+
+    const typesSection =
+      document.getElementById("typesSection");
+
+    const detailsSection =
+      document.getElementById("detailsSection");
+
+    const summarySection =
+      document.getElementById("summarySection");
+
+    const previewSection =
+      document.getElementById("previewSection");
+
+    const reviewSection =
+      document.getElementById("reviewSection");
+
+    const resultSection =
+      document.getElementById("resultSection");
+
+    const exportSection =
+      document.getElementById("exportSection");
+
+    const progressPanel =
+      document.getElementById("progressPanel");
+
+    const progressFill =
+      document.getElementById("progressFill");
+
+    const progressText =
+      document.getElementById("progressText");
+
+    const progressPercent =
+      document.getElementById("progressPercent");
+
+    const cancelBtn =
+      document.getElementById("cancelBtn");
+
+    const centerXlsxBtn =
+      document.getElementById("centerXlsxBtn");
+
+    const centerCsvBtn =
+      document.getElementById("centerCsvBtn");
+
+    const downloadBothBtn =
+      document.getElementById("downloadBothBtn");
+
+    const exportMessage =
+      document.getElementById("exportMessage");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+    const previewMetrics =
+      document.getElementById("previewMetrics");
+
+    const previewTitle =
+      document.getElementById("previewTitle");
+
+    const previewDescription =
+      document.getElementById("previewDescription");
+
+    const previewTable =
+      document.getElementById("previewTable");
+
+    const typesBody =
+      document.getElementById("typesBody");
 
     let workbook = null;
     let currentFile = null;
@@ -2221,142 +2846,297 @@
 
     const PROCESS_CHUNK_SIZE = 500;
 
-    fileInput.addEventListener("change", handleFileUpload);
+    fileInput.addEventListener(
+      "change",
+      handleFileUpload
+    );
 
-    sheetSelect.addEventListener("change", function () {
-      currentSheetName = sheetSelect.value;
-      loadSelectedSheet();
-    });
+    sheetSelect.addEventListener(
+      "change",
+      function () {
+        currentSheetName =
+          sheetSelect.value;
 
-    cleanBtn.addEventListener("click", cleanSpreadsheet);
+        loadSelectedSheet();
+      }
+    );
 
-    downloadBtn.addEventListener("click", function () {
-      exportWorkbook("xlsx");
-    });
+    cleanBtn.addEventListener(
+      "click",
+      cleanSpreadsheet
+    );
 
-    downloadCsvBtn.addEventListener("click", function () {
-      exportWorkbook("csv");
-    });
+    downloadBtn.addEventListener(
+      "click",
+      function () {
+        exportWorkbook("xlsx");
+      }
+    );
 
-    centerXlsxBtn.addEventListener("click", function () {
-      exportWorkbook("xlsx");
-    });
+    downloadCsvBtn.addEventListener(
+      "click",
+      function () {
+        exportWorkbook("csv");
+      }
+    );
 
-    centerCsvBtn.addEventListener("click", function () {
-      exportWorkbook("csv");
-    });
+    centerXlsxBtn.addEventListener(
+      "click",
+      function () {
+        exportWorkbook("xlsx");
+      }
+    );
 
-    downloadBothBtn.addEventListener("click", downloadBothFiles);
+    centerCsvBtn.addEventListener(
+      "click",
+      function () {
+        exportWorkbook("csv");
+      }
+    );
 
-    startOverBtn.addEventListener("click", resetApp);
+    downloadBothBtn.addEventListener(
+      "click",
+      downloadBothFiles
+    );
 
-    copyReportBtn.addEventListener("click", copyCleaningReport);
+    startOverBtn.addEventListener(
+      "click",
+      resetApp
+    );
 
-    cancelBtn.addEventListener("click", function () {
-      processingCancelled = true;
-      setProgress(100, "Cancelling…");
-    });
+    copyReportBtn.addEventListener(
+      "click",
+      copyCleaningReport
+    );
+
+    cancelBtn.addEventListener(
+      "click",
+      function () {
+        processingCancelled =
+          true;
+
+        setProgress(
+          100,
+          "Cancelling…"
+        );
+      }
+    );
 
     function setText(id, value) {
-      const el = document.getElementById(id);
+      const el =
+        document.getElementById(id);
 
       if (el) {
-        el.textContent = String(value ?? "");
+        el.textContent =
+          String(value ?? "");
       }
     }
 
     function escapeHtml(value) {
       return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
     }
 
     function showSuccess(message) {
-      successMessage.textContent = message;
-      successMessage.classList.remove("hidden");
-      errorMessage.classList.add("hidden");
+      successMessage.textContent =
+        message;
+
+      successMessage.classList.remove(
+        "hidden"
+      );
+
+      errorMessage.classList.add(
+        "hidden"
+      );
     }
 
     function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.remove("hidden");
-      successMessage.classList.add("hidden");
+      errorMessage.textContent =
+        message;
+
+      errorMessage.classList.remove(
+        "hidden"
+      );
+
+      successMessage.classList.add(
+        "hidden"
+      );
     }
 
     function clearMessages() {
-      successMessage.classList.add("hidden");
-      errorMessage.classList.add("hidden");
-      successMessage.textContent = "";
-      errorMessage.textContent = "";
-    }
-
-    function setProgress(percent, message) {
-      const safe = Math.max(
-        0,
-        Math.min(100, Math.round(percent))
+      successMessage.classList.add(
+        "hidden"
       );
 
-      progressPanel.classList.remove("hidden");
-      progressFill.style.width = safe + "%";
-      progressPercent.textContent = safe + "%";
+      errorMessage.classList.add(
+        "hidden"
+      );
+
+      successMessage.textContent =
+        "";
+
+      errorMessage.textContent =
+        "";
+    }
+
+    function setProgress(
+      percent,
+      message
+    ) {
+      const safe =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Math.round(percent)
+          )
+        );
+
+      progressPanel.classList.remove(
+        "hidden"
+      );
+
+      progressFill.style.width =
+        safe + "%";
+
+      progressPercent.textContent =
+        safe + "%";
+
       progressText.textContent =
-        message || "Processing spreadsheet…";
+        message ||
+        "Processing spreadsheet…";
     }
 
     function hideProgress() {
-      progressPanel.classList.add("hidden");
-      progressFill.style.width = "0%";
-      progressPercent.textContent = "0%";
-      progressText.textContent = "Preparing spreadsheet…";
+      progressPanel.classList.add(
+        "hidden"
+      );
+
+      progressFill.style.width =
+        "0%";
+
+      progressPercent.textContent =
+        "0%";
+
+      progressText.textContent =
+        "Preparing spreadsheet…";
     }
 
     function yieldToBrowser() {
-      return new Promise(resolve => setTimeout(resolve, 0));
+      return new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            0
+          )
+      );
     }
 
     function formatBytes(bytes) {
-      if (!Number.isFinite(bytes) || bytes <= 0) {
+      if (
+        !Number.isFinite(bytes) ||
+        bytes <= 0
+      ) {
         return "0 B";
       }
 
-      const units = ["B", "KB", "MB", "GB"];
+      const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+      ];
 
-      const index = Math.min(
-        Math.floor(Math.log(bytes) / Math.log(1024)),
-        units.length - 1
-      );
+      const index =
+        Math.min(
+          Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+          ),
+          units.length - 1
+        );
 
       return `${(
         bytes /
-        Math.pow(1024, index)
-      ).toFixed(index === 0 ? 0 : 2)} ${units[index]}`;
+        Math.pow(
+          1024,
+          index
+        )
+      ).toFixed(
+        index === 0
+          ? 0
+          : 2
+      )} ${units[index]}`;
     }
 
     function normalizeHeader(value) {
-      return String(value ?? "")
+      return String(
+        value ?? ""
+      )
         .trim()
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "");
+        .replace(
+          /[^a-z0-9]+/g,
+          ""
+        );
     }
 
     function headerLooksLikeData(value) {
-      const v = String(value ?? "").trim();
+      const v =
+        String(
+          value ?? ""
+        ).trim();
 
       if (!v) return false;
-      if (isValidEmail(v)) return true;
-      if (isValidPhone(v)) return true;
-      if (isErrorValue(v)) return true;
-      if (isDateLike(v)) return true;
-      if (/^\d+(?:\.\d+)?$/.test(v)) return true;
+
+      if (isValidEmail(v)) {
+        return true;
+      }
+
+      if (isValidPhone(v)) {
+        return true;
+      }
+
+      if (isErrorValue(v)) {
+        return true;
+      }
+
+      if (isDateLike(v)) {
+        return true;
+      }
+
+      if (
+        /^\d+(?:\.\d+)?$/.test(v)
+      ) {
+        return true;
+      }
 
       return false;
     }
 
     function headerScore(row) {
-      if (!Array.isArray(row)) {
+      if (
+        !Array.isArray(row)
+      ) {
         return {
           score: -Infinity,
           strongHeaderCount: 0,
@@ -2370,34 +3150,59 @@
       let nonEmpty = 0;
       let dataLikeCount = 0;
 
-      row.forEach(cell => {
-        const raw = String(cell ?? "").trim();
+      row.forEach(
+        cell => {
+          const raw =
+            String(
+              cell ?? ""
+            ).trim();
 
-        if (!raw) return;
+          if (!raw) {
+            return;
+          }
 
-        nonEmpty++;
+          nonEmpty++;
 
-        const h = normalizeHeader(raw);
+          const h =
+            normalizeHeader(
+              raw
+            );
 
-        if (STRONG_HEADERS.has(h)) {
-          score += 6;
-          strongHeaderCount++;
+          if (
+            STRONG_HEADERS.has(
+              h
+            )
+          ) {
+            score += 6;
+            strongHeaderCount++;
+          }
+
+          if (
+            headerLooksLikeData(
+              raw
+            )
+          ) {
+            score -= 3;
+            dataLikeCount++;
+          }
+
+          if (
+            /^[a-zA-Z][a-zA-Z0-9_ -]{1,35}$/.test(
+              raw
+            ) &&
+            raw.split(/\s+/).length <= 4
+          ) {
+            score += 1;
+          }
         }
+      );
 
-        if (headerLooksLikeData(raw)) {
-          score -= 3;
-          dataLikeCount++;
-        }
-
-        if (
-          /^[a-zA-Z][a-zA-Z0-9_ -]{1,35}$/.test(raw) &&
-          raw.split(/\s+/).length <= 4
-        ) {
-          score += 1;
-        }
-      });
-
-      score += Math.min(nonEmpty, 20) * 0.2;
+      score +=
+        Math.min(
+          nonEmpty,
+          20
+        ) *
+        0.2;
 
       return {
         score,
@@ -2416,7 +3221,10 @@
       }
 
       const maxCheck =
-        Math.min(rows.length, 20);
+        Math.min(
+          rows.length,
+          20
+        );
 
       let bestIndex = -1;
       let bestResult = null;
@@ -2427,7 +3235,9 @@
         i++
       ) {
         const result =
-          headerScore(rows[i]);
+          headerScore(
+            rows[i]
+          );
 
         const credible =
           result.nonEmpty >= 3 &&
@@ -2440,100 +3250,159 @@
             )
           );
 
-        if (!credible) continue;
+        if (!credible) {
+          continue;
+        }
 
         if (
           !bestResult ||
-          result.score > bestResult.score
+          result.score >
+            bestResult.score
         ) {
-          bestResult = result;
-          bestIndex = i;
+          bestResult =
+            result;
+
+          bestIndex =
+            i;
         }
       }
 
-      if (bestIndex === -1) {
+      if (
+        bestIndex === -1
+      ) {
         const columnCount =
-          getColumnCount(rows);
+          getColumnCount(
+            rows
+          );
 
         const genericHeaders =
           Array.from(
-            { length: columnCount },
+            {
+              length:
+                columnCount
+            },
             (_, index) =>
-              `Column ${index + 1}`
+              `Column ${
+                index + 1
+              }`
           );
 
         return {
           headerIndex: -1,
-          headers: genericHeaders,
+          headers:
+            genericHeaders,
           detected: false
         };
       }
 
       return {
-        headerIndex: bestIndex,
-        headers: makeUniqueHeaders(
-          rows[bestIndex] || []
-        ),
+        headerIndex:
+          bestIndex,
+
+        headers:
+          makeUniqueHeaders(
+            rows[bestIndex] ||
+              []
+          ),
+
         detected: true
       };
     }
 
-    function makeUniqueHeaders(headers) {
+    function makeUniqueHeaders(
+      headers
+    ) {
       const seen = new Map();
 
-      return headers.map((value, index) => {
-        let base =
-          String(value ?? "").trim();
+      return headers.map(
+        (
+          value,
+          index
+        ) => {
+          let base =
+            String(
+              value ?? ""
+            ).trim();
 
-        if (!base) {
-          base = `Column ${index + 1}`;
+          if (!base) {
+            base =
+              `Column ${
+                index + 1
+              }`;
+          }
+
+          const key =
+            base.toLowerCase();
+
+          const count =
+            seen.get(key) ||
+            0;
+
+          seen.set(
+            key,
+            count + 1
+          );
+
+          return count === 0
+            ? base
+            : `${base} ${
+                count + 1
+              }`;
         }
-
-        const key = base.toLowerCase();
-        const count = seen.get(key) || 0;
-
-        seen.set(key, count + 1);
-
-        return count === 0
-          ? base
-          : `${base} ${count + 1}`;
-      });
+      );
     }
 
-    function getColumnCount(rows) {
+    function getColumnCount(
+      rows
+    ) {
       return Math.max(
         0,
-        ...rows.map(row =>
-          Array.isArray(row)
-            ? row.length
-            : 0
+        ...rows.map(
+          row =>
+            Array.isArray(
+              row
+            )
+              ? row.length
+              : 0
         )
       );
     }
 
     function normalizeCell(value) {
-      return String(value ?? "")
+      return String(
+        value ?? ""
+      )
         .trim()
         .toLowerCase();
     }
 
     function isEmptyCell(value) {
-      return String(value ?? "").trim() === "";
+      return (
+        String(
+          value ?? ""
+        ).trim() === ""
+      );
     }
 
     function isEmptyRow(row) {
-      return row.every(isEmptyCell);
+      return row.every(
+        isEmptyCell
+      );
     }
 
     function makeRowKey(row) {
       return row
-        .map(normalizeCell)
+        .map(
+          normalizeCell
+        )
         .join("\u001f");
     }
 
     function isErrorValue(value) {
       return ERROR_VALUES.has(
-        String(value ?? "")
+        String(
+          value ?? ""
+        )
           .trim()
           .toUpperCase()
       );
@@ -2541,7 +3410,9 @@
 
     function isValidEmail(value) {
       const email =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
       return (
         !!email &&
@@ -2551,8 +3422,12 @@
       );
     }
 
-    function extractPhoneDigits(value) {
-      return String(value ?? "").replace(
+    function extractPhoneDigits(
+      value
+    ) {
+      return String(
+        value ?? ""
+      ).replace(
         /\D/g,
         ""
       );
@@ -2560,22 +3435,39 @@
 
     function isValidPhone(value) {
       const phone =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
-      if (!phone || isErrorValue(phone)) {
+      if (
+        !phone ||
+        isErrorValue(
+          phone
+        )
+      ) {
         return false;
       }
 
-      if (isDateLike(phone)) {
+      if (
+        isDateLike(
+          phone
+        )
+      ) {
         return false;
       }
 
-      if (!/^\+?[0-9\s().-]+$/.test(phone)) {
+      if (
+        !/^\+?[0-9\s().-]+$/.test(
+          phone
+        )
+      ) {
         return false;
       }
 
       const digits =
-        extractPhoneDigits(phone);
+        extractPhoneDigits(
+          phone
+        );
 
       return (
         digits.length >= 7 &&
@@ -2583,93 +3475,140 @@
       );
     }
 
-    function standardizePhone(value) {
+    function standardizePhone(
+      value
+    ) {
       const original =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
       if (
         !original ||
-        !isValidPhone(original)
+        !isValidPhone(
+          original
+        )
       ) {
         return original;
       }
 
       const digits =
-        extractPhoneDigits(original);
+        extractPhoneDigits(
+          original
+        );
 
-      return original.startsWith("+")
+      return original.startsWith(
+        "+"
+      )
         ? `+${digits}`
         : digits;
     }
 
-    function excelSerialToDate(value) {
-      const n = Number(value);
+    function excelSerialToDate(
+      value
+    ) {
+      const n =
+        Number(value);
 
       if (
-        !Number.isFinite(n) ||
+        !Number.isFinite(
+          n
+        ) ||
         n < 20000 ||
         n > 60000
       ) {
         return null;
       }
 
-      const utc = Math.round(
-        (n - 25569) *
-        86400 *
-        1000
-      );
+      const utc =
+        Math.round(
+          (n - 25569) *
+          86400 *
+          1000
+        );
 
-      const d = new Date(utc);
+      const d =
+        new Date(
+          utc
+        );
 
-      if (Number.isNaN(d.getTime())) {
+      if (
+        Number.isNaN(
+          d.getTime()
+        )
+      ) {
         return null;
       }
 
       return d;
     }
 
-    function formatDateYMD(date) {
+    function formatDateYMD(
+      date
+    ) {
       const y =
         date.getUTCFullYear();
 
       const m =
         String(
-          date.getUTCMonth() + 1
-        ).padStart(2, "0");
+          date.getUTCMonth() +
+          1
+        ).padStart(
+          2,
+          "0"
+        );
 
       const d =
         String(
           date.getUTCDate()
-        ).padStart(2, "0");
+        ).padStart(
+          2,
+          "0"
+        );
 
       return `${y}-${m}-${d}`;
     }
 
-    function parseDateValue(value) {
+    function parseDateValue(
+      value
+    ) {
       if (
         value === null ||
         value === undefined ||
-        String(value).trim() === ""
+        String(
+          value
+        ).trim() === ""
       ) {
         return null;
       }
 
-      if (typeof value === "number") {
-        return excelSerialToDate(value);
+      if (
+        typeof value ===
+        "number"
+      ) {
+        return excelSerialToDate(
+          value
+        );
       }
 
       const raw =
-        String(value).trim();
+        String(
+          value
+        ).trim();
 
       if (
-        /^\d+(?:\.\d+)?$/.test(raw)
+        /^\d+(?:\.\d+)?$/.test(
+          raw
+        )
       ) {
         const serial =
           excelSerialToDate(
             Number(raw)
           );
 
-        if (serial) return serial;
+        if (serial) {
+          return serial;
+        }
       }
 
       let m =
@@ -2705,9 +3644,14 @@
         );
 
       if (m) {
-        const day = Number(m[1]);
-        const month = Number(m[2]);
-        const year = Number(m[3]);
+        const day =
+          Number(m[1]);
+
+        const month =
+          Number(m[2]);
+
+        const year =
+          Number(m[3]);
 
         const d =
           new Date(
@@ -2719,9 +3663,12 @@
           );
 
         if (
-          d.getUTCFullYear() === year &&
-          d.getUTCMonth() + 1 === month &&
-          d.getUTCDate() === day
+          d.getUTCFullYear() ===
+            year &&
+          d.getUTCMonth() + 1 ===
+            month &&
+          d.getUTCDate() ===
+            day
         ) {
           return d;
         }
@@ -2730,27 +3677,44 @@
       return null;
     }
 
-    function isDateLike(value) {
-      return !!parseDateValue(value);
+    function isDateLike(
+      value
+    ) {
+      return !!parseDateValue(
+        value
+      );
     }
 
-    function isLikelyNumber(value) {
+    function isLikelyNumber(
+      value
+    ) {
       if (
         value === null ||
         value === undefined ||
-        String(value).trim() === ""
+        String(
+          value
+        ).trim() === ""
       ) {
         return false;
       }
 
-      if (isErrorValue(value)) {
+      if (
+        isErrorValue(
+          value
+        )
+      ) {
         return false;
       }
 
       const s =
-        String(value)
+        String(
+          value
+        )
           .trim()
-          .replace(/,/g, "");
+          .replace(
+            /,/g,
+            ""
+          );
 
       return /^[-+]?\d+(?:\.\d+)?$/.test(
         s
@@ -2788,7 +3752,8 @@
 
       for (
         let i = 0;
-        i < normalizedHeaders.length;
+        i <
+          normalizedHeaders.length;
         i++
       ) {
         if (
@@ -2812,20 +3777,25 @@
 
       for (
         let i = 0;
-        i < normalizedHeaders.length;
+        i <
+          normalizedHeaders.length;
         i++
       ) {
         if (
-          words.some(word =>
-            normalizedHeaders[i]
-              .includes(word)
+          words.some(
+            word =>
+              normalizedHeaders[
+                i
+              ].includes(word)
           )
         ) {
           return i;
         }
       }
 
-      if (!dataRows.length) {
+      if (
+        !dataRows.length
+      ) {
         return -1;
       }
 
@@ -2839,22 +3809,33 @@
       ) {
         const values =
           dataRows
-            .map(row =>
-              String(
-                row?.[c] ?? ""
-              ).trim()
+            .map(
+              row =>
+                String(
+                  row?.[c] ??
+                    ""
+                ).trim()
             )
-            .filter(Boolean);
+            .filter(
+              Boolean
+            );
 
         if (!values.length) {
           continue;
         }
 
-        if (type === "email") {
+        if (
+          type === "email"
+        ) {
           const emailLike =
-            values.filter(value =>
-              /@/.test(value) &&
-              /[A-Za-z]/.test(value)
+            values.filter(
+              value =>
+                /@/.test(
+                  value
+                ) &&
+                /[A-Za-z]/.test(
+                  value
+                )
             ).length;
 
           const score =
@@ -2863,35 +3844,50 @@
 
           if (
             emailLike >= 2 &&
-            score > bestScore
+            score >
+              bestScore
           ) {
-            bestScore = score;
-            bestIndex = c;
+            bestScore =
+              score;
+
+            bestIndex =
+              c;
           }
-        } else if (type === "phone") {
+        } else if (
+          type === "phone"
+        ) {
           const phoneLike =
-            values.filter(value => {
-              if (isDateLike(value)) {
-                return false;
+            values.filter(
+              value => {
+                if (
+                  isDateLike(
+                    value
+                  )
+                ) {
+                  return false;
+                }
+
+                const digits =
+                  extractPhoneDigits(
+                    value
+                  );
+
+                const hasPhoneFormatting =
+                  /^\+?[0-9\s().-]+$/.test(
+                    value
+                  );
+
+                return (
+                  isValidPhone(
+                    value
+                  ) &&
+                  digits.length >= 7 &&
+                  digits.length <=
+                    15 &&
+                  hasPhoneFormatting
+                );
               }
-
-              const digits =
-                extractPhoneDigits(
-                  value
-                );
-
-              const hasPhoneFormatting =
-                /^\+?[0-9\s().-]+$/.test(
-                  value
-                );
-
-              return (
-                isValidPhone(value) &&
-                digits.length >= 7 &&
-                digits.length <= 15 &&
-                hasPhoneFormatting
-              );
-            }).length;
+            ).length;
 
           const score =
             phoneLike /
@@ -2900,10 +3896,14 @@
           if (
             phoneLike >= 2 &&
             score >= 0.5 &&
-            score > bestScore
+            score >
+              bestScore
           ) {
-            bestScore = score;
-            bestIndex = c;
+            bestScore =
+              score;
+
+            bestIndex =
+              c;
           }
         }
       }
@@ -2911,27 +3911,49 @@
       return bestIndex;
     }
 
-    function detectHeaderType(header) {
+    function detectHeaderType(
+      header
+    ) {
       const h =
-        normalizeHeader(header);
+        normalizeHeader(
+          header
+        );
 
-      if (h.includes("email")) {
+      if (
+        h.includes(
+          "email"
+        )
+      ) {
         return "Email";
       }
 
       if (
-        h.includes("phone") ||
-        h.includes("mobile") ||
-        h.includes("telephone") ||
-        h.includes("contactnumber")
+        h.includes(
+          "phone"
+        ) ||
+        h.includes(
+          "mobile"
+        ) ||
+        h.includes(
+          "telephone"
+        ) ||
+        h.includes(
+          "contactnumber"
+        )
       ) {
         return "Phone";
       }
 
       if (
-        h.includes("date") ||
-        h.includes("dob") ||
-        h.includes("birth")
+        h.includes(
+          "date"
+        ) ||
+        h.includes(
+          "dob"
+        ) ||
+        h.includes(
+          "birth"
+        )
       ) {
         return "Date";
       }
@@ -2939,25 +3961,45 @@
       if (
         h === "id" ||
         h.endsWith("id") ||
-        h.includes("code") ||
-        h.includes("numberid")
+        h.includes(
+          "code"
+        ) ||
+        h.includes(
+          "numberid"
+        )
       ) {
         return "ID";
       }
 
-      if (h.includes("gender")) {
+      if (
+        h.includes(
+          "gender"
+        )
+      ) {
         return "Categorical";
       }
 
-      if (h.includes("status")) {
+      if (
+        h.includes(
+          "status"
+        )
+      ) {
         return "Categorical";
       }
 
-      if (h.includes("response")) {
+      if (
+        h.includes(
+          "response"
+        )
+      ) {
         return "Categorical";
       }
 
-      if (h.includes("payment")) {
+      if (
+        h.includes(
+          "payment"
+        )
+      ) {
         return "Categorical";
       }
 
@@ -2969,11 +4011,16 @@
       values
     ) {
       const forced =
-        detectHeaderType(header);
+        detectHeaderType(
+          header
+        );
 
       const nonEmpty =
         values.filter(
-          v => !isEmptyCell(v)
+          v =>
+            !isEmptyCell(
+              v
+            )
         );
 
       if (
@@ -2998,27 +4045,40 @@
         }
       }
 
-      if (forced === "Email") {
+      if (
+        forced === "Email"
+      ) {
         return "Email";
       }
 
-      if (forced === "Phone") {
+      if (
+        forced === "Phone"
+      ) {
         return "Phone";
       }
 
-      if (forced === "Date") {
+      if (
+        forced === "Date"
+      ) {
         return "Date";
       }
 
-      if (forced === "ID") {
+      if (
+        forced === "ID"
+      ) {
         return "ID";
       }
 
-      if (forced === "Categorical") {
+      if (
+        forced ===
+        "Categorical"
+      ) {
         return "Categorical";
       }
 
-      if (nonEmpty.length) {
+      if (
+        nonEmpty.length
+      ) {
         if (
           nonEmpty.every(
             isValidEmail
@@ -3073,7 +4133,9 @@
           nonEmpty.filter(
             value =>
               /^[A-Za-z]{1,6}\d{2,}$/.test(
-                String(value).trim()
+                String(
+                  value
+                ).trim()
               )
           ).length;
 
@@ -3118,7 +4180,8 @@
     function getFormulaMap(
       worksheet
     ) {
-      const map = new Map();
+      const map =
+        new Map();
 
       if (
         !worksheet ||
@@ -3149,7 +4212,9 @@
             });
 
           const cell =
-            worksheet[address];
+            worksheet[
+              address
+            ];
 
           if (
             cell &&
@@ -3157,7 +4222,18 @@
           ) {
             map.set(
               `${r}:${c}`,
-              String(cell.f)
+              {
+                formula:
+                  String(
+                    cell.f
+                  ),
+                value:
+                  cell.v,
+                type:
+                  cell.t,
+                text:
+                  cell.w
+              }
             );
           }
         }
@@ -3192,11 +4268,15 @@
             )
           ) {
             list.push({
-              row: r + 1,
-              column: c,
+              row:
+                r + 1,
+              column:
+                c,
               label:
                 headers[c] ||
-                `Column ${c + 1}`
+                `Column ${
+                  c + 1
+                }`
             });
           }
         }
@@ -3210,11 +4290,17 @@
     ) {
       let count = 0;
 
-      for (const row of rows) {
-        for (const cell of row) {
+      for (
+        const row of rows
+      ) {
+        for (
+          const cell of row
+        ) {
           if (
-            typeof cell === "string" &&
-            cell !== cell.trim()
+            typeof cell ===
+              "string" &&
+            cell !==
+              cell.trim()
           ) {
             count++;
           }
@@ -3235,15 +4321,20 @@
         c < columnCount;
         c++
       ) {
-        let hasData = false;
+        let hasData =
+          false;
 
-        for (const row of dataRows) {
+        for (
+          const row of dataRows
+        ) {
           if (
             !isEmptyCell(
               row[c]
             )
           ) {
-            hasData = true;
+            hasData =
+              true;
+
             break;
           }
         }
@@ -3260,50 +4351,70 @@
       headers,
       dataRows
     ) {
-      const identityIndexes = [];
+      const identityIndexes =
+        [];
 
       headers.forEach(
-        (header, index) => {
+        (
+          header,
+          index
+        ) => {
           const h =
             normalizeHeader(
               header
             );
 
           if (
-            h.includes("email") ||
+            h.includes(
+              "email"
+            ) ||
             h === "id" ||
-            h.endsWith("id")
+            h.endsWith(
+              "id"
+            )
           ) {
             identityIndexes.push(
               index
             );
+
             return;
           }
 
           const values =
             dataRows
-              .map(row =>
-                String(
-                  row?.[index] ?? ""
-                ).trim()
+              .map(
+                row =>
+                  String(
+                    row?.[
+                      index
+                    ] ?? ""
+                  ).trim()
               )
-              .filter(Boolean);
+              .filter(
+                Boolean
+              );
 
           if (!values.length) {
             return;
           }
 
           const emailLike =
-            values.filter(value =>
-              /@/.test(value) &&
-              /[A-Za-z]/.test(value)
+            values.filter(
+              value =>
+                /@/.test(
+                  value
+                ) &&
+                /[A-Za-z]/.test(
+                  value
+                )
             ).length;
 
           const idLike =
-            values.filter(value =>
-              /^[A-Za-z]{1,6}\d{2,}$/.test(
-                value
-              )
+            values.filter(
+              value =>
+                /^[A-Za-z]{1,6}\d{2,}$/.test(
+                  value
+                )
             ).length;
 
           if (
@@ -3315,6 +4426,7 @@
             identityIndexes.push(
               index
             );
+
             return;
           }
 
@@ -3341,7 +4453,10 @@
             new Map();
 
           dataRows.forEach(
-            (row, rowIndex) => {
+            (
+              row,
+              rowIndex
+            ) => {
               const value =
                 normalizeCell(
                   row[index]
@@ -3387,15 +4502,20 @@
               groups.push({
                 rows,
                 field:
-                  headers[index] ||
-                  `Column ${index + 1}`,
+                  headers[
+                    index
+                  ] ||
+                  `Column ${
+                    index + 1
+                  }`,
                 value
               });
 
-              rows.forEach(r =>
-                participatingRows.add(
-                  r
-                )
+              rows.forEach(
+                r =>
+                  participatingRows.add(
+                    r
+                  )
               );
             }
           }
@@ -3413,7 +4533,8 @@
       headers,
       dataRows
     ) {
-      const identityIndexes = [];
+      const identityIndexes =
+        [];
 
       for (
         let index = 0;
@@ -3429,7 +4550,9 @@
         }
 
         const header =
-          headers[index];
+          headers[
+            index
+          ];
 
         const h =
           normalizeHeader(
@@ -3437,13 +4560,18 @@
           );
 
         if (
-          h.includes("email") ||
+          h.includes(
+            "email"
+          ) ||
           h === "id" ||
-          h.endsWith("id")
+          h.endsWith(
+            "id"
+          )
         ) {
           identityIndexes.push(
             index
           );
+
           continue;
         }
 
@@ -3451,8 +4579,10 @@
 
         for (
           let start = 0;
-          start < dataRows.length;
-          start += PROCESS_CHUNK_SIZE
+          start <
+            dataRows.length;
+          start +=
+            PROCESS_CHUNK_SIZE
         ) {
           if (
             processingCancelled
@@ -3476,8 +4606,9 @@
           ) {
             const value =
               String(
-                dataRows[r]?.[index] ??
-                ""
+                dataRows[r]?.[
+                  index
+                ] ?? ""
               ).trim();
 
             if (value) {
@@ -3488,7 +4619,8 @@
           }
 
           if (
-            end < dataRows.length
+            end <
+            dataRows.length
           ) {
             await yieldToBrowser();
           }
@@ -3501,7 +4633,9 @@
         const emailLike =
           values.filter(
             value =>
-              /@/.test(value) &&
+              /@/.test(
+                value
+              ) &&
               /[A-Za-z]/.test(
                 value
               )
@@ -3524,6 +4658,7 @@
           identityIndexes.push(
             index
           );
+
           continue;
         }
 
@@ -3547,7 +4682,8 @@
 
       for (
         let ii = 0;
-        ii < identityIndexes.length;
+        ii <
+          identityIndexes.length;
         ii++
       ) {
         if (
@@ -3559,15 +4695,19 @@
         }
 
         const index =
-          identityIndexes[ii];
+          identityIndexes[
+            ii
+          ];
 
         const byValue =
           new Map();
 
         for (
           let start = 0;
-          start < dataRows.length;
-          start += PROCESS_CHUNK_SIZE
+          start <
+            dataRows.length;
+          start +=
+            PROCESS_CHUNK_SIZE
         ) {
           if (
             processingCancelled
@@ -3624,7 +4764,8 @@
           }
 
           if (
-            end < dataRows.length
+            end <
+            dataRows.length
           ) {
             await yieldToBrowser();
           }
@@ -3642,15 +4783,20 @@
             groups.push({
               rows,
               field:
-                headers[index] ||
-                `Column ${index + 1}`,
+                headers[
+                  index
+                ] ||
+                `Column ${
+                  index + 1
+                }`,
               value
             });
 
-            rows.forEach(r =>
-              participatingRows.add(
-                r
-              )
+            rows.forEach(
+              r =>
+                participatingRows.add(
+                  r
+                )
             );
           }
         }
@@ -3702,7 +4848,9 @@
         headerInfo.headerIndex;
 
       const headers =
-        [...headerInfo.headers];
+        [
+          ...headerInfo.headers
+        ];
 
       const dataRows =
         headerRowIndex >= 0
@@ -3724,7 +4872,9 @@
         columnCount
       ) {
         headers.push(
-          `Column ${headers.length + 1}`
+          `Column ${
+            headers.length + 1
+          }`
         );
       }
 
@@ -3761,8 +4911,10 @@
 
       for (
         let start = 0;
-        start < dataRows.length;
-        start += PROCESS_CHUNK_SIZE
+        start <
+          dataRows.length;
+        start +=
+          PROCESS_CHUNK_SIZE
       ) {
         if (
           processingCancelled
@@ -3790,8 +4942,9 @@
           const emailValue =
             emailIndex >= 0
               ? String(
-                  row[emailIndex] ??
-                  ""
+                  row[
+                    emailIndex
+                  ] ?? ""
                 ).trim()
               : "";
 
@@ -3819,8 +4972,9 @@
           const phoneValue =
             phoneIndex >= 0
               ? String(
-                  row[phoneIndex] ??
-                  ""
+                  row[
+                    phoneIndex
+                  ] ?? ""
                 ).trim()
               : "";
 
@@ -3866,12 +5020,14 @@
         setProgress(
           12 +
             Math.round(
-              (end /
+              (
+                end /
                 Math.max(
                   dataRows.length,
                   1
-                )) *
-                18
+                )
+              ) *
+              18
             ),
           "Checking emails, phones and dates…"
         );
@@ -3884,13 +5040,18 @@
         }
       }
 
-      const seen = new Set();
-      let duplicateRows = 0;
+      const seen =
+        new Set();
+
+      let duplicateRows =
+        0;
 
       for (
         let start = 0;
-        start < dataRows.length;
-        start += PROCESS_CHUNK_SIZE
+        start <
+          dataRows.length;
+        start +=
+          PROCESS_CHUNK_SIZE
       ) {
         if (
           processingCancelled
@@ -3916,32 +5077,42 @@
             dataRows[r];
 
           if (
-            isEmptyRow(row)
+            isEmptyRow(
+              row
+            )
           ) {
             continue;
           }
 
           const key =
-            makeRowKey(row);
+            makeRowKey(
+              row
+            );
 
           if (
-            seen.has(key)
+            seen.has(
+              key
+            )
           ) {
             duplicateRows++;
           } else {
-            seen.add(key);
+            seen.add(
+              key
+            );
           }
         }
 
         setProgress(
           30 +
             Math.round(
-              (end /
+              (
+                end /
                 Math.max(
                   dataRows.length,
                   1
-                )) *
-                8
+                )
+              ) *
+              8
             ),
           "Checking duplicate rows…"
         );
@@ -3954,7 +5125,8 @@
         }
       }
 
-      const emptyColumnIndexes = [];
+      const emptyColumnIndexes =
+        [];
 
       for (
         let c = 0;
@@ -3969,12 +5141,15 @@
           );
         }
 
-        let hasData = false;
+        let hasData =
+          false;
 
         for (
           let start = 0;
-          start < dataRows.length;
-          start += PROCESS_CHUNK_SIZE
+          start <
+            dataRows.length;
+          start +=
+            PROCESS_CHUNK_SIZE
         ) {
           const end =
             Math.min(
@@ -3990,17 +5165,22 @@
           ) {
             if (
               !isEmptyCell(
-                dataRows[r]?.[c]
+                dataRows[
+                  r
+                ]?.[c]
               )
             ) {
-              hasData = true;
+              hasData =
+                true;
+
               break;
             }
           }
 
           if (
             hasData ||
-            end >= dataRows.length
+            end >=
+              dataRows.length
           ) {
             break;
           }
@@ -4008,7 +5188,9 @@
           await yieldToBrowser();
         }
 
-        if (!hasData) {
+        if (
+          !hasData
+        ) {
           emptyColumnIndexes.push(
             c
           );
@@ -4022,12 +5204,15 @@
 
       await yieldToBrowser();
 
-      const missingList = [];
+      const missingList =
+        [];
 
       for (
         let start = 0;
-        start < dataRows.length;
-        start += PROCESS_CHUNK_SIZE
+        start <
+          dataRows.length;
+        start +=
+          PROCESS_CHUNK_SIZE
       ) {
         if (
           processingCancelled
@@ -4065,10 +5250,13 @@
               missingList.push({
                 row:
                   r + 1,
-                column: c,
+                column:
+                  c,
                 label:
                   headers[c] ||
-                  `Column ${c + 1}`
+                  `Column ${
+                    c + 1
+                  }`
               });
             }
           }
@@ -4082,7 +5270,8 @@
         }
       }
 
-      const missingByColumn = [];
+      const missingByColumn =
+        [];
 
       for (
         let c = 0;
@@ -4097,12 +5286,15 @@
           );
         }
 
-        const missingRows = [];
+        const missingRows =
+          [];
 
         for (
           let start = 0;
-          start < dataRows.length;
-          start += PROCESS_CHUNK_SIZE
+          start <
+            dataRows.length;
+          start +=
+            PROCESS_CHUNK_SIZE
         ) {
           const end =
             Math.min(
@@ -4118,7 +5310,9 @@
           ) {
             if (
               isEmptyCell(
-                dataRows[r]?.[c]
+                dataRows[
+                  r
+                ]?.[c]
               )
             ) {
               missingRows.push(
@@ -4139,10 +5333,13 @@
           missingRows.length
         ) {
           missingByColumn.push({
-            column: c,
+            column:
+              c,
             label:
               headers[c] ||
-              `Column ${c + 1}`,
+              `Column ${
+                c + 1
+              }`,
             missing:
               missingRows.length,
             total:
@@ -4179,9 +5376,12 @@
           );
 
         for (
-          let rStart = range.s.r;
-          rStart <= range.e.r;
-          rStart += PROCESS_CHUNK_SIZE
+          let rStart =
+            range.s.r;
+          rStart <=
+            range.e.r;
+          rStart +=
+            PROCESS_CHUNK_SIZE
         ) {
           if (
             processingCancelled
@@ -4205,8 +5405,10 @@
             r++
           ) {
             for (
-              let c = range.s.c;
-              c <= range.e.c;
+              let c =
+                range.s.c;
+              c <=
+                range.e.c;
               c++
             ) {
               const address =
@@ -4222,7 +5424,8 @@
 
               if (
                 headerRowIndex >= 0 &&
-                r <= headerRowIndex
+                r <=
+                  headerRowIndex
               ) {
                 continue;
               }
@@ -4235,7 +5438,9 @@
 
               const field =
                 headers[c] ||
-                `Column ${c + 1}`;
+                `Column ${
+                  c + 1
+                }`;
 
               if (
                 cell &&
@@ -4262,8 +5467,10 @@
 
       for (
         let start = 0;
-        start < dataRows.length;
-        start += PROCESS_CHUNK_SIZE
+        start <
+          dataRows.length;
+        start +=
+          PROCESS_CHUNK_SIZE
       ) {
         if (
           processingCancelled
@@ -4295,7 +5502,8 @@
           ) {
             const value =
               String(
-                row[c] ?? ""
+                row[c] ??
+                ""
               ).trim();
 
             if (
@@ -4308,7 +5516,9 @@
                   r + 1,
                 field:
                   headers[c] ||
-                  `Column ${c + 1}`,
+                  `Column ${
+                    c + 1
+                  }`,
                 value
               });
             }
@@ -4334,7 +5544,8 @@
           dataRows
         );
 
-      const columnTypes = [];
+      const columnTypes =
+        [];
 
       for (
         let c = 0;
@@ -4349,12 +5560,15 @@
           );
         }
 
-        const values = [];
+        const values =
+          [];
 
         for (
           let start = 0;
-          start < dataRows.length;
-          start += PROCESS_CHUNK_SIZE
+          start <
+            dataRows.length;
+          start +=
+            PROCESS_CHUNK_SIZE
         ) {
           const end =
             Math.min(
@@ -4369,7 +5583,9 @@
             r++
           ) {
             values.push(
-              dataRows[r]?.[c]
+              dataRows[
+                r
+              ]?.[c]
             );
           }
 
@@ -4388,13 +5604,15 @@
           );
 
         let filled = 0;
+
         const normalized =
           new Set();
 
         for (
           let start = 0;
           start < values.length;
-          start += PROCESS_CHUNK_SIZE
+          start +=
+            PROCESS_CHUNK_SIZE
         ) {
           const end =
             Math.min(
@@ -4412,7 +5630,9 @@
               values[i];
 
             if (
-              !isEmptyCell(v)
+              !isEmptyCell(
+                v
+              )
             ) {
               filled++;
 
@@ -4451,12 +5671,14 @@
           setProgress(
             70 +
               Math.round(
-                ((c + 1) /
+                (
+                  (c + 1) /
                   Math.max(
                     columnCount,
                     1
-                  )) *
-                  8
+                  )
+                ) *
+                8
               ),
             "Finishing column analysis…"
           );
@@ -4508,10 +5730,14 @@
       value
     ) {
       const key =
-        normalizeHeader(header);
+        normalizeHeader(
+          header
+        );
 
       const text =
-        String(value ?? "").trim();
+        String(
+          value ?? ""
+        ).trim();
 
       if (!text) {
         return text;
@@ -4520,22 +5746,30 @@
       let map = null;
 
       if (
-        key.includes("gender")
+        key.includes(
+          "gender"
+        )
       ) {
         map =
           CATEGORY_MAPS.gender;
       } else if (
-        key.includes("response")
+        key.includes(
+          "response"
+        )
       ) {
         map =
           CATEGORY_MAPS.response;
       } else if (
-        key.includes("status")
+        key.includes(
+          "status"
+        )
       ) {
         map =
           CATEGORY_MAPS.status;
       } else if (
-        key.includes("payment")
+        key.includes(
+          "payment"
+        )
       ) {
         map =
           CATEGORY_MAPS.payment;
@@ -4550,7 +5784,10 @@
           text.toLowerCase()
         ];
 
-      return standard || text;
+      return (
+        standard ||
+        text
+      );
     }
 
     async function cleanRowsAsync(
@@ -4567,14 +5804,19 @@
         before.columnCount;
 
       const headers =
-        [...before.headers];
+        [
+          ...before.headers
+        ];
 
-      const rawDataRows = [];
+      const rawDataRows =
+        [];
 
       for (
         let start = 0;
-        start < before.dataRows.length;
-        start += PROCESS_CHUNK_SIZE
+        start <
+          before.dataRows.length;
+        start +=
+          PROCESS_CHUNK_SIZE
       ) {
         if (
           processingCancelled
@@ -4597,10 +5839,14 @@
           r++
         ) {
           const row =
-            before.dataRows[r];
+            before.dataRows[
+              r
+            ];
 
           if (
-            !isEmptyRow(row)
+            !isEmptyRow(
+              row
+            )
           ) {
             rawDataRows.push(
               row
@@ -4628,7 +5874,8 @@
           emptyColumnIndexes
         );
 
-      const cleanedHeaders = [];
+      const cleanedHeaders =
+        [];
 
       for (
         let c = 0;
@@ -4636,30 +5883,47 @@
         c++
       ) {
         if (
-          !emptySet.has(c)
+          !emptySet.has(
+            c
+          )
         ) {
           cleanedHeaders.push(
             headers[c] ||
-            `Column ${c + 1}`
+            `Column ${
+              c + 1
+            }`
           );
         }
       }
 
-      const cleanedDataRows = [];
-      const formulasToRestore = [];
+      const cleanedDataRows =
+        [];
+
+      const formulasToRestore =
+        [];
 
       const formulaMap =
         getFormulaMap(
           worksheet
         );
 
-      const seen = new Set();
+      const seen =
+        new Set();
 
-      let duplicateRowsRemoved = 0;
-      let emailsNormalized = 0;
-      let phonesStandardized = 0;
-      let datesStandardized = 0;
-      let categoriesStandardized = 0;
+      let duplicateRowsRemoved =
+        0;
+
+      let emailsNormalized =
+        0;
+
+      let phonesStandardized =
+        0;
+
+      let datesStandardized =
+        0;
+
+      let categoriesStandardized =
+        0;
 
       for (
         let start = 0;
@@ -4694,7 +5958,9 @@
             ];
 
           if (
-            isEmptyRow(row)
+            isEmptyRow(
+              row
+            )
           ) {
             continue;
           }
@@ -4709,28 +5975,37 @@
 
           const newRow = [];
 
-          const outputSheetRow =
-            cleanedDataRows.length +
-            1;
+          /* 
+             IMPORTANT FIX:
+             Formulas are collected for the current source row first.
+             They are only added to formulasToRestore after the row
+             survives duplicate detection. This prevents a skipped
+             duplicate row from shifting formulas onto the next row.
+          */
+          const rowFormulas = [];
 
           for (
             let c = 0;
-            c <
-              originalColumnCount;
+            c < originalColumnCount;
             c++
           ) {
             if (
-              emptySet.has(c)
+              emptySet.has(
+                c
+              )
             ) {
               continue;
             }
 
             const header =
               headers[c] ||
-              `Column ${c + 1}`;
+              `Column ${
+                c + 1
+              }`;
 
             let value =
-              row[c] ?? "";
+              row[c] ??
+              "";
 
             const originalValue =
               String(
@@ -4748,7 +6023,9 @@
             if (
               c ===
                 before.emailIndex &&
-              !isEmptyCell(value)
+              !isEmptyCell(
+                value
+              )
             ) {
               const normalized =
                 String(
@@ -4771,7 +6048,9 @@
             if (
               c ===
                 before.phoneIndex &&
-              !isEmptyCell(value)
+              !isEmptyCell(
+                value
+              )
             ) {
               const standardized =
                 standardizePhone(
@@ -4853,21 +6132,27 @@
               value
             );
 
-            const formula =
+            const formulaInfo =
               formulaMap.get(
                 `${sourceSheetRow}:${c}`
               );
 
-            if (formula) {
-              formulasToRestore.push({
-                r:
-                  outputSheetRow,
+            if (
+              formulaInfo
+            ) {
+              rowFormulas.push({
                 c:
                   outputCol,
                 formula:
                   String(
-                    formula
-                  )
+                    formulaInfo.formula
+                  ),
+                value:
+                  formulaInfo.value,
+                type:
+                  formulaInfo.type,
+                text:
+                  formulaInfo.text
               });
             }
           }
@@ -4878,13 +6163,51 @@
             );
 
           if (
-            seen.has(key)
+            seen.has(
+              key
+            )
           ) {
             duplicateRowsRemoved++;
+
+            /*
+              Do NOT add rowFormulas here.
+              The duplicate row is discarded.
+            */
             continue;
           }
 
-          seen.add(key);
+          seen.add(
+            key
+          );
+
+          /*
+            The output row is calculated only after the row
+            has been accepted. Therefore duplicate removal
+            cannot shift subsequent formulas.
+          */
+          const outputSheetRow =
+            cleanedDataRows.length +
+            1;
+
+          rowFormulas.forEach(
+            item => {
+              formulasToRestore.push({
+                r:
+                  outputSheetRow,
+                c:
+                  item.c,
+                formula:
+                  item.formula,
+                value:
+                  item.value,
+                type:
+                  item.type,
+                text:
+                  item.text
+              });
+            }
+          );
+
           cleanedDataRows.push(
             newRow
           );
@@ -4893,12 +6216,14 @@
         setProgress(
           78 +
             Math.round(
-              (end /
+              (
+                end /
                 Math.max(
                   before.dataRows.length,
                   1
-                )) *
-                16
+                )
+              ) *
+              16
             ),
           "Cleaning and standardizing rows…"
         );
@@ -4940,21 +6265,29 @@
       return {
         rows:
           cleaned,
+
         rowsBefore,
         rowsAfter,
+
         columnsBefore,
         columnsAfter,
+
         blankRowsRemoved,
         duplicateRowsRemoved,
+
         emailsNormalized,
         phonesStandardized,
         datesStandardized,
         categoriesStandardized,
+
         emptyColumnsRemoved:
           emptyColumnIndexes.length,
+
         totalChanges,
+
         analysisBefore:
           before,
+
         formulasToRestore
       };
     }
@@ -4971,28 +6304,35 @@
 
       el.innerHTML = "";
 
-      if (!items.length) {
+      if (
+        !items.length
+      ) {
         el.innerHTML =
           '<div class="report-empty">None detected.</div>';
+
         return;
       }
 
-      items.forEach(item => {
-        const div =
-          document.createElement(
-            "div"
+      items.forEach(
+        item => {
+          const div =
+            document.createElement(
+              "div"
+            );
+
+          div.className =
+            "report-row";
+
+          div.innerHTML =
+            formatter(
+              item
+            );
+
+          el.appendChild(
+            div
           );
-
-        div.className =
-          "report-row";
-
-        div.innerHTML =
-          formatter(item);
-
-        el.appendChild(
-          div
-        );
-      });
+        }
+      );
     }
 
     function renderAnalysis(
@@ -5059,8 +6399,12 @@
         x =>
           `<span class="report-badge issue">Review</span>` +
           `Data row ${x.row} — ` +
-          `${escapeHtml(x.field)}: ` +
-          `${escapeHtml(x.value)}`
+          `${escapeHtml(
+            x.field
+          )}: ` +
+          `${escapeHtml(
+            x.value
+          )}`
       );
 
       renderList(
@@ -5069,8 +6413,12 @@
         x =>
           `<span class="report-badge issue">Review</span>` +
           `Data row ${x.row} — ` +
-          `${escapeHtml(x.field)}: ` +
-          `${escapeHtml(x.value)}`
+          `${escapeHtml(
+            x.field
+          )}: ` +
+          `${escapeHtml(
+            x.value
+          )}`
       );
 
       renderList(
@@ -5079,9 +6427,17 @@
         x =>
           `<span class="report-badge">Formula</span>` +
           `Data row ${x.row} — ` +
-          `${escapeHtml(x.field)}` +
-          `<div class="muted">Formula: ${escapeHtml(x.formula)}<br>` +
-          `Result: ${escapeHtml(x.value)}</div>`
+          `${escapeHtml(
+            x.field
+          )}` +
+          `<div class="muted">` +
+          `Formula: ${escapeHtml(
+            x.formula
+          )}<br>` +
+          `Result: ${escapeHtml(
+            x.value
+          )}` +
+          `</div>`
       );
 
       renderList(
@@ -5090,8 +6446,12 @@
         x =>
           `<span class="report-badge issue">Error</span>` +
           `Data row ${x.row} — ` +
-          `${escapeHtml(x.field)}: ` +
-          `${escapeHtml(x.value)}`
+          `${escapeHtml(
+            x.field
+          )}: ` +
+          `${escapeHtml(
+            x.value
+          )}`
       );
 
       const missingEl =
@@ -5099,10 +6459,12 @@
           "missingList"
         );
 
-      missingEl.innerHTML = "";
+      missingEl.innerHTML =
+        "";
 
       if (
-        !analysis.missingByColumn
+        !analysis
+          .missingByColumn
           .length
       ) {
         missingEl.innerHTML =
@@ -5132,26 +6494,39 @@
                 : "";
 
             const badge =
-              item.percent === 100
+              item.percent ===
+              100
                 ? '<span class="report-badge issue">100% empty</span>'
-                : item.percent >= 25
+                : item.percent >=
+                    25
                   ? '<span class="report-badge warn">Needs review</span>'
                   : '<span class="report-badge">Partial</span>';
 
             const rowsText =
-              item.rows.length <= 6
+              item.rows.length <=
+              6
                 ? item.rows.join(
                     ", "
                   )
                 : `${item.rows
-                    .slice(0, 6)
+                    .slice(
+                      0,
+                      6
+                    )
                     .join(
                       ", "
-                    )} +${item.rows.length - 6} more`;
+                    )} +${
+                    item.rows.length -
+                    6
+                  } more`;
 
             div.innerHTML =
-              `<div><strong>${escapeHtml(item.label)}</strong> ${badge}</div>` +
-              `<div class="missing-meta">${item.missing} of ${item.total} rows missing (${percent}%) · Rows: ${escapeHtml(rowsText)}</div>` +
+              `<div><strong>${escapeHtml(
+                item.label
+              )}</strong> ${badge}</div>` +
+              `<div class="missing-meta">${item.missing} of ${item.total} rows missing (${percent}%) · Rows: ${escapeHtml(
+                rowsText
+              )}</div>` +
               `<div class="missing-bar"><div class="missing-fill ${level}" style="width:${Math.min(
                 100,
                 item.percent
@@ -5169,10 +6544,12 @@
           "emptyColumnsList"
         );
 
-      emptyEl.innerHTML = "";
+      emptyEl.innerHTML =
+        "";
 
       if (
-        !analysis.emptyColumnIndexes
+        !analysis
+          .emptyColumnIndexes
           .length
       ) {
         emptyEl.innerHTML =
@@ -5193,10 +6570,15 @@
 
             div.innerHTML =
               `<strong><span class="report-badge issue">100% empty</span>${escapeHtml(
-                analysis.headers[c] ||
-                `Column ${c + 1}`
+                analysis
+                  .headers[c] ||
+                `Column ${
+                  c + 1
+                }`
               )}</strong>` +
-              `<span>Column ${c + 1} · no filled cells</span>`;
+              `<span>Column ${
+                c + 1
+              } · no filled cells</span>`;
 
             emptyEl.appendChild(
               div
@@ -5205,7 +6587,9 @@
         );
       }
 
-      const duplicateItems = [];
+      const duplicateItems =
+        [];
+
       const seenPotential =
         new Set();
 
@@ -5218,7 +6602,10 @@
         new Map();
 
       normalizedRows.forEach(
-        (key, i) => {
+        (
+          key,
+          i
+        ) => {
           if (
             !key
               .replace(
@@ -5243,21 +6630,26 @@
 
           exactMap
             .get(key)
-            .push(i + 1);
+            .push(
+              i + 1
+            );
         }
       );
 
       exactMap.forEach(
         rows => {
           if (
-            rows.length >= 2
+            rows.length >=
+            2
           ) {
             duplicateItems.push({
               type:
                 "exact",
               rows,
               text:
-                `Rows ${rows.join(", ")} are identical across all available columns.`
+                `Rows ${rows.join(
+                  ", "
+                )} are identical across all available columns.`
             });
           }
         }
@@ -5283,7 +6675,9 @@
               rows:
                 group.rows,
               text:
-                `Rows ${group.rows.join(", ")} share the same ${group.field} value: ${group.value}.`
+                `Rows ${group.rows.join(
+                  ", "
+                )} share the same ${group.field} value: ${group.value}.`
             });
           }
         }
@@ -5294,9 +6688,12 @@
           "duplicatesList"
         );
 
-      duplicateEl.innerHTML = "";
+      duplicateEl.innerHTML =
+        "";
 
-      if (!duplicateItems.length) {
+      if (
+        !duplicateItems.length
+      ) {
         duplicateEl.innerHTML =
           '<div class="report-empty">No exact or potential duplicates detected.</div>';
       } else {
@@ -5337,7 +6734,8 @@
       }
 
       const emailColumn =
-        analysis.emailIndex >= 0
+        analysis.emailIndex >=
+        0
           ? (
               analysis.headers[
                 analysis.emailIndex
@@ -5350,7 +6748,8 @@
           : "Not found";
 
       const phoneColumn =
-        analysis.phoneIndex >= 0
+        analysis.phoneIndex >=
+        0
           ? (
               analysis.headers[
                 analysis.phoneIndex
@@ -5388,14 +6787,17 @@
         "detailHeaderStatus",
         analysis.headerDetected
           ? `Detected — row ${
-              analysis.headerRowIndex + 1
+              analysis.headerRowIndex +
+              1
             }`
           : "Not detected — generic columns used"
       );
 
       const validation =
-        analysis.emailIndex === -1 &&
-        analysis.phoneIndex === -1
+        analysis.emailIndex ===
+          -1 &&
+        analysis.phoneIndex ===
+          -1
           ? "No contact columns"
           : (
               analysis.invalidEmails >
@@ -5411,7 +6813,8 @@
         validation
       );
 
-      typesBody.innerHTML = "";
+      typesBody.innerHTML =
+        "";
 
       analysis.columnTypes.forEach(
         col => {
@@ -5498,11 +6901,9 @@
 
       setText(
         "reviewTotal",
-        analysis.invalidEmails +
-        analysis.invalidPhones +
-        analysis.errors.length +
-        analysis.missingValues +
-        analysis.potentialDuplicates
+        getReviewItemCount(
+          analysis
+        )
       );
 
       previewMetrics.classList.add(
@@ -5556,7 +6957,8 @@
       rows,
       cleaned
     ) {
-      previewTable.innerHTML = "";
+      previewTable.innerHTML =
+        "";
 
       if (
         !rows ||
@@ -5592,9 +6994,12 @@
 
         th.textContent =
           String(
-            rows[0]?.[c] ?? ""
+            rows[0]?.[c] ??
+            ""
           ).trim() ||
-          `Column ${c + 1}`;
+          `Column ${
+            c + 1
+          }`;
 
         headerRow.appendChild(
           th
@@ -5642,7 +7047,8 @@
 
           td.textContent =
             String(
-              rows[r]?.[c] ?? ""
+              rows[r]?.[c] ??
+              ""
             );
 
           tr.appendChild(
@@ -5692,8 +7098,10 @@
       return new Date().toLocaleString(
         undefined,
         {
-          dateStyle: "medium",
-          timeStyle: "short"
+          dateStyle:
+            "medium",
+          timeStyle:
+            "short"
         }
       );
     }
@@ -5804,59 +7212,97 @@
       const result =
         cleanedResult;
 
-      const report = [
-        "Clean My Spreadsheet - Cleaning Report",
-        "",
-        `File: ${
-          currentFile?.name ||
-          "Unknown"
-        }`,
-        `Worksheet: ${
-          currentSheetName ||
-          "Unknown"
-        }`,
-        `Header: ${
-          currentAnalysis?.headerDetected
-            ? `Detected (row ${
-                currentAnalysis.headerRowIndex + 1
-              })`
-            : "Not detected — generic columns used"
-        }`,
-        "",
-        "CLEANING SUMMARY",
-        `Rows Before: ${result.rowsBefore}`,
-        `Rows After: ${result.rowsAfter}`,
-        `Columns Before: ${result.columnsBefore}`,
-        `Columns After: ${result.columnsAfter}`,
-        `Blank Rows Removed: ${result.blankRowsRemoved}`,
-        `Duplicate Rows Removed: ${result.duplicateRowsRemoved}`,
-        `Emails Normalized: ${result.emailsNormalized}`,
-        `Phones Standardized: ${result.phonesStandardized}`,
-        `Dates Standardized: ${result.datesStandardized}`,
-        `Categories Standardized: ${result.categoriesStandardized}`,
-        `Empty Columns Removed: ${result.emptyColumnsRemoved}`,
-        `Total Changes: ${result.totalChanges}`,
-        "",
-        "REVIEW ITEMS",
-        `Invalid Emails: ${result.analysisBefore.invalidEmails}`,
-        `Invalid Phones: ${result.analysisBefore.invalidPhones}`,
-        `Spreadsheet Errors: ${result.analysisBefore.errors.length}`,
-        `Missing Values: ${result.analysisBefore.missingValues}`,
-        `Potential Duplicates: ${result.analysisBefore.potentialDuplicates}`,
-        `Total Review Items: ${getReviewItemCount(
-          result.analysisBefore
-        )}`,
-        "",
-        "EXPORT",
-        `XLSX: ${safeBaseName(
-          currentFile?.name
-        )}_cleaned.xlsx`,
-        `CSV: ${safeBaseName(
-          currentFile?.name
-        )}_cleaned.csv`,
-        "",
-        "Note: Invalid values are preserved for review rather than silently deleted."
-      ].join("\n");
+      const report =
+        [
+          "Clean My Spreadsheet - Cleaning Report",
+          "",
+          `File: ${
+            currentFile?.name ||
+            "Unknown"
+          }`,
+          `Worksheet: ${
+            currentSheetName ||
+            "Unknown"
+          }`,
+          `Header: ${
+            currentAnalysis?.headerDetected
+              ? `Detected (row ${
+                  currentAnalysis.headerRowIndex +
+                  1
+                })`
+              : "Not detected — generic columns used"
+          }`,
+          "",
+          "CLEANING SUMMARY",
+          `Rows Before: ${
+            result.rowsBefore
+          }`,
+          `Rows After: ${
+            result.rowsAfter
+          }`,
+          `Columns Before: ${
+            result.columnsBefore
+          }`,
+          `Columns After: ${
+            result.columnsAfter
+          }`,
+          `Blank Rows Removed: ${
+            result.blankRowsRemoved
+          }`,
+          `Duplicate Rows Removed: ${
+            result.duplicateRowsRemoved
+          }`,
+          `Emails Normalized: ${
+            result.emailsNormalized
+          }`,
+          `Phones Standardized: ${
+            result.phonesStandardized
+          }`,
+          `Dates Standardized: ${
+            result.datesStandardized
+          }`,
+          `Categories Standardized: ${
+            result.categoriesStandardized
+          }`,
+          `Empty Columns Removed: ${
+            result.emptyColumnsRemoved
+          }`,
+          `Total Changes: ${
+            result.totalChanges
+          }`,
+          "",
+          "REVIEW ITEMS",
+          `Invalid Emails: ${
+            result.analysisBefore.invalidEmails
+          }`,
+          `Invalid Phones: ${
+            result.analysisBefore.invalidPhones
+          }`,
+          `Spreadsheet Errors: ${
+            result.analysisBefore.errors.length
+          }`,
+          `Missing Values: ${
+            result.analysisBefore.missingValues
+          }`,
+          `Potential Duplicates: ${
+            result.analysisBefore.potentialDuplicates
+          }`,
+          `Total Review Items: ${
+            getReviewItemCount(
+              result.analysisBefore
+            )
+          }`,
+          "",
+          "EXPORT",
+          `XLSX: ${safeBaseName(
+            currentFile?.name
+          )}_cleaned.xlsx`,
+          `CSV: ${safeBaseName(
+            currentFile?.name
+          )}_cleaned.csv`,
+          "",
+          "Note: Invalid values are preserved for review rather than silently deleted."
+        ].join("\n");
 
       try {
         if (
@@ -5999,8 +7445,10 @@
         item => {
           const address =
             XLSX.utils.encode_cell({
-              r: item.r,
-              c: item.c
+              r:
+                item.r,
+              c:
+                item.c
             });
 
           const existing =
@@ -6008,12 +7456,43 @@
               address
             ] || {};
 
-          cleanSheet[address] = {
+          const restored = {
             ...existing,
-            t: "n",
             f:
               item.formula
           };
+
+          /*
+            Preserve the source cell metadata where available.
+            This is safer than forcing every formula cell to type "n".
+          */
+          if (
+            item.type !==
+            undefined
+          ) {
+            restored.t =
+              item.type;
+          }
+
+          if (
+            item.value !==
+            undefined
+          ) {
+            restored.v =
+              item.value;
+          }
+
+          if (
+            item.text !==
+            undefined
+          ) {
+            restored.w =
+              item.text;
+          }
+
+          cleanSheet[
+            address
+          ] = restored;
         }
       );
     }
@@ -6281,7 +7760,9 @@
         !currentRows.length ||
         !currentRows.some(
           row =>
-            !isEmptyRow(row)
+            !isEmptyRow(
+              row
+            )
         )
       ) {
         currentAnalysis =
@@ -6318,11 +7799,20 @@
         "hidden"
       );
 
-      downloadBtn.disabled = true;
-      downloadCsvBtn.disabled = true;
-      centerXlsxBtn.disabled = true;
-      centerCsvBtn.disabled = true;
-      downloadBothBtn.disabled = true;
+      downloadBtn.disabled =
+        true;
+
+      downloadCsvBtn.disabled =
+        true;
+
+      centerXlsxBtn.disabled =
+        true;
+
+      centerCsvBtn.disabled =
+        true;
+
+      downloadBothBtn.disabled =
+        true;
 
       centerXlsxBtn.textContent =
         "↓ Download Cleaned XLSX";
@@ -6408,17 +7898,21 @@
       const file =
         event.target.files[0];
 
-      if (!file) return;
+      if (!file) {
+        return;
+      }
 
       clearMessages();
 
       resetResultsOnly();
 
       const extension =
-        `.${file.name
-          .split(".")
-          .pop()
-          .toLowerCase()}`;
+        `.${
+          file.name
+            .split(".")
+            .pop()
+            .toLowerCase()
+        }`;
 
       if (
         !SUPPORTED_EXTENSIONS.includes(
@@ -6477,10 +7971,14 @@
           XLSX.read(
             arrayBuffer,
             {
-              type: "array",
-              cellFormula: true,
-              cellStyles: false,
-              cellDates: false
+              type:
+                "array",
+              cellFormula:
+                true,
+              cellStyles:
+                false,
+              cellDates:
+                false
             }
           );
 
@@ -6759,7 +8257,8 @@
           "Preparing download…";
 
         if (
-          type === "csv"
+          type ===
+          "csv"
         ) {
           if (!cleanedResult) {
             await cleanSpreadsheet();
@@ -6853,7 +8352,7 @@
         for (
           let sheetIndex = 0;
           sheetIndex <
-          workbook.SheetNames.length;
+            workbook.SheetNames.length;
           sheetIndex++
         ) {
           const sheetName =
@@ -6878,10 +8377,14 @@
             XLSX.utils.sheet_to_json(
               ws,
               {
-                header: 1,
-                defval: "",
-                raw: false,
-                blankrows: true
+                header:
+                  1,
+                defval:
+                  "",
+                raw:
+                  false,
+                blankrows:
+                  true
               }
             );
 
@@ -6916,7 +8419,11 @@
             XLSX.utils.book_append_sheet(
               out,
               XLSX.utils.aoa_to_sheet(
-                [["No data"]]
+                [
+                  [
+                    "No data"
+                  ]
+                ]
               ),
               safeSheetName(
                 sheetName,
@@ -6973,7 +8480,8 @@
           out,
           outputName,
           {
-            bookType: "xlsx"
+            bookType:
+              "xlsx"
           }
         );
 
@@ -7138,12 +8646,24 @@
     }
 
     function resetResultsOnly() {
-      workbook = null;
-      currentWorksheet = null;
-      currentRows = [];
-      currentSheetName = "";
-      currentAnalysis = null;
-      cleanedResult = null;
+      workbook =
+        null;
+
+      currentWorksheet =
+        null;
+
+      currentRows =
+        [];
+
+      currentSheetName =
+        "";
+
+      currentAnalysis =
+        null;
+
+      cleanedResult =
+        null;
+
       processingCancelled =
         false;
 
@@ -7325,8 +8845,10 @@
         '<div style="margin-top:6px;">Your file is analyzed directly in your browser.</div>';
 
       window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+        top:
+          0,
+        behavior:
+          "smooth"
       });
     }
   </script>
